@@ -2,4 +2,4 @@
 
 Aplikace v "" + "" + "" databáze.
 
-TEAM se skládá z "Davida Vargy", "", "", ""
+TEAM tvořen studenty: "Davidem Vargou", "", "", ""
