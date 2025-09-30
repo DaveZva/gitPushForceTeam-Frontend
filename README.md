@@ -3,3 +3,5 @@
 Aplikace v "" + "" + "" databáze.
 
 TEAM tvořen studenty: "Davidem Vargou", "", "", ""
+
+Nejlepší projekt.
