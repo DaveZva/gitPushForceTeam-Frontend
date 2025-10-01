@@ -2,6 +2,6 @@
 
 Aplikace v "" + "" + "" databáze.
 
-TEAM tvořen studenty: "Davidem Vargou", "", "", ""
+TEAM tvořen studenty: "Davidem Vargou", "Klára Kuřítková", "", ""
 
 Nejlepší projekt.
