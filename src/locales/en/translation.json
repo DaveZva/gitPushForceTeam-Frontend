@@ -1,0 +1,63 @@
+{
+  "nav": {
+    "appName": "CatShow",
+    "dashboard": "Dashboard",
+    "newApplication": "New Registration",
+    "myApplications": "My Registrations",
+    "myCats": "My cats",
+    "logOut": "Logout",
+    "logIn": "Login",
+    "signUp": "Registration"
+  },
+  "user": {
+    "notifications": "Notifikace"
+  },
+  "dashboard": {
+    "welcome": "Welcome back, {{name}}!",
+    "subtitle": "Zde je rychlý přehled vaší aktivity.",
+    "welcome_guest": "Welcome Back!",
+    "stats": {
+      "active": "Aktivní přihlášky",
+      "approved": "Schválené účasti",
+      "cats": "Kočky v profilu"
+    },
+    "history": {
+      "title": "Historie vašich přihlášek",
+      "subtitle": "Přehled všech výstav, kterých jste se účastnili."
+    },
+    "upcoming": {
+      "title": "Nadcházející výstavy",
+      "subtitle": "Nové výstavy, na které se můžete přihlásit."
+    }
+  },
+  "table": {
+    "show": "Výstava",
+    "date": "Datum",
+    "animals": "Zvířata",
+    "status": "Stav",
+    "actions": "Akce"
+  },
+  "status": {
+    "completed": "Proběhlo"
+  },
+  "actions": {
+    "detail": "Detail",
+    "showAllHistory": "Zobrazit celou historii →",
+    "showAllShows": "Zobrazit všechny výstavy →",
+    "applyToShow": "Přihlásit se na výstavu",
+    "showDetails": "Zobrazit detaily"
+  },
+  "auth": {
+    "login": "Login",
+    "registration": "Registration",
+    "firstName": "Name",
+    "lastName": "Last Name",
+    "email": "E-mail",
+    "password": "Password",
+    "loginIn": "Login In",
+    "registerIn": "Register",
+    "dontHaveAccount": "Don't have an account yet? ",
+    "haveAccount": "Already have an account? "
+  },
+  "location": "Místo"
+}
