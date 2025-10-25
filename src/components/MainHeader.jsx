@@ -33,17 +33,19 @@ export function MainHeader() {
                     <NavLink to="/" className={({isActive}) => isActive ? 'active' : ''}>
                         {t('nav.dashboard')}
                     </NavLink>
-                    <NavLink to="/apply" className={({isActive}) => isActive ? 'active' : ''}>
-                        {t('nav.newApplication')}
-                    </NavLink>
-
                     {isAuthenticated && (
                         <>
+                            <NavLink to="/apply" className={({isActive}) => isActive ? 'active' : ''}>
+                                {t('nav.newApplication')}
+                            </NavLink>
                             <NavLink to="/my-applications" className={({isActive}) => isActive ? 'active' : ''}>
                                 {t('nav.myApplications')}
                             </NavLink>
                             <NavLink to="/my-cats" className={({isActive}) => isActive ? 'active' : ''}>
                                 {t('nav.myCats')}
+                            </NavLink>
+                            <NavLink to="/exhibitions" className={({isActive}) => isActive ? 'active' : ''}>
+                                {t('nav.exhibitions')}
                             </NavLink>
                         </>
                     )}

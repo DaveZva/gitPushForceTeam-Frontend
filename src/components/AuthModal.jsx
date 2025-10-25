@@ -40,21 +40,21 @@ export function AuthModal({ onClose }) {
                         <>
                             <div className="form-group">
                                 <label>{t('auth.firstName')}</label>
-                                <input type="text" value={firstName} onChange={(e) => setFirstName(e.target.value)} required />
+                                <input className="inputText" type="text" value={firstName} onChange={(e) => setFirstName(e.target.value)} required />
                             </div>
                             <div className="form-group">
                                 <label>{t('auth.lastName')}</label>
-                                <input type="text" value={lastName} onChange={(e) => setLastName(e.target.value)} required />
+                                <input className="inputText" type="text" value={lastName} onChange={(e) => setLastName(e.target.value)} required />
                             </div>
                         </>
                     )}
                     <div className="form-group">
                         <label>{t('auth.email')}</label>
-                        <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+                        <input className="inputText" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
                     </div>
                     <div className="form-group">
                         <label>{t('auth.password')}</label>
-                        <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+                        <input className="inputText" type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
                     </div>
 
                     {error && <p className="error-message">{error}</p>}

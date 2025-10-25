@@ -4,9 +4,10 @@ import { AuthProvider } from './context/AuthContext';
 import './App.css';
 
 // Importy
-import { AppLayout } from './layouts/AppLayout'; // Náš nový "obal"
+import { AppLayout } from './layouts/AppLayout'; // Náš "obal"
 import Dashboard from './pages/Dashboard';
-import HealthCheckPage from './pages/HealthCheck';
+import { ApplicationPage } from './pages/catRegister/ApplicationPage.jsx';
+import Secretariat from './pages/secretariat/ExhibitionManagementPage.jsx';
 
 function App() {
     // 't' potřebujeme pro texty na placeholder stránkách
@@ -18,11 +19,13 @@ function App() {
                 <Routes>
                     {/* Všechny cesty uvnitř použijí náš AppLayout (s hlavičkou) */}
                     <Route path="/" element={<AppLayout />}>
-                    {/* index=true znamená, že toto je výchozí stránka pro "/" */}
+
+                        {/* index=true znamená, že toto je výchozí stránka pro "/" */}
                         <Route index element={<Dashboard />} />
-                        <Route path="health" element={<HealthCheckPage />} />
+                        <Route path="apply" element={<ApplicationPage />} />
+                        <Route path="exhibitions" element={<Secretariat />} />
+
                         {/* Placeholder stránky pro odkazy v navigaci */}
-                        <Route path="apply" element={<h2>{t('nav.newApplication')}</h2>} />
                         <Route path="my-applications" element={<h2>{t('nav.myApplications')}</h2>} />
                         <Route path="my-cats" element={<h2>{t('nav.myCats')}</h2>} />
                     </Route>

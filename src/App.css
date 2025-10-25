@@ -13,6 +13,7 @@
     --color-surface: #ffffff;
     --color-text: #333;
     --color-text-secondary: #777;
+    --color-input-text: #e8e8e8;
     --border-radius: 8px;
     --box-shadow: 0 4px 12px rgba(0,0,0,0.05);
 }
@@ -252,4 +253,8 @@ button:hover {
     opacity: 0.8;
     background-color: var(--color-primary);
     transition: opacity 0.2s linear, background-color 0.2s linear;
+}
+.inputText {
+    background-color: var(--color-input-text);
+    color: black;
 }
