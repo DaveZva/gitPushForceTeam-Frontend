@@ -2,13 +2,6 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { usePersistentForm } from './usePersistentForm';
 
-// Import všech kroků
-import { Step1_Show } from './Step1_Show';
-import { Step2_Breeder } from './Step2_Breeder';
-import { Step3_Owner } from './Step3_Owner';
-import { Step4_Animal } from './Step4_Animal';
-import { Step5_Final } from './Step5_Final';
-
 // Import stylů
 import styles from './Application.module.css';
 

@@ -3,8 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { AuthProvider } from './context/AuthContext';
 import './App.css';
 
-// Importy
-import { AppLayout } from './layouts/AppLayout'; // Náš "obal"
+import { AppLayout } from './layouts/AppLayout';
 import Dashboard from './pages/Dashboard';
 import { ApplicationPage } from './pages/catRegister/ApplicationPage.jsx';
 import Secretariat from './pages/secretariat/ExhibitionManagementPage.jsx';
@@ -17,12 +16,11 @@ function App() {
         <AuthProvider>
             <BrowserRouter>
                 <Routes>
-                    {/* Všechny cesty uvnitř použijí náš AppLayout (s hlavičkou) */}
+                    {/* Všechny cesty uvnitř použijí AppLayout (s hlavičkou) */}
                     <Route path="/" element={<AppLayout />}>
 
-                        {/* index=true znamená, že toto je výchozí stránka pro "/" */}
                         <Route index element={<Dashboard />} />
-                        <Route path="apply" element={<ApplicationPage />} />
+                        <Route path="apply" element={<h2>{t('nav.myApp')}</h2>} />
                         <Route path="exhibitions" element={<Secretariat />} />
 
                         {/* Placeholder stránky pro odkazy v navigaci */}
