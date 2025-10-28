@@ -19,11 +19,8 @@ function Dashboard() {
     const { user, isAuthenticated } = useAuth();
 
     return (
-        // Používáme React.Fragment (<>), protože obalující <main> je už v AppLayout
         <>
             <header className="dashboard-header">
-
-                {/* Zobrazí se jeden H1 podle toho, jestli je uživatel přihlášený */}
                 {isAuthenticated && user ? (
                     <h1>{t('dashboard.welcome', { name: user.firstName })}!</h1>
                 ) : (

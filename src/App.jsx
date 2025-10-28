@@ -5,8 +5,8 @@ import './App.css';
 
 import { AppLayout } from './layouts/AppLayout';
 import Dashboard from './pages/Dashboard';
-import { ApplicationPage } from './pages/catRegister/ApplicationPage.jsx';
 import Secretariat from './pages/secretariat/ExhibitionManagementPage.jsx';
+import CatRegisterPage from './pages/catRegister/CatRegistrationForm';
 
 function App() {
     // 't' potřebujeme pro texty na placeholder stránkách
@@ -20,10 +20,8 @@ function App() {
                     <Route path="/" element={<AppLayout />}>
 
                         <Route index element={<Dashboard />} />
-                        <Route path="apply" element={<h2>{t('nav.myApp')}</h2>} />
+                        <Route path="apply" element={<CatRegisterPage />} />
                         <Route path="exhibitions" element={<Secretariat />} />
-
-                        {/* Placeholder stránky pro odkazy v navigaci */}
                         <Route path="my-applications" element={<h2>{t('nav.myApplications')}</h2>} />
                         <Route path="my-cats" element={<h2>{t('nav.myCats')}</h2>} />
                     </Route>

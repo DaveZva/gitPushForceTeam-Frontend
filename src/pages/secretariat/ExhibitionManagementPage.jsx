@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import styles from './ExhibitionManagementPage.module.css';
-import { getAllAdminShows } from '../../services/api'; // <-- KROK 1: Import API
+import { getAllAdminShows } from '../../services/api';
 
 
 const formatDate = (dateString) => { /* ... */ };

@@ -60,5 +60,10 @@
     "dontHaveAccount": "Nemáte účet? ",
     "haveAccount": "Již máte vytvořen účet? "
   },
+  "form": {
+    "actions": {
+      "saveAndContinue": "Uložit a pokračovat."
+    }
+  },
   "location": "Místo"
 }

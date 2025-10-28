@@ -1,0 +1,227 @@
+:root {
+    --color-primary: #007bff; /* Modrá z designu */
+    --color-primary-light: #e6f2ff; /* Světle modrá pro ohraničení */
+    --color-background-light: #F3F4F6; /* Světle šedé pozadí pro inputy a taby */
+    --color-text-primary: #333;
+    --color-text-secondary: #555;
+    --color-text-placeholder: #999;
+    --color-white: #ffffff;
+    --border-radius-card: 20px;
+    --border-radius-pill: 999px;
+    --border-radius-input: 12px;
+}
+
+/* Hlavní wrapper pro obsah kroku (bílá karta) */
+.step-content-wrapper {
+    background-color: var(--color-white);
+    border-radius: var(--border-radius-card);
+    padding: 2rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.07);
+    margin-top: 2rem;
+}
+
+/* Kontejner pro taby a tlačítko "přidat" */
+.tabs-with-button {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    gap: 1.5rem;
+}
+
+/* Kontejner pro samotné taby (šedý ovál) */
+.tabs-container {
+    display: flex;
+    background-color: var(--color-background-light);
+    border-radius: var(--border-radius-pill);
+    padding: 5px;
+    flex-grow: 1;
+}
+
+/* Jednotlivá tlačítka tabů */
+.tab-button {
+    flex: 1; /* Aby se rovnoměrně roztáhly */
+    padding: 0.75rem 1.5rem;
+    border: none;
+    background-color: transparent;
+    border-radius: var(--border-radius-pill);
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: var(--color-text-primary);
+    transition: all 0.3s ease;
+    white-space: nowrap;
+}
+
+/* Aktivní tab */
+.tab-button.active {
+    background-color: var(--color-primary);
+    color: var(--color-white);
+    box-shadow: 0 4px 10px rgba(0, 123, 255, 0.3);
+}
+
+.tab-button:not(.active):hover {
+    color: var(--color-primary);
+}
+
+/* Tlačítko "+ přidat další zvíře" */
+.btn-add-animal {
+    background-color: transparent;
+    border: 2px solid var(--color-primary-light);
+    color: var(--color-primary);
+    border-radius: var(--border-radius-pill);
+    padding: 0.75rem 1.5rem;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+}
+
+.btn-add-animal:hover {
+    background-color: var(--color-primary-light);
+    border-color: var(--color-primary);
+}
+
+/* Obsah tabu (kontejner pro formulář) */
+.tab-content {
+    padding-top: 1rem;
+}
+
+/* 3-sloupcová mřížka pro formulář */
+.form-grid-3-col {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem 2rem; /* Větší mezera mezi sloupci */
+}
+
+/* Kontejner pro jedno pole (label + input) */
+.form-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+/* Popisek pole */
+.form-field label {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--color-text-secondary);
+}
+
+/* Stylování pro inputy a selecty */
+.form-field input[type="text"],
+.form-field input[type="date"],
+.form-field input[type="email"],
+.form-field input[type="phone"],
+.form-field textarea,
+.form-field select {
+    background-color: var(--color-background-light);
+    border: none;
+    border-radius: var(--border-radius-input);
+    padding: 1rem;
+    font-size: 0.95rem;
+    color: var(--color-text-primary);
+    width: 100%;
+    box-sizing: border-box; /* Důležité pro správný padding */
+    transition: box-shadow 0.2s ease;
+}
+
+/* Placeholder text */
+.form-field input::placeholder {
+    color: var(--color-text-placeholder);
+}
+
+/* Focus stav */
+.form-field input:focus,
+.form-field select:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px var(--color-primary-light);
+}
+
+/* Specifické styly pro <select> aby vypadal jako input */
+.form-field select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    /* Vlastní šipka */
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3E%3Cpath stroke='%236B7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    background-size: 1em;
+    padding-right: 3rem; /* Místo pro šipku */
+    cursor: pointer;
+}
+
+/* Datum narození - placeholder */
+.form-field input[type="date"]:invalid {
+    color: var(--color-text-placeholder);
+}
+
+/* ----- Responzivní design ----- */
+
+@media (max-width: 1024px) {
+    /* Na tabletech přejít na 2 sloupce */
+    .form-grid-3-col {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .tabs-with-button {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .tabs-container {
+        width: 100%;
+    }
+
+    .btn-add-animal {
+        width: 100%;
+        text-align: center;
+    }
+}
+
+@media (max-width: 767px) {
+    .step-content-wrapper {
+        padding: 1.5rem;
+    }
+
+    /* Na mobilech přejít na 1 sloupec */
+    .form-grid-3-col {
+        grid-template-columns: 1fr;
+        gap: 1.25rem;
+    }
+
+    .tabs-container {
+        flex-direction: column;
+        border-radius: var(--border-radius-input);
+        padding: 4px;
+    }
+
+    .tab-button {
+        border-radius: 9px;
+        font-size: 0.9rem;
+        padding: 0.75rem 1rem;
+    }
+
+    .btn-add-animal {
+        font-size: 0.9rem;
+        padding: 0.75rem 1rem;
+    }
+}
+
+.ems-input-group {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.ems-input-group select {
+    flex-basis: 150px;
+    flex-grow: 0;
+}
+
+/* Input pro zbytek kódu (ns 24...) */
+.ems-input-group input {
+    flex-grow: 1;
+}
+

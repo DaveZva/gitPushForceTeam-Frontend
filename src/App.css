@@ -224,7 +224,7 @@ body {
 
 .btn-primary {
     display: block;
-    width: 100%;
+    max-width: 100%;
     padding: 0.75rem;
     background-color: var(--color-primary);
     text-decoration: none;

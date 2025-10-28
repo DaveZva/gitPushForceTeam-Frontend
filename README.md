@@ -1,6 +1,6 @@
 # Cat Show Frontend
 
-## Lokální spuštění (bez Dockeru)
+## Lokální spuštění
 ```bash
 # 1. Nainstalovat dependencies
 npm install
@@ -10,12 +10,6 @@ npm run dev
 
 # 3. Otevřít v prohlížeči
 http://localhost:5173
-```
-
-## Docker spuštění
-```bash
-# Z root složky projektu
-docker-compose up frontend
 ```
 
 ## Environment Variables
