@@ -59,5 +59,13 @@
     "dontHaveAccount": "Don't have an account yet? ",
     "haveAccount": "Already have an account? "
   },
+  "stepper": {
+    "exhibition": "Exhibition",
+    "cat": "Cat",
+    "breeder": "Breeder",
+    "exhibitor": "Exhibitor",
+    "consent": "Consents",
+    "recap": "Recap"
+  },
   "location": "Místo"
 }

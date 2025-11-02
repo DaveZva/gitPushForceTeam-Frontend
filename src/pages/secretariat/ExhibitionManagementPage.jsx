@@ -1,61 +1,83 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
-import styles from './ExhibitionManagementPage.module.css';
-import { getAllAdminShows } from '../../services/api';
-
-
-const formatDate = (dateString) => { /* ... */ };
-const getStatusClass = (status) => { /* ... */ };
-
+import { secretariatApi } from '../../services/api/secretariatApi'; // Správný import
+import { useAuth } from '../../context/AuthContext';
 
 export default function ExhibitionManagementPage() {
     const { t } = useTranslation();
+    const { isAuthenticated } = useAuth();
     const [shows, setShows] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
-    // KROK 2: Úprava useEffect pro volání API
+    // Helper funkce (přesunuty dovnitř)
+    const formatDate = (dateString) => {
+        if (!dateString) return '-';
+        return new Date(dateString).toLocaleDateString('cs-CZ', {
+            year: 'numeric', month: '2-digit', day: '2-digit',
+        });
+    };
+
+    const getStatusClass = (status) => {
+        const baseClass = "px-3 py-1 rounded-full text-xs font-semibold";
+        const statuses = {
+            PLANNED: 'bg-yellow-100 text-yellow-800',
+            OPEN: 'bg-green-100 text-green-800',
+            CLOSED: 'bg-orange-100 text-orange-800',
+            COMPLETED: 'bg-blue-100 text-blue-800',
+            CANCELLED: 'bg-gray-100 text-gray-800',
+        };
+        return `${baseClass} ${statuses[status] || ''}`;
+    };
+
+
     useEffect(() => {
         const fetchShows = async () => {
+            if (!isAuthenticated) {
+                setError(t('errors.notAuthenticated'));
+                setLoading(false);
+                return;
+            }
+
             try {
                 setLoading(true);
                 setError(null);
 
-                // Voláme funkci z api.js
-                const data = await getAllAdminShows();
+                // --- OPRAVA ZDE ---
+                // Místo 'getSecretariatExhibitions' voláme 'getSecretariatShows'
+                const data = await secretariatApi.getSecretariatShows();
+                // --------------------
 
-                // Třídění už dělá backend, takže data jen uložíme
-                setShows(data);
-
+                const sortedData = data.sort((a, b) => new Date(b.startDate) - new Date(a.startDate));
+                setShows(sortedData);
             } catch (err) {
-                // Zachytíme chyby (např. 401 Unauthorized, pokud admin není přihlášen)
-                setError(err.message || t('errors.fetchFailed', 'Nepodařilo se načíst data.'));
+                setError(t(err.message) || t('errors.fetchFailed'));
                 console.error(err);
             } finally {
                 setLoading(false);
             }
         };
-
         fetchShows();
-    }, [t]);
-
+    }, [t, isAuthenticated]);
 
     const renderTableBody = () => {
         if (loading) {
             return (
                 <tr>
-                    <td colSpan="5">{t('common.loading', 'Načítání dat...')}</td>
+                    <td colSpan="5" className="py-8 text-center text-gray-500">
+                        {t('common.loading')}
+                    </td>
                 </tr>
             );
         }
 
-        // Případ 2: Chyba
         if (error) {
             return (
                 <tr>
-                    {/* Používáme třídu z tvého App.css, kterou už máš */}
-                    <td colSpan="5" className="error">{error}</td>
+                    <td colSpan="5" className="py-8 text-center text-red-600">
+                        {error}
+                    </td>
                 </tr>
             );
         }
@@ -63,27 +85,30 @@ export default function ExhibitionManagementPage() {
         if (shows.length === 0) {
             return (
                 <tr>
-                    <td colSpan="5" style={{ textAlign: 'center', padding: '2rem' }}>
-                        {t('admin.shows.noShows', 'Zatím nebyly naplánovány ani neproběhly žádné výstavy.')}
+                    <td colSpan="5" className="py-8 text-center text-gray-500">
+                        {t('secretariat.shows.noShows')}
                     </td>
                 </tr>
             );
         }
-
         return shows.map(show => (
-            <tr key={show.id}>
-                <td><strong>{show.name}</strong></td>
-                <td>{show.venueName}</td>
-                <td>{formatDate(show.startDate)} - {formatDate(show.endDate)}</td>
-                <td>
-          <span className={getStatusClass(show.status)}>
-            {/* Přidáme překlad pro statusy */}
-              {t(`statuses.${show.status}`, show.status)}
-          </span>
+            <tr key={show.id} className="border-b border-gray-100 hover:bg-gray-50">
+                <td className="py-4 px-3 font-semibold text-gray-800">{show.name}</td>
+                <td className="py-4 px-3 text-gray-600">{show.venueName}</td>
+                <td className="py-4 px-3 text-gray-600">
+                    {formatDate(show.startDate)} - {formatDate(show.endDate)}
                 </td>
-                <td>
-                    <Link to={`/admin/shows/edit/${show.id}`} className={styles.editLink}>
-                        {t('common.edit', 'Upravit')}
+                <td className="py-4 px-3">
+                    <span className={getStatusClass(show.status)}>
+                        {t(`statuses.${show.status}`, show.status)}
+                    </span>
+                </td>
+                <td className="py-4 px-3">
+                    <Link
+                        to={`/secretariat/exhibition/edit/${show.id}`}
+                        className="font-medium text-blue-600 hover:text-blue-800"
+                    >
+                        {t('common.edit')}
                     </Link>
                 </td>
             </tr>
@@ -91,35 +116,36 @@ export default function ExhibitionManagementPage() {
     };
 
     return (
-        <div className={styles.adminPageContainer}>
-            {/* Hlavička stránky (zůstává stejná) */}
-            <header className={styles.pageHeader}>
-                <h1 className="dashboard-header">{t('admin.shows.title', 'Správa výstav')}</h1>
-                <Link to="/admin/shows/new" className="btn-primary">
-                    {t('admin.shows.add', 'Přidat výstavu')}
+        <div className="container max-w-7xl mx-auto p-4 sm:p-8">
+            <header className="flex justify-between items-center mb-8">
+                <h1 className="text-3xl font-bold text-gray-900">
+                    {t('secretariat.shows.title')}
+                </h1>
+                <Link
+                    to="/secretariat/exhibition/new"
+                    className="px-6 py-3 rounded-full font-semibold transition-all duration-300 bg-blue-600 text-white hover:bg-blue-700 shadow-lg"
+                >
+                    {t('secretariat.shows.add')}
                 </Link>
             </header>
 
-            {/* Panel se seznamem (zůstává stejný) */}
-            <div className="history-panel">
-                <table className="history-table">
-                    <thead>
+            <div className="bg-white p-6 sm:p-8 rounded-2xl shadow-xl overflow-x-auto">
+                <table className="w-full min-w-max table-auto text-left">
+                    <thead className="border-b border-gray-200">
                     <tr>
-                        <th>{t('admin.shows.col.name', 'Název výstavy')}</th>
-                        <th>{t('admin.shows.col.venue', 'Místo konání')}</th>
-                        <th>{t('admin.shows.col.date', 'Datum konání')}</th>
-                        <th>{t('admin.shows.col.status', 'Status')}</th>
-                        <th>{t('admin.shows.col.actions', 'Akce')}</th>
+                        <th className="py-3 px-3 text-sm font-semibold text-gray-600">{t('secretariat.shows.col.name')}</th>
+                        <th className="py-3 px-3 text-sm font-semibold text-gray-600">{t('secretariat.shows.col.venue')}</th>
+                        <th className="py-3 px-3 text-sm font-semibold text-gray-600">{t('secretariat.shows.col.date')}</th>
+                        <th className="py-3 px-3 text-sm font-semibold text-gray-600">{t('secretariat.shows.col.status')}</th>
+                        <th className="py-3 px-3 text-sm font-semibold text-gray-600">{t('secretariat.shows.col.actions')}</th>
                     </tr>
                     </thead>
-
-                    {/* Tělo tabulky teď renderuje naše nová funkce */}
                     <tbody>
                     {renderTableBody()}
                     </tbody>
-
                 </table>
             </div>
         </div>
     );
 }
+

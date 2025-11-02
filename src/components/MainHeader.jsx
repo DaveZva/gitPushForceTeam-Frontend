@@ -44,7 +44,7 @@ export function MainHeader() {
                             <NavLink to="/my-cats" className={({isActive}) => isActive ? 'active' : ''}>
                                 {t('nav.myCats')}
                             </NavLink>
-                            <NavLink to="/exhibitions" className={({isActive}) => isActive ? 'active' : ''}>
+                            <NavLink to="/secretariat/exhibition" className={({isActive}) => isActive ? 'active' : ''}>
                                 {t('nav.exhibitions')}
                             </NavLink>
                         </>

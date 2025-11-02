@@ -1,8 +1,26 @@
 import React, { useState, useEffect } from 'react';
+import { useFormContext } from 'react-hook-form';
 import { storageUtils } from '../../../utils/storage';
 
-export function Step4_ExhibitorInfo({ data, onChange, onLoadExhibitor, onCopyBreeder }) {
+// Běžný vzhled inputu
+const inputClass = "w-full p-3 bg-gray-100 border-none rounded-lg focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:bg-gray-200";
+
+const FormField = ({ label, name, error, children }) => (
+    <div className="flex flex-col gap-2">
+        <label htmlFor={name} className="text-sm font-semibold text-gray-700">
+            {label}
+        </label>
+        {children}
+        {error && <p className="text-sm text-red-600">{error.message}</p>}
+    </div>
+);
+
+export function Step4_ExhibitorInfo() {
+    const { register, setValue, watch, formState: { errors } } = useFormContext();
     const [savedExhibitors, setSavedExhibitors] = useState([]);
+
+    const sameAsBreeder = watch("sameAsBreeder");
+    const breederData = watch(["breederFirstName", "breederLastName", "breederAddress", "breederZip", "breederCity", "breederEmail", "breederPhone"]);
 
     useEffect(() => {
         setSavedExhibitors(storageUtils.getExhibitors());
@@ -13,144 +31,97 @@ export function Step4_ExhibitorInfo({ data, onChange, onLoadExhibitor, onCopyBre
         if (exhibitorId) {
             const exhibitor = savedExhibitors.find(ex => ex.id === exhibitorId);
             if (exhibitor) {
-                onLoadExhibitor(exhibitor);
+                setValue("exhibitorFirstName", exhibitor.firstName, { shouldValidate: true });
+                setValue("exhibitorLastName", exhibitor.lastName, { shouldValidate: true });
+                setValue("exhibitorAddress", exhibitor.address, { shouldValidate: true });
+                setValue("exhibitorZip", exhibitor.zip, { shouldValidate: true });
+                setValue("exhibitorCity", exhibitor.city, { shouldValidate: true });
+                setValue("exhibitorEmail", exhibitor.email, { shouldValidate: true });
+                setValue("exhibitorPhone", exhibitor.phone, { shouldValidate: true });
+                setValue("sameAsBreeder", false); // Načtení vystavovatele odškrtne checkbox
             }
         }
     };
 
-    return (
-        <div className="registration-form">
-            <h2>Údaje o vystavovateli</h2>
+    // Efekt pro kopírování dat chovatele
+    useEffect(() => {
+        if (sameAsBreeder) {
+            setValue("exhibitorFirstName", breederData[0]);
+            setValue("exhibitorLastName", breederData[1]);
+            setValue("exhibitorAddress", breederData[2]);
+            setValue("exhibitorZip", breederData[3]);
+            setValue("exhibitorCity", breederData[4]);
+            setValue("exhibitorEmail", breederData[5]);
+            setValue("exhibitorPhone", breederData[6]);
+        }
+    }, [sameAsBreeder, breederData, setValue]);
 
-            {savedExhibitors.length > 0 && !data.sameAsBreeder && (
-                <div className="form-field" style={{ backgroundColor: '#f0f7ff', padding: '1rem', borderRadius: '8px', marginBottom: '1.5rem' }}>
-                    <label>Načíst uloženého vystavovatele</label>
-                    <select onChange={handleLoadExhibitor} defaultValue="">
-                        <option value="">-- Vyberte ze seznamu --</option>
-                        {savedExhibitors.map(exhibitor => (
-                            <option key={exhibitor.id} value={exhibitor.id}>
-                                {exhibitor.firstName} {exhibitor.lastName} ({exhibitor.email})
-                            </option>
-                        ))}
-                    </select>
+    return (
+        <div className="space-y-6">
+            <h2 className="text-2xl font-bold text-gray-800">Údaje o vystavovateli</h2>
+
+            {savedExhibitors.length > 0 && !sameAsBreeder && (
+                <div className="p-4 bg-blue-50 rounded-lg">
+                    <FormField label="Načíst uloženého vystavovatele" name="loadExhibitor">
+                        <select
+                            onChange={handleLoadExhibitor}
+                            defaultValue=""
+                            className={inputClass}
+                            disabled={sameAsBreeder}
+                        >
+                            <option value="">-- Vyberte ze seznamu --</option>
+                            {savedExhibitors.map(ex => (
+                                <option key={ex.id} value={ex.id}>
+                                    {ex.firstName} {ex.lastName} ({ex.email})
+                                </option>
+                            ))}
+                        </select>
+                    </FormField>
                 </div>
             )}
 
-            <div className="info-box" style={{ backgroundColor: '#f0f7ff', padding: '1rem', borderRadius: '8px', marginBottom: '1.5rem' }}>
-                <label style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', cursor: 'pointer' }}>
+            <div className="p-4 bg-blue-50 rounded-lg">
+                <label className="flex items-center gap-3 cursor-pointer">
                     <input
                         type="checkbox"
-                        id="sameAsBreeder"
-                        checked={data.sameAsBreeder || false}
-                        onChange={onCopyBreeder}
-                        style={{ width: '20px', height: '20px', cursor: 'pointer' }}
+                        {...register("sameAsBreeder")}
+                        className="w-5 h-5 text-blue-600 rounded cursor-pointer focus:ring-blue-500"
                     />
-                    <span style={{ fontSize: '0.95rem' }}>
-            Vystavovatel je stejný jako chovatel
-          </span>
+                    <span className="font-medium text-gray-800">
+                        Vystavovatel je stejný jako chovatel
+                    </span>
                 </label>
             </div>
 
-            <div className="form-section" style={{ opacity: data.sameAsBreeder ? 0.5 : 1 }}>
-                <div className="form-row">
-                    <div className="form-field">
-                        <label htmlFor="exhibitorFirstName">Jméno *</label>
-                        <input
-                            type="text"
-                            id="exhibitorFirstName"
-                            name="exhibitorFirstName"
-                            value={data.exhibitorFirstName || ''}
-                            onChange={onChange}
-                            required
-                            disabled={data.sameAsBreeder}
-                        />
-                    </div>
+            <div className={`space-y-6 transition-opacity ${sameAsBreeder ? 'opacity-50' : 'opacity-100'}`}>
+                <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+                    <FormField label="Jméno *" name="exhibitorFirstName" error={errors.exhibitorFirstName}>
+                        <input type="text" {...register("exhibitorFirstName")} className={inputClass} disabled={sameAsBreeder} />
+                    </FormField>
 
-                    <div className="form-field">
-                        <label htmlFor="exhibitorLastName">Příjmení *</label>
-                        <input
-                            type="text"
-                            id="exhibitorLastName"
-                            name="exhibitorLastName"
-                            value={data.exhibitorLastName || ''}
-                            onChange={onChange}
-                            required
-                            disabled={data.sameAsBreeder}
-                        />
-                    </div>
-                </div>
+                    <FormField label="Příjmení *" name="exhibitorLastName" error={errors.exhibitorLastName}>
+                        <input type="text" {...register("exhibitorLastName")} className={inputClass} disabled={sameAsBreeder} />
+                    </FormField>
 
-                <div className="form-field">
-                    <label htmlFor="exhibitorAddress">Ulice a číslo popisné *</label>
-                    <input
-                        type="text"
-                        id="exhibitorAddress"
-                        name="exhibitorAddress"
-                        value={data.exhibitorAddress || ''}
-                        onChange={onChange}
-                        required
-                        disabled={data.sameAsBreeder}
-                        placeholder="Např. Hlavní 123"
-                    />
-                </div>
+                    <FormField label="Ulice a číslo popisné *" name="exhibitorAddress" error={errors.exhibitorAddress}>
+                        <input type="text" {...register("exhibitorAddress")} className={inputClass} placeholder="Např. Hlavní 123" disabled={sameAsBreeder} />
+                    </FormField>
 
-                <div className="form-row">
-                    <div className="form-field">
-                        <label htmlFor="exhibitorZip">PSČ *</label>
-                        <input
-                            type="text"
-                            id="exhibitorZip"
-                            name="exhibitorZip"
-                            value={data.exhibitorZip || ''}
-                            onChange={onChange}
-                            required
-                            disabled={data.sameAsBreeder}
-                            placeholder="123 45"
-                        />
-                    </div>
+                    <FormField label="PSČ *" name="exhibitorZip" error={errors.exhibitorZip}>
+                        <input type="text" {...register("exhibitorZip")} className={inputClass} placeholder="123 45" disabled={sameAsBreeder} />
+                    </FormField>
 
-                    <div className="form-field">
-                        <label htmlFor="exhibitorCity">Město *</label>
-                        <input
-                            type="text"
-                            id="exhibitorCity"
-                            name="exhibitorCity"
-                            value={data.exhibitorCity || ''}
-                            onChange={onChange}
-                            required
-                            disabled={data.sameAsBreeder}
-                        />
-                    </div>
-                </div>
+                    <FormField label="Město *" name="exhibitorCity" error={errors.exhibitorCity}>
+                        <input type="text" {...register("exhibitorCity")} className={inputClass} disabled={sameAsBreeder} />
+                    </FormField>
 
-                <div className="form-row">
-                    <div className="form-field">
-                        <label htmlFor="exhibitorEmail">Email *</label>
-                        <input
-                            type="email"
-                            id="exhibitorEmail"
-                            name="exhibitorEmail"
-                            value={data.exhibitorEmail || ''}
-                            onChange={onChange}
-                            required
-                            disabled={data.sameAsBreeder}
-                            placeholder="email@example.com"
-                        />
-                    </div>
+                    <FormField label="Email *" name="exhibitorEmail" error={errors.exhibitorEmail}>
+                        <input type="email" {...register("exhibitorEmail")} className={inputClass} placeholder="email@example.com" disabled={sameAsBreeder} />
+                    </FormField>
 
-                    <div className="form-field">
-                        <label htmlFor="exhibitorPhone">Telefon *</label>
-                        <input
-                            type="phone"
-                            id="exhibitorPhone"
-                            name="exhibitorPhone"
-                            value={data.exhibitorPhone || ''}
-                            onChange={onChange}
-                            required
-                            disabled={data.sameAsBreeder}
-                            placeholder="+420 123 456 789"
-                        />
-                    </div>
+                    <FormField label="Telefon *" name="exhibitorPhone" error={errors.exhibitorPhone}>
+                        <input type="tel" {...register("exhibitorPhone")} className={inputClass} placeholder="+420 123 456 789" disabled={sameAsBreeder} />
+                    </FormField>
                 </div>
             </div>
         </div>

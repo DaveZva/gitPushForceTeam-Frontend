@@ -65,5 +65,82 @@
       "saveAndContinue": "Uložit a pokračovat."
     }
   },
+  "stepper": {
+    "exhibition": "Výstava",
+    "cat": "Kočka",
+    "breeder": "Chovatel",
+    "exhibitor": "Vystavovatel",
+    "consent": "Souhlasy",
+    "recap": "Rekapitulace"
+  },
+  "common": {
+    "loading": "Načítání...",
+    "edit": "Upravit",
+    "yes": "Ano",
+    "no": "Ne",
+    "select": "Vyberte",
+    "noTitle": "Bez titulu"
+  },
+  "errors": {
+    "fetchFailed": "Nepodařilo se načíst data."
+  },
+  "statuses": {
+    "PLANNED": "Naplánováno",
+    "OPEN": "Registrace otevřena",
+    "CLOSED": "Registrace uzavřena",
+    "COMPLETED": "Proběhlo",
+    "CANCELLED": "Zrušeno"
+  },
+  "alert": {
+    "submitSuccess": "Přihláška byla úspěšně odeslána! Číslo přihlášky: {{number}}",
+    "submitError": "Chyba při odesílání přihlášky. Zkuste to prosím později.",
+    "createSuccess": "Výstava byla úspěšně vytvořena.",
+    "createError": "Chyba při vytváření výstavy. Zkuste to prosím později."
+  },
+  "confirm": {
+    "resetForm": "Opravdu chcete smazat všechny vyplněné údaje?"
+  },
+  "admin": {
+    "shows": {
+      "title": "Správa výstav",
+      "add": "Přidat výstavu",
+      "noShows": "Zatím nebyly naplánovány žádné výstavy.",
+      "col": {
+        "name": "Název výstavy",
+        "venue": "Místo konání",
+        "date": "Datum konání",
+        "status": "Status",
+        "actions": "Akce"
+      }
+    },
+    "create": {
+      "title": "Vytvořit novou výstavu",
+      "back": "Zpět na seznam",
+      "submit": "Vytvořit výstavu",
+      "submitting": "Vytvářím...",
+      "section": {
+        "basic": "Základní informace",
+        "venue": "Místo konání",
+        "dates": "Důležitá data",
+        "organizer": "Organizátor"
+      }
+    }
+  },
+  "fields": {
+    "name": "Název výstavy *",
+    "description": "Popis",
+    "status": "Status *",
+    "venueName": "Název místa *",
+    "venueAddress": "Adresa",
+    "venueCity": "Město",
+    "venueState": "Stát",
+    "venueZip": "PSČ",
+    "startDate": "Datum a čas začátku *",
+    "endDate": "Datum a čas konce *",
+    "registrationDeadline": "Uzávěrka registrací *",
+    "organizerName": "Jméno organizátora *",
+    "contactEmail": "Kontaktní email",
+    "websiteUrl": "Webová stránka"
+  },
   "location": "Místo"
 }

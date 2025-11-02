@@ -1,162 +1,162 @@
 import React, { useState, useEffect } from 'react';
+import { useForm, FormProvider } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useTranslation } from 'react-i18next';
+import { registrationSchema } from '../../schemas/registrationSchema';
 import { FormStepper } from '../../components/FormStepper';
 import { Step1_Exhibition } from './steps/Step1_Exhibition';
 import { Step2_CatInfo } from './steps/Step2_CatInfo';
 import { Step3_BreederInfo } from './steps/Step3_BreederInfo';
 import { Step4_ExhibitorInfo } from './steps/Step4_ExhibitorInfo';
 import { Step5_NotesAndConsent } from './steps/Step5_NotesAndConsent';
+import { Step6_Recap } from './steps/Step6_Recap';
 import { storageUtils } from '../../utils/storage';
 import { registrationApi } from '../../services/api/registrationApi';
 import '../../styles/CatRegistration.css';
 
+// Výchozí hodnoty pro jednu kočku (VRÁCENA VŠECHNA POLE)
+export const defaultCatValues = {
+    // Základní údaje
+    titleBefore: "",
+    catName: "",
+    titleAfter: "",
+    chipNumber: "",
+    gender: "",
+    neutered: "",
+    emsCode: "",
+    birthDate: "",
+    showClass: "",
+    pedigreeNumber: "",
+    cageType: "",
+    // Matka
+    motherTitleBefore: "",
+    motherName: "",
+    motherTitleAfter: "",
+    motherBreed: "",
+    motherEmsCode: "",
+    motherColor: "",
+    motherPedigreeNumber: "",
+    // Otec
+    fatherTitleBefore: "",
+    fatherName: "",
+    fatherTitleAfter: "",
+    fatherBreed: "",
+    fatherEmsCode: "",
+    fatherColor: "",
+    fatherPedigreeNumber: "",
+};
+
+// Definice polí pro validaci v jednotlivých krocích
+const fieldsByStep = [
+    [],
+    ['showId', 'days'],
+    ['cats'],
+    ['breederFirstName', 'breederLastName', 'breederAddress', 'breederZip', 'breederCity', 'breederEmail', 'breederPhone'],
+    ['sameAsBreeder', 'exhibitorFirstName', 'exhibitorLastName', 'exhibitorAddress', 'exhibitorZip', 'exhibitorCity', 'exhibitorEmail', 'exhibitorPhone'],
+    ['dataAccuracy', 'gdprConsent'],
+    [],
+];
+
 function CatRegistrationForm() {
+    const { t } = useTranslation();
     const [currentStep, setCurrentStep] = useState(1);
-    const [formData, setFormData] = useState({});
     const [isSubmitting, setIsSubmitting] = useState(false);
 
-    const stepLabels = ['Výstava', 'Kočka', 'Chovatel', 'Vystavovatel', 'Souhlas'];
+    const stepLabels = [
+        'stepper.exhibition',
+        'stepper.cat',
+        'stepper.breeder',
+        'stepper.exhibitor',
+        'stepper.consent',
+        'stepper.recap'
+    ];
+    const totalSteps = stepLabels.length;
 
-    // Načtení rozdělaného formuláře z localStorage
+    const methods = useForm({
+        resolver: zodResolver(registrationSchema),
+        defaultValues: storageUtils.getCurrentForm() || {
+            sameAsBreeder: false,
+            cats: [defaultCatValues]
+        },
+        mode: 'onTouched',
+    });
+
+    const { handleSubmit, watch, reset, trigger } = methods;
+
     useEffect(() => {
-        const savedForm = storageUtils.getCurrentForm();
-        if (savedForm) {
-            setFormData(savedForm);
-        }
-    }, []);
+        const subscription = watch((value) => {
+            storageUtils.saveCurrentForm(value);
+        });
+        return () => subscription.unsubscribe();
+    }, [watch]);
 
-    // Automatické ukládání formuláře při každé změně
-    useEffect(() => {
-        if (Object.keys(formData).length > 0) {
-            storageUtils.saveCurrentForm(formData);
-        }
-    }, [formData]);
+    const onSubmit = async (data) => {
+        setIsSubmitting(true);
+        try {
+            const registrationData = {
+                show: { id: data.showId, days: data.days },
+                cats: data.cats,
+                breeder: {
+                    firstName: data.breederFirstName,
+                    lastName: data.breederLastName,
+                    address: data.breederAddress,
+                    zip: data.breederZip,
+                    city: data.breederCity,
+                    email: data.breederEmail,
+                    phone: data.breederPhone
+                },
+                exhibitor: data.sameAsBreeder ? null : {
+                    firstName: data.exhibitorFirstName,
+                    lastName: data.exhibitorLastName,
+                    address: data.exhibitorAddress,
+                    zip: data.exhibitorZip,
+                    city: data.exhibitorCity,
+                    email: data.exhibitorEmail,
+                    phone: data.exhibitorPhone
+                },
+                notes: data.notes,
+                consents: {
+                    dataAccuracy: data.dataAccuracy,
+                    gdpr: data.gdprConsent
+                }
+            };
 
-    // Obecná funkce pro změnu hodnot
-    const handleChange = (e) => {
-        const { name, value, type, checked } = e.target;
-        setFormData(prev => ({
-            ...prev,
-            [name]: type === 'checkbox' ? checked : value
-        }));
-    };
+            const response = await registrationApi.submitRegistration(registrationData);
 
-    // Načíst uloženou kočku
-    const handleLoadCat = (cat) => {
-        setFormData(prev => ({
-            ...prev,
-            catName: cat.catName,
-            cattery: cat.cattery,
-            gender: cat.gender,
-            birthDate: cat.birthDate,
-            pedigreeNumber: cat.pedigreeNumber,
-            motherName: cat.motherName,
-            fatherName: cat.fatherName
-        }));
-    };
+            storageUtils.saveBreeder(registrationData.breeder);
+            if (registrationData.exhibitor) {
+                storageUtils.saveExhibitor(registrationData.exhibitor);
+            }
 
-    // Načíst uloženého chovatele
-    const handleLoadBreeder = (breeder) => {
-        setFormData(prev => ({
-            ...prev,
-            breederFirstName: breeder.firstName,
-            breederLastName: breeder.lastName,
-            breederAddress: breeder.address,
-            breederZip: breeder.zip,
-            breederCity: breeder.city,
-            breederEmail: breeder.email,
-            breederPhone: breeder.phone
-        }));
-    };
+            storageUtils.clearCurrentForm();
+            alert(t('alert.submitSuccess', { number: response.registrationNumber }));
 
-    // Načíst uloženého vystavovatele
-    const handleLoadExhibitor = (exhibitor) => {
-        setFormData(prev => ({
-            ...prev,
-            exhibitorFirstName: exhibitor.firstName,
-            exhibitorLastName: exhibitor.lastName,
-            exhibitorAddress: exhibitor.address,
-            exhibitorZip: exhibitor.zip,
-            exhibitorCity: exhibitor.city,
-            exhibitorEmail: exhibitor.email,
-            exhibitorPhone: exhibitor.phone,
-            sameAsBreeder: false
-        }));
-    };
+            reset({
+                sameAsBreeder: false,
+                cats: [defaultCatValues]
+            });
+            setCurrentStep(1);
 
-    // Zkopírovat údaje chovatele do vystavovatele
-    const handleCopyBreeder = (e) => {
-        const isChecked = e.target.checked;
-        if (isChecked) {
-            setFormData(prev => ({
-                ...prev,
-                sameAsBreeder: true,
-                exhibitorFirstName: prev.breederFirstName,
-                exhibitorLastName: prev.breederLastName,
-                exhibitorAddress: prev.breederAddress,
-                exhibitorZip: prev.breederZip,
-                exhibitorCity: prev.breederCity,
-                exhibitorEmail: prev.breederEmail,
-                exhibitorPhone: prev.breederPhone
-            }));
-        } else {
-            setFormData(prev => ({
-                ...prev,
-                sameAsBreeder: false
-            }));
+        } catch (error) {
+            alert(t('alert.submitError'));
+            console.error('Submission error:', error);
+        } finally {
+            setIsSubmitting(false);
         }
     };
 
-    // Validace jednotlivých kroků
-    const validateStep = () => {
-        switch(currentStep) {
-            case 1:
-                if (!formData.showId || !formData.days) {
-                    alert('Prosím vyplňte všechna povinná pole');
-                    return false;
-                }
-                break;
-            case 2:
-                if (!formData.catName || !formData.gender || !formData.birthDate) {
-                    alert('Prosím vyplňte všechna povinná pole u kočky');
-                    return false;
-                }
-                break;
-            case 3:
-                if (!formData.breederFirstName || !formData.breederLastName || !formData.breederAddress ||
-                    !formData.breederZip || !formData.breederCity || !formData.breederEmail || !formData.breederPhone) {
-                    alert('Prosím vyplňte všechna povinná pole chovatele');
-                    return false;
-                }
-                break;
-            case 4:
-                if (!formData.sameAsBreeder && (!formData.exhibitorFirstName || !formData.exhibitorLastName ||
-                    !formData.exhibitorAddress || !formData.exhibitorZip || !formData.exhibitorCity ||
-                    !formData.exhibitorEmail || !formData.exhibitorPhone)) {
-                    alert('Prosím vyplňte všechna povinná pole vystavovatele');
-                    return false;
-                }
-                break;
-            case 5:
-                if (!formData.dataAccuracy || !formData.gdprConsent) {
-                    alert('Musíte souhlasit s podmínkami');
-                    return false;
-                }
-                break;
-        }
-        return true;
-    };
+    const handleNext = async () => {
+        const fieldsToValidate = fieldsByStep[currentStep];
+        const isValid = await trigger(fieldsToValidate);
 
-    // Přechod na další krok
-    const handleNext = () => {
-        if (validateStep()) {
-            if (currentStep < 5) {
+        if (isValid) {
+            if (currentStep < totalSteps) {
                 setCurrentStep(currentStep + 1);
                 window.scrollTo({ top: 0, behavior: 'smooth' });
             }
         }
     };
 
-    // Přechod na předchozí krok
     const handlePrevious = () => {
         if (currentStep > 1) {
             setCurrentStep(currentStep - 1);
@@ -164,167 +164,88 @@ function CatRegistrationForm() {
         }
     };
 
-    // Odeslání formuláře
-    const handleSubmit = async () => {
-        if (!validateStep()) return;
-
-        setIsSubmitting(true);
-
-        try {
-            // Příprava dat pro backend
-            const registrationData = {
-                show: {
-                    id: formData.showId,
-                    days: formData.days
-                },
-                cat: {
-                    name: formData.catName,
-                    cattery: formData.cattery,
-                    breed: formData.breed,
-                    gender: formData.gender,
-                    birthDate: formData.birthDate,
-                    color: formData.color,
-                    pedigreeNumber: formData.pedigreeNumber,
-                    mother: formData.motherName,
-                    father: formData.fatherName
-                },
-                breeder: {
-                    firstName: formData.breederFirstName,
-                    lastName: formData.breederLastName,
-                    address: formData.breederAddress,
-                    zip: formData.breederZip,
-                    city: formData.breederCity,
-                    email: formData.breederEmail,
-                    phone: formData.breederPhone
-                },
-                exhibitor: formData.sameAsBreeder ? null : {
-                    firstName: formData.exhibitorFirstName,
-                    lastName: formData.exhibitorLastName,
-                    address: formData.exhibitorAddress,
-                    zip: formData.exhibitorZip,
-                    city: formData.exhibitorCity,
-                    email: formData.exhibitorEmail,
-                    phone: formData.exhibitorPhone
-                },
-                notes: formData.notes,
-                consents: {
-                    dataAccuracy: formData.dataAccuracy,
-                    gdpr: formData.gdprConsent
-                }
-            };
-
-            // Odeslání na backend
-            const response = await registrationApi.submitRegistration(registrationData);
-
-            // Uložení dat do localStorage pro příští použití
-            storageUtils.saveCat(registrationData.cat);
-            storageUtils.saveBreeder(registrationData.breeder);
-            if (registrationData.exhibitor) {
-                storageUtils.saveExhibitor(registrationData.exhibitor);
-            }
-
-            // Smazání aktuálního formuláře
-            storageUtils.clearCurrentForm();
-
-            alert(`Přihláška byla úspěšně odeslána! Číslo přihlášky: ${response.registrationNumber}`);
-
-            // Reset formuláře
-            setFormData({});
-            setCurrentStep(1);
-
-        } catch (error) {
-            alert('Chyba při odesílání přihlášky. Zkuste to prosím později.');
-            console.error('Submission error:', error);
-        } finally {
-            setIsSubmitting(false);
-        }
-    };
-
-    // Smazání celého formuláře
     const handleReset = () => {
-        if (window.confirm('Opravdu chcete smazat všechny vyplněné údaje?')) {
-            setFormData({});
+        if (window.confirm(t('confirm.resetForm'))) {
+            reset({
+                sameAsBreeder: false,
+                cats: [defaultCatValues]
+            });
             storageUtils.clearCurrentForm();
             setCurrentStep(1);
         }
     };
+
+    const btnBase = "px-6 py-3 rounded-full font-semibold transition-all duration-300";
+    const btnPrimary = `${btnBase} bg-blue-600 text-white hover:bg-blue-700 shadow-lg`;
+    const btnSecondary = `${btnBase} bg-gray-200 text-gray-800 hover:bg-gray-300`;
+    const btnSubmit = `${btnBase} bg-green-600 text-white hover:bg-green-700 shadow-lg disabled:opacity-50`;
+    const btnReset = `${btnBase} bg-red-100 text-red-700 hover:bg-red-200`;
 
     return (
-        <div className="cat-registration-page">
-            <div className="container">
-                <div className="page-header">
-                    <h1>Registrace kočky na výstavu</h1>
-                    <button className="btn-reset" onClick={handleReset}>
-                        Smazat vše
-                    </button>
-                </div>
+        <FormProvider {...methods}>
+            <div className="min-h-screen bg-gray-50">
+                <div className="container max-w-5xl mx-auto p-4 sm:p-8">
 
-                <FormStepper
-                    currentStep={currentStep}
-                    totalSteps={5}
-                    labels={stepLabels}
-                />
-
-                <div className="registration-form-wrapper">
-                    {currentStep === 1 && (
-                        <Step1_Exhibition data={formData} onChange={handleChange} />
-                    )}
-                    {currentStep === 2 && (
-                        <Step2_CatInfo
-                            data={formData}
-                            onChange={handleChange}
-                            onLoadCat={handleLoadCat}
-                        />
-                    )}
-                    {currentStep === 3 && (
-                        <Step3_BreederInfo
-                            data={formData}
-                            onChange={handleChange}
-                            onLoadBreeder={handleLoadBreeder}
-                        />
-                    )}
-                    {currentStep === 4 && (
-                        <Step4_ExhibitorInfo
-                            data={formData}
-                            onChange={handleChange}
-                            onLoadExhibitor={handleLoadExhibitor}
-                            onCopyBreeder={handleCopyBreeder}
-                        />
-                    )}
-                    {currentStep === 5 && (
-                        <Step5_NotesAndConsent data={formData} onChange={handleChange} />
-                    )}
-                </div>
-
-                <div className="form-navigation">
-                    <button
-                        className="btn-secondary"
-                        onClick={handlePrevious}
-                        disabled={currentStep === 1}
-                    >
-                        ← Zpět
-                    </button>
-
-                    {currentStep < 5 ? (
-                        <button className="btn-primary" onClick={handleNext}>
-                            Pokračovat →
+                    <div className="flex justify-between items-center mb-8">
+                        <h1 className="text-3xl font-bold text-gray-900">
+                            {t('form.title')}
+                        </h1>
+                        <button className={btnReset} onClick={handleReset}>
+                            {t('form.resetAll')}
                         </button>
-                    ) : (
+                    </div>
+
+                    <FormStepper
+                        currentStep={currentStep}
+                        totalSteps={totalSteps}
+                        labels={stepLabels}
+                    />
+
+                    <div className="bg-white p-6 sm:p-10 rounded-2xl shadow-xl mt-8">
+                        <form onSubmit={handleSubmit(onSubmit)}>
+                            {currentStep === 1 && <Step1_Exhibition />}
+                            {currentStep === 2 && <Step2_CatInfo />}
+                            {currentStep === 3 && <Step3_BreederInfo />}
+                            {currentStep === 4 && <Step4_ExhibitorInfo />}
+                            {currentStep === 5 && <Step5_NotesAndConsent />}
+                            {currentStep === 6 && <Step6_Recap />}
+                        </form>
+                    </div>
+
+                    <div className="flex justify-between mt-10">
                         <button
-                            className="btn-submit"
-                            onClick={handleSubmit}
-                            disabled={isSubmitting}
+                            type="button"
+                            className={btnSecondary}
+                            onClick={handlePrevious}
+                            disabled={currentStep === 1}
+                            style={{ visibility: currentStep === 1 ? 'hidden' : 'visible' }}
                         >
-                            {isSubmitting ? 'Odesílám...' : '✓ Odeslat přihlášku'}
+                            ← {t('form.back')}
                         </button>
-                    )}
-                </div>
 
-                <div className="info-message">
-                    💾 Vaše data jsou automaticky ukládána v prohlížeči. Můžete formulář kdykoli opustit a vrátit se k němu později.
+                        {currentStep < totalSteps ? (
+                            <button type="button" className={btnPrimary} onClick={handleNext}>
+                                {currentStep === totalSteps - 1 ? t('form.toRecap') : t('form.continue')} →
+                            </button>
+                        ) : (
+                            <button
+                                type="button"
+                                className={btnSubmit}
+                                onClick={handleSubmit(onSubmit)}
+                                disabled={isSubmitting}
+                            >
+                                {isSubmitting ? t('form.submitting') : t('form.submit')}
+                            </button>
+                        )}
+                    </div>
+
+                    <div className="mt-8 text-center text-gray-500">
+                        💾 {t('form.autosaveInfo')}
+                    </div>
                 </div>
             </div>
-        </div>
+        </FormProvider>
     );
 }
+
 export default CatRegistrationForm;
