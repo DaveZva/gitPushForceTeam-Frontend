@@ -1,8 +1,16 @@
+// Soubor: src/pages/catRegister/steps/Step1_Exhibition.jsx (UPRAVENÝ)
 import React, { useState, useEffect } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { registrationApi } from '../../../services/api/registrationApi';
 
+// Importujeme naše nové UI komponenty
+import { Select } from '../../../components/ui/Select';
+import { RadioGroup } from '../../../components/ui/RadioGroup';
+import { Radio } from '../../../components/ui/Radio';
+
 export function Step1_Exhibition() {
+    // Tuto pomocnou komponentu zde zatím necháme,
+    // protože ji stále používáme jako obal
     const FormField = ({ label, name, children, error }) => (
         <div className="flex flex-col gap-2">
             <label htmlFor={name} className="text-sm font-semibold text-gray-700">
@@ -39,37 +47,37 @@ export function Step1_Exhibition() {
                 {loading ? (
                     <div className="w-full p-3 text-gray-500 bg-gray-100 rounded-lg">Načítám výstavy...</div>
                 ) : (
-                    <select
-                        id="showId"
-                        {...register("showId")}
-                        className="w-full p-3 bg-gray-100 border-none rounded-lg focus:ring-2 focus:ring-blue-500"
-                    >
+                    // POUŽITÍ KOMPONENTY <Select>
+                    <Select id="showId" {...register("showId")}>
                         <option value="">Vyberte výstavu...</option>
                         {shows.map(show => (
                             <option key={show.id} value={show.id}>
                                 {show.name} ({show.date})
                             </option>
                         ))}
-                    </select>
+                    </Select>
                 )}
             </FormField>
 
             <FormField label="Účast na výstavě *" name="days" error={errors.days}>
-                <div className="flex flex-col p-2 space-y-2 bg-gray-100 rounded-lg sm:flex-row sm:space-y-0 sm:space-x-2">
-                    {['sat', 'sun', 'both'].map((day) => (
-                        <label key={day} className="flex-1 px-4 py-3 text-center transition-colors duration-200 rounded-md cursor-pointer has-[:checked]:bg-blue-600 has-[:checked]:text-white">
-                            <input
-                                type="radio"
-                                value={day}
-                                {...register("days")}
-                                className="sr-only" // Skryje radio button
-                            />
-                            {day === 'sat' && 'Sobota'}
-                            {day === 'sun' && 'Neděle'}
-                            {day === "both" && 'Oba dny'}
-                        </label>
-                    ))}
-                </div>
+                {/* POUŽITÍ KOMPONENT <RadioGroup> a <Radio> */}
+                <RadioGroup>
+                    <Radio
+                        label="Sobota"
+                        value="sat"
+                        registration={register("days")}
+                    />
+                    <Radio
+                        label="Neděle"
+                        value="sun"
+                        registration={register("days")}
+                    />
+                    <Radio
+                        label="Oba dny"
+                        value="both"
+                        registration={register("days")}
+                    />
+                </RadioGroup>
             </FormField>
         </div>
     );

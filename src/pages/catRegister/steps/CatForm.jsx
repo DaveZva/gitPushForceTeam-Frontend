@@ -1,10 +1,16 @@
+// Soubor: src/pages/catRegister/steps/CatForm.jsx (UPRAVENÝ)
 import React, { useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-// Importujeme náš validační soubor (cesta musí být správně)
 import { BREED_OPTIONS, validateEmsCode } from "../../../utils/emsRules.js";
 
-// Pomocná komponenta FormField
+// Importujeme naše nové UI komponenty
+import { Input } from '../../../components/ui/Input';
+import { Select } from '../../../components/ui/Select';
+import { Card } from '../../../components/ui/Card';
+import { Button } from '../../../components/ui/Button'; // Importujeme Button
+
+// Pomocná komponenta FormField (zůstává, je to dobrý wrapper)
 const FormField = ({ label, name, children, error }) => (
     <div className="flex flex-col gap-2">
         <label htmlFor={name} className="text-sm font-semibold text-gray-700">
@@ -15,10 +21,11 @@ const FormField = ({ label, name, children, error }) => (
     </div>
 );
 
-// Běžný vzhled inputu a selectu
-const inputClass = "w-full p-3 bg-gray-100 border-none rounded-lg focus:ring-2 focus:ring-blue-500";
+// !!!!!!!!!!
+// const inputClass = "..." --> TOTO JSME SMAZALI (je teď v Input.jsx a Select.jsx)
+// !!!!!!!!!!
 
-// --- Pomocná komponenta pro grid ---
+// --- Pomocná komponenta pro grid (zůstává) ---
 const FormGrid = ({ children }) => (
     <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
         {children}
@@ -30,7 +37,6 @@ export function CatForm({ catIndex, onRemove }) {
     const { t } = useTranslation();
     const [activeTab, setActiveTab] = useState('basic');
     const { register, formState: { errors }, watch, setValue, setError, clearErrors } = useFormContext();
-    // Dynamické cesty k polím
     const fieldName = (name) => `cats.${catIndex}.${name}`;
     const fieldError = (name) => errors.cats?.[catIndex]?.[name];
 
@@ -39,36 +45,25 @@ export function CatForm({ catIndex, onRemove }) {
     const emsSuffix = watch(fieldName("emsCode"))?.substring(4) || '';
 
     const handleEmsChange = (e) => {
+        // ... (tato logika zůstává stejná)
         const { name, value } = e.target;
         const newPrefix = (name === "emsPrefix") ? value : emsPrefix;
         const newSuffix = (name === "emsSuffix") ? value : emsSuffix;
 
         const fullEmsCode = `${newPrefix} ${newSuffix}`;
-        const fieldNameStr = fieldName('emsCode'); // např. "cats.0.emsCode"
+        const fieldNameStr = fieldName('emsCode');
 
-        // 1. Nastavíme hodnotu (už nepotřebujeme shouldValidate)
         setValue(fieldNameStr, fullEmsCode);
-
-        // 2. Ručně spustíme naši validaci
-        console.log("MANUÁLNĚ VALIDUJI:", fullEmsCode); // Pro kontrolu
         const result = validateEmsCode(fullEmsCode);
 
-        // 3. Ručně nastavíme nebo smažeme chybu
         if (result === true) {
-            // Vše je OK, pokud byla chyba, smažeme ji
-            console.log("VÝSLEDEK: OK");
             clearErrors(fieldNameStr);
         } else {
-            // Našli jsme chybu, nastavíme ji
-            console.log("VÝSLEDEK: CHYBA", result);
-            setError(fieldNameStr, {
-                type: 'custom',
-                message: result // 'result' je ta naše chybová hláška
-            });
+            setError(fieldNameStr, { type: 'custom', message: result });
         }
     };
 
-    // --- Tlačítko pro záložku ---
+    // --- Tlačítko pro záložku (zůstává lokální) ---
     const TabButton = ({ label, isActive, onClick }) => (
         <button
             type="button"
@@ -86,9 +81,9 @@ export function CatForm({ catIndex, onRemove }) {
             case 'basic':
                 return (
                     <FormGrid>
-                        {/* --- ZÁKLADNÍ ÚDAJE --- */}
+                        {/* --- ZÁKLADNÍ ÚDAJE (používáme <Select> a <Input>) --- */}
                         <FormField label={t('catForm.titleBefore')} name={fieldName("titleBefore")} error={fieldError("titleBefore")}>
-                            <select {...register(fieldName("titleBefore"))} className={inputClass}>
+                            <Select {...register(fieldName("titleBefore"))}>
                                 <option value="">-- {t('common.noTitle')} --</option>
                                 <option value="champion">CH</option>
                                 <option value="inter-champion">IC</option>
@@ -97,54 +92,46 @@ export function CatForm({ catIndex, onRemove }) {
                                 <option value="national-winner">NV</option>
                                 <option value="world-winner">WW</option>
                                 <option value="junior-world-winner">JWW</option>
-                            </select>
+                            </Select>
                         </FormField>
 
                         <FormField label={t('catForm.catName')} name={fieldName("catName")} error={fieldError("catName")}>
-                            <input type="text" {...register(fieldName("catName"))} className={inputClass} placeholder="Molly" />
+                            <Input type="text" {...register(fieldName("catName"))} placeholder="Molly" />
                         </FormField>
 
                         <FormField label={t('catForm.titleAfter')} name={fieldName("titleAfter")} error={fieldError("titleAfter")}>
-                            <select {...register(fieldName("titleAfter"))} className={inputClass}>
+                            <Select {...register(fieldName("titleAfter"))}>
                                 <option value="">-- {t('common.noTitle')} --</option>
                                 <option value="junior-winner">JW</option>
                                 <option value="distinguished-show-merit">DSM</option>
                                 <option value="distinguished-variety-merit">DVM</option>
                                 <option value="distinguished-merit">DM</option>
-                            </select>
+                            </Select>
                         </FormField>
 
                         <FormField label={t('catForm.chipNumber')} name={fieldName("chipNumber")} error={fieldError("chipNumber")}>
-                            <input type="text" {...register(fieldName("chipNumber"))} className={inputClass} placeholder="15 místné číslo" />
+                            <Input type="text" {...register(fieldName("chipNumber"))} placeholder="15 místné číslo" />
                         </FormField>
 
                         <FormField label={t('catForm.gender')} name={fieldName("gender")} error={fieldError("gender")}>
-                            <select {...register(fieldName("gender"))} className={inputClass}>
+                            <Select {...register(fieldName("gender"))}>
                                 <option value="">-- {t('common.select')} --</option>
                                 <option value="male">{t('catForm.male')}</option>
                                 <option value="female">{t('catForm.female')}</option>
-                            </select>
+                            </Select>
                         </FormField>
 
                         <FormField label={t('catForm.neutered')} name={fieldName("neutered")} error={fieldError("neutered")}>
-                            <select {...register(fieldName("neutered"))} className={inputClass}>
+                            <Select {...register(fieldName("neutered"))}>
                                 <option value="">-- {t('common.select')} --</option>
                                 <option value="yes">{t('common.yes')}</option>
                                 <option value="no">{t('common.no')}</option>
-                            </select>
+                            </Select>
                         </FormField>
 
-
-                        {/* --- ZDE JE OPRAVENÝ BLOK PRO EMS KÓD ---
-                          Odstranili jsme duplicitní pole a toto je jediné místo,
-                          kde se 'emsCode' nyní v 'basic' tabu nachází.
-                        */}
-
-                        {/* KROK 1: Skrytý input, který drží validaci */}
-                        <input
+                        <Input
                             type="hidden"
                             {...register(fieldName("emsCode"), {
-                                // 'required' můžeme nechat, to RHF zvládne
                                 required: 'Musíte vybrat plemeno.'
                             })}
                         />
@@ -152,39 +139,36 @@ export function CatForm({ catIndex, onRemove }) {
                         {/* KROK 2: Viditelný formulář napojený na BREED_OPTIONS */}
                         <FormField label={t('catForm.emsCode')} name={fieldName("emsCode")} error={fieldError("emsCode")}>
                             <div className="flex gap-2">
-                                <select
+                                <Select
                                     name="emsPrefix"
                                     value={emsPrefix}
                                     onChange={handleEmsChange}
-                                    className={`${inputClass} w-1/3`}
+                                    className="w-1/3" // Přidáváme extra třídu!
                                 >
                                     <option value="">-- Plemeno --</option>
-                                    {/* Plníme select z našeho souboru emsRules.js */}
                                     {BREED_OPTIONS.map(opt => (
                                         <option key={opt.value} value={opt.value}>
                                             {opt.label}
                                         </option>
                                     ))}
-                                </select>
-                                <input
+                                </Select>
+                                <Input
                                     type="text"
                                     name="emsSuffix"
                                     value={emsSuffix}
                                     onChange={handleEmsChange}
-                                    className={`${inputClass} w-2/3`}
+                                    className="w-2/3" // Přidáváme extra třídu!
                                     placeholder="n 03 24"
                                 />
                             </div>
                         </FormField>
-                        {/* --- KONEC OPRAVENÉHO BLOKU --- */}
-
 
                         <FormField label={t('catForm.birthDate')} name={fieldName("birthDate")} error={fieldError("birthDate")}>
-                            <input type="date" {...register(fieldName("birthDate"))} className={inputClass} />
+                            <Input type="date" {...register(fieldName("birthDate"))} />
                         </FormField>
 
                         <FormField label={t('catForm.showClass')} name={fieldName("showClass")} error={fieldError("showClass")}>
-                            <select {...register(fieldName("showClass"))} className={inputClass}>
+                            <Select {...register(fieldName("showClass"))}>
                                 <option value="">-- {t('common.select')} --</option>
                                 <option value="class7">{t('catForm.classOptions.c7')}</option>
                                 <option value="class6">{t('catForm.classOptions.c6')}</option>
@@ -193,74 +177,74 @@ export function CatForm({ catIndex, onRemove }) {
                                 <option value="class3">{t('catForm.classOptions.c3')}</option>
                                 <option value="class2">{t('catForm.classOptions.c2')}</option>
                                 <option value="class1">{t('catForm.classOptions.c1')}</option>
-                            </select>
+                            </Select>
                         </FormField>
 
                         <FormField label={t('catForm.pedigreeNumber')} name={fieldName("pedigreeNumber")} error={fieldError("pedigreeNumber")}>
-                            <input type="text" {...register(fieldName("pedigreeNumber"))} className={inputClass} placeholder="CSZ FO 1234/18" />
+                            <Input type="text" {...register(fieldName("pedigreeNumber"))} placeholder="CSZ FO 1234/18" />
                         </FormField>
 
                         <FormField label={t('catForm.cageType')} name={fieldName("cageType")} error={fieldError("cageType")}>
-                            <select {...register(fieldName("cageType"))} className={inputClass}>
+                            <Select {...register(fieldName("cageType"))}>
                                 <option value="">-- {t('common.select')} --</option>
                                 <option value="own_cage">{t('catForm.cageOptions.own')}</option>
                                 <option value="rent_small">{t('catForm.cageOptions.rentSmall')}</option>
                                 <option value="rent_large">{t('catForm.cageOptions.rentLarge')}</option>
-                            </select>
+                            </Select>
                         </FormField>
                     </FormGrid>
                 );
             case 'pedigree': // Matka
                 return (
                     <FormGrid>
-                        {/* --- RODOKMEN - MATKA --- */}
+                        {/* --- RODOKMEN - MATKA (používáme <Input>) --- */}
                         <FormField label={t('catForm.titleBefore')} name={fieldName("motherTitleBefore")} error={fieldError("motherTitleBefore")}>
-                            <input type="text" {...register(fieldName("motherTitleBefore"))} className={inputClass} placeholder="CH" />
+                            <Input type="text" {...register(fieldName("motherTitleBefore"))} placeholder="CH" />
                         </FormField>
                         <FormField label={t('catForm.name')} name={fieldName("motherName")} error={fieldError("motherName")}>
-                            <input type="text" {...register(fieldName("motherName"))} className={inputClass} placeholder={t('catForm.motherNamePlaceholder')} />
+                            <Input type="text" {...register(fieldName("motherName"))} placeholder={t('catForm.motherNamePlaceholder')} />
                         </FormField>
                         <FormField label={t('catForm.titleAfter')} name={fieldName("motherTitleAfter")} error={fieldError("motherTitleAfter")}>
-                            <input type="text" {...register(fieldName("motherTitleAfter"))} className={inputClass} />
+                            <Input type="text" {...register(fieldName("motherTitleAfter"))} />
                         </FormField>
                         <FormField label={t('catForm.breed')} name={fieldName("motherBreed")} error={fieldError("motherBreed")}>
-                            <input type="text" {...register(fieldName("motherBreed"))} className={inputClass} placeholder={t('catForm.breedPlaceholder')} />
+                            <Input type="text" {...register(fieldName("motherBreed"))} placeholder={t('catForm.breedPlaceholder')} />
                         </FormField>
                         <FormField label={t('catForm.emsCodeShort')} name={fieldName("motherEmsCode")} error={fieldError("motherEmsCode")}>
-                            <input type="text" {...register(fieldName("motherEmsCode"))} className={inputClass} />
+                            <Input type="text" {...register(fieldName("motherEmsCode"))} />
                         </FormField>
                         <FormField label={t('catForm.color')} name={fieldName("motherColor")} error={fieldError("motherColor")}>
-                            <input type="text" {...register(fieldName("motherColor"))} className={inputClass} />
+                            <Input type="text" {...register(fieldName("motherColor"))} />
                         </FormField>
                         <FormField label={t('catForm.pedigreeNumber')} name={fieldName("motherPedigreeNumber")} error={fieldError("motherPedigreeNumber")}>
-                            <input type="text" {...register(fieldName("motherPedigreeNumber"))} className={inputClass} />
+                            <Input type="text" {...register(fieldName("motherPedigreeNumber"))} />
                         </FormField>
                     </FormGrid>
                 );
             case 'father': // Otec
                 return (
                     <FormGrid>
-                        {/* --- RODOKMEN - OTEC --- */}
+                        {/* --- RODOKMEN - OTEC (používáme <Input>) --- */}
                         <FormField label={t('catForm.titleBefore')} name={fieldName("fatherTitleBefore")} error={fieldError("fatherTitleBefore")}>
-                            <input type="text" {...register(fieldName("fatherTitleBefore"))} className={inputClass} placeholder="GIC" />
+                            <Input type="text" {...register(fieldName("fatherTitleBefore"))} placeholder="GIC" />
                         </FormField>
                         <FormField label={t('catForm.name')} name={fieldName("fatherName")} error={fieldError("fatherName")}>
-                            <input type="text" {...register(fieldName("fatherName"))} className={inputClass} placeholder={t('catForm.fatherNamePlaceholder')} />
+                            <Input type="text" {...register(fieldName("fatherName"))} placeholder={t('catForm.fatherNamePlaceholder')} />
                         </FormField>
                         <FormField label={t('catForm.titleAfter')} name={fieldName("fatherTitleAfter")} error={fieldError("fatherTitleAfter")}>
-                            <input type="text" {...register(fieldName("fatherTitleAfter"))} className={inputClass} />
+                            <Input type="text" {...register(fieldName("fatherTitleAfter"))} />
                         </FormField>
                         <FormField label={t('catForm.breed')} name={fieldName("fatherBreed")} error={fieldError("fatherBreed")}>
-                            <input type="text" {...register(fieldName("fatherBreed"))} className={inputClass} placeholder={t('catForm.breedPlaceholder')} />
+                            <Input type="text" {...register(fieldName("fatherBreed"))} placeholder={t('catForm.breedPlaceholder')} />
                         </FormField>
                         <FormField label={t('catForm.emsCodeShort')} name={fieldName("fatherEmsCode")} error={fieldError("fatherEmsCode")}>
-                            <input type="text" {...register(fieldName("fatherEmsCode"))} className={inputClass} />
+                            <Input type="text" {...register(fieldName("fatherEmsCode"))} />
                         </FormField>
                         <FormField label={t('catForm.color')} name={fieldName("fatherColor")} error={fieldError("fatherColor")}>
-                            <input type="text" {...register(fieldName("fatherColor"))} className={inputClass} />
+                            <Input type="text" {...register(fieldName("fatherColor"))} />
                         </FormField>
                         <FormField label={t('catForm.pedigreeNumber')} name={fieldName("fatherPedigreeNumber")} error={fieldError("fatherPedigreeNumber")}>
-                            <input type="text" {...register(fieldName("fatherPedigreeNumber"))} className={inputClass} />
+                            <Input type="text" {...register(fieldName("fatherPedigreeNumber"))} />
                         </FormField>
                     </FormGrid>
                 );
@@ -270,11 +254,11 @@ export function CatForm({ catIndex, onRemove }) {
     };
 
     return (
-        // Wrapper pro jednu kočku
-        <div className="p-6 bg-white rounded-2xl shadow-lg border border-gray-200">
+        // Wrapper pro jednu kočku - POUŽÍVÁME <Card>
+        <Card>
             <div className="flex flex-col items-stretch gap-6 mb-8 md:flex-row md:items-center md:justify-between">
 
-                {/* --- Taby (vráceny zpět) --- */}
+                {/* --- Taby (zůstávají stejné) --- */}
                 <div className="flex flex-col flex-grow p-1 bg-gray-100 rounded-full md:flex-row">
                     <TabButton
                         label={t('catForm.tabs.basic')}
@@ -293,21 +277,20 @@ export function CatForm({ catIndex, onRemove }) {
                     />
                 </div>
 
-                {/* Tlačítko pro odebrání (zobrazí se jen pokud onRemove existuje) */}
+                {/* Tlačítko pro odebrání - POUŽÍVÁME <Button> */}
                 {onRemove && (
-                    <button
-                        type="button"
+                    <Button
+                        variant="outlineDanger"
                         onClick={onRemove}
-                        className="px-5 py-3 font-semibold text-red-600 transition-colors bg-white border-2 border-red-200 rounded-full hover:bg-red-50 whitespace-nowLrap"
                     >
                         {t('catForm.removeCat')}
-                    </button>
+                    </Button>
                 )}
             </div>
 
             <div className="pt-4">
                 {renderTabContent()}
             </div>
-        </div>
+        </Card>
     );
 }
