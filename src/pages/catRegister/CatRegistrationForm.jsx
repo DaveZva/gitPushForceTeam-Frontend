@@ -1,4 +1,3 @@
-// Soubor: src/pages/catRegister/CatRegistrationForm.jsx
 import React, { useState, useEffect } from 'react';
 import { useForm, FormProvider } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -15,10 +14,9 @@ import { storageUtils } from '../../utils/storage';
 import { registrationApi } from '../../services/api/registrationApi';
 import '../../styles/CatRegistration.css';
 
-// Import naší nové komponenty
+//Komponenty
 import { Button } from '../../components/ui/Button';
 
-// Výchozí hodnoty pro jednu kočku (VRÁCENA VŠECHNA POLE)
 export const defaultCatValues = {
     titleBefore: "",
     catName: "",
@@ -49,7 +47,6 @@ export const defaultCatValues = {
     fatherPedigreeNumber: "",
 };
 
-// Definice polí pro validaci v jednotlivých krocích
 const fieldsByStep = [
     [],
     ['showId', 'days'],

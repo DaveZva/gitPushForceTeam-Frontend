@@ -9,11 +9,10 @@ export const Checkbox = ({
                              error
                          }) => {
 
-    // Styly z původního souboru
-    const consentBoxClass = "flex items-start gap-3 p-4 border border-gray-200 rounded-lg has-[:checked]:border-blue-400 has-[:checked]:bg-blue-50";
+    const consentBoxClass = "flex items-start gap-3 p-4 border border-gray-200 rounded-lg has-[:checked]:border-blue-400 has-[:checked]:bg-blue-50 text-center";
     const checkboxClass = "w-5 h-5 text-blue-600 rounded cursor-pointer focus:ring-blue-500 shrink-0 mt-1";
-    // Styl pro chybu
     const errorBoxClass = error ? 'border-red-500 bg-red-50' : '';
+
 
     return (
         <div className={`${consentBoxClass} ${errorBoxClass}`}>

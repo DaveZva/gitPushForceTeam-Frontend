@@ -1,4 +1,3 @@
-// Soubor: src/components/ui/Button.jsx (AKTUALIZOVANÝ)
 import React from 'react';
 
 // Základní styly pro všechna tlačítka
@@ -26,7 +25,6 @@ export const Button = ({
                            style = {}                  // Pro speciální případy (jako 'visibility')
                        }) => {
 
-    // Vybere správný styl podle varianty, defaultně 'primary'
     const variantClasses = variants[variant] || variants.primary;
 
     return (

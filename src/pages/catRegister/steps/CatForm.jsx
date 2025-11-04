@@ -1,16 +1,15 @@
-// Soubor: src/pages/catRegister/steps/CatForm.jsx (UPRAVENÝ)
 import React, { useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { BREED_OPTIONS, validateEmsCode } from "../../../utils/emsRules.js";
 
-// Importujeme naše nové UI komponenty
+//Komponenty
 import { Input } from '../../../components/ui/Input';
 import { Select } from '../../../components/ui/Select';
 import { Card } from '../../../components/ui/Card';
-import { Button } from '../../../components/ui/Button'; // Importujeme Button
+import { Button } from '../../../components/ui/Button';
 
-// Pomocná komponenta FormField (zůstává, je to dobrý wrapper)
+
 const FormField = ({ label, name, children, error }) => (
     <div className="flex flex-col gap-2">
         <label htmlFor={name} className="text-sm font-semibold text-gray-700">
@@ -21,18 +20,12 @@ const FormField = ({ label, name, children, error }) => (
     </div>
 );
 
-// !!!!!!!!!!
-// const inputClass = "..." --> TOTO JSME SMAZALI (je teď v Input.jsx a Select.jsx)
-// !!!!!!!!!!
-
-// --- Pomocná komponenta pro grid (zůstává) ---
 const FormGrid = ({ children }) => (
     <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
         {children}
     </div>
 );
 
-// --- Komponenta pro 1 kočku ---
 export function CatForm({ catIndex, onRemove }) {
     const { t } = useTranslation();
     const [activeTab, setActiveTab] = useState('basic');
@@ -40,12 +33,10 @@ export function CatForm({ catIndex, onRemove }) {
     const fieldName = (name) => `cats.${catIndex}.${name}`;
     const fieldError = (name) => errors.cats?.[catIndex]?.[name];
 
-    // EMS kód handler (zůstává beze změny)
     const emsPrefix = watch(fieldName("emsCode"))?.substring(0, 3) || '';
     const emsSuffix = watch(fieldName("emsCode"))?.substring(4) || '';
 
     const handleEmsChange = (e) => {
-        // ... (tato logika zůstává stejná)
         const { name, value } = e.target;
         const newPrefix = (name === "emsPrefix") ? value : emsPrefix;
         const newSuffix = (name === "emsSuffix") ? value : emsSuffix;
@@ -63,25 +54,11 @@ export function CatForm({ catIndex, onRemove }) {
         }
     };
 
-    // --- Tlačítko pro záložku (zůstává lokální) ---
-    const TabButton = ({ label, isActive, onClick }) => (
-        <button
-            type="button"
-            className={`flex-1 px-6 py-3 rounded-full font-semibold transition-all ${
-                isActive ? 'bg-blue-600 text-white shadow-md' : 'text-gray-700 hover:text-blue-600'
-            }`}
-            onClick={onClick}
-        >
-            {label}
-        </button>
-    );
-
     const renderTabContent = () => {
         switch (activeTab) {
             case 'basic':
                 return (
                     <FormGrid>
-                        {/* --- ZÁKLADNÍ ÚDAJE (používáme <Select> a <Input>) --- */}
                         <FormField label={t('catForm.titleBefore')} name={fieldName("titleBefore")} error={fieldError("titleBefore")}>
                             <Select {...register(fieldName("titleBefore"))}>
                                 <option value="">-- {t('common.noTitle')} --</option>
@@ -170,13 +147,25 @@ export function CatForm({ catIndex, onRemove }) {
                         <FormField label={t('catForm.showClass')} name={fieldName("showClass")} error={fieldError("showClass")}>
                             <Select {...register(fieldName("showClass"))}>
                                 <option value="">-- {t('common.select')} --</option>
-                                <option value="class7">{t('catForm.classOptions.c7')}</option>
-                                <option value="class6">{t('catForm.classOptions.c6')}</option>
-                                <option value="class5">{t('catForm.classOptions.c5')}</option>
-                                <option value="class4">{t('catForm.classOptions.c4')}</option>
-                                <option value="class3">{t('catForm.classOptions.c3')}</option>
-                                <option value="class2">{t('catForm.classOptions.c2')}</option>
-                                <option value="class1">{t('catForm.classOptions.c1')}</option>
+                                <option value="supreme_champion">{t('catForm.classOptions.c1')}</option>
+                                <option value="supreme_premior">{t('catForm.classOptions.c2')}</option>
+                                <option value="grant_inter_champion">{t('catForm.classOptions.c3')}</option>
+                                <option value="grant_inter_premier">{t('catForm.classOptions.c4')}</option>
+                                <option value="international_champion">{t('catForm.classOptions.c5')}</option>
+                                <option value="international_premier">{t('catForm.classOptions.c6')}</option>
+                                <option value="champion">{t('catForm.classOptions.c7')}</option>
+                                <option value="premier">{t('catForm.classOptions.c8')}</option>
+                                <option value="open">{t('catForm.classOptions.c9')}</option>
+                                <option value="neuter">{t('catForm.classOptions.c10')}</option>
+                                <option value="junior">{t('catForm.classOptions.c11')}</option>
+                                <option value="kitten">{t('catForm.classOptions.c12')}</option>
+                                <option value="novice_class">{t('catForm.classOptions.c13a')}</option>
+                                <option value="control_class">{t('catForm.classOptions.c13b')}</option>
+                                <option value="determination_class">{t('catForm.classOptions.c13c')}</option>
+                                <option value="domestic_cat">{t('catForm.classOptions.c14')}</option>
+                                <option value="out_of_competition">{t('catForm.classOptions.c15')}</option>
+                                <option value="litter">{t('catForm.classOptions.c16')}</option>
+                                <option value="veteran">{t('catForm.classOptions.c17')}</option>
                             </Select>
                         </FormField>
 
@@ -254,30 +243,36 @@ export function CatForm({ catIndex, onRemove }) {
     };
 
     return (
-        // Wrapper pro jednu kočku - POUŽÍVÁME <Card>
         <Card>
             <div className="flex flex-col items-stretch gap-6 mb-8 md:flex-row md:items-center md:justify-between">
 
-                {/* --- Taby (zůstávají stejné) --- */}
                 <div className="flex flex-col flex-grow p-1 bg-gray-100 rounded-full md:flex-row">
-                    <TabButton
-                        label={t('catForm.tabs.basic')}
-                        isActive={activeTab === 'basic'}
+                    <Button
+                        variant={activeTab === 'basic' ? 'primary' : 'secondary'}
                         onClick={() => setActiveTab('basic')}
-                    />
-                    <TabButton
-                        label={t('catForm.tabs.mother')}
-                        isActive={activeTab === 'pedigree'}
+                        style={{ width: "33.3%", margin: "0 5px 0 5px" }}
+                        className="hover:bg-primary-500 hover:text-black"
+                    >
+                        {t('catForm.tabs.basic')}
+                    </Button>
+                    <Button
+                        variant={activeTab === 'pedigree' ? 'primary' : 'secondary'}
                         onClick={() => setActiveTab('pedigree')}
-                    />
-                    <TabButton
-                        label={t('catForm.tabs.father')}
-                        isActive={activeTab === 'father'}
+                        style={{ width: "33.3%", margin: "0 5px 0 5px" }}
+                        className="hover:bg-primary-500 hover:text-black"
+                    >
+                        {t('catForm.tabs.mother')}
+                    </Button>
+                    <Button
+                        variant={activeTab === 'father' ? 'primary' : 'secondary'}
                         onClick={() => setActiveTab('father')}
-                    />
+                        style={{ width: "33.3%", margin: "0 5px 0 5px" }}
+                        className="hover:bg-primary-500 hover:text-black"
+                    >
+                        {t('catForm.tabs.father')}
+                    </Button>
                 </div>
 
-                {/* Tlačítko pro odebrání - POUŽÍVÁME <Button> */}
                 {onRemove && (
                     <Button
                         variant="outlineDanger"

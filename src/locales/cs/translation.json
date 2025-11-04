@@ -63,6 +63,90 @@
   "form": {
     "actions": {
       "saveAndContinue": "Uložit a pokračovat."
+    },
+    "continue": "Pokračovat",
+    "back": "Zpět",
+    "toRecap": "Rekapitulace",
+    "submit": "Odeslat",
+    "resetAll": "Vymazat mezipaměť",
+    "title": "Registrace kočky na výstavu"
+  },
+  "catForm": {
+    "titleBefore": "Titul před jménem",
+    "catName": "Jméno",
+    "titleAfter": "Titul za jménem",
+    "chipNumber": "Číslo čipu",
+    "gender": "Pohlaví,",
+    "neutered": "Kastrované",
+    "emsCode": "EMS Kód",
+    "birthDate": "Datum narození",
+    "showClass": "Soutěžní třída",
+    "pedigreeNumber": "Číslo kočky?",
+    "cageType": "Typ přepravky",
+    "male": "Kocour",
+    "female": "Kočka",
+    "addAnotherCat": "Přidat další kočku",
+    "tabs": {
+      "basic": "Kočka",
+      "mother": "Matka",
+      "father": "Otec"
+    },
+    "common": {
+      "loading": "Načítám...",
+      "select": "Vyberte",
+      "noTitle": "Bez titulu",
+      "yes": "Ano",
+      "no": "Ne",
+      "sat": "Sobota",
+      "sun": "Neděle",
+      "both": "Oba dny",
+      "agreed": "Souhlasím",
+      "notAgreed": "Nesouhlasím"
+    },
+    "recap": {
+      "title": "Rekapitulace přihlášky",
+      "checkData": "Prosím zkontrolujte všechny zadané údaje. Pokud je vše v pořádku, odešlete přihlášku.",
+      "exhibition": "Výstava",
+      "showName": "Název výstavy",
+      "days": "Dny účasti",
+      "cat": "Kočka",
+      "breeder": "Chovatel",
+      "exhibitor": "Vystavovatel",
+      "name": "Jméno a Příjmení",
+      "address": "Adresa",
+      "email": "Email",
+      "phone": "Telefon",
+      "sameAsBreeder": "Shodný s chovatelem",
+      "notesAndConsent": "Poznámky a Souhlasy",
+      "notes": "Poznámky",
+      "dataAccuracy": "Pravdivost údajů",
+      "gdprConsent": "Souhlas GDPR"
+    },
+    "classOptions": {
+      "c1": "Supreme Šampion",
+      "c2": "Supreme Premior",
+      "c3": "Mezinárodní Grandšampion",
+      "c4": "Mezinárodní Grandpremior",
+      "c5": "Mezinárodní Šampion",
+      "c6": "Mezinárodní Premior",
+      "c7": "Šampion",
+      "c8": "Premior",
+      "c9": "Otevřená třída",
+      "c10": "Kastráti",
+      "c11": "8-12 měsíců",
+      "c12": "4-8 měsíců",
+      "c13a": "Novinců",
+      "c13b": "Kontrolní",
+      "c13c": "Ověřovací",
+      "c14": "Domácí kočky",
+      "c15": "Mimo soutěž",
+      "c16": "Vrhy (min. 3 koťata)",
+      "c17": "Veteráni (nad 7 let)"
+    },
+    "cageOptions": {
+      "own": "Vlastní klec - 1700 CZK",
+      "rentSmall": "Klec k zapůjčení 70x70 - 2200 CZK",
+      "rentLarge": "Klec k zapůjčení 120x70 - 2800 CZK"
     }
   },
   "stepper": {

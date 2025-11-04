@@ -13,7 +13,6 @@ export function Step5_NotesAndConsent() {
         <div className="space-y-6">
             <h2 className="text-2xl font-bold text-gray-800">Poznámky a souhlas</h2>
 
-            {/* ZDE je první náhrada */}
             <TextArea
                 id="notes"
                 label="Poznámky k přihlášce"
@@ -23,7 +22,6 @@ export function Step5_NotesAndConsent() {
             />
 
             <div className="space-y-4">
-                {/* ZDE je druhá náhrada */}
                 <Checkbox
                     id="dataAccuracy"
                     label="Prohlašuji, že všechny uvedené údaje jsou pravdivé a úplné."
@@ -32,7 +30,6 @@ export function Step5_NotesAndConsent() {
                     error={errors.dataAccuracy}
                 />
 
-                {/* ZDE je třetí náhrada */}
                 <Checkbox
                     id="gdprConsent"
                     label="Souhlasím se zpracováním osobních údajů"

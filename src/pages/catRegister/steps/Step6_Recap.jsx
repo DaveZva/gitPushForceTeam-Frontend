@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { useFormContext } from 'react-hook-form';
+import { useTranslation } from 'react-i18next'; // Import i18n
 import { registrationApi } from '../../../services/api/registrationApi';
 
 export function Step6_Recap() {
     const { getValues } = useFormContext();
+    const { t } = useTranslation(); // Inicializace i18n
     const data = getValues();
 
-    // --- Definice přesunuty sem dovnitř ---
+    // --- Pomocné komponenty přesunuty dovnitř ---
     const RecapItem = ({ label, value }) => (
         <div className="py-3 border-b border-gray-200">
             <span className="text-sm font-medium text-gray-500">{label}</span>
@@ -23,8 +25,8 @@ export function Step6_Recap() {
             </div>
         </div>
     );
+    // -----------------------------------------
 
-    // --- 2. Přidáme stav pro načtení výstav ---
     const [shows, setShows] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
 
@@ -40,70 +42,102 @@ export function Step6_Recap() {
             }
         };
         loadShows();
-    }, []); // Prázdné pole znamená "spustit jen jednou"
+    }, []);
 
-
-    // --- 3. Najdeme název výstavy ---
+    // Načtení názvu výstavy (zůstává stejné)
     const selectedShow = shows.find(show => String(show.id) === String(data.showId));
-    const showName = isLoading ? "Načítám..." : (selectedShow ? `${selectedShow.name} (${selectedShow.date})` : data.showId);
+    const showName = isLoading ? t('common.loading') : (selectedShow ? `${selectedShow.name} (${selectedShow.date})` : data.showId);
 
+    // Překladové mapy (zůstávají stejné)
+    const daysMap = { sat: t('common.sat'), sun: t('common.sun'), both: t('common.both') };
+    const genderMap = { male: t('catForm.male'), female: t('catForm.female') };
+    const neuteredMap = { yes: t('common.yes'), no: t('common.no') };
 
-    // Jednoduché mapování pro čitelnější výstup
-    const daysMap = { sat: "Sobota", sun: "Neděle", both: "Oba dny" };
-    const genderMap = { male: "Kocour", female: "Kočka" };
-    const neuteredMap = { yes: "Ano", no: "Ne" };
+    // Mapa pro překlad tříd (NOVÁ)
+    const classMap = {
+        supreme_champion: t('catForm.classOptions.c1'),
+        supreme_premior: t('catForm.classOptions.c2'),
+        grant_inter_champion: t('catForm.classOptions.c3'),
+        grant_inter_premier: t('catForm.classOptions.c4'),
+        international_champion: t('catForm.classOptions.c5'),
+        international_premier: t('catForm.classOptions.c6'),
+        champion: t('catForm.classOptions.c7'),
+        premier: t('catForm.classOptions.c8'),
+        open: t('catForm.classOptions.c9'),
+        neuter: t('catForm.classOptions.c10'),
+        junior: t('catForm.classOptions.c11'),
+        kitten: t('catForm.classOptions.c12'),
+        novice_class: t('catForm.classOptions.c13a'),
+        control_class: t('catForm.classOptions.c13b'),
+        determination_class: t('catForm.classOptions.c13c'),
+        domestic_cat: t('catForm.classOptions.c14'),
+        out_of_competition: t('catForm.classOptions.c15'),
+        litter: t('catForm.classOptions.c16'),
+        veteran: t('catForm.classOptions.c17'),
+    };
+
+    // Mapa pro překlad klecí (NOVÁ)
+    const cageMap = {
+        own_cage: t('catForm.cageOptions.own'),
+        rent_small: t('catForm.cageOptions.rentSmall'),
+        rent_large: t('catForm.cageOptions.rentLarge'),
+    };
 
     return (
         <div className="space-y-8">
-            <h2 className="text-2xl font-bold text-gray-800">Rekapitulace přihlášky</h2>
+            <h2 className="text-2xl font-bold text-gray-800">{t('recap.title')}</h2>
             <p className="text-gray-600">
-                Prosím zkontrolujte všechny zadané údaje. Pokud je vše v pořádku, odešlete přihlášku.
+                {t('recap.checkData')}
             </p>
 
             <div className="space-y-6">
-                <RecapSection title="Výstava">
-                    {/* --- 4. Použijeme nalezený název --- */}
-                    <RecapItem label="Název výstavy" value={showName} />
-                    <RecapItem label="Dny účasti" value={daysMap[data.days]} />
+                <RecapSection title={t('recap.exhibition')}>
+                    <RecapItem label={t('recap.showName')} value={showName} />
+                    <RecapItem label={t('recap.days')} value={daysMap[data.days]} />
                 </RecapSection>
 
-                <RecapSection title="Kočka">
-                    <RecapItem label="Jméno" value={`${data.titleBefore || ''} ${data.catName} ${data.titleAfter || ''}`} />
-                    <RecapItem label="Pohlaví" value={genderMap[data.gender]} />
-                    <RecapItem label="Kastrované" value={neuteredMap[data.neutered]} />
-                    <RecapItem label="Datum narození" value={data.birthDate} />
-                    <RecapItem label="EMS kód" value={data.emsCode} />
-                    <RecapItem label="Třída" value={data.showClass} />
-                    <RecapItem label="Čip" value={data.chipNumber} />
-                    <RecapItem label="Typ klece" value={data.cageType} />
+                {/* --- ZMĚNA ZDE: Mapování přes pole koček --- */}
+                {data.cats && data.cats.map((cat, index) => (
+                    <RecapSection title={`${t('recap.cat')} ${index + 1}`} key={index}>
+                        <RecapItem label={t('catForm.name')} value={`${cat.titleBefore || ''} ${cat.catName} ${cat.titleAfter || ''}`.trim()} />
+                        <RecapItem label={t('catForm.gender')} value={genderMap[cat.gender]} />
+                        <RecapItem label={t('catForm.neutered')} value={neuteredMap[cat.neutered]} />
+                        <RecapItem label={t('catForm.birthDate')} value={cat.birthDate} />
+                        <RecapItem label={t('catForm.emsCode')} value={cat.emsCode} />
+                        <RecapItem label={t('catForm.showClass')} value={classMap[cat.showClass] || cat.showClass} />
+                        <RecapItem label={t('catForm.chipNumber')} value={cat.chipNumber} />
+                        <RecapItem label={t('catForm.cageType')} value={cageMap[cat.cageType] || cat.cageType} />
+                    </RecapSection>
+                ))}
+                {/* --- Konec změny --- */}
+
+
+                <RecapSection title={t('recap.breeder')}>
+                    <RecapItem label={t('recap.name')} value={`${data.breederFirstName} ${data.breederLastName}`} />
+                    <RecapItem label={t('recap.address')} value={`${data.breederAddress}, ${data.breederZip} ${data.breederCity}`} />
+                    <RecapItem label={t('recap.email')} value={data.breederEmail} />
+                    <RecapItem label={t('recap.phone')} value={data.breederPhone} />
                 </RecapSection>
 
-                <RecapSection title="Chovatel">
-                    <RecapItem label="Jméno a Příjmení" value={`${data.breederFirstName} ${data.breederLastName}`} />
-                    <RecapItem label="Adresa" value={`${data.breederAddress}, ${data.breederZip} ${data.breederCity}`} />
-                    <RecapItem label="Email" value={data.breederEmail} />
-                    <RecapItem label="Telefon" value={data.breederPhone} />
-                </RecapSection>
-
-                <RecapSection title="Vystavovatel">
+                <RecapSection title={t('recap.exhibitor')}>
                     {data.sameAsBreeder ? (
                         <p className="p-3 text-gray-700 bg-gray-100 rounded-md">
-                            Shodný s chovatelem
+                            {t('recap.sameAsBreeder')}
                         </p>
                     ) : (
                         <>
-                            <RecapItem label="Jméno a Příjmení" value={`${data.exhibitorFirstName} ${data.exhibitorLastName}`} />
-                            <RecapItem label="Adresa" value={`${data.exhibitorAddress}, ${data.exhibitorZip} ${data.exhibitorCity}`} />
-                            <RecapItem label="Email" value={data.exhibitorEmail} />
-                            <RecapItem label="Telefon" value={data.exhibitorPhone} />
+                            <RecapItem label={t('recap.name')} value={`${data.exhibitorFirstName} ${data.exhibitorLastName}`} />
+                            <RecapItem label={t('recap.address')} value={`${data.exhibitorAddress}, ${data.exhibitorZip} ${data.exhibitorCity}`} />
+                            <RecapItem label={t('recap.email')} value={data.exhibitorEmail} />
+                            <RecapItem label={t('recap.phone')} value={data.exhibitorPhone} />
                         </>
                     )}
                 </RecapSection>
 
-                <RecapSection title="Poznámky a Souhlasy">
-                    <RecapItem label="Poznámky" value={data.notes} />
-                    <RecapItem label="Pravdivost údajů" value={data.dataAccuracy ? "✓ Souhlasím" : "X Nesouhlasím"} />
-                    <RecapItem label="Souhlas GDPR" value={data.gdprConsent ? "✓ Souhlasím" : "X Nesouhlasím"} />
+                <RecapSection title={t('recap.notesAndConsent')}>
+                    <RecapItem label={t('recap.notes')} value={data.notes} />
+                    <RecapItem label={t('recap.dataAccuracy')} value={data.dataAccuracy ? `✓ ${t('common.agreed')}` : `X ${t('common.notAgreed')}`} />
+                    <RecapItem label={t('recap.gdprConsent')} value={data.gdprConsent ? `✓ ${t('common.agreed')}` : `X ${t('common.notAgreed')}`} />
                 </RecapSection>
             </div>
         </div>

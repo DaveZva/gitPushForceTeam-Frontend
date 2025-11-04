@@ -163,7 +163,7 @@ export const EMS_RULES = {
         modifiers: [],
         white:     ['03', '04'],
         patterns:  ['21'],
-        pointed:   [], // '33' je implicitní a nepíše se
+        pointed:   [],
         eyeColors: [],
         other:     []
     },
@@ -173,7 +173,7 @@ export const EMS_RULES = {
         modifiers: ['s'],
         white:     [],
         patterns:  ['21'],
-        pointed:   [], // '33' je implicitní a nepíše se
+        pointed:   [],
         eyeColors: [],
         other:     []
     },
@@ -181,10 +181,10 @@ export const EMS_RULES = {
         breedCode: "TUV",
         colors:    ['n', 'a', 'd', 'e', 'f', 'g'],
         modifiers: [],
-        white:     [], // Vzor '01' (van) je implicitní
+        white:     [],
         patterns:  ['21', '22', '23', '24', '25'],
         pointed:   [],
-        eyeColors: ['61', '62', '63', '64'], // Musí se vždy zapsat
+        eyeColors: ['61', '62', '63', '64'],
         other:     []
     },
 
@@ -683,6 +683,5 @@ export function validateEmsCode(fullEmsCode) {
         breedRules.breedCode = prefix;
     }
 
-    // Zavoláme chytrý validátor
     return masterValidator(suffix, breedRules);
 }
