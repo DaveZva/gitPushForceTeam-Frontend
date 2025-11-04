@@ -20,12 +20,44 @@ import { Button } from '../../components/ui/Button';
 
 // Výchozí hodnoty pro jednu kočku (VRÁCENA VŠECHNA POLE)
 export const defaultCatValues = {
-    // ... (zbytek zůstává stejný) ...
+    titleBefore: "",
+    catName: "",
+    titleAfter: "",
+    chipNumber: "",
+    gender: "",
+    neutered: "",
+    emsCode: "",
+    birthDate: "",
+    showClass: "",
+    pedigreeNumber: "",
+    cageType: "",
+    // Matka
+    motherTitleBefore: "",
+    motherName: "",
+    motherTitleAfter: "",
+    motherBreed: "",
+    motherEmsCode: "",
+    motherColor: "",
+    motherPedigreeNumber: "",
+    // Otec
+    fatherTitleBefore: "",
+    fatherName: "",
+    fatherTitleAfter: "",
+    fatherBreed: "",
+    fatherEmsCode: "",
+    fatherColor: "",
+    fatherPedigreeNumber: "",
 };
 
 // Definice polí pro validaci v jednotlivých krocích
 const fieldsByStep = [
-    // ... (zůstává stejné) ...
+    [],
+    ['showId', 'days'],
+    ['cats'],
+    ['breederFirstName', 'breederLastName', 'breederAddress', 'breederZip', 'breederCity', 'breederEmail', 'breederPhone'],
+    ['sameAsBreeder', 'exhibitorFirstName', 'exhibitorLastName', 'exhibitorAddress', 'exhibitorZip', 'exhibitorCity', 'exhibitorEmail', 'exhibitorPhone'],
+    ['dataAccuracy', 'gdprConsent'],
+    [],
 ];
 
 function CatRegistrationForm() {
@@ -34,40 +66,117 @@ function CatRegistrationForm() {
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     const stepLabels = [
-        // ... (zůstává stejné) ...
+        'stepper.exhibition',
+        'stepper.cat',
+        'stepper.breeder',
+        'stepper.exhibitor',
+        'stepper.consent',
+        'stepper.recap'
     ];
     const totalSteps = stepLabels.length;
 
     const methods = useForm({
-        // ... (zůstává stejné) ...
+        resolver: zodResolver(registrationSchema),
+        defaultValues: storageUtils.getCurrentForm() || {
+            sameAsBreeder: false,
+            cats: [defaultCatValues]
+        },
+        mode: 'onTouched',
     });
 
     const { handleSubmit, watch, reset, trigger } = methods;
 
     useEffect(() => {
-        // ... (zůstává stejné) ...
+        const subscription = watch((value) => {
+            storageUtils.saveCurrentForm(value);
+        });
+        return () => subscription.unsubscribe();
     }, [watch]);
 
     const onSubmit = async (data) => {
-        // ... (zůstává stejné) ...
+        setIsSubmitting(true);
+        try {
+            const registrationData = {
+                show: { id: data.showId, days: data.days },
+                cats: data.cats,
+                breeder: {
+                    firstName: data.breederFirstName,
+                    lastName: data.breederLastName,
+                    address: data.breederAddress,
+                    zip: data.breederZip,
+                    city: data.breederCity,
+                    email: data.breederEmail,
+                    phone: data.breederPhone
+                },
+                exhibitor: data.sameAsBreeder ? null : {
+                    firstName: data.exhibitorFirstName,
+                    lastName: data.exhibitorLastName,
+                    address: data.exhibitorAddress,
+                    zip: data.exhibitorZip,
+                    city: data.exhibitorCity,
+                    email: data.exhibitorEmail,
+                    phone: data.exhibitorPhone
+                },
+                notes: data.notes,
+                consents: {
+                    dataAccuracy: data.dataAccuracy,
+                    gdpr: data.gdprConsent
+                }
+            };
+
+            const response = await registrationApi.submitRegistration(registrationData);
+
+            storageUtils.saveBreeder(registrationData.breeder);
+            if (registrationData.exhibitor) {
+                storageUtils.saveExhibitor(registrationData.exhibitor);
+            }
+
+            storageUtils.clearCurrentForm();
+            alert(t('alert.submitSuccess', { number: response.registrationNumber }));
+
+            reset({
+                sameAsBreeder: false,
+                cats: [defaultCatValues]
+            });
+            setCurrentStep(1);
+
+        } catch (error) {
+            alert(t('alert.submitError'));
+            console.error('Submission error:', error);
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
     const handleNext = async () => {
-        // ... (zůstává stejné) ...
+        const fieldsToValidate = fieldsByStep[currentStep];
+        const isValid = await trigger(fieldsToValidate);
+
+        if (isValid) {
+            if (currentStep < totalSteps) {
+                setCurrentStep(currentStep + 1);
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }
     };
 
     const handlePrevious = () => {
-        // ... (zůstává stejné) ...
+        if (currentStep > 1) {
+            setCurrentStep(currentStep - 1);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
     };
 
     const handleReset = () => {
-        // ... (zůstává stejné) ...
+        if (window.confirm(t('confirm.resetForm'))) {
+            reset({
+                sameAsBreeder: false,
+                cats: [defaultCatValues]
+            });
+            storageUtils.clearCurrentForm();
+            setCurrentStep(1);
+        }
     };
-
-    // !!!!!!!!!!
-    // Definice stylů pro tlačítka jsou pryč.
-    // Už je nepotřebujeme, jsou v komponentě Button.jsx
-    // !!!!!!!!!!
 
     return (
         <FormProvider {...methods}>
@@ -79,7 +188,6 @@ function CatRegistrationForm() {
                             {t('form.title')}
                         </h1>
 
-                        {/* ZDE je první náhrada */}
                         <Button variant="reset" onClick={handleReset}>
                             {t('form.resetAll')}
                         </Button>
@@ -93,12 +201,16 @@ function CatRegistrationForm() {
 
                     <div className="bg-white p-6 sm:p-10 rounded-2xl shadow-xl mt-8">
                         <form onSubmit={handleSubmit(onSubmit)}>
-                            {/* ... (kroky zůstávají stejné) ... */}
+                            {currentStep === 1 && <Step1_Exhibition />}
+                            {currentStep === 2 && <Step2_CatInfo />}
+                            {currentStep === 3 && <Step3_BreederInfo />}
+                            {currentStep === 4 && <Step4_ExhibitorInfo />}
+                            {currentStep === 5 && <Step5_NotesAndConsent />}
+                            {currentStep === 6 && <Step6_Recap />}
                         </form>
                     </div>
 
                     <div className="flex justify-between mt-10">
-                        {/* ZDE je druhá náhrada */}
                         <Button
                             variant="secondary"
                             onClick={handlePrevious}
@@ -109,12 +221,10 @@ function CatRegistrationForm() {
                         </Button>
 
                         {currentStep < totalSteps ? (
-                            /* ZDE je třetí náhrada */
                             <Button variant="primary" onClick={handleNext}>
                                 {currentStep === totalSteps - 1 ? t('form.toRecap') : t('form.continue')} →
                             </Button>
                         ) : (
-                            /* ZDE je čtvrtá náhrada */
                             <Button
                                 variant="submit"
                                 onClick={handleSubmit(onSubmit)}

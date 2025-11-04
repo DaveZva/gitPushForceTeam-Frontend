@@ -1,16 +1,12 @@
-// Soubor: src/pages/catRegister/steps/Step1_Exhibition.jsx (UPRAVENÝ)
 import React, { useState, useEffect } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { registrationApi } from '../../../services/api/registrationApi';
 
-// Importujeme naše nové UI komponenty
 import { Select } from '../../../components/ui/Select';
 import { RadioGroup } from '../../../components/ui/RadioGroup';
 import { Radio } from '../../../components/ui/Radio';
 
 export function Step1_Exhibition() {
-    // Tuto pomocnou komponentu zde zatím necháme,
-    // protože ji stále používáme jako obal
     const FormField = ({ label, name, children, error }) => (
         <div className="flex flex-col gap-2">
             <label htmlFor={name} className="text-sm font-semibold text-gray-700">
@@ -47,7 +43,6 @@ export function Step1_Exhibition() {
                 {loading ? (
                     <div className="w-full p-3 text-gray-500 bg-gray-100 rounded-lg">Načítám výstavy...</div>
                 ) : (
-                    // POUŽITÍ KOMPONENTY <Select>
                     <Select id="showId" {...register("showId")}>
                         <option value="">Vyberte výstavu...</option>
                         {shows.map(show => (
@@ -60,7 +55,6 @@ export function Step1_Exhibition() {
             </FormField>
 
             <FormField label="Účast na výstavě *" name="days" error={errors.days}>
-                {/* POUŽITÍ KOMPONENT <RadioGroup> a <Radio> */}
                 <RadioGroup>
                     <Radio
                         label="Sobota"
