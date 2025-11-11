@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useForm, FormProvider, SubmitHandler, FieldValues } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useTranslation } from 'react-i18next';
 import type { Resolver } from 'react-hook-form';
 
 import {
-    registrationSchema,
+    createRegistrationSchema,
     RegistrationFormData,
     CatFormData
 } from '../../schemas/registrationSchema';
@@ -59,10 +59,49 @@ const fieldsByStep: (keyof RegistrationFormData)[][] = [
     [],
 ];
 
-function CatRegistrationForm() {
+interface SubmitSuccessProps {
+    registrationNumber: string;
+    onBackToStart: () => void;
+}
+const SubmitSuccess: React.FC<SubmitSuccessProps> = ({ registrationNumber, onBackToStart }) => {
     const { t } = useTranslation();
+    return (
+        <div className="text-center p-10 bg-white rounded-lg shadow-xl">
+            <svg className="w-16 h-16 mx-auto text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+            <h2 className="text-2xl font-bold text-green-600 mt-4 mb-2">
+                {t('alert.submitSuccess', { number: registrationNumber })}
+            </h2>
+            <p className="text-lg text-gray-700 mb-2">
+                {t('submitSuccess.message')}
+            </p>
+            <p className="text-3xl font-bold text-gray-900 mb-6">
+                {registrationNumber}
+            </p>
+            <p className="text-gray-600 mb-8">
+                {t('submitSuccess.info')}
+            </p>
+
+            <div className="flex justify-center gap-4">
+                <Button variant="primary" onClick={onBackToStart}>
+                    {t('submitSuccess.backButton')}
+                </Button>
+                <Button
+                    variant="secondary"
+                    onClick={() => alert('Funkce pro stažení PDF se připravuje!')}
+                >
+                    Stáhnout PDF (připravuje se)
+                </Button>
+            </div>
+        </div>
+    );
+};
+
+function CatRegistrationForm() {
+    const { t, i18n } = useTranslation(); // Získáme i18n
     const [currentStep, setCurrentStep] = useState(1);
     const [isSubmitting, setIsSubmitting] = useState(false);
+
+    const [submitSuccessData, setSubmitSuccessData] = useState<{ number: string } | null>(null);
 
     const stepLabels = [
         'stepper.exhibition',
@@ -74,6 +113,7 @@ function CatRegistrationForm() {
     ];
     const totalSteps = stepLabels.length;
 
+    const registrationSchema = useMemo(() => createRegistrationSchema(t), [i18n.language, t]);
     const methods = useForm<RegistrationFormData>({
         resolver: zodResolver(registrationSchema) as Resolver<RegistrationFormData>,
         defaultValues: (storageUtils.getCurrentForm() as RegistrationFormData | null) || {
@@ -134,19 +174,27 @@ function CatRegistrationForm() {
             }
 
             storageUtils.clearCurrentForm();
-            alert(t('alert.submitSuccess', { number: response.registrationNumber }));
+
+            setSubmitSuccessData({ number: String(response.registrationNumber) });
 
             reset({
                 sameAsBreeder: false,
                 cats: [defaultCatValues]
             });
-            setCurrentStep(1);
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
 
         } catch (error: unknown) {
             alert(t('alert.submitError'));
-            console.error('Submission error:', error);
+            console.error(t('alert.submitError'), error);
         } finally {
             setIsSubmitting(false);
+        }
+    };
+
+    const handleConfirmAndSubmit = () => {
+        if (window.confirm(t('confirm.submitForm'))) {
+            handleSubmit(onSubmit)();
         }
     };
 
@@ -185,61 +233,74 @@ function CatRegistrationForm() {
             <div className="min-h-screen bg-gray-50">
                 <div className="container max-w-5xl mx-auto p-4 sm:p-8">
 
-                    <div className="flex justify-between items-center mb-8">
-                        <h1 className="text-3xl font-bold text-gray-900">
-                            {t('form.title')}
-                        </h1>
+                    {submitSuccessData ? (
+                        <SubmitSuccess
+                            registrationNumber={submitSuccessData.number}
+                            onBackToStart={() => {
+                                setSubmitSuccessData(null);
+                                setCurrentStep(1);
+                                window.scrollTo({ top: 0, behavior: 'smooth' });
+                            }}
+                        />
+                    ) : (
+                        <React.Fragment>
+                            <div className="flex justify-between items-center mb-8">
+                                <h1 className="text-3xl font-bold text-gray-900">
+                                    {t('form.title')}
+                                </h1>
 
-                        <Button variant="reset" onClick={handleReset}>
-                            {t('form.resetAll')}
-                        </Button>
-                    </div>
+                                <Button variant="reset" onClick={handleReset}>
+                                    {t('form.resetAll')}
+                                </Button>
+                            </div>
 
-                    <FormStepper
-                        currentStep={currentStep}
-                        totalSteps={totalSteps}
-                        labels={stepLabels}
-                    />
+                            <FormStepper
+                                currentStep={currentStep}
+                                totalSteps={totalSteps}
+                                labels={stepLabels}
+                            />
 
-                    <div className="bg-white p-6 sm:p-10 rounded-2xl shadow-xl mt-8">
-                        <form>
-                            {currentStep === 1 && <Step1_Exhibition />}
-                            {currentStep === 2 && <Step2_CatInfo />}
-                            {currentStep === 3 && <Step3_BreederInfo />}
-                            {currentStep === 4 && <Step4_ExhibitorInfo />}
-                            {currentStep === 5 && <Step5_NotesAndConsent />}
-                            {currentStep === 6 && <Step6_Recap />}
-                        </form>
-                    </div>
+                            <div className="bg-white p-6 sm:p-10 rounded-2xl shadow-xl mt-8">
+                                <form>
+                                    {currentStep === 1 && <Step1_Exhibition />}
+                                    {currentStep === 2 && <Step2_CatInfo />}
+                                    {currentStep === 3 && <Step3_BreederInfo />}
+                                    {currentStep === 4 && <Step4_ExhibitorInfo />}
+                                    {currentStep === 5 && <Step5_NotesAndConsent />}
+                                    {currentStep === 6 && <Step6_Recap onEditStep={setCurrentStep} />}
+                                </form>
+                            </div>
 
-                    <div className="flex justify-between mt-10">
-                        <Button
-                            variant="secondary"
-                            onClick={handlePrevious}
-                            disabled={currentStep === 1}
-                            style={{ visibility: currentStep === 1 ? 'hidden' : 'visible' }}
-                        >
-                            ← {t('form.back')}
-                        </Button>
+                            <div className="flex justify-between mt-10">
+                                <Button
+                                    variant="secondary"
+                                    onClick={handlePrevious}
+                                    disabled={currentStep === 1}
+                                    style={{ visibility: currentStep === 1 ? 'hidden' : 'visible' }}
+                                >
+                                    ← {t('form.back')}
+                                </Button>
 
-                        {currentStep < totalSteps ? (
-                            <Button variant="primary" onClick={handleNext}>
-                                {currentStep === totalSteps - 1 ? t('form.toRecap') : t('form.continue')} →
-                            </Button>
-                        ) : (
-                            <Button
-                                variant="submit"
-                                onClick={handleSubmit(onSubmit)}
-                                disabled={isSubmitting}
-                            >
-                                {isSubmitting ? t('form.submitting', 'Odesílám...') : t('form.submit')}
-                            </Button>
-                        )}
-                    </div>
+                                {currentStep < totalSteps ? (
+                                    <Button variant="primary" onClick={handleNext}>
+                                        {currentStep === totalSteps - 1 ? t('form.toRecap') : t('form.continue')} →
+                                    </Button>
+                                ) : (
+                                    <Button
+                                        variant="submit"
+                                        onClick={handleConfirmAndSubmit}
+                                        disabled={isSubmitting}
+                                    >
+                                        {isSubmitting ? t('form.submitting') : t('form.submit')}
+                                    </Button>
+                                )}
+                            </div>
 
-                    <div className="mt-8 text-center text-gray-500">
-                        💾 {t('form.autosaveInfo', 'Údaje se automaticky ukládají.')}
-                    </div>
+                            <div className="mt-8 text-center text-gray-500">
+                                💾 {t('form.autosaveInfo')}
+                            </div>
+                        </React.Fragment>
+                    )}
                 </div>
             </div>
         </FormProvider>

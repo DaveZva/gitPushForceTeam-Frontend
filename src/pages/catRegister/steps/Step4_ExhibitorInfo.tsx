@@ -1,5 +1,6 @@
 import React, { useState, useEffect, ReactNode } from 'react';
 import { useFormContext, FieldError } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import { storageUtils } from '../../../utils/storage';
 import { RegistrationFormData, CatFormData } from '../../../schemas/registrationSchema';
 
@@ -12,7 +13,6 @@ interface FormFieldProps {
     children: ReactNode;
 }
 
-// Typ pro data ze storage (předpoklad)
 interface SavedExhibitor {
     id: number;
     firstName: string;
@@ -25,6 +25,7 @@ interface SavedExhibitor {
 }
 
 export function Step4_ExhibitorInfo() {
+    const { t } = useTranslation(); // Add hook
     const FormField: React.FC<FormFieldProps> = ({ label, name, error, children }) => (
         <div className="flex flex-col gap-2">
             <label htmlFor={name} className="text-sm font-semibold text-gray-700">
@@ -84,18 +85,18 @@ export function Step4_ExhibitorInfo() {
 
     return (
         <div className="space-y-6">
-            <h2 className="text-2xl font-bold text-gray-800">Údaje o vystavovateli</h2>
+            <h2 className="text-2xl font-bold text-gray-800">{t('step4.title')}</h2>
 
             {savedExhibitors.length > 0 && !sameAsBreeder && (
                 <div className="p-4 bg-blue-50 rounded-lg">
-                    <FormField label="Načíst uloženého vystavovatele" name="loadExhibitor" error={undefined}>
+                    <FormField label={t('step4.loadSaved')} name="loadExhibitor" error={undefined}>
                         <select
                             onChange={handleLoadExhibitor}
                             defaultValue=""
                             className={inputClass}
                             disabled={sameAsBreeder}
                         >
-                            <option value="">-- Vyberte ze seznamu --</option>
+                            <option value="">{t('common.selectFromList')}</option>
                             {savedExhibitors.map(ex => (
                                 <option key={ex.id} value={ex.id}>
                                     {ex.firstName} {ex.lastName} ({ex.email})
@@ -114,39 +115,39 @@ export function Step4_ExhibitorInfo() {
                         className="w-5 h-5 text-blue-600 rounded cursor-pointer focus:ring-blue-500"
                     />
                     <span className="font-medium text-gray-800">
-                        Vystavovatel je stejný jako chovatel
+                        {t('step4.sameAsBreeder')}
                     </span>
                 </label>
             </div>
 
             <div className={`space-y-6 transition-opacity ${sameAsBreeder ? 'opacity-50' : 'opacity-100'}`}>
                 <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-                    <FormField label="Jméno *" name="exhibitorFirstName" error={errors.exhibitorFirstName}>
+                    <FormField label={t('form.firstNameLabel')} name="exhibitorFirstName" error={errors.exhibitorFirstName}>
                         <input type="text" {...register("exhibitorFirstName")} className={inputClass} disabled={sameAsBreeder} />
                     </FormField>
 
-                    <FormField label="Příjmení *" name="exhibitorLastName" error={errors.exhibitorLastName}>
+                    <FormField label={t('form.lastNameLabel')} name="exhibitorLastName" error={errors.exhibitorLastName}>
                         <input type="text" {...register("exhibitorLastName")} className={inputClass} disabled={sameAsBreeder} />
                     </FormField>
 
-                    <FormField label="Ulice a číslo popisné *" name="exhibitorAddress" error={errors.exhibitorAddress}>
-                        <input type="text" {...register("exhibitorAddress")} className={inputClass} placeholder="Např. Hlavní 123" disabled={sameAsBreeder} />
+                    <FormField label={t('form.addressLabel')} name="exhibitorAddress" error={errors.exhibitorAddress}>
+                        <input type="text" {...register("exhibitorAddress")} className={inputClass} placeholder={t('form.addressPlaceholder')} disabled={sameAsBreeder} />
                     </FormField>
 
-                    <FormField label="PSČ *" name="exhibitorZip" error={errors.exhibitorZip}>
-                        <input type="text" {...register("exhibitorZip")} className={inputClass} placeholder="123 45" disabled={sameAsBreeder} />
+                    <FormField label={t('form.zipLabel')} name="exhibitorZip" error={errors.exhibitorZip}>
+                        <input type="text" {...register("exhibitorZip")} className={inputClass} placeholder={t('form.zipPlaceholder')} disabled={sameAsBreeder} />
                     </FormField>
 
-                    <FormField label="Město *" name="exhibitorCity" error={errors.exhibitorCity}>
+                    <FormField label={t('form.cityLabel')} name="exhibitorCity" error={errors.exhibitorCity}>
                         <input type="text" {...register("exhibitorCity")} className={inputClass} disabled={sameAsBreeder} />
                     </FormField>
 
-                    <FormField label="Email *" name="exhibitorEmail" error={errors.exhibitorEmail}>
-                        <input type="email" {...register("exhibitorEmail")} className={inputClass} placeholder="email@example.com" disabled={sameAsBreeder} />
+                    <FormField label={t('form.emailLabel')} name="exhibitorEmail" error={errors.exhibitorEmail}>
+                        <input type="email" {...register("exhibitorEmail")} className={inputClass} placeholder={t('form.emailPlaceholder')} disabled={sameAsBreeder} />
                     </FormField>
 
-                    <FormField label="Telefon *" name="exhibitorPhone" error={errors.exhibitorPhone}>
-                        <input type="tel" {...register("exhibitorPhone")} className={inputClass} placeholder="+420 123 456 789" disabled={sameAsBreeder} />
+                    <FormField label={t('form.phoneLabel')} name="exhibitorPhone" error={errors.exhibitorPhone}>
+                        <input type="tel" {...register("exhibitorPhone")} className={inputClass} placeholder={t('form.phonePlaceholder')} disabled={sameAsBreeder} />
                     </FormField>
                 </div>
             </div>

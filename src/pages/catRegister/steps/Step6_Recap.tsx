@@ -4,7 +4,11 @@ import { useTranslation } from 'react-i18next';
 import { registrationApi, AvailableShow } from '../../../services/api/registrationApi';
 import { RegistrationFormData, CatFormData } from '../../../schemas/registrationSchema';
 
-export function Step6_Recap() {
+interface Step6RecapProps {
+    onEditStep: (step: number) => void;
+}
+
+export function Step6_Recap({ onEditStep }: Step6RecapProps) {
     const { getValues } = useFormContext<RegistrationFormData>();
     const { t } = useTranslation();
     const data = getValues();
@@ -22,13 +26,24 @@ export function Step6_Recap() {
 
     interface RecapSectionProps {
         title: string;
+        editStep: number; // Krok, na který se má vrátit
+        onEdit: (step: number) => void;
         children: ReactNode;
     }
-    const RecapSection: React.FC<RecapSectionProps> = ({ title, children }) => (
+    const RecapSection: React.FC<RecapSectionProps> = ({ title, editStep, onEdit, children }) => (
         <div className="p-6 bg-white rounded-lg shadow-sm">
-            <h3 className="text-lg font-bold text-blue-700 border-b border-blue-200 pb-2 mb-4">
-                {title}
-            </h3>
+            <div className="flex justify-between items-center border-b border-blue-200 pb-2 mb-4">
+                <h3 className="text-lg font-bold text-blue-700">
+                    {title}
+                </h3>
+                <button
+                    type="button"
+                    onClick={() => onEdit(editStep)}
+                    className="px-3 py-1 text-sm font-semibold text-blue-600 transition-colors bg-blue-100 rounded-md hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                    {t('common.edit', 'Upravit')}
+                </button>
+            </div>
             <div className="grid grid-cols-1 gap-x-6 sm:grid-cols-2 lg:grid-cols-3">
                 {children}
             </div>
@@ -89,20 +104,29 @@ export function Step6_Recap() {
 
     return (
         <div className="space-y-8">
-            <h2 className="text-2xl font-bold text-gray-800">{t('recap.title')}</h2>
+            <h2 className="text-2xl font-bold text-gray-800">{t('catForm.recap.title')}</h2>
             <p className="text-gray-600">
-                {t('recap.checkData')}
+                {t('catForm.recap.checkData')}
             </p>
 
             <div className="space-y-6">
-                <RecapSection title={t('recap.exhibition')}>
-                    <RecapItem label={t('recap.showName')} value={showName} />
-                    <RecapItem label={t('recap.days')} value={daysMap[data.days]} />
+                <RecapSection
+                    title={t('catForm.recap.exhibition')}
+                    editStep={1}
+                    onEdit={onEditStep}
+                >
+                    <RecapItem label={t('catForm.recap.showName')} value={showName} />
+                    <RecapItem label={t('catForm.recap.days')} value={daysMap[data.days]} />
                 </RecapSection>
 
                 {data.cats && data.cats.map((cat, index) => (
-                    <RecapSection title={`${t('recap.cat')} ${index + 1}`} key={index}>
-                        <RecapItem label={t('catForm.name')} value={`${cat.titleBefore || ''} ${cat.catName} ${cat.titleAfter || ''}`.trim()} />
+                    <RecapSection
+                        title={`${t('catForm.recap.cat')} ${index + 1}`} // Použití 'catForm.recap.cat'
+                        key={index}
+                        editStep={2}
+                        onEdit={onEditStep}
+                    >
+                        <RecapItem label={t('catForm.catName')} value={`${cat.titleBefore || ''} ${cat.catName} ${cat.titleAfter || ''}`.trim()} />
                         <RecapItem label={t('catForm.gender')} value={genderMap[cat.gender]} />
                         <RecapItem label={t('catForm.neutered')} value={neuteredMap[cat.neutered]} />
                         <RecapItem label={t('catForm.birthDate')} value={cat.birthDate} />
@@ -113,32 +137,44 @@ export function Step6_Recap() {
                     </RecapSection>
                 ))}
 
-                <RecapSection title={t('recap.breeder')}>
-                    <RecapItem label={t('recap.name')} value={`${data.breederFirstName} ${data.breederLastName}`} />
-                    <RecapItem label={t('recap.address')} value={`${data.breederAddress}, ${data.breederZip} ${data.breederCity}`} />
-                    <RecapItem label={t('recap.email')} value={data.breederEmail} />
-                    <RecapItem label={t('recap.phone')} value={data.breederPhone} />
+                <RecapSection
+                    title={t('catForm.recap.breeder')}
+                    editStep={3}
+                    onEdit={onEditStep}
+                >
+                    <RecapItem label={t('catForm.recap.name')} value={`${data.breederFirstName} ${data.breederLastName}`} />
+                    <RecapItem label={t('catForm.recap.address')} value={`${data.breederAddress}, ${data.breederZip} ${data.breederCity}`} />
+                    <RecapItem label={t('catForm.recap.email')} value={data.breederEmail} />
+                    <RecapItem label={t('catForm.recap.phone')} value={data.breederPhone} />
                 </RecapSection>
 
-                <RecapSection title={t('recap.exhibitor')}>
+                <RecapSection
+                    title={t('catForm.recap.exhibitor')}
+                    editStep={4}
+                    onEdit={onEditStep}
+                >
                     {data.sameAsBreeder ? (
                         <p className="p-3 text-gray-700 bg-gray-100 rounded-md">
-                            {t('recap.sameAsBreeder')}
+                            {t('catForm.recap.sameAsBreeder')}
                         </p>
                     ) : (
                         <>
-                            <RecapItem label={t('recap.name')} value={`${data.exhibitorFirstName} ${data.exhibitorLastName}`} />
-                            <RecapItem label={t('recap.address')} value={`${data.exhibitorAddress}, ${data.exhibitorZip} ${data.exhibitorCity}`} />
-                            <RecapItem label={t('recap.email')} value={data.exhibitorEmail} />
-                            <RecapItem label={t('recap.phone')} value={data.exhibitorPhone} />
+                            <RecapItem label={t('catForm.recap.name')} value={`${data.exhibitorFirstName} ${data.exhibitorLastName}`} />
+                            <RecapItem label={t('catForm.recap.address')} value={`${data.exhibitorAddress}, ${data.exhibitorZip} ${data.exhibitorCity}`} />
+                            <RecapItem label={t('catForm.recap.email')} value={data.exhibitorEmail} />
+                            <RecapItem label={t('catForm.recap.phone')} value={data.exhibitorPhone} />
                         </>
                     )}
                 </RecapSection>
 
-                <RecapSection title={t('recap.notesAndConsent')}>
-                    <RecapItem label={t('recap.notes')} value={data.notes} />
-                    <RecapItem label={t('recap.dataAccuracy')} value={data.dataAccuracy ? `✓ ${t('common.agreed')}` : `X ${t('common.notAgreed')}`} />
-                    <RecapItem label={t('recap.gdprConsent')} value={data.gdprConsent ? `✓ ${t('common.agreed')}` : `X ${t('common.notAgreed')}`} />
+                <RecapSection
+                    title={t('catForm.recap.notesAndConsent')}
+                    editStep={5}
+                    onEdit={onEditStep}
+                >
+                    <RecapItem label={t('catForm.recap.notes')} value={data.notes} />
+                    <RecapItem label={t('catForm.recap.dataAccuracy')} value={data.dataAccuracy ? `✓ ${t('common.agreed')}` : `X ${t('common.notAgreed')}`} />
+                    <RecapItem label={t('catForm.recap.gdprConsent')} value={data.gdprConsent ? `✓ ${t('common.agreed')}` : `X ${t('common.notAgreed')}`} />
                 </RecapSection>
             </div>
         </div>
