@@ -1,26 +1,27 @@
 import React from 'react';
 import { useFormContext } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import { RegistrationFormData } from '../../../schemas/registrationSchema';
 import { Checkbox } from '../../../components/ui/Checkbox';
 
 export function Step5_NotesAndConsent() {
-    const { t } = useTranslation();
     const { register, formState: { errors } } = useFormContext<RegistrationFormData>();
+    const { t } = useTranslation();
 
     return (
         <div className="space-y-6">
-            <h2 className="text-2xl font-bold text-gray-800">{t('step5.title')}</h2>
+            <h2 className="text-2xl font-bold text-gray-800">{t('registrationSteps.step5_consent.title')}</h2>
 
             <div className="flex flex-col gap-2">
 
                 <label htmlFor="notes" className="text-sm font-semibold text-gray-700">
-                    Poznámky k přihlášce
+                    {t('registrationSteps.step5_consent.notes.label')}
                 </label>
 
                 <textarea
                     id="notes"
                     rows={5}
-                    placeholder="Zde můžete uvést jakékoliv poznámky k vaší přihlášce..."
+                    placeholder={t('registrationSteps.step5_consent.notes.placeholder')}
                     className={`w-full p-3 bg-gray-100 border-none rounded-lg focus:ring-2 focus:ring-blue-500 ${errors.notes ? 'ring-2 ring-red-500' : ''} `}
                     {...register("notes")}
                 />
@@ -31,23 +32,23 @@ export function Step5_NotesAndConsent() {
             <div className="space-y-4">
                 <Checkbox
                     id="dataAccuracy"
-                    label={t('step5.dataAccuracyLabel')}
-                    description={t('step5.dataAccuracyDescription')}
+                    label={t('registrationSteps.step5_consent.dataAccuracy.label')}
+                    description={t('registrationSteps.step5_consent.dataAccuracy.description')}
                     registration={register("dataAccuracy")}
                     error={errors.dataAccuracy}
                 />
 
                 <Checkbox
                     id="gdprConsent"
-                    label={t('step5.gdprConsentLabel')}
-                    description={t('step5.gdprConsentDescription')}
+                    label={t('registrationSteps.step5_consent.gdprConsent.label')}
+                    description={t('registrationSteps.step5_consent.gdprConsent.description')}
                     registration={register("gdprConsent")}
                     error={errors.gdprConsent}
                 />
             </div>
 
             <div className="p-4 text-yellow-800 bg-yellow-50 border-l-4 border-yellow-400 rounded-lg">
-                <strong className="font-bold">⚠️ {t('step5.warningTitle')}</strong> {t('step5.warningBody')}
+                <strong className="font-bold">{t('registrationSteps.step5_consent.alert.title')}</strong> {t('registrationSteps.step5_consent.alert.text')}
             </div>
         </div>
     );

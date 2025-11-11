@@ -1,10 +1,8 @@
 import { z } from 'zod';
 import { validateEmsCode } from '../utils/emsRules';
-import i18n from 'i18next';
+import { TFunction } from 'i18next';
 
-const t = (key: string) => i18n.t(key);
-
-const createPersonSchema = () => ({
+const createPersonSchema = (t: TFunction) => ({
     FirstName: z.string().min(2, t('validation.person.firstName.min')),
     LastName: z.string().min(2, t('validation.person.lastName.min')),
     Address: z.string().min(5, t('validation.person.address.min')),
@@ -14,7 +12,7 @@ const createPersonSchema = () => ({
     Phone: z.string().regex(/^((\+420 ?)|(00420 ?))?\d{3} ?\d{3} ?\d{3}$/, t('validation.person.phone.invalid')),
 });
 
-const createCatSchema = () => z.object({
+const createCatSchema = (t: TFunction) => z.object({
     // Základní údaje
     titleBefore: z.string().optional(),
     catName: z.string().min(2, t('validation.cat.name.min')),
@@ -64,9 +62,9 @@ const createCatSchema = () => z.object({
     fatherPedigreeNumber: z.string().optional(),
 });
 
-export const createRegistrationSchema = () => {
-    const personSchema = createPersonSchema();
-    const catSchema = createCatSchema();
+export const createRegistrationSchema = (t: TFunction) => {
+    const personSchema = createPersonSchema(t);
+    const catSchema = createCatSchema(t);
 
     return z.object({
         showId: z.string().min(1, t('validation.registration.showId.required')),

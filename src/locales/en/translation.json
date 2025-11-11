@@ -2,12 +2,12 @@
   "nav": {
     "appName": "CatShow",
     "dashboard": "Dashboard",
-    "newApplication": "New Application",
+    "newApplication": "New Applications",
     "myApplications": "My Applications",
     "myCats": "My Cats",
-    "logOut": "Log Out",
-    "logIn": "Log In",
-    "signUp": "Sign Up",
+    "logOut": "Log out",
+    "logIn": "Login",
+    "signUp": "Registration",
     "exhibitions": "Exhibitions"
   },
   "user": {
@@ -19,12 +19,12 @@
     "welcome_guest": "Welcome back",
     "stats": {
       "active": "Active Applications",
-      "approved": "Approved Entries",
+      "approved": "Approved Participations",
       "cats": "Cats in Profile"
     },
     "history": {
       "title": "Your Application History",
-      "subtitle": "An overview of all shows you have attended.
+      "subtitle": "Overview of all shows you have attended."
     },
     "upcoming": {
       "title": "Upcoming Shows",
@@ -43,211 +43,229 @@
   },
   "actions": {
     "detail": "Detail",
-    "showAllHistory": "Show Full History →",
-    "showAllShows": "Show All Shows →",
-    "applyToShow": "Apply to Show",
-    "showDetails": "Show Details"
+    "showAllHistory": "Show all history →",
+    "showAllShows": "Show all shows →",
+    "applyToShow": "Apply to show",
+    "showDetails": "Show details"
   },
   "auth": {
-    "login": "Log In",
+    "login": "Login",
     "registration": "Registration",
     "firstName": "First Name",
     "lastName": "Last Name",
-    "email": "Email",
+    "email": "E-mail",
     "password": "Password",
-    "loginIn": "Log In",
+    "loginIn": "Log in",
     "registerIn": "Register",
-    "dontHaveAccount": "Don't have an account? ",
+    "dontHaveAccount": "Don't have an account yet? ",
     "haveAccount": "Already have an account? "
   },
   "form": {
     "actions": {
-      "saveAndContinue": "Save and Continue"
+      "saveAndContinue": "Save and continue."
     },
     "continue": "Continue",
     "back": "Back",
-    "toRecap": "Recap",
+    "toRecap": "To Recap",
     "submit": "Submit",
-    "submitting": "Submitting...",
     "resetAll": "Clear All",
-    "title": "Cat Show Registration",
-    "autosaveInfo": "Data is saved automatically.",
-    "firstNameLabel": "First Name *",
-    "lastNameLabel": "Last Name *",
-    "addressLabel": "Street and House Number *",
-    "addressPlaceholder": "E.g., Main 123",
-    "zipLabel": "ZIP Code *",
-    "zipPlaceholder": "12345",
-    "cityLabel": "City *",
-    "emailLabel": "Email *",
-    "emailPlaceholder": "email@example.com",
-    "phoneLabel": "Phone *",
-    "phonePlaceholder": "+1 123 456 7890"
-    "toRecap": "Summary",
-    "submit": "Submit",
-    "resetAll": "Clear Cache",
-    "title": "Cat Registration for Show"
+    "title": "Register cat for show",
+    "submitting": "Submitting...",
+    "autosaveInfo": "Data is saved automatically."
   },
   "catForm": {
-    "titleBefore": "Title Before Name",
+    "titleBefore": "Title before name",
     "catName": "Name",
-    "titleAfter": "Title After Name",
-    "chipNumber": "Chip Number",
+    "titleAfter": "Title after name",
+    "chipNumber": "Chip number",
     "gender": "Gender",
     "neutered": "Neutered",
     "emsCode": "EMS Code",
-    "birthDate": "Date of Birth",
-    "showClass": "Show Class",
-    "pedigreeNumber": "Pedigree Number",
-    "pedigreeNumber": "Cat Number?",
-    "cageType": "Cage Type",
+    "birthDate": "Date of birth",
+    "showClass": "Show class",
+    "pedigreeNumber": "Pedigree number",
+    "cageType": "Cage type",
     "male": "Male",
     "female": "Female",
-    "addAnotherCat": "Add Another Cat",
-    "removeCat": "Remove Cat",
-    "namePlaceholder": "Molly",
-    "chipPlaceholder": "15-digit number",
-    "breedSelect": "Breed",
-    "emsSuffixPlaceholder": "n 03 24",
-    "pedigreePlaceholder": "FPL 1234/18",
-    "titlePlaceholderCH": "CH",
-    "titlePlaceholderGIC": "GIC",
-    "breed": "Breed",
-    "emsCodeShort": "EMS",
-    "color": "Color",
-    "breedPlaceholder": "E.g., MCO",
-    "motherNamePlaceholder": "Mother's Name",
-    "fatherNamePlaceholder": "Father's Name",
+    "addAnotherCat": "Add another cat",
     "tabs": {
       "basic": "Cat",
       "mother": "Mother",
       "father": "Father"
     },
-    "classOptions": {
-      "c1": "Supreme Champion",
-      "c2": "Supreme Premior",
-      "c3": "Grand International Champion",
-      "c4": "Grand International Premior",
+    "common": {
+      "loading": "Loading...",
+      "select": "Select",
+      "noTitle": "No title",
+      "yes": "Yes",
+      "no": "No",
+      "sat": "Saturday",
+      "sun": "Sunday",
+      "both": "Both days",
+      "agreed": "I agree",
+      "notAgreed": "I do not agree"
+    },
     "recap": {
-      "title": "Application Summary",
+      "title": "Application Recap",
       "checkData": "Please check all entered data. If everything is correct, submit the application.",
       "exhibition": "Exhibition",
       "showName": "Show Name",
-      "days": "Days of Participation",
+      "days": "Days of attendance",
       "cat": "Cat",
       "breeder": "Breeder",
       "exhibitor": "Exhibitor",
-      "name": "Name",
+      "name": "Name and Surname",
       "address": "Address",
       "email": "Email",
       "phone": "Phone",
-      "sameAsBreeder": "Same as Breeder",
+      "sameAsBreeder": "Same as breeder",
       "notesAndConsent": "Notes and Consents",
       "notes": "Notes",
-      "dataAccuracy": "Data Accuracy",
+      "dataAccuracy": "Data accuracy",
       "gdprConsent": "GDPR Consent"
     },
     "classOptions": {
       "c1": "Supreme Champion",
       "c2": "Supreme Premior",
-      "c3": "International Grand Champion",
-      "c4": "International Grand Premior",
+      "c3": "International Grandchampion",
+      "c4": "International Grandpremior",
       "c5": "International Champion",
       "c6": "International Premior",
       "c7": "Champion",
       "c8": "Premior",
-      "c9": "Open Class",
-      "c10": "Neuter Class",
-      "c11": "8-12 Months (Junior)",
-      "c12": "4-8 Months (Kitten)",
-      "c13a": "Novice Class",
-      "c13b": "Control Class",
-      "c13c": "Determination Class",
-      "c14": "Domestic Cat (HHP)",
-      "c15": "Out of Competition",
-      "c16": "Litter (min. 3 kittens)",
-      "c17": "Veteran (over 7 years)"
-    },
-    "cageOptions": {
-      "own": "Own Cage - 1700 CZK",
-      "rentSmall": "Rented Cage 70x70 - 2200 CZK",
-      "rentLarge": "Rented Cage 120x70 - 2800 CZK"
-    }
-  },
-  "recap": {
-    "title": "Application Recap",
-    "checkData": "Please check all entered data. If everything is correct, submit the application.",
-      "c10": "Neuters",
-      "c11": "8-12 Months",
-      "c12": "4-8 Months",
+      "c9": "Open class",
+      "c10": "Neutered",
+      "c11": "8-12 months",
+      "c12": "4-8 months",
       "c13a": "Novice",
       "c13b": "Control",
       "c13c": "Verification",
-      "c14": "Household Pets",
-      "c15": "Non-Competitive",
+      "c14": "Domestic cats",
+      "c15": "Out of competition",
       "c16": "Litters (min. 3 kittens)",
       "c17": "Veterans (over 7 years)"
     },
     "cageOptions": {
-      "own": "Own Cage - 1700 CZK",
-      "rentSmall": "Cage Rental 70x70 - 2200 CZK",
-      "rentLarge": "Cage Rental 120x70 - 2800 CZK"
+      "own": "Own cage - 1700 CZK",
+      "rentSmall": "Rental cage 70x70 - 2200 CZK",
+      "rentLarge": "Rental cage 120x70 - 2800 CZK"
     }
   },
   "stepper": {
     "exhibition": "Exhibition",
-    "showName": "Show Name",
-    "days": "Days of Attendance",
     "cat": "Cat",
     "breeder": "Breeder",
     "exhibitor": "Exhibitor",
-    "name": "Full Name",
-    "address": "Address",
-    "email": "Email",
-    "phone": "Phone",
-    "sameAsBreeder": "Same as Breeder",
-    "notesAndConsent": "Notes and Consents",
-    "notes": "Notes",
-    "dataAccuracy": "Data Accuracy",
-    "gdprConsent": "GDPR Consent"
-  },
-  "stepper": {
-    "exhibition": "Show",
-    "cat": "Cat",
-    "breeder": "Breeder",
-    "exhibitor": "Exhibitor",
-    "consent": "Consent",
+    "consent": "Consents",
     "recap": "Recap"
   },
-  "step1": {
-    "title": "Exhibition Selection",
-    "showLabel": "Exhibition *",
-    "loadingShows": "Loading shows...",
-    "selectShow": "Select an exhibition...",
-    "daysLabel": "Attendance Days *",
-    "daySat": "Saturday",
-    "daySun": "Sunday",
-    "dayBoth": "Both Days"
-  },
-  "step3": {
-    "title": "Breeder Information",
-    "loadSaved": "Load Saved Breeder"
-  },
-  "step4": {
-    "title": "Exhibitor Information",
-    "loadSaved": "Load Saved Exhibitor",
-    "sameAsBreeder": "Exhibitor is the same as breeder"
-  },
-  "step5": {
-    "title": "Notes and Consent",
-    "notesLabel": "Application Notes",
-    "notesPlaceholder": "You can provide any notes for your application here...",
-    "dataAccuracyLabel": "I declare that all information provided is true and complete.",
-    "dataAccuracyDescription": "I am aware that providing false information may lead to exclusion from the show.",
-    "gdprConsentLabel": "I consent to the processing of personal data",
-    "gdprConsentDescription": "in accordance with the GDPR regulation for the purpose of show registration and related activities.",
-    "warningTitle": "Warning:",
-    "warningBody": "After submitting the application, you will receive a confirmation email with payment details. The application will be active once the payment is credited to our account."
+  "registrationSteps": {
+    "step1_exhibition": {
+      "title": "Show Selection",
+      "errors": {
+        "loadShows": "Error loading shows:"
+      },
+      "show": {
+        "label": "Show *",
+        "loading": "Loading shows...",
+        "placeholder": "Select a show..."
+      },
+      "attendance": {
+        "label": "Show Attendance *",
+        "saturday": "Saturday",
+        "sunday": "Sunday",
+        "both": "Both days"
+      }
+    },
+    "step3_breeder": {
+      "title": "Breeder Information",
+      "loadSaved": {
+        "label": "Load saved breeder",
+        "placeholder": "-- Select from list --"
+      },
+      "firstName": {
+        "label": "First Name *"
+      },
+      "lastName": {
+        "label": "Last Name *"
+      },
+      "address": {
+        "label": "Street and house number *",
+        "placeholder": "e.g., Main St 123"
+      },
+      "zip": {
+        "label": "ZIP Code *",
+        "placeholder": "123 45"
+      },
+      "city": {
+        "label": "City *"
+      },
+      "email": {
+        "label": "Email *",
+        "placeholder": "email@example.com"
+      },
+      "phone": {
+        "label": "Phone *",
+        "placeholder": "+420 123 456 789"
+      }
+    },
+    "step4_exhibitor": {
+      "title": "Exhibitor Information",
+      "loadSaved": {
+        "label": "Load saved exhibitor",
+        "placeholder": "-- Select from list --"
+      },
+      "sameAsBreeder": "Exhibitor is the same as breeder",
+      "firstName": {
+        "label": "First Name *"
+      },
+      "lastName": {
+        "label": "Last Name *"
+      },
+      "address": {
+        "label": "Street and house number *",
+        "placeholder": "e.g., Main St 123"
+      },
+      "zip": {
+        "label": "ZIP Code *",
+        "placeholder": "123 45"
+      },
+      "city": {
+        "label": "City *"
+      },
+      "email": {
+        "label": "Email *",
+        "placeholder": "email@example.com"
+      },
+      "phone": {
+        "label": "Phone *",
+        "placeholder": "+420 123 456 789"
+      }
+    },
+    "step5_consent": {
+      "title": "Notes and Consent",
+      "notes": {
+        "label": "Application Notes",
+        "placeholder": "You can provide any notes related to your application here..."
+      },
+      "dataAccuracy": {
+        "label": "I declare that all provided information is true and complete.",
+        "description": "I am aware that providing false information may lead to exclusion from the show."
+      },
+      "gdprConsent": {
+        "label": "I agree to the processing of personal data",
+        "description": "in accordance with the GDPR regulation for the purpose of registration for the exhibition and other related activities."
+      },
+      "alert": {
+        "title": "⚠️ Warning:",
+        "text": "After submitting the application, you will receive a confirmation email with payment details. The application will become active once the payment is credited to our account."
+      }
+    },
+    "step6_recap": {
+      "errors": {
+        "loadShows": "Error loading shows in recap:"
+      }
+    }
   },
   "common": {
     "loading": "Loading...",
@@ -255,61 +273,34 @@
     "yes": "Yes",
     "no": "No",
     "select": "Select",
-    "noTitle": "No Title",
-    "sat": "Saturday",
-    "sun": "Sunday",
-    "both": "Both Days",
-    "agreed": "Agreed",
-    "notAgreed": "Not Agreed",
-    "selectFromList": "-- Select from list --"
-  },
-  "statuses": {
-    "PLANNED": "Planned",
-    "OPEN": "Registration Open",
-    "CLOSED": "Registration Closed",
-    "COMPLETED": "Completed",
-    "CANCELLED": "Cancelled"
-  },
-  "alert": {
-    "submitSuccess": "Application successfully submitted! Application number: {{number}}",
-    "submitError": "Error submitting application. Please try again later.",
-    "createSuccess": "Show successfully created.",
-    "createError": "Error creating show. Please try again later."
-  },
-    "consent": "Consents",
-    "recap": "Summary"
-  },
-  "common": {
-    "loading": "Loading...",
-    "select": "Select",
-    "noTitle": "No Title",
-    "yes": "Yes",
-    "no": "No",
-    "sat": "Saturday",
-    "sun": "Sunday",
-    "both": "Both Days",
-    "agreed": "I Agree",
-    "notAgreed": "I Disagree",
-    "edit": "Edit"
+    "noTitle": "No title"
   },
   "errors": {
-    "fetchFailed": "Failed to load data."
+    "fetchFailed": "Failed to load data.",
+    "submission": "Submission error:"
   },
   "statuses": {
     "PLANNED": "Planned",
-    "OPEN": "Registration Open",
-    "CLOSED": "Registration Closed",
+    "OPEN": "Registration open",
+    "CLOSED": "Registration closed",
     "COMPLETED": "Completed",
     "CANCELLED": "Cancelled"
   },
   "alert": {
-    "submitSuccess": "Application successfully submitted! Application number: {{number}}",
+    "submitSuccess": "Application submitted successfully! Application number: {{number}}",
     "submitError": "Error submitting application. Please try again later.",
-    "createSuccess": "Show successfully created.",
+    "createSuccess": "Show created successfully.",
     "createError": "Error creating show. Please try again later."
   },
   "confirm": {
-    "resetForm": "Are you sure you want to delete all entered data?"
+    "resetForm": "Are you sure you want to delete all entered data?",
+    "submitForm": "Are you sure you want to submit the application? Data cannot be changed after submission."
+  },
+  "submitSuccess": {
+    "title": "Application Submitted Successfully!",
+    "message": "Your application number is:",
+    "info": "Confirmation and payment details have been sent to your email.",
+    "backButton": "New Application"
   },
   "admin": {
     "shows": {
@@ -353,149 +344,5 @@
     "contactEmail": "Contact Email",
     "websiteUrl": "Website URL"
   },
-  "location": "Location",
-  "logs": {
-    "step1ShowError": "Error loading shows (Step 1)",
-    "recapShowError": "Error loading shows (Recap)",
-    "submitError": "Error submitting form"
-  },
-  "errors": {
-    "firstNameRequired": "First name is required",
-    "lastNameRequired": "Last name is required",
-    "addressRequired": "Address is required",
-    "zipInvalid": "Invalid ZIP code (format 12345)",
-    "cityRequired": "City is required",
-    "emailInvalid": "Invalid email format",
-    "phoneInvalid": "Invalid phone number (format +1 123 456 7890)",
-    "catNameRequired": "Cat's name is required",
-    "chipInvalid": "Chip must have 15 digits",
-    "genderRequired": "Gender is required",
-    "neuteredRequired": "Please specify if neutered",
-    "birthDateRequired": "Date of birth is required",
-    "showClassRequired": "Show class is required",
-    "cageTypeRequired": "Cage type is required",
-    "showIdRequired": "Please select a show",
-    "daysRequired": "Please select attendance days",
-    "catsMinRequired": "You must register at least one cat",
-    "dataAccuracyRequired": "You must confirm the accuracy of the data",
-    "gdprConsentRequired": "You must consent to personal data processing",
-    "exhibitorRequired": "Exhibitor details are required if not the same as breeder",
-    "fetchFailed": "Failed to fetch data.",
-    "ems": {
-      "invalid": "Invalid EMS code"
-    "websiteUrl": "Website"
-  },
-  "step3": {
-    "title": "Breeder Information",
-    "loadSaved": "Load Saved Breeder",
-    "selectPlaceholder": "-- Select from List --",
-    "firstName": "First Name *",
-    "lastName": "Last Name *",
-    "address": "Street and House Number *",
-    "addressPlaceholder": "E.g. Main Street 123",
-    "zip": "ZIP Code *",
-    "zipPlaceholder": "123 45",
-    "city": "City *",
-    "email": "Email *",
-    "emailPlaceholder": "email@example.com",
-    "phone": "Phone *",
-    "phonePlaceholder": "+420 123 456 789"
-  },
-  "step4": {
-    "title": "Exhibitor Information",
-    "loadSaved": "Load Saved Exhibitor",
-    "selectPlaceholder": "-- Select from List --",
-    "sameAsBreeder": "Exhibitor is the same as breeder",
-    "firstName": "First Name *",
-    "lastName": "Last Name *",
-    "address": "Street and House Number *",
-    "addressPlaceholder": "E.g. Main Street 123",
-    "zip": "ZIP Code *",
-    "zipPlaceholder": "123 45",
-    "city": "City *",
-    "email": "Email *",
-    "emailPlaceholder": "email@example.com",
-    "phone": "Phone *",
-    "phonePlaceholder": "+420 123 456 789"
-  },
-  "step5": {
-    "title": "Notes and Consent",
-    "notesLabel": "Application Notes",
-    "notesPlaceholder": "You can enter any notes about your application here...",
-    "dataAccuracyLabel": "I declare that all the information provided is true and complete.",
-    "dataAccuracyDescription": "I am aware that providing false information may result in exclusion from the show.",
-    "gdprConsentLabel": "I consent to the processing of personal data",
-    "gdprConsentDescription": "in accordance with GDPR regulations for the purpose of show registration and related activities.",
-    "warningTitle": "⚠️ Warning:",
-    "warningText": "After submitting your application, you will receive a confirmation email with payment details. The application will be active after payment is credited to our account."
-  },
-  "location": "Location",
-  "validation": {
-    "person": {
-      "firstName": {
-        "min": "First name is required"
-      },
-      "lastName": {
-        "min": "Last name is required"
-      },
-      "address": {
-        "min": "Address is required"
-      },
-      "zip": {
-        "invalid": "Invalid ZIP code (format 123 45)"
-      },
-      "city": {
-        "min": "City is required"
-      },
-      "email": {
-        "invalid": "Invalid email format"
-      },
-      "phone": {
-        "invalid": "Invalid phone number (format +420 123 456 789)"
-      }
-    },
-    "cat": {
-      "name": {
-        "min": "Cat name is required"
-      },
-      "chipNumber": {
-        "invalid": "Chip must have 15 digits"
-      },
-      "gender": {
-        "required": "Gender is required."
-      },
-      "neutered": {
-        "required": "You must select one option."
-      },
-      "birthDate": {
-        "invalid": "Birth date is required"
-      },
-      "showClass": {
-        "required": "Show class is required"
-      },
-      "cageType": {
-        "required": "Cage type is required"
-      }
-    },
-    "registration": {
-      "showId": {
-        "required": "Please select a show"
-      },
-      "days": {
-        "required": "Please select participation days"
-      },
-      "cats": {
-        "min": "You must register at least one cat"
-      },
-      "dataAccuracy": {
-        "required": "You must confirm the accuracy of the data"
-      },
-      "gdprConsent": {
-        "required": "You must consent to personal data processing"
-      },
-      "exhibitor": {
-        "required": "Exhibitor details are required if not the same as breeder"
-      }
-    }
-  }
+  "location": "Location"
 }

@@ -4,7 +4,6 @@ import { useTranslation } from 'react-i18next';
 import { BREED_OPTIONS, validateEmsCode } from "../../../utils/emsRules";
 import { RegistrationFormData, CatFormData } from '../../../schemas/registrationSchema';
 import { Select } from '../../../components/ui/Select';
-// Import pro Card byl smazán
 import { Button } from '../../../components/ui/Button';
 import { Input } from '../../../components/ui/Input';
 
@@ -101,7 +100,7 @@ export function CatForm({ catIndex, onRemove }: CatFormProps) {
                         </FormField>
 
                         <FormField label={t('catForm.catName')} name={fieldName("catName")} error={getError("catName")}>
-                            <Input type="text" {...register(fieldName("catName"))} placeholder={t('catForm.namePlaceholder')} />
+                            <Input type="text" {...register(fieldName("catName"))} placeholder="Molly" />
                         </FormField>
 
                         <FormField label={t('catForm.titleAfter')} name={fieldName("titleAfter")} error={getError("titleAfter")}>
@@ -115,7 +114,7 @@ export function CatForm({ catIndex, onRemove }: CatFormProps) {
                         </FormField>
 
                         <FormField label={t('catForm.chipNumber')} name={fieldName("chipNumber")} error={getError("chipNumber")}>
-                            <Input type="text" {...register(fieldName("chipNumber"))} placeholder={t('catForm.chipPlaceholder')} />
+                            <Input type="text" {...register(fieldName("chipNumber"))} placeholder="15 místné číslo" />
                         </FormField>
 
                         <FormField label={t('catForm.gender')} name={fieldName("gender")} error={getError("gender")}>
@@ -144,7 +143,7 @@ export function CatForm({ catIndex, onRemove }: CatFormProps) {
                                     onChange={handleEmsChange}
                                     className="w-1/3"
                                 >
-                                    <option value="">-- {t('catForm.breedSelect')} --</option>
+                                    <option value="">-- Plemeno --</option>
                                     {BREED_OPTIONS.map(opt => (
                                         <option key={opt.value} value={opt.value}>
                                             {opt.label}
@@ -153,11 +152,11 @@ export function CatForm({ catIndex, onRemove }: CatFormProps) {
                                 </Select>
                                 <Input
                                     type="text"
-                                    name="emsSuffix"
+                                    name="emsSuffix" // Ani toto se neregistruje
                                     value={emsSuffix}
                                     onChange={handleEmsChange}
                                     className="w-2/3"
-                                    placeholder={t('catForm.emsSuffixPlaceholder')}
+                                    placeholder="n 03 24"
                                 />
                             </div>
                         </FormField>
@@ -192,7 +191,7 @@ export function CatForm({ catIndex, onRemove }: CatFormProps) {
                         </FormField>
 
                         <FormField label={t('catForm.pedigreeNumber')} name={fieldName("pedigreeNumber")} error={getError("pedigreeNumber")}>
-                            <Input type="text" {...register(fieldName("pedigreeNumber"))} placeholder={t('catForm.pedigreePlaceholder')} />
+                            <Input type="text" {...register(fieldName("pedigreeNumber"))} placeholder="CSZ FO 1234/18" />
                         </FormField>
 
                         <FormField label={t('catForm.cageType')} name={fieldName("cageType")} error={getError("cageType")}>
@@ -209,7 +208,7 @@ export function CatForm({ catIndex, onRemove }: CatFormProps) {
                 return (
                     <FormGrid>
                         <FormField label={t('catForm.titleBefore')} name={fieldName("motherTitleBefore")} error={getError("motherTitleBefore")}>
-                            <Input type="text" {...register(fieldName("motherTitleBefore"))} placeholder={t('catForm.titlePlaceholderCH')} />
+                            <Input type="text" {...register(fieldName("motherTitleBefore"))} placeholder="CH" />
                         </FormField>
                         <FormField label={t('catForm.name')} name={fieldName("motherName")} error={getError("motherName")}>
                             <Input type="text" {...register(fieldName("motherName"))} placeholder={t('catForm.motherNamePlaceholder')} />
@@ -235,7 +234,7 @@ export function CatForm({ catIndex, onRemove }: CatFormProps) {
                 return (
                     <FormGrid>
                         <FormField label={t('catForm.titleBefore')} name={fieldName("fatherTitleBefore")} error={getError("fatherTitleBefore")}>
-                            <Input type="text" {...register(fieldName("fatherTitleBefore"))} placeholder={t('catForm.titlePlaceholderGIC')} />
+                            <Input type="text" {...register(fieldName("fatherTitleBefore"))} placeholder="GIC" />
                         </FormField>
                         <FormField label={t('catForm.name')} name={fieldName("fatherName")} error={getError("fatherName")}>
                             <Input type="text" {...register(fieldName("fatherName"))} placeholder={t('catForm.fatherNamePlaceholder')} />
@@ -263,7 +262,6 @@ export function CatForm({ catIndex, onRemove }: CatFormProps) {
     };
 
     return (
-        /* ==== ZDE ZAČÍNÁ NAHRAZENÁ KOMPONENTA CARD ==== */
         <div className="p-6 bg-white rounded-2xl shadow-lg border border-gray-200">
             <div className="flex flex-col items-stretch gap-6 mb-8 md:flex-row md:items-center md:justify-between">
                 <div className="flex flex-col flex-grow p-1 bg-gray-100 rounded-full md:flex-row">
@@ -307,6 +305,5 @@ export function CatForm({ catIndex, onRemove }: CatFormProps) {
                 {renderTabContent()}
             </div>
         </div>
-        /* ==== ZDE KONČÍ NAHRAZENÁ KOMPONENTA CARD ==== */
     );
 }

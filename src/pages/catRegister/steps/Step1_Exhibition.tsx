@@ -1,9 +1,8 @@
 import React, { useState, useEffect, ReactNode } from 'react';
 import { useFormContext, FieldError } from 'react-hook-form';
-import { useTranslation } from 'react-i18next';
 import { registrationApi, AvailableShow } from '../../../services/api/registrationApi';
 import { RegistrationFormData } from '../../../schemas/registrationSchema';
-
+import { useTranslation } from 'react-i18next';
 import { Select } from '../../../components/ui/Select';
 import { Radio } from '../../../components/ui/Radio';
 
@@ -15,7 +14,6 @@ interface FormFieldProps {
 }
 
 export function Step1_Exhibition() {
-    const { t } = useTranslation();
     const FormField: React.FC<FormFieldProps> = ({ label, name, children, error }) => (
         <div className="flex flex-col gap-2">
             <label htmlFor={name} className="text-sm font-semibold text-gray-700">
@@ -25,7 +23,7 @@ export function Step1_Exhibition() {
             {error && <p className="text-sm text-red-600">{error.message}</p>}
         </div>
     );
-
+    const { t } = useTranslation();
     const { register, formState: { errors } } = useFormContext<RegistrationFormData>();
     const [shows, setShows] = useState<AvailableShow[]>([]);
     const [loading, setLoading] = useState(true);
@@ -36,7 +34,7 @@ export function Step1_Exhibition() {
                 const availableShows = await registrationApi.getAvailableShows();
                 setShows(availableShows);
             } catch (error) {
-                console.error(t('logs.step1ShowError'), error);
+                console.error(t('registrationSteps.step1_exhibition.errors.loadShows'), error);
             } finally {
                 setLoading(false);
             }
@@ -46,14 +44,14 @@ export function Step1_Exhibition() {
 
     return (
         <div className="space-y-6">
-            <h2 className="text-2xl font-bold text-gray-800">{t('step1.title')}</h2>
+            <h2 className="text-2xl font-bold text-gray-800">{t('registrationSteps.step1_exhibition.title')}</h2>
 
-            <FormField label={t('step1.showLabel')} name="showId" error={errors.showId}>
+            <FormField label={t('registrationSteps.step1_exhibition.show.label')} name="showId" error={errors.showId}>
                 {loading ? (
-                    <div className="w-full p-3 text-gray-500 bg-gray-100 rounded-lg">{t('step1.loadingShows')}</div>
+                    <div className="w-full p-3 text-gray-500 bg-gray-100 rounded-lg">{t('registrationSteps.step1_exhibition.show.loading')}</div>
                 ) : (
                     <Select id="showId" {...register("showId")}>
-                        <option value="">{t('step1.selectShow')}</option>
+                        <option value="">{t('registrationSteps.step1_exhibition.show.placeholder')}</option>
                         {shows.map(show => (
                             <option key={show.id} value={show.id}>
                                 {show.name} ({show.date})
@@ -63,20 +61,20 @@ export function Step1_Exhibition() {
                 )}
             </FormField>
 
-            <FormField label="Účast na výstavě *" name="days" error={errors.days}>
+            <FormField label={t('registrationSteps.step1_exhibition.attendance.label')} name="days" error={errors.days}>
                 <div className="flex flex-col p-2 space-y-2 bg-gray-100 rounded-lg sm:flex-row sm:space-y-0 sm:space-x-2">
                     <Radio
-                        label={t('step1.daySat')}
+                        label={t('registrationSteps.step1_exhibition.attendance.saturday')}
                         value="sat"
                         registration={register("days")}
                     />
                     <Radio
-                        label={t('step1.daySun')}
+                        label={t('registrationSteps.step1_exhibition.attendance.sunday')}
                         value="sun"
                         registration={register("days")}
                     />
                     <Radio
-                        label={t('step1.dayBoth')}
+                        label={t('registrationSteps.step1_exhibition.attendance.both')}
                         value="both"
                         registration={register("days")}
                     />
