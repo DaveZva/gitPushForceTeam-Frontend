@@ -17,7 +17,7 @@ export const Checkbox: React.FC<CheckboxProps> = ({
                                                       error
                                                   }) => {
 
-    const consentBoxClass = "flex items-start gap-3 p-4 border border-gray-200 rounded-lg has-[:checked]:border-blue-400 has-[:checked]:bg-blue-50 text-left"; // Změna na text-left
+    const consentBoxClass = "flex items-start gap-3 p-4 border border-gray-200 rounded-lg has-[:checked]:border-blue-400 has-[:checked]:bg-blue-50 text-left";
     const checkboxClass = "w-5 h-5 text-blue-600 rounded cursor-pointer focus:ring-blue-500 shrink-0 mt-1";
     const errorBoxClass = error ? 'border-red-500 bg-red-50' : '';
 
