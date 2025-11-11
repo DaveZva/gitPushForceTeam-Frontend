@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { BREED_OPTIONS, validateEmsCode } from "../../../utils/emsRules";
 import { RegistrationFormData, CatFormData } from '../../../schemas/registrationSchema';
 import { Select } from '../../../components/ui/Select';
-import { Card } from '../../../components/ui/Card';
+// Import pro Card byl smazán
 import { Button } from '../../../components/ui/Button';
 import { Input } from '../../../components/ui/Input';
 
@@ -263,7 +263,8 @@ export function CatForm({ catIndex, onRemove }: CatFormProps) {
     };
 
     return (
-        <Card>
+        /* ==== ZDE ZAČÍNÁ NAHRAZENÁ KOMPONENTA CARD ==== */
+        <div className="p-6 bg-white rounded-2xl shadow-lg border border-gray-200">
             <div className="flex flex-col items-stretch gap-6 mb-8 md:flex-row md:items-center md:justify-between">
                 <div className="flex flex-col flex-grow p-1 bg-gray-100 rounded-full md:flex-row">
                     <Button
@@ -305,6 +306,7 @@ export function CatForm({ catIndex, onRemove }: CatFormProps) {
             <div className="pt-4">
                 {renderTabContent()}
             </div>
-        </Card>
+        </div>
+        /* ==== ZDE KONČÍ NAHRAZENÁ KOMPONENTA CARD ==== */
     );
 }

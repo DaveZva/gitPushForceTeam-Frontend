@@ -2,7 +2,7 @@ import React, { useState, useEffect, ReactNode } from 'react';
 import { useFormContext, FieldError } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { storageUtils } from '../../../utils/storage';
-import { RegistrationFormData, CatFormData } from '../../../schemas/registrationSchema';
+import { RegistrationFormData } from '../../../schemas/registrationSchema';
 
 const inputClass = "w-full p-3 bg-gray-100 border-none rounded-lg focus:ring-2 focus:ring-blue-500";
 
@@ -25,7 +25,7 @@ interface SavedBreeder {
 }
 
 export function Step3_BreederInfo() {
-    const { t } = useTranslation();
+    const { t } = useTranslation(); // Inicializace
     const FormField: React.FC<FormFieldProps> = ({ label, name, error, children }) => (
         <div className="flex flex-col gap-2">
             <label htmlFor={name} className="text-sm font-semibold text-gray-700">
@@ -71,7 +71,7 @@ export function Step3_BreederInfo() {
                             defaultValue=""
                             className={inputClass}
                         >
-                            <option value="">{t('common.selectFromList')}</option>
+                            <option value="">{t('step3.selectPlaceholder')}</option>
                             {savedBreeders.map(breeder => (
                                 <option key={breeder.id} value={breeder.id}>
                                     {breeder.firstName} {breeder.lastName} ({breeder.email})
@@ -83,32 +83,32 @@ export function Step3_BreederInfo() {
             )}
 
             <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-                <FormField label={t('form.firstNameLabel')} name="breederFirstName" error={errors.breederFirstName}>
+                <FormField label={t('step3.firstName')} name="breederFirstName" error={errors.breederFirstName}>
                     <input type="text" {...register("breederFirstName")} className={inputClass} />
                 </FormField>
 
-                <FormField label={t('form.lastNameLabel')} name="breederLastName" error={errors.breederLastName}>
+                <FormField label={t('step3.lastName')} name="breederLastName" error={errors.breederLastName}>
                     <input type="text" {...register("breederLastName")} className={inputClass} />
                 </FormField>
 
-                <FormField label={t('form.addressLabel')} name="breederAddress" error={errors.breederAddress}>
-                    <input type="text" {...register("breederAddress")} className={inputClass} placeholder={t('form.addressPlaceholder')} />
+                <FormField label={t('step3.address')} name="breederAddress" error={errors.breederAddress}>
+                    <input type="text" {...register("breederAddress")} className={inputClass} placeholder={t('step3.addressPlaceholder')} />
                 </FormField>
 
-                <FormField label={t('form.zipLabel')} name="breederZip" error={errors.breederZip}>
-                    <input type="text" {...register("breederZip")} className={inputClass} placeholder={t('form.zipPlaceholder')} />
+                <FormField label={t('step3.zip')} name="breederZip" error={errors.breederZip}>
+                    <input type="text" {...register("breederZip")} className={inputClass} placeholder={t('step3.zipPlaceholder')} />
                 </FormField>
 
-                <FormField label={t('form.cityLabel')} name="breederCity" error={errors.breederCity}>
+                <FormField label={t('step3.city')} name="breederCity" error={errors.breederCity}>
                     <input type="text" {...register("breederCity")} className={inputClass} />
                 </FormField>
 
-                <FormField label={t('form.emailLabel')} name="breederEmail" error={errors.breederEmail}>
-                    <input type="email" {...register("breederEmail")} className={inputClass} placeholder={t('form.emailPlaceholder')} />
+                <FormField label={t('step3.email')} name="breederEmail" error={errors.breederEmail}>
+                    <input type="email" {...register("breederEmail")} className={inputClass} placeholder={t('step3.emailPlaceholder')} />
                 </FormField>
 
-                <FormField label={t('form.phoneLabel')} name="breederPhone" error={errors.breederPhone}>
-                    <input type="tel" {...register("breederPhone")} className={inputClass} placeholder={t('form.phonePlaceholder')} />
+                <FormField label={t('step3.phone')} name="breederPhone" error={errors.breederPhone}>
+                    <input type="tel" {...register("breederPhone")} className={inputClass} placeholder={t('step3.phonePlaceholder')} />
                 </FormField>
             </div>
         </div>

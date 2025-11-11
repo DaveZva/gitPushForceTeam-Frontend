@@ -26,7 +26,7 @@ export function Step6_Recap({ onEditStep }: Step6RecapProps) {
 
     interface RecapSectionProps {
         title: string;
-        editStep: number; // Krok, na který se má vrátit
+        editStep: number;
         onEdit: (step: number) => void;
         children: ReactNode;
     }
@@ -87,7 +87,7 @@ export function Step6_Recap({ onEditStep }: Step6RecapProps) {
         neuter: t('catForm.classOptions.c10'),
         junior: t('catForm.classOptions.c11'),
         kitten: t('catForm.classOptions.c12'),
-        novice_class: t('catForm.classOptions.c13a'),
+        novice_class: t('catForm.classAptions.c13a'),
         control_class: t('catForm.classOptions.c13b'),
         determination_class: t('catForm.classOptions.c13c'),
         domestic_cat: t('catForm.classOptions.c14'),
@@ -121,7 +121,7 @@ export function Step6_Recap({ onEditStep }: Step6RecapProps) {
 
                 {data.cats && data.cats.map((cat, index) => (
                     <RecapSection
-                        title={`${t('catForm.recap.cat')} ${index + 1}`} // Použití 'catForm.recap.cat'
+                        title={`${t('recap.cat')} ${index + 1}`}
                         key={index}
                         editStep={2}
                         onEdit={onEditStep}

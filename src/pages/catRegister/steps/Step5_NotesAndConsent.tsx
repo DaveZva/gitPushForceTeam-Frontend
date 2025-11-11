@@ -1,8 +1,6 @@
 import React from 'react';
 import { useFormContext } from 'react-hook-form';
-import { useTranslation } from 'react-i18next';
-import { RegistrationFormData, CatFormData } from '../../../schemas/registrationSchema';
-import { TextArea } from '../../../components/ui/TextArea';
+import { RegistrationFormData } from '../../../schemas/registrationSchema';
 import { Checkbox } from '../../../components/ui/Checkbox';
 
 export function Step5_NotesAndConsent() {
@@ -13,13 +11,22 @@ export function Step5_NotesAndConsent() {
         <div className="space-y-6">
             <h2 className="text-2xl font-bold text-gray-800">{t('step5.title')}</h2>
 
-            <TextArea
-                id="notes"
-                label={t('step5.notesLabel')}
-                placeholder={t('step5.notesPlaceholder')}
-                registration={register("notes")}
-                error={errors.notes}
-            />
+            <div className="flex flex-col gap-2">
+
+                <label htmlFor="notes" className="text-sm font-semibold text-gray-700">
+                    Poznámky k přihlášce
+                </label>
+
+                <textarea
+                    id="notes"
+                    rows={5}
+                    placeholder="Zde můžete uvést jakékoliv poznámky k vaší přihlášce..."
+                    className={`w-full p-3 bg-gray-100 border-none rounded-lg focus:ring-2 focus:ring-blue-500 ${errors.notes ? 'ring-2 ring-red-500' : ''} `}
+                    {...register("notes")}
+                />
+
+                {errors.notes && <p className="mt-1 text-sm text-red-600">{errors.notes.message}</p>}
+            </div>
 
             <div className="space-y-4">
                 <Checkbox

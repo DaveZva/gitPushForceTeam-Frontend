@@ -118,6 +118,25 @@
       "mother": "Matka",
       "father": "Otec"
     },
+    "recap": {
+      "title": "Rekapitulace přihlášky",
+      "checkData": "Prosím zkontrolujte všechny zadané údaje. Pokud je vše v pořádku, odešlete přihlášku.",
+      "exhibition": "Výstava",
+      "showName": "Název výstavy",
+      "days": "Dny účasti",
+      "cat": "Kočka",
+      "breeder": "Chovatel",
+      "exhibitor": "Vystavovatel",
+      "name": "Jméno a Příjmení",
+      "address": "Adresa",
+      "email": "Email",
+      "phone": "Telefon",
+      "sameAsBreeder": "Shodný s chovatelem",
+      "notesAndConsent": "Poznámky a Souhlasy",
+      "notes": "Poznámky",
+      "dataAccuracy": "Pravdivost údajů",
+      "gdprConsent": "Souhlas GDPR"
+    },
     "classOptions": {
       "c1": "Supreme Šampion",
       "c2": "Supreme Premior",
@@ -203,8 +222,9 @@
     "warningBody": "Po odeslání přihlášky obdržíte potvrzovací email s platebními údaji. Přihláška bude aktivní po připsání platby na náš účet."
   },
   "common": {
-    "loading": "Načítání...",
-    "edit": "Upravit",
+    "loading": "Načítám...",
+    "select": "Vyberte",
+    "noTitle": "Bez titulu",
     "yes": "Ano",
     "no": "Ne",
     "select": "Vyberte",
@@ -215,6 +235,10 @@
     "agreed": "Souhlasím",
     "notAgreed": "Nesouhlasím",
     "selectFromList": "-- Vyberte ze seznamu --"
+    "edit": "Upravit"
+  },
+  "errors": {
+    "fetchFailed": "Nepodařilo se načíst data."
   },
   "statuses": {
     "PLANNED": "Naplánováno",
@@ -304,6 +328,117 @@
     "fetchFailed": "Nepodařilo se načíst data.",
     "ems": {
       "invalid": "Neplatný EMS kód"
+  "step3": {
+    "title": "Údaje o chovateli",
+    "loadSaved": "Načíst uloženého chovatele",
+    "selectPlaceholder": "-- Vyberte ze seznamu --",
+    "firstName": "Jméno *",
+    "lastName": "Příjmení *",
+    "address": "Ulice a číslo popisné *",
+    "addressPlaceholder": "Např. Hlavní 123",
+    "zip": "PSČ *",
+    "zipPlaceholder": "123 45",
+    "city": "Město *",
+    "email": "Email *",
+    "emailPlaceholder": "email@example.com",
+    "phone": "Telefon *",
+    "phonePlaceholder": "+420 123 456 789"
+  },
+  "step4": {
+    "title": "Údaje o vystavovateli",
+    "loadSaved": "Načíst uloženého vystavovatele",
+    "selectPlaceholder": "-- Vyberte ze seznamu --",
+    "sameAsBreeder": "Vystavovatel je stejný jako chovatel",
+    "firstName": "Jméno *",
+    "lastName": "Příjmení *",
+    "address": "Ulice a číslo popisné *",
+    "addressPlaceholder": "Např. Hlavní 123",
+    "zip": "PSČ *",
+    "zipPlaceholder": "123 45",
+    "city": "Město *",
+    "email": "Email *",
+    "emailPlaceholder": "email@example.com",
+    "phone": "Telefon *",
+    "phonePlaceholder": "+420 123 456 789"
+  },
+  "step5": {
+    "title": "Poznámky a souhlas",
+    "notesLabel": "Poznámky k přihlášce",
+    "notesPlaceholder": "Zde můžete uvést jakékoliv poznámky k vaší přihlášce...",
+    "dataAccuracyLabel": "Prohlašuji, že všechny uvedené údaje jsou pravdivé a úplné.",
+    "dataAccuracyDescription": "Jsem si vědom/a, že uvedení nepravdivých údajů může vést k vyloučení z výstavy.",
+    "gdprConsentLabel": "Souhlasím se zpracováním osobních údajů",
+    "gdprConsentDescription": "v souladu s nařízením GDPR za účelem registrace na výstavu a dalších souvisejících činností.",
+    "warningTitle": "⚠️ Upozornění:",
+    "warningText": "Po odeslání přihlášky obdržíte potvrzovací email s platebními údaji. Přihláška bude aktivní po připsání platby na náš účet."
+  },
+  "location": "Místo",
+  "validation": {
+    "person": {
+      "firstName": {
+        "min": "Jméno je povinné"
+      },
+      "lastName": {
+        "min": "Příjmení je povinné"
+      },
+      "address": {
+        "min": "Adresa je povinná"
+      },
+      "zip": {
+        "invalid": "Neplatné PSČ (formát 123 45)"
+      },
+      "city": {
+        "min": "Město je povinné"
+      },
+      "email": {
+        "invalid": "Neplatný formát emailu"
+      },
+      "phone": {
+        "invalid": "Neplatné telefonní číslo (formát +420 123 456 789)"
+      }
+    },
+    "cat": {
+      "name": {
+        "min": "Jméno zvířete je povinné"
+      },
+      "chipNumber": {
+        "invalid": "Čip musí mít 15 číslic"
+      },
+      "gender": {
+        "required": "Pohlaví je povinné."
+      },
+      "neutered": {
+        "required": "Musíte vybrat jednu z možností."
+      },
+      "birthDate": {
+        "invalid": "Datum narození je povinné"
+      },
+      "showClass": {
+        "required": "Třída je povinná"
+      },
+      "cageType": {
+        "required": "Typ klece je povinný"
+      }
+    },
+    "registration": {
+      "showId": {
+        "required": "Prosím vyberte výstavu"
+      },
+      "days": {
+        "required": "Prosím vyberte dny účasti"
+      },
+      "cats": {
+        "min": "Musíte přihlásit alespoň jednu kočku"
+      },
+      "dataAccuracy": {
+        "required": "Musíte potvrdit pravdivost údajů"
+      },
+      "gdprConsent": {
+        "required": "Musíte souhlasit se zpracováním osobních údajů"
+      },
+      "exhibitor": {
+        "required": "Údaje o vystavovateli jsou povinné, pokud není shodný s chovatelem"
+      }
     }
   }
 }

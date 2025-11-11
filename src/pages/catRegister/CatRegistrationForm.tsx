@@ -69,37 +69,32 @@ const SubmitSuccess: React.FC<SubmitSuccessProps> = ({ registrationNumber, onBac
         <div className="text-center p-10 bg-white rounded-lg shadow-xl">
             <svg className="w-16 h-16 mx-auto text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
             <h2 className="text-2xl font-bold text-green-600 mt-4 mb-2">
-                {t('alert.submitSuccess', { number: registrationNumber })}
+                {t('submitSuccess.title', 'Přihláška úspěšně odeslána!')}
             </h2>
             <p className="text-lg text-gray-700 mb-2">
-                {t('submitSuccess.message')}
+                {t('submitSuccess.message', 'Vaše číslo přihlášky je:')}
             </p>
             <p className="text-3xl font-bold text-gray-900 mb-6">
                 {registrationNumber}
             </p>
             <p className="text-gray-600 mb-8">
-                {t('submitSuccess.info')}
+                {t('submitSuccess.info', 'Potvrzení a platební údaje byly odeslány na Váš email.')}
             </p>
-
-            <div className="flex justify-center gap-4">
-                <Button variant="primary" onClick={onBackToStart}>
-                    {t('submitSuccess.backButton')}
-                </Button>
-                <Button
-                    variant="secondary"
-                    onClick={() => alert('Funkce pro stažení PDF se připravuje!')}
-                >
-                    Stáhnout PDF (připravuje se)
-                </Button>
-            </div>
+            <Button variant="primary" onClick={onBackToStart}>
+                {t('submitSuccess.backButton', 'Nová přihláška')}
+            </Button>
         </div>
     );
 };
 
+
 function CatRegistrationForm() {
-    const { t, i18n } = useTranslation(); // Získáme i18n
+    const { t, i18n } = useTranslation();
     const [currentStep, setCurrentStep] = useState(1);
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [submitSuccessData, setSubmitSuccessData] = useState<{ number: string } | null>(null);
+
+    const registrationSchema = useMemo(() => createRegistrationSchema(), [i18n.language]);
 
     const [submitSuccessData, setSubmitSuccessData] = useState<{ number: string } | null>(null);
 
@@ -193,7 +188,7 @@ function CatRegistrationForm() {
     };
 
     const handleConfirmAndSubmit = () => {
-        if (window.confirm(t('confirm.submitForm'))) {
+        if (window.confirm(t('confirm.submitForm', 'Opravdu si přejete finálně odeslat přihlášku? Zkontrolujte prosím všechny údaje.'))) {
             handleSubmit(onSubmit)();
         }
     };
@@ -243,7 +238,7 @@ function CatRegistrationForm() {
                             }}
                         />
                     ) : (
-                        <React.Fragment>
+                        <>
                             <div className="flex justify-between items-center mb-8">
                                 <h1 className="text-3xl font-bold text-gray-900">
                                     {t('form.title')}
@@ -267,6 +262,7 @@ function CatRegistrationForm() {
                                     {currentStep === 3 && <Step3_BreederInfo />}
                                     {currentStep === 4 && <Step4_ExhibitorInfo />}
                                     {currentStep === 5 && <Step5_NotesAndConsent />}
+
                                     {currentStep === 6 && <Step6_Recap onEditStep={setCurrentStep} />}
                                 </form>
                             </div>
@@ -291,15 +287,15 @@ function CatRegistrationForm() {
                                         onClick={handleConfirmAndSubmit}
                                         disabled={isSubmitting}
                                     >
-                                        {isSubmitting ? t('form.submitting') : t('form.submit')}
+                                        {isSubmitting ? t('form.submitting', 'Odesílám...') : t('form.submit')}
                                     </Button>
                                 )}
                             </div>
 
                             <div className="mt-8 text-center text-gray-500">
-                                💾 {t('form.autosaveInfo')}
+                                💾 {t('form.autosaveInfo', 'Údaje se automaticky ukládají.')}
                             </div>
-                        </React.Fragment>
+                        </>
                     )}
                 </div>
             </div>
