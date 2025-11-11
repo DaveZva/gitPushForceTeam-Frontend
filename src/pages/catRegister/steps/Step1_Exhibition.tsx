@@ -1,10 +1,9 @@
 import React, { useState, useEffect, ReactNode } from 'react';
 import { useFormContext, FieldError } from 'react-hook-form';
 import { registrationApi, AvailableShow } from '../../../services/api/registrationApi';
-import { RegistrationFormData, CatFormData } from '../../../schemas/registrationSchema';
+import { RegistrationFormData } from '../../../schemas/registrationSchema';
 
 import { Select } from '../../../components/ui/Select';
-import { RadioGroup } from '../../../components/ui/RadioGroup';
 import { Radio } from '../../../components/ui/Radio';
 
 interface FormFieldProps {
@@ -63,7 +62,8 @@ export function Step1_Exhibition() {
             </FormField>
 
             <FormField label="Účast na výstavě *" name="days" error={errors.days}>
-                <RadioGroup>
+                {/* ==== ZDE ZAČÍNÁ NAHRAZENÁ KOMPONENTA RADIOGROUP ==== */}
+                <div className="flex flex-col p-2 space-y-2 bg-gray-100 rounded-lg sm:flex-row sm:space-y-0 sm:space-x-2">
                     <Radio
                         label="Sobota"
                         value="sat"
@@ -79,7 +79,7 @@ export function Step1_Exhibition() {
                         value="both"
                         registration={register("days")}
                     />
-                </RadioGroup>
+                </div>
             </FormField>
         </div>
     );
