@@ -96,6 +96,8 @@ function CatRegistrationForm() {
 
     const registrationSchema = useMemo(() => createRegistrationSchema(), [i18n.language]);
 
+    const [submitSuccessData, setSubmitSuccessData] = useState<{ number: string } | null>(null);
+
     const stepLabels = [
         'stepper.exhibition',
         'stepper.cat',
@@ -106,6 +108,7 @@ function CatRegistrationForm() {
     ];
     const totalSteps = stepLabels.length;
 
+    const registrationSchema = useMemo(() => createRegistrationSchema(t), [i18n.language, t]);
     const methods = useForm<RegistrationFormData>({
         resolver: zodResolver(registrationSchema) as Resolver<RegistrationFormData>,
         defaultValues: (storageUtils.getCurrentForm() as RegistrationFormData | null) || {
@@ -178,7 +181,7 @@ function CatRegistrationForm() {
 
         } catch (error: unknown) {
             alert(t('alert.submitError'));
-            console.error('Submission error:', error);
+            console.error(t('alert.submitError'), error);
         } finally {
             setIsSubmitting(false);
         }

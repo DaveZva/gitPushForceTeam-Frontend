@@ -1,5 +1,6 @@
 import React, { useState, useEffect, ReactNode } from 'react';
 import { useFormContext, FieldError } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import { registrationApi, AvailableShow } from '../../../services/api/registrationApi';
 import { RegistrationFormData } from '../../../schemas/registrationSchema';
 
@@ -14,6 +15,7 @@ interface FormFieldProps {
 }
 
 export function Step1_Exhibition() {
+    const { t } = useTranslation();
     const FormField: React.FC<FormFieldProps> = ({ label, name, children, error }) => (
         <div className="flex flex-col gap-2">
             <label htmlFor={name} className="text-sm font-semibold text-gray-700">
@@ -34,24 +36,24 @@ export function Step1_Exhibition() {
                 const availableShows = await registrationApi.getAvailableShows();
                 setShows(availableShows);
             } catch (error) {
-                console.error('Chyba při načítání výstav:', error);
+                console.error(t('logs.step1ShowError'), error);
             } finally {
                 setLoading(false);
             }
         };
         loadShows();
-    }, []);
+    }, [t]);
 
     return (
         <div className="space-y-6">
-            <h2 className="text-2xl font-bold text-gray-800">Výběr výstavy</h2>
+            <h2 className="text-2xl font-bold text-gray-800">{t('step1.title')}</h2>
 
-            <FormField label="Výstava *" name="showId" error={errors.showId}>
+            <FormField label={t('step1.showLabel')} name="showId" error={errors.showId}>
                 {loading ? (
-                    <div className="w-full p-3 text-gray-500 bg-gray-100 rounded-lg">Načítám výstavy...</div>
+                    <div className="w-full p-3 text-gray-500 bg-gray-100 rounded-lg">{t('step1.loadingShows')}</div>
                 ) : (
                     <Select id="showId" {...register("showId")}>
-                        <option value="">Vyberte výstavu...</option>
+                        <option value="">{t('step1.selectShow')}</option>
                         {shows.map(show => (
                             <option key={show.id} value={show.id}>
                                 {show.name} ({show.date})
@@ -62,20 +64,19 @@ export function Step1_Exhibition() {
             </FormField>
 
             <FormField label="Účast na výstavě *" name="days" error={errors.days}>
-                {/* ==== ZDE ZAČÍNÁ NAHRAZENÁ KOMPONENTA RADIOGROUP ==== */}
                 <div className="flex flex-col p-2 space-y-2 bg-gray-100 rounded-lg sm:flex-row sm:space-y-0 sm:space-x-2">
                     <Radio
-                        label="Sobota"
+                        label={t('step1.daySat')}
                         value="sat"
                         registration={register("days")}
                     />
                     <Radio
-                        label="Neděle"
+                        label={t('step1.daySun')}
                         value="sun"
                         registration={register("days")}
                     />
                     <Radio
-                        label="Oba dny"
+                        label={t('step1.dayBoth')}
                         value="both"
                         registration={register("days")}
                     />

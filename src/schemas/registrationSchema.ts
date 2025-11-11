@@ -40,7 +40,7 @@ const createCatSchema = () => z.object({
         if (result !== true) {
             ctx.addIssue({
                 code: z.ZodIssueCode.custom,
-                message: result,
+                message: t(result, { defaultValue: result }),
             });
         }
     }),
