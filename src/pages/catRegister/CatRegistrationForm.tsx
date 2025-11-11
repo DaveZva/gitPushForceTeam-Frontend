@@ -182,8 +182,9 @@ function CatRegistrationForm() {
         }
     };
 
+    // 4. Nová funkce pro potvrzovací dialog
     const handleConfirmAndSubmit = () => {
-        if (window.confirm(t('confirm.submitForm'))) {
+        if (window.confirm(t('confirm.submitForm', 'Opravdu si přejete finálně odeslat přihlášku? Zkontrolujte prosím všechny údaje.'))) {
             handleSubmit(onSubmit)();
         }
     };
@@ -227,8 +228,8 @@ function CatRegistrationForm() {
                         <SubmitSuccess
                             registrationNumber={submitSuccessData.number}
                             onBackToStart={() => {
-                                setSubmitSuccessData(null);
-                                setCurrentStep(1);
+                                setSubmitSuccessData(null); // Skryje success stránku
+                                setCurrentStep(1);      // Vrátí na krok 1
                                 window.scrollTo({ top: 0, behavior: 'smooth' });
                             }}
                         />
@@ -257,6 +258,7 @@ function CatRegistrationForm() {
                                     {currentStep === 3 && <Step3_BreederInfo />}
                                     {currentStep === 4 && <Step4_ExhibitorInfo />}
                                     {currentStep === 5 && <Step5_NotesAndConsent />}
+
                                     {currentStep === 6 && <Step6_Recap onEditStep={setCurrentStep} />}
                                 </form>
                             </div>

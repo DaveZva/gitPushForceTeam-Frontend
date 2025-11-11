@@ -126,7 +126,7 @@ export function Step6_Recap({ onEditStep }: Step6RecapProps) {
                         editStep={2}
                         onEdit={onEditStep}
                     >
-                        <RecapItem label={t('catForm.name')} value={`${cat.titleBefore || ''} ${cat.catName} ${cat.titleAfter || ''}`.trim()} />
+                        <RecapItem label={t('catForm.catName')} value={`${cat.titleBefore || ''} ${cat.catName} ${cat.titleAfter || ''}`.trim()} />
                         <RecapItem label={t('catForm.gender')} value={genderMap[cat.gender]} />
                         <RecapItem label={t('catForm.neutered')} value={neuteredMap[cat.neutered]} />
                         <RecapItem label={t('catForm.birthDate')} value={cat.birthDate} />
@@ -138,43 +138,43 @@ export function Step6_Recap({ onEditStep }: Step6RecapProps) {
                 ))}
 
                 <RecapSection
-                    title={t('recap.breeder')}
+                    title={t('catForm.recap.breeder')}
                     editStep={3}
                     onEdit={onEditStep}
                 >
-                    <RecapItem label={t('recap.name')} value={`${data.breederFirstName} ${data.breederLastName}`} />
-                    <RecapItem label={t('recap.address')} value={`${data.breederAddress}, ${data.breederZip} ${data.breederCity}`} />
-                    <RecapItem label={t('recap.email')} value={data.breederEmail} />
-                    <RecapItem label={t('recap.phone')} value={data.breederPhone} />
+                    <RecapItem label={t('catForm.recap.name')} value={`${data.breederFirstName} ${data.breederLastName}`} />
+                    <RecapItem label={t('catForm.recap.address')} value={`${data.breederAddress}, ${data.breederZip} ${data.breederCity}`} />
+                    <RecapItem label={t('catForm.recap.email')} value={data.breederEmail} />
+                    <RecapItem label={t('catForm.recap.phone')} value={data.breederPhone} />
                 </RecapSection>
 
                 <RecapSection
-                    title={t('recap.exhibitor')}
+                    title={t('catForm.recap.exhibitor')}
                     editStep={4}
                     onEdit={onEditStep}
                 >
                     {data.sameAsBreeder ? (
                         <p className="p-3 text-gray-700 bg-gray-100 rounded-md">
-                            {t('recap.sameAsBreeder')}
+                            {t('catForm.recap.sameAsBreeder')}
                         </p>
                     ) : (
                         <>
-                            <RecapItem label={t('recap.name')} value={`${data.exhibitorFirstName} ${data.exhibitorLastName}`} />
-                            <RecapItem label={t('recap.address')} value={`${data.exhibitorAddress}, ${data.exhibitorZip} ${data.exhibitorCity}`} />
-                            <RecapItem label={t('recap.email')} value={data.exhibitorEmail} />
-                            <RecapItem label={t('recap.phone')} value={data.exhibitorPhone} />
+                            <RecapItem label={t('catForm.recap.name')} value={`${data.exhibitorFirstName} ${data.exhibitorLastName}`} />
+                            <RecapItem label={t('catForm.recap.address')} value={`${data.exhibitorAddress}, ${data.exhibitorZip} ${data.exhibitorCity}`} />
+                            <RecapItem label={t('catForm.recap.email')} value={data.exhibitorEmail} />
+                            <RecapItem label={t('catForm.recap.phone')} value={data.exhibitorPhone} />
                         </>
                     )}
                 </RecapSection>
 
                 <RecapSection
-                    title={t('recap.notesAndConsent')}
+                    title={t('catForm.recap.notesAndConsent')}
                     editStep={5}
                     onEdit={onEditStep}
                 >
-                    <RecapItem label={t('recap.notes')} value={data.notes} />
-                    <RecapItem label={t('recap.dataAccuracy')} value={data.dataAccuracy ? `✓ ${t('common.agreed')}` : `X ${t('common.notAgreed')}`} />
-                    <RecapItem label={t('recap.gdprConsent')} value={data.gdprConsent ? `✓ ${t('common.agreed')}` : `X ${t('common.notAgreed')}`} />
+                    <RecapItem label={t('catForm.recap.notes')} value={data.notes} />
+                    <RecapItem label={t('catForm.recap.dataAccuracy')} value={data.dataAccuracy ? `✓ ${t('common.agreed')}` : `X ${t('common.notAgreed')}`} />
+                    <RecapItem label={t('catForm.recap.gdprConsent')} value={data.gdprConsent ? `✓ ${t('common.agreed')}` : `X ${t('common.notAgreed')}`} />
                 </RecapSection>
             </div>
         </div>

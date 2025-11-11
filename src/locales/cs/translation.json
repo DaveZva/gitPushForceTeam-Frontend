@@ -226,5 +226,61 @@
     "contactEmail": "Kontaktní email",
     "websiteUrl": "Webová stránka"
   },
+  "common": {
+    "loading": "Načítám...",
+    "select": "Vyberte",
+    "noTitle": "Bez titulu",
+    "yes": "Ano",
+    "no": "Ne",
+    "sat": "Sobota",
+    "sun": "Neděle",
+    "both": "Oba dny",
+    "agreed": "Souhlasím",
+    "notAgreed": "Nesouhlasím"
+  },
+  "step5": {
+    "title": "Poznámky a souhlas",
+    "notesLabel": "Poznámky k přihlášce",
+    "notesPlaceholder": "Zde můžete uvést jakékoliv poznámky k vaší přihlášce...",
+    "dataAccuracyLabel": "Prohlašuji, že všechny uvedené údaje jsou pravdivé a úplné.",
+    "dataAccuracyDescription": "Jsem si vědom/a, že uvedení nepravdivých údajů může vést k vyloučení z výstavy.",
+    "gdprConsentLabel": "Souhlasím se zpracováním osobních údajů",
+    "gdprConsentDescription": "v souladu s nařízením GDPR za účelem registrace na výstavu a dalších souvisejících činností.",
+    "warningTitle": "⚠️ Upozornění:",
+    "warningText": "Po odeslání přihlášky obdržíte potvrzovací email s platebními údaji. Přihláška bude aktivní po připsání platby na náš účet."
+  },
+  "step3": {
+    "title": "Údaje o chovateli",
+    "loadSaved": "Načíst uloženého chovatele",
+    "selectPlaceholder": "-- Vyberte ze seznamu --",
+    "firstName": "Jméno *",
+    "lastName": "Příjmení *",
+    "address": "Ulice a číslo popisné *",
+    "addressPlaceholder": "Např. Hlavní 123",
+    "zip": "PSČ *",
+    "zipPlaceholder": "123 45",
+    "city": "Město *",
+    "email": "Email *",
+    "emailPlaceholder": "email@example.com",
+    "phone": "Telefon *",
+    "phonePlaceholder": "+420 123 456 789"
+  },
+  "step4": {
+    "title": "Údaje o vystavovateli",
+    "loadSaved": "Načíst uloženého vystavovatele",
+    "selectPlaceholder": "-- Vyberte ze seznamu --",
+    "sameAsBreeder": "Vystavovatel je stejný jako chovatel",
+    "firstName": "Jméno *",
+    "lastName": "Příjmení *",
+    "address": "Ulice a číslo popisné *",
+    "addressPlaceholder": "Např. Hlavní 123",
+    "zip": "PSČ *",
+    "zipPlaceholder": "123 45",
+    "city": "Město *",
+    "email": "Email *",
+    "emailPlaceholder": "email@example.com",
+    "phone": "Telefon *",
+    "phonePlaceholder": "+420 123 456 789"
+  },
   "location": "Místo"
 }

@@ -2,62 +2,152 @@
   "nav": {
     "appName": "CatShow",
     "dashboard": "Dashboard",
-    "newApplication": "New Registration",
-    "myApplications": "My Registrations",
-    "myCats": "My cats",
-    "logOut": "Logout",
-    "logIn": "Login",
-    "signUp": "Registration"
+    "newApplication": "New Application",
+    "myApplications": "My Applications",
+    "myCats": "My Cats",
+    "logOut": "Log Out",
+    "logIn": "Log In",
+    "signUp": "Sign Up",
+    "exhibitions": "Exhibitions"
   },
   "user": {
-    "notifications": "Notifikace"
+    "notifications": "Notifications"
   },
   "dashboard": {
-    "welcome": "Welcome back, {{name}}!",
-    "subtitle": "Zde je rychlý přehled vaší aktivity.",
-    "welcome_guest": "Welcome Back!",
+    "welcome": "Welcome back, {{name}}",
+    "subtitle": "Here is a quick overview of your activity.",
+    "welcome_guest": "Welcome back",
     "stats": {
-      "active": "Aktivní přihlášky",
-      "approved": "Schválené účasti",
-      "cats": "Kočky v profilu"
+      "active": "Active Applications",
+      "approved": "Approved Attendances",
+      "cats": "Cats in Profile"
     },
     "history": {
-      "title": "Historie vašich přihlášek",
-      "subtitle": "Přehled všech výstav, kterých jste se účastnili."
+      "title": "Your Application History",
+      "subtitle": "Overview of all exhibitions you have attended."
     },
     "upcoming": {
-      "title": "Nadcházející výstavy",
-      "subtitle": "Nové výstavy, na které se můžete přihlásit."
+      "title": "Upcoming Exhibitions",
+      "subtitle": "New exhibitions you can register for."
     }
   },
   "table": {
-    "show": "Výstava",
-    "date": "Datum",
-    "animals": "Zvířata",
-    "status": "Stav",
-    "actions": "Akce"
+    "show": "Exhibition",
+    "date": "Date",
+    "animals": "Animals",
+    "status": "Status",
+    "actions": "Actions"
   },
   "status": {
-    "completed": "Proběhlo"
+    "completed": "Completed"
   },
   "actions": {
     "detail": "Detail",
-    "showAllHistory": "Zobrazit celou historii →",
-    "showAllShows": "Zobrazit všechny výstavy →",
-    "applyToShow": "Přihlásit se na výstavu",
-    "showDetails": "Zobrazit detaily"
+    "showAllHistory": "Show full history →",
+    "showAllShows": "Show all exhibitions →",
+    "applyToShow": "Apply for exhibition",
+    "showDetails": "Show Details"
   },
   "auth": {
     "login": "Login",
     "registration": "Registration",
-    "firstName": "Name",
+    "firstName": "First Name",
     "lastName": "Last Name",
     "email": "E-mail",
     "password": "Password",
-    "loginIn": "Login In",
+    "loginIn": "Log In",
     "registerIn": "Register",
-    "dontHaveAccount": "Don't have an account yet? ",
+    "dontHaveAccount": "Don't have an account? ",
     "haveAccount": "Already have an account? "
+  },
+  "form": {
+    "actions": {
+      "saveAndContinue": "Save and continue."
+    },
+    "continue": "Continue",
+    "back": "Back",
+    "toRecap": "Recap",
+    "submit": "Submit",
+    "resetAll": "Clear cache",
+    "title": "Cat Registration for Exhibition"
+  },
+  "catForm": {
+    "titleBefore": "Title before name",
+    "catName": "Name",
+    "titleAfter": "Title after name",
+    "chipNumber": "Chip Number",
+    "gender": "Gender",
+    "neutered": "Neutered",
+    "emsCode": "EMS Code",
+    "birthDate": "Date of Birth",
+    "showClass": "Competition Class",
+    "pedigreeNumber": "Pedigree Number?",
+    "cageType": "Cage Type",
+    "male": "Male",
+    "female": "Female",
+    "addAnotherCat": "Add another cat",
+    "tabs": {
+      "basic": "Cat",
+      "mother": "Mother",
+      "father": "Father"
+    },
+    "common": {
+      "loading": "Loading...",
+      "select": "Select",
+      "noTitle": "No title",
+      "yes": "Yes",
+      "no": "No",
+      "sat": "Saturday",
+      "sun": "Sunday",
+      "both": "Both days",
+      "agreed": "Agreed",
+      "notAgreed": "Not agreed"
+    },
+    "recap": {
+      "title": "Application Recap",
+      "checkData": "Please check all entered data. If everything is correct, submit the application.",
+      "exhibition": "Exhibition",
+      "showName": "Exhibition Name",
+      "days": "Days of attendance",
+      "cat": "Cat",
+      "breeder": "Breeder",
+      "exhibitor": "Exhibitor",
+      "name": "Name and Surname",
+      "address": "Address",
+      "email": "Email",
+      "phone": "Phone",
+      "sameAsBreeder": "Same as breeder",
+      "notesAndConsent": "Notes and Consents",
+      "notes": "Notes",
+      "dataAccuracy": "Data Accuracy",
+      "gdprConsent": "GDPR Consent"
+    },
+    "classOptions": {
+      "c1": "Supreme Champion",
+      "c2": "Supreme Premior",
+      "c3": "Grand International Champion",
+      "c4": "Grand International Premior",
+      "c5": "International Champion",
+      "c6": "International Premior",
+      "c7": "Champion",
+      "c8": "Premior",
+      "c9": "Open Class",
+      "c10": "Neuters",
+      "c11": "8-12 months",
+      "c12": "4-8 months",
+      "c13a": "Novice",
+      "c13b": "Control",
+      "c13c": "Determination",
+      "c14": "Domestic Cats",
+      "c15": "Out of Competition",
+      "c16": "Litters (min. 3 kittens)",
+      "c17": "Veterans (over 7 years)"
+    },
+    "cageOptions": {
+      "own": "Own cage - 1700 CZK",
+      "rentSmall": "Rented cage 70x70 - 2200 CZK",
+      "rentLarge": "Rented cage 120x70 - 2800 CZK"
+    }
   },
   "stepper": {
     "exhibition": "Exhibition",
@@ -67,5 +157,130 @@
     "consent": "Consents",
     "recap": "Recap"
   },
-  "location": "Místo"
+  "common": {
+    "loading": "Loading...",
+    "edit": "Edit",
+    "yes": "Yes",
+    "no": "No",
+    "select": "Select",
+    "noTitle": "No title"
+  },
+  "errors": {
+    "fetchFailed": "Failed to load data."
+  },
+  "statuses": {
+    "PLANNED": "Planned",
+    "OPEN": "Registration open",
+    "CLOSED": "Registration closed",
+    "COMPLETED": "Completed",
+    "CANCELLED": "Cancelled"
+  },
+  "alert": {
+    "submitSuccess": "Application successfully submitted! Application number: {{number}}",
+    "submitError": "Error submitting application. Please try again later.",
+    "createSuccess": "Exhibition was successfully created.",
+    "createError": "Error creating exhibition. Please try again later."
+  },
+  "confirm": {
+    "resetForm": "Are you sure you want to delete all entered data?"
+  },
+  "admin": {
+    "shows": {
+      "title": "Exhibition Management",
+      "add": "Add Exhibition",
+      "noShows": "No exhibitions have been scheduled yet.",
+      "col": {
+        "name": "Exhibition Name",
+        "venue": "Venue",
+        "date": "Date",
+        "status": "Status",
+        "actions": "Actions"
+      }
+    },
+    "create": {
+      "title": "Create New Exhibition",
+      "back": "Back to list",
+      "submit": "Create Exhibition",
+      "submitting": "Creating...",
+      "section": {
+        "basic": "Basic Information",
+        "venue": "Venue",
+        "dates": "Important Dates",
+        "organizer": "Organizer"
+      }
+    }
+  },
+  "fields": {
+    "name": "Exhibition Name *",
+    "description": "Description",
+    "status": "Status *",
+    "venueName": "Venue Name *",
+    "venueAddress": "Address",
+    "venueCity": "City",
+    "venueState": "State",
+    "venueZip": "ZIP Code",
+    "startDate": "Start Date and Time *",
+    "endDate": "End Date and Time *",
+    "registrationDeadline": "Registration Deadline *",
+    "organizerName": "Organizer Name *",
+    "contactEmail": "Contact Email",
+    "websiteUrl": "Website URL"
+  },
+  "common": {
+    "loading": "Loading...",
+    "select": "Select",
+    "noTitle": "No title",
+    "yes": "Yes",
+    "no": "No",
+    "sat": "Saturday",
+    "sun": "Sunday",
+    "both": "Both days",
+    "agreed": "Agreed",
+    "notAgreed": "Not agreed"
+  },
+  "step5": {
+    "title": "Notes and Consent",
+    "notesLabel": "Application Notes",
+    "notesPlaceholder": "You can add any notes regarding your application here...",
+    "dataAccuracyLabel": "I declare that all provided information is true and complete.",
+    "dataAccuracyDescription": "I am aware that providing false information may lead to exclusion from the exhibition.",
+    "gdprConsentLabel": "I consent to the processing of personal data",
+    "gdprConsentDescription": "in accordance with the GDPR regulation for the purpose of registration for the exhibition and other related activities.",
+    "warningTitle": "⚠️ Warning:",
+    "warningText": "After submitting the application, you will receive a confirmation email with payment details. The application will become active after the payment is credited to our account."
+  },
+  "step3": {
+    "title": "Breeder Information",
+    "loadSaved": "Load saved breeder",
+    "selectPlaceholder": "-- Select from list --",
+    "firstName": "First Name *",
+    "lastName": "Last Name *",
+    "address": "Street and number *",
+    "addressPlaceholder": "E.g. Main 123",
+    "zip": "ZIP Code *",
+    "zipPlaceholder": "123 45",
+    "city": "City *",
+    "email": "Email *",
+    "emailPlaceholder": "email@example.com",
+    "phone": "Phone *",
+    "phonePlaceholder": "+420 123 456 789"
+  },
+  "step4": {
+    "title": "Exhibitor Information",
+    "loadSaved": "Load saved exhibitor",
+    "selectPlaceholder": "-- Select from list --",
+    "sameAsBreeder": "Exhibitor is the same as breeder",
+    "firstName": "First Name *",
+    "lastName": "Last Name *",
+    "address": "Street and number *",
+    "addressPlaceholder": "E.g. Main 123",
+    "zip": "ZIP Code *",
+    "zipPlaceholder": "123 45",
+    "city": "City *",
+    "email": "Email *",
+    "emailPlaceholder": "email@example.com",
+    "phone": "Phone *",
+    "phonePlaceholder": "+420 123 456 789"
+  },
+  "location": "Location"
 }
