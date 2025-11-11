@@ -1,39 +1,39 @@
 import { z } from 'zod';
 import { validateEmsCode } from '../utils/emsRules';
+import i18n from 'i18next';
 
-// Schéma pro chovatele/vystavovatele
-const personSchema = {
-    FirstName: z.string().min(2, "Jméno je povinné"),
-    LastName: z.string().min(2, "Příjmení je povinné"),
-    Address: z.string().min(5, "Adresa je povinná"),
-    Zip: z.string().regex(/^\d{3} ?\d{2}$/, "Neplatné PSČ (formát 123 45)"),
-    City: z.string().min(2, "Město je povinné"),
-    Email: z.string().email("Neplatný formát emailu"),
-    Phone: z.string().regex(/^((\+420 ?)|(00420 ?))?\d{3} ?\d{3} ?\d{3}$/, "Neplatné telefonní číslo (formát +420 123 456 789)"),
-};
+const t = (key: string) => i18n.t(key);
 
-// Schéma pro 1 kočku
-const catSchema = z.object({
+const createPersonSchema = () => ({
+    FirstName: z.string().min(2, t('validation.person.firstName.min')),
+    LastName: z.string().min(2, t('validation.person.lastName.min')),
+    Address: z.string().min(5, t('validation.person.address.min')),
+    Zip: z.string().regex(/^\d{3} ?\d{2}$/, t('validation.person.zip.invalid')),
+    City: z.string().min(2, t('validation.person.city.min')),
+    Email: z.string().email(t('validation.person.email.invalid')),
+    Phone: z.string().regex(/^((\+420 ?)|(00420 ?))?\d{3} ?\d{3} ?\d{3}$/, t('validation.person.phone.invalid')),
+});
+
+const createCatSchema = () => z.object({
     // Základní údaje
     titleBefore: z.string().optional(),
-    catName: z.string().min(2, "Jméno zvířete je povinné"),
+    catName: z.string().min(2, t('validation.cat.name.min')),
     titleAfter: z.string().optional(),
     chipNumber: z.string().optional().refine(val => !val || /^\d{15}$/.test(val), {
-        message: "Čip musí mít 15 číslic"
+        message: t('validation.cat.chipNumber.invalid')
     }),
 
     gender: z.enum(['male', 'female'], {
-        required_error: "Pohlaví je povinné"
+        message: t('validation.cat.gender.required')
     }),
-    neutered: z.enum(['yes', 'no'], {
-        required_error: "Uveďte, zda je kastrované"
+    neutered: z.enum(["yes", "no"], {
+        message: t('validation.cat.neutered.required')
     }),
 
-    birthDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Datum narození je povinné"),
-    showClass: z.string().min(1, "Třída je povinná"),
+    birthDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, t('validation.cat.birthDate.invalid')),
+    showClass: z.string().min(1, t('validation.cat.showClass.required')),
     pedigreeNumber: z.string().optional(),
-    cageType: z.string().min(1, "Typ klece je povinný"),
-
+    cageType: z.string().min(1, t('validation.cat.cageType.required')),
 
     emsCode: z.string().superRefine((val, ctx) => {
         const result = validateEmsCode(val);
@@ -64,70 +64,69 @@ const catSchema = z.object({
     fatherPedigreeNumber: z.string().optional(),
 });
 
+export const createRegistrationSchema = () => {
+    const personSchema = createPersonSchema();
+    const catSchema = createCatSchema();
 
-export const registrationSchema = z.object({
-    // Krok 1
-    showId: z.string().min(1, "Prosím vyberte výstavu"),
-    days: z.enum(['sat', 'sun', 'both'], {
-        required_error: "Prosím vyberte dny účasti"
-    }),
+    return z.object({
+        showId: z.string().min(1, t('validation.registration.showId.required')),
+        days: z.enum(['sat', 'sun', 'both'], {
+            message: t('validation.registration.days.required')
+        }),
 
-    // Krok 2
-    cats: z.array(catSchema).min(1, "Musíte přihlásit alespoň jednu kočku"),
+        cats: z.array(catSchema).min(1, t('validation.registration.cats.min')),
 
-    // Krok 3 - Chovatel
-    breederFirstName: personSchema.FirstName,
-    breederLastName: personSchema.LastName,
-    breederAddress: personSchema.Address,
-    breederZip: personSchema.Zip,
-    breederCity: personSchema.City,
-    breederEmail: personSchema.Email,
-    breederPhone: personSchema.Phone,
+        breederFirstName: personSchema.FirstName,
+        breederLastName: personSchema.LastName,
+        breederAddress: personSchema.Address,
+        breederZip: personSchema.Zip,
+        breederCity: personSchema.City,
+        breederEmail: personSchema.Email,
+        breederPhone: personSchema.Phone,
 
-    // Krok 4 - Vystavovatel
-    sameAsBreeder: z.boolean().default(false),
-    exhibitorFirstName: personSchema.FirstName.optional(),
-    exhibitorLastName: personSchema.LastName.optional(),
-    exhibitorAddress: personSchema.Address.optional(),
-    exhibitorZip: personSchema.Zip.optional(),
-    exhibitorCity: personSchema.City.optional(),
-    exhibitorEmail: personSchema.Email.optional(),
-    exhibitorPhone: personSchema.Phone.optional(),
+        sameAsBreeder: z.boolean().default(false),
+        exhibitorFirstName: personSchema.FirstName.optional(),
+        exhibitorLastName: personSchema.LastName.optional(),
+        exhibitorAddress: personSchema.Address.optional(),
+        exhibitorZip: personSchema.Zip.optional(),
+        exhibitorCity: personSchema.City.optional(),
+        exhibitorEmail: personSchema.Email.optional(),
+        exhibitorPhone: personSchema.Phone.optional(),
 
-    // Krok 5 - Souhlas
-    notes: z.string().optional(),
-    dataAccuracy: z.boolean().refine(val => val === true, {
-        message: "Musíte potvrdit pravdivost údajů"
-    }),
-    gdprConsent: z.boolean().refine(val => val === true, {
-        message: "Musíte souhlasit se zpracováním osobních údajů"
-    }),
+        notes: z.string().optional(),
+        dataAccuracy: z.boolean().refine(val => val === true, {
+            message: t('validation.registration.dataAccuracy.required')
+        }),
+        gdprConsent: z.boolean().refine(val => val === true, {
+            message: t('validation.registration.gdprConsent.required')
+        }),
 
-}).refine(data => {
-    if (!data.sameAsBreeder) {
-        return z.object({
-            exhibitorFirstName: personSchema.FirstName,
-            exhibitorLastName: personSchema.LastName,
-            exhibitorAddress: personSchema.Address,
-            exhibitorZip: personSchema.Zip,
-            exhibitorCity: personSchema.City,
-            exhibitorEmail: personSchema.Email,
-            exhibitorPhone: personSchema.Phone,
-        }).safeParse({
-            exhibitorFirstName: data.exhibitorFirstName,
-            exhibitorLastName: data.exhibitorLastName,
-            exhibitorAddress: data.exhibitorAddress,
-            exhibitorZip: data.exhibitorZip,
-            exhibitorCity: data.exhibitorCity,
-            exhibitorEmail: data.exhibitorEmail,
-            exhibitorPhone: data.exhibitorPhone,
-        }).success;
-    }
-    return true;
-}, {
-    message: "Údaje o vystavovateli jsou povinné, pokud není shodný s chovatelem",
-    path: ["exhibitorFirstName"],
-});
+    }).refine(data => {
+        if (!data.sameAsBreeder) {
+            return z.object({
+                exhibitorFirstName: personSchema.FirstName,
+                exhibitorLastName: personSchema.LastName,
+                exhibitorAddress: personSchema.Address,
+                exhibitorZip: personSchema.Zip,
+                exhibitorCity: personSchema.City,
+                exhibitorEmail: personSchema.Email,
+                exhibitorPhone: personSchema.Phone,
+            }).safeParse({
+                exhibitorFirstName: data.exhibitorFirstName,
+                exhibitorLastName: data.exhibitorLastName,
+                exhibitorAddress: data.exhibitorAddress,
+                exhibitorZip: data.exhibitorZip,
+                exhibitorCity: data.exhibitorCity,
+                exhibitorEmail: data.exhibitorEmail,
+                exhibitorPhone: data.exhibitorPhone,
+            }).success;
+        }
+        return true;
+    }, {
+        message: t('validation.registration.exhibitor.required'),
+        path: ["exhibitorFirstName"],
+    });
+};
 
-export type RegistrationFormData = z.infer<typeof registrationSchema>;
+export type RegistrationFormData = z.infer<ReturnType<typeof createRegistrationSchema>>;
 export type CatFormData = RegistrationFormData['cats'][0];

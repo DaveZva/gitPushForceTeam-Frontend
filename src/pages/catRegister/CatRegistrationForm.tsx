@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useForm, FormProvider, SubmitHandler, FieldValues } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useTranslation } from 'react-i18next';
 import type { Resolver } from 'react-hook-form';
 
 import {
-    registrationSchema,
+    createRegistrationSchema,
     RegistrationFormData,
     CatFormData
 } from '../../schemas/registrationSchema';
@@ -89,10 +89,12 @@ const SubmitSuccess: React.FC<SubmitSuccessProps> = ({ registrationNumber, onBac
 
 
 function CatRegistrationForm() {
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
     const [currentStep, setCurrentStep] = useState(1);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [submitSuccessData, setSubmitSuccessData] = useState<{ number: string } | null>(null);
+
+    const registrationSchema = useMemo(() => createRegistrationSchema(), [i18n.language]);
 
     const stepLabels = [
         'stepper.exhibition',
@@ -165,7 +167,7 @@ function CatRegistrationForm() {
 
             storageUtils.clearCurrentForm();
 
-            setSubmitSuccessData({ number: response.registrationNumber });
+            setSubmitSuccessData({ number: String(response.registrationNumber) });
 
             reset({
                 sameAsBreeder: false,
@@ -182,7 +184,6 @@ function CatRegistrationForm() {
         }
     };
 
-    // 4. Nová funkce pro potvrzovací dialog
     const handleConfirmAndSubmit = () => {
         if (window.confirm(t('confirm.submitForm', 'Opravdu si přejete finálně odeslat přihlášku? Zkontrolujte prosím všechny údaje.'))) {
             handleSubmit(onSubmit)();
@@ -228,8 +229,8 @@ function CatRegistrationForm() {
                         <SubmitSuccess
                             registrationNumber={submitSuccessData.number}
                             onBackToStart={() => {
-                                setSubmitSuccessData(null); // Skryje success stránku
-                                setCurrentStep(1);      // Vrátí na krok 1
+                                setSubmitSuccessData(null);
+                                setCurrentStep(1);
                                 window.scrollTo({ top: 0, behavior: 'smooth' });
                             }}
                         />
