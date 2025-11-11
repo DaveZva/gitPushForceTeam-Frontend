@@ -13,6 +13,7 @@ interface FormFieldProps {
     children: ReactNode;
 }
 
+// Typ pro data ze storage (předpoklad)
 interface SavedExhibitor {
     id: number;
     firstName: string;
@@ -25,7 +26,6 @@ interface SavedExhibitor {
 }
 
 export function Step4_ExhibitorInfo() {
-    const { t } = useTranslation();
     const FormField: React.FC<FormFieldProps> = ({ label, name, error, children }) => (
         <div className="flex flex-col gap-2">
             <label htmlFor={name} className="text-sm font-semibold text-gray-700">
@@ -36,6 +36,7 @@ export function Step4_ExhibitorInfo() {
         </div>
     );
 
+    const { t } = useTranslation();
     const { register, setValue, watch, formState: { errors } } = useFormContext<RegistrationFormData>();
     const [savedExhibitors, setSavedExhibitors] = useState<SavedExhibitor[]>([]);
 
@@ -85,18 +86,18 @@ export function Step4_ExhibitorInfo() {
 
     return (
         <div className="space-y-6">
-            <h2 className="text-2xl font-bold text-gray-800">{t('step4.title')}</h2>
+            <h2 className="text-2xl font-bold text-gray-800">{t('registrationSteps.step4_exhibitor.title')}</h2>
 
             {savedExhibitors.length > 0 && !sameAsBreeder && (
                 <div className="p-4 bg-blue-50 rounded-lg">
-                    <FormField label={t('step4.loadSaved')} name="loadExhibitor" error={undefined}>
+                    <FormField label={t('registrationSteps.step4_exhibitor.loadSaved.label')} name="loadExhibitor" error={undefined}>
                         <select
                             onChange={handleLoadExhibitor}
                             defaultValue=""
                             className={inputClass}
                             disabled={sameAsBreeder}
                         >
-                            <option value="">{t('step4.selectPlaceholder')}</option>
+                            <option value="">{t('registrationSteps.step4_exhibitor.loadSaved.placeholder')}</option>
                             {savedExhibitors.map(ex => (
                                 <option key={ex.id} value={ex.id}>
                                     {ex.firstName} {ex.lastName} ({ex.email})
@@ -115,39 +116,39 @@ export function Step4_ExhibitorInfo() {
                         className="w-5 h-5 text-blue-600 rounded cursor-pointer focus:ring-blue-500"
                     />
                     <span className="font-medium text-gray-800">
-                        {t('step4.sameAsBreeder')}
+                        {t('registrationSteps.step4_exhibitor.sameAsBreeder')}
                     </span>
                 </label>
             </div>
 
             <div className={`space-y-6 transition-opacity ${sameAsBreeder ? 'opacity-50' : 'opacity-100'}`}>
                 <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-                    <FormField label={t('step4.firstName')} name="exhibitorFirstName" error={errors.exhibitorFirstName}>
+                    <FormField label={t('registrationSteps.step4_exhibitor.firstName.label')} name="exhibitorFirstName" error={errors.exhibitorFirstName}>
                         <input type="text" {...register("exhibitorFirstName")} className={inputClass} disabled={sameAsBreeder} />
                     </FormField>
 
-                    <FormField label={t('step4.lastName')} name="exhibitorLastName" error={errors.exhibitorLastName}>
+                    <FormField label={t('registrationSteps.step4_exhibitor.lastName.label')} name="exhibitorLastName" error={errors.exhibitorLastName}>
                         <input type="text" {...register("exhibitorLastName")} className={inputClass} disabled={sameAsBreeder} />
                     </FormField>
 
-                    <FormField label={t('step4.address')} name="exhibitorAddress" error={errors.exhibitorAddress}>
-                        <input type="text" {...register("exhibitorAddress")} className={inputClass} placeholder={t('step4.addressPlaceholder')} disabled={sameAsBreeder} />
+                    <FormField label={t('registrationSteps.step4_exhibitor.address.label')} name="exhibitorAddress" error={errors.exhibitorAddress}>
+                        <input type="text" {...register("exhibitorAddress")} className={inputClass} placeholder={t('registrationSteps.step4_exhibitor.address.placeholder')} disabled={sameAsBreeder} />
                     </FormField>
 
-                    <FormField label={t('step4.zip')} name="exhibitorZip" error={errors.exhibitorZip}>
-                        <input type="text" {...register("exhibitorZip")} className={inputClass} placeholder={t('step4.zipPlaceholder')} disabled={sameAsBreeder} />
+                    <FormField label={t('registrationSteps.step4_exhibitor.zip.label')} name="exhibitorZip" error={errors.exhibitorZip}>
+                        <input type="text" {...register("exhibitorZip")} className={inputClass} placeholder={t('registrationSteps.step4_exhibitor.zip.placeholder')} disabled={sameAsBreeder} />
                     </FormField>
 
-                    <FormField label={t('step4.city')} name="exhibitorCity" error={errors.exhibitorCity}>
+                    <FormField label={t('registrationSteps.step4_exhibitor.city.label')} name="exhibitorCity" error={errors.exhibitorCity}>
                         <input type="text" {...register("exhibitorCity")} className={inputClass} disabled={sameAsBreeder} />
                     </FormField>
 
-                    <FormField label={t('step4.email')} name="exhibitorEmail" error={errors.exhibitorEmail}>
-                        <input type="email" {...register("exhibitorEmail")} className={inputClass} placeholder={t('step4.emailPlaceholder')} disabled={sameAsBreeder} />
+                    <FormField label={t('registrationSteps.step4_exhibitor.email.label')} name="exhibitorEmail" error={errors.exhibitorEmail}>
+                        <input type="email" {...register("exhibitorEmail")} className={inputClass} placeholder={t('registrationSteps.step4_exhibitor.email.placeholder')} disabled={sameAsBreeder} />
                     </FormField>
 
-                    <FormField label={t('step4.phone')} name="exhibitorPhone" error={errors.exhibitorPhone}>
-                        <input type="tel" {...register("exhibitorPhone")} className={inputClass} placeholder={t('step4.phonePlaceholder')} disabled={sameAsBreeder} />
+                    <FormField label={t('registrationSteps.step4_exhibitor.phone.label')} name="exhibitorPhone" error={errors.exhibitorPhone}>
+                        <input type="tel" {...register("exhibitorPhone")} className={inputClass} placeholder={t('registrationSteps.step4_exhibitor.phone.placeholder')} disabled={sameAsBreeder} />
                     </FormField>
                 </div>
             </div>

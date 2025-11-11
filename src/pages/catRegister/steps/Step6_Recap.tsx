@@ -2,7 +2,7 @@ import React, { useState, useEffect, ReactNode } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { registrationApi, AvailableShow } from '../../../services/api/registrationApi';
-import { RegistrationFormData, CatFormData } from '../../../schemas/registrationSchema';
+import { RegistrationFormData } from '../../../schemas/registrationSchema';
 
 interface Step6RecapProps {
     onEditStep: (step: number) => void;
@@ -41,7 +41,7 @@ export function Step6_Recap({ onEditStep }: Step6RecapProps) {
                     onClick={() => onEdit(editStep)}
                     className="px-3 py-1 text-sm font-semibold text-blue-600 transition-colors bg-blue-100 rounded-md hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
-                    {t('common.edit', 'Upravit')}
+                    {t('common.edit')} {/* 'common.edit' je správně, existuje v rootu */}
                 </button>
             </div>
             <div className="grid grid-cols-1 gap-x-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -59,19 +59,26 @@ export function Step6_Recap({ onEditStep }: Step6RecapProps) {
                 const availableShows = await registrationApi.getAvailableShows();
                 setShows(availableShows);
             } catch (error) {
-                console.error("Chyba při načítání výstav v rekapitulaci:", error);
+                // 1. POUŽITÍ NOVÉHO LOKALIZAČNÍHO KLÍČE
+                console.error(t('registrationSteps.step6_recap.errors.loadShows'), error);
             } finally {
                 setIsLoading(false);
             }
         };
         loadShows();
-    }, []);
+    }, [t]); // Přidáno 't' do závislostí
 
     const selectedShow = shows.find(show => String(show.id) === String(data.showId));
     const showName = isLoading ? t('common.loading') : (selectedShow ? `${selectedShow.name} (${selectedShow.date})` : data.showId);
 
-    const daysMap: Record<string, string> = { sat: t('common.sat'), sun: t('common.sun'), both: t('common.both') };
+    // 2. OPRAVENÉ CESTY z 'common.*' na 'catForm.common.*'
+    const daysMap: Record<string, string> = {
+        sat: t('catForm.common.sat'),
+        sun: t('catForm.common.sun'),
+        both: t('catForm.common.both')
+    };
     const genderMap: Record<string, string> = { male: t('catForm.male'), female: t('catForm.female') };
+    // 'common.yes' a 'common.no' jsou v pořádku, existují v root 'common' objektu
     const neuteredMap: Record<string, string> = { yes: t('common.yes'), no: t('common.no') };
 
     const classMap: Record<string, string> = {
@@ -87,7 +94,8 @@ export function Step6_Recap({ onEditStep }: Step6RecapProps) {
         neuter: t('catForm.classOptions.c10'),
         junior: t('catForm.classOptions.c11'),
         kitten: t('catForm.classOptions.c12'),
-        novice_class: t('catForm.classAptions.c13a'),
+        // 3. OPRAVEN PŘEKLEP 'classAptions' -> 'classOptions'
+        novice_class: t('catForm.classOptions.c13a'),
         control_class: t('catForm.classOptions.c13b'),
         determination_class: t('catForm.classOptions.c13c'),
         domestic_cat: t('catForm.classOptions.c14'),
@@ -121,11 +129,13 @@ export function Step6_Recap({ onEditStep }: Step6RecapProps) {
 
                 {data.cats && data.cats.map((cat, index) => (
                     <RecapSection
-                        title={`${t('recap.cat')} ${index + 1}`}
+                        // 4. OPRAVENÁ CESTA 'recap.cat' -> 'catForm.recap.cat'
+                        title={`${t('catForm.recap.cat')} ${index + 1}`}
                         key={index}
                         editStep={2}
                         onEdit={onEditStep}
                     >
+                        {/* 5. OPRAVENÝ KLÍČ 'catForm.name' -> 'catForm.catName' */}
                         <RecapItem label={t('catForm.catName')} value={`${cat.titleBefore || ''} ${cat.catName} ${cat.titleAfter || ''}`.trim()} />
                         <RecapItem label={t('catForm.gender')} value={genderMap[cat.gender]} />
                         <RecapItem label={t('catForm.neutered')} value={neuteredMap[cat.neutered]} />
@@ -137,6 +147,7 @@ export function Step6_Recap({ onEditStep }: Step6RecapProps) {
                     </RecapSection>
                 ))}
 
+                {/* 6. OPRAVENÉ CESTY pro sekce Chovatel a Vystavovatel */}
                 <RecapSection
                     title={t('catForm.recap.breeder')}
                     editStep={3}
@@ -173,8 +184,9 @@ export function Step6_Recap({ onEditStep }: Step6RecapProps) {
                     onEdit={onEditStep}
                 >
                     <RecapItem label={t('catForm.recap.notes')} value={data.notes} />
-                    <RecapItem label={t('catForm.recap.dataAccuracy')} value={data.dataAccuracy ? `✓ ${t('common.agreed')}` : `X ${t('common.notAgreed')}`} />
-                    <RecapItem label={t('catForm.recap.gdprConsent')} value={data.gdprConsent ? `✓ ${t('common.agreed')}` : `X ${t('common.notAgreed')}`} />
+                    {/* 7. OPRAVENÉ CESTY pro 'agreed' a 'notAgreed' */}
+                    <RecapItem label={t('catForm.recap.dataAccuracy')} value={data.dataAccuracy ? `✓ ${t('catForm.common.agreed')}` : `X ${t('catForm.common.notAgreed')}`} />
+                    <RecapItem label={t('catForm.recap.gdprConsent')} value={data.gdprConsent ? `✓ ${t('catForm.common.agreed')}` : `X ${t('catForm.common.notAgreed')}`} />
                 </RecapSection>
             </div>
         </div>

@@ -69,7 +69,7 @@ const SubmitSuccess: React.FC<SubmitSuccessProps> = ({ registrationNumber, onBac
         <div className="text-center p-10 bg-white rounded-lg shadow-xl">
             <svg className="w-16 h-16 mx-auto text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
             <h2 className="text-2xl font-bold text-green-600 mt-4 mb-2">
-                {t('submitSuccess.title', 'Přihláška úspěšně odeslána!')}
+                {t('alert.submitSuccess', { number: registrationNumber })}
             </h2>
             <p className="text-lg text-gray-700 mb-2">
                 {t('submitSuccess.message', 'Vaše číslo přihlášky je:')}
@@ -80,9 +80,17 @@ const SubmitSuccess: React.FC<SubmitSuccessProps> = ({ registrationNumber, onBac
             <p className="text-gray-600 mb-8">
                 {t('submitSuccess.info', 'Potvrzení a platební údaje byly odeslány na Váš email.')}
             </p>
-            <Button variant="primary" onClick={onBackToStart}>
-                {t('submitSuccess.backButton', 'Nová přihláška')}
-            </Button>
+            <div className="flex justify-center gap-4">
+                <Button variant="primary" onClick={onBackToStart}>
+                    {t('submitSuccess.backButton', 'Nová přihláška')}
+                </Button>
+                <Button
+                    variant="secondary"
+                    onClick={() => alert('Funkce pro stažení PDF se připravuje!')}
+                >
+                    Stáhnout PDF (připravuje se)
+                </Button>
+            </div>
         </div>
     );
 };
@@ -92,9 +100,6 @@ function CatRegistrationForm() {
     const { t, i18n } = useTranslation();
     const [currentStep, setCurrentStep] = useState(1);
     const [isSubmitting, setIsSubmitting] = useState(false);
-    const [submitSuccessData, setSubmitSuccessData] = useState<{ number: string } | null>(null);
-
-    const registrationSchema = useMemo(() => createRegistrationSchema(), [i18n.language]);
 
     const [submitSuccessData, setSubmitSuccessData] = useState<{ number: string } | null>(null);
 
@@ -107,8 +112,8 @@ function CatRegistrationForm() {
         'stepper.recap'
     ];
     const totalSteps = stepLabels.length;
-
     const registrationSchema = useMemo(() => createRegistrationSchema(t), [i18n.language, t]);
+
     const methods = useForm<RegistrationFormData>({
         resolver: zodResolver(registrationSchema) as Resolver<RegistrationFormData>,
         defaultValues: (storageUtils.getCurrentForm() as RegistrationFormData | null) || {
@@ -238,7 +243,7 @@ function CatRegistrationForm() {
                             }}
                         />
                     ) : (
-                        <>
+                        <React.Fragment>
                             <div className="flex justify-between items-center mb-8">
                                 <h1 className="text-3xl font-bold text-gray-900">
                                     {t('form.title')}
@@ -262,7 +267,6 @@ function CatRegistrationForm() {
                                     {currentStep === 3 && <Step3_BreederInfo />}
                                     {currentStep === 4 && <Step4_ExhibitorInfo />}
                                     {currentStep === 5 && <Step5_NotesAndConsent />}
-
                                     {currentStep === 6 && <Step6_Recap onEditStep={setCurrentStep} />}
                                 </form>
                             </div>
@@ -295,7 +299,7 @@ function CatRegistrationForm() {
                             <div className="mt-8 text-center text-gray-500">
                                 💾 {t('form.autosaveInfo', 'Údaje se automaticky ukládají.')}
                             </div>
-                        </>
+                        </React.Fragment>
                     )}
                 </div>
             </div>
