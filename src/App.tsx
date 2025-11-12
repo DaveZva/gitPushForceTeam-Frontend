@@ -5,9 +5,9 @@ import './App.css';
 
 import { AppLayout } from './layouts/AppLayout';
 import Dashboard from './pages/Dashboard';
-import Secretariat from './pages/secretariat/ExhibitionManagementPage';
+import Secretariat from './pages/secretariat/ShowManagementPage';
 import CatRegisterPage from './pages/catRegister/CatRegistrationForm';
-import NewExhibition from './pages/secretariat/ExhibitionCreatePage';
+import { ShowCreatePage } from './pages/secretariat/ShowCreatePage';
 // import EditExhibition from './pages/secretariat/ExhibitionEditPage';
 
 function App() {
@@ -25,12 +25,9 @@ function App() {
                         <Route path="my-cats" element={<h2>{t('nav.myCats')}</h2>} />
 
                         <Route path="secretariat">
-                            <Route path="exhibition" element={<Secretariat />}>
-                                <Route index element={<Secretariat />} />
-                                <Route path="new" element={<NewExhibition />} />
-                                {/* <Route path="edit/:id" element={<EditExhibition />} /> */}
-                            </Route>
-                            {/* <Route path="users" element={<h2>Správa uživatelů</h2>} /> */}
+                            <Route index element={<Secretariat />} />
+                            <Route path="new/show" element={<ShowCreatePage />} />
+                            {/* <Route path="edit/:id" element={<EditExhibition />} /> */}
                         </Route>
                     </Route>
                 </Routes>

@@ -68,26 +68,23 @@ export const registrationApi = {
     }
 },
 
-getAvailableShows: async (): Promise<AvailableShow[]> => {
-    try {
-        const response = await fetch(`${API_BASE_URL}/exhibitions/available`);
-        if (!response.ok) {
-            throw new Error('Chyba při načítání výstav');
+    getAvailableShows: async (): Promise<AvailableShow[]> => {
+        try {
+            const response = await fetch(`${API_BASE_URL}/exhibitions/available`);
+
+            if (!response.ok) {
+                throw new Error(`Chyba při načítání výstav: ${response.status} ${response.statusText}`);
+            }
+
+            const data: AvailableShow[] = await response.json();
+
+            return data;
+
+        } catch (error) {
+            console.error('API Error:', error);
+            return [];
         }
-
-        return [
-            { id: 1, name: 'MVK Praha', date: '14. - 15. 12. 2025', location: 'Praha' },
-            { id: 2, name: 'MVK Ostrava', date: '20. - 21. 1. 2026', location: 'Ostrava' },
-            { id: 3, name: 'MVK Brno', date: '5. - 6. 3. 2026', location: 'Brno' }
-        ];
-
-    } catch (error) {
-        console.error('API Error:', error);
-        return [
-            { id: 1, name: 'MVK Praha', date: '14. - 15. 12. 2025', location: 'Praha' },
-            { id: 2, name: 'MVK Ostrava', date: '20. - 21. 1. 2026', location: 'Ostrava' },
-            { id: 3, name: 'MVK Brno', date: '5. - 6. 3. 2026', location: 'Brno' }
-        ];
     }
-}
+
+
 };

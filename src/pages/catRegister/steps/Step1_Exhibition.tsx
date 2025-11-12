@@ -1,10 +1,17 @@
 import React, { useState, useEffect, ReactNode } from 'react';
 import { useFormContext, FieldError } from 'react-hook-form';
-import { registrationApi, AvailableShow } from '../../../services/api/registrationApi';
+import { registrationApi } from '../../../services/api/registrationApi';
 import { RegistrationFormData } from '../../../schemas/registrationSchema';
 import { useTranslation } from 'react-i18next';
 import { Select } from '../../../components/ui/Select';
 import { Radio } from '../../../components/ui/Radio';
+import {secretariatApi} from "../../../services/api/secretariatApi";
+
+type ShowForDropdown = {
+    id: string | number;
+    name: string;
+    startDate: string;
+};
 
 interface FormFieldProps {
     label: string;
@@ -25,13 +32,21 @@ export function Step1_Exhibition() {
     );
     const { t } = useTranslation();
     const { register, formState: { errors } } = useFormContext<RegistrationFormData>();
-    const [shows, setShows] = useState<AvailableShow[]>([]);
+
+    const [shows, setShows] = useState<ShowForDropdown[]>([]);
     const [loading, setLoading] = useState(true);
+
+    const formatDate = (dateString: string | undefined): string => {
+        if (!dateString) return '-';
+        return new Date(dateString).toLocaleDateString('cs-CZ', {
+            year: 'numeric', month: '2-digit', day: '2-digit',
+        });
+    };
 
     useEffect(() => {
         const loadShows = async () => {
             try {
-                const availableShows = await registrationApi.getAvailableShows();
+                const availableShows = await secretariatApi.getAvailableShows();
                 setShows(availableShows);
             } catch (error) {
                 console.error(t('registrationSteps.step1_exhibition.errors.loadShows'), error);
@@ -52,9 +67,11 @@ export function Step1_Exhibition() {
                 ) : (
                     <Select id="showId" {...register("showId")}>
                         <option value="">{t('registrationSteps.step1_exhibition.show.placeholder')}</option>
+
+                        {/* Toto už je v pořádku, protože 'show' má typ 'ShowForDropdown' */}
                         {shows.map(show => (
                             <option key={show.id} value={show.id}>
-                                {show.name} ({show.date})
+                                {show.name} ({formatDate(show.startDate)})
                             </option>
                         ))}
                     </Select>

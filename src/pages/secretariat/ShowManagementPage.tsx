@@ -4,11 +4,11 @@ import { Link } from 'react-router-dom';
 import { secretariatApi, Show } from '../../services/api/secretariatApi';
 import { useAuth } from '../../context/AuthContext';
 
-export default function ExhibitionManagementPage() {
+export default function ShowManagementPage() {
     const { t } = useTranslation();
     const { isAuthenticated } = useAuth();
 
-    const [shows, setShows] = useState<Show[]>([]); // Používáme typ Show
+    const [shows, setShows] = useState<Show[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
 
@@ -108,7 +108,7 @@ export default function ExhibitionManagementPage() {
                 </td>
                 <td className="py-4 px-3">
                     <Link
-                        to={`/secretariat/exhibition/edit/${show.id}`}
+                        to={`/secretariat/edit/show/${show.id}`}
                         className="font-medium text-blue-600 hover:text-blue-800"
                     >
                         {t('common.edit')}
@@ -125,7 +125,7 @@ export default function ExhibitionManagementPage() {
                     {t('admin.shows.title')}
                 </h1>
                 <Link
-                    to="/secretariat/exhibition/new"
+                    to="/secretariat/new/show"
                     className="px-6 py-3 rounded-full font-semibold transition-all duration-300 bg-blue-600 text-white hover:bg-blue-700 shadow-lg"
                 >
                     {t('admin.shows.add')}

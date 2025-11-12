@@ -165,6 +165,9 @@ function CatRegistrationForm() {
                 }
             };
 
+            console.log("--- DATA K ODESLÁNÍ (Payload) ---");
+            console.log(registrationData);
+
             const response = await registrationApi.submitRegistration(registrationData);
 
             storageUtils.saveBreeder(registrationData.breeder);

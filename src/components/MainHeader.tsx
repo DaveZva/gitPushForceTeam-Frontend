@@ -46,7 +46,7 @@ export function MainHeader() {
                             <NavLink to="/my-cats" className={getNavLinkClass}>
                                 {t('nav.myCats')}
                             </NavLink>
-                            <NavLink to="/secretariat/exhibition" className={getNavLinkClass}>
+                            <NavLink to="/secretariat/" className={getNavLinkClass}>
                                 {t('nav.exhibitions')}
                             </NavLink>
                         </>

@@ -152,7 +152,7 @@ export function CatForm({ catIndex, onRemove }: CatFormProps) {
                                 </Select>
                                 <Input
                                     type="text"
-                                    name="emsSuffix" // Ani toto se neregistruje
+                                    name="emsSuffix"
                                     value={emsSuffix}
                                     onChange={handleEmsChange}
                                     className="w-2/3"
