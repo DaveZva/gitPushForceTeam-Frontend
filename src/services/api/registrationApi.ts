@@ -1,4 +1,5 @@
 import { CatFormData } from '../../schemas/registrationSchema';
+import api from '../api';
 
 export interface RegistrationPayload {
     show: {
@@ -36,55 +37,41 @@ export interface SubmitRegistrationResponse {
 }
 
 export interface AvailableShow {
-    id: number;
+    id: number | string;
     name: string;
-    date: string;
-    location: string;
+    description?: string;
+    status: 'PLANNED' | 'OPEN' | 'CLOSED' | 'COMPLETED' | 'CANCELLED';
+    venueName: string;
+    venueAddress?: string;
+    venueCity?: string;
+    venueState?: string;
+    venueZip?: string;
+    startDate: string;
+    endDate: string;
+    registrationDeadline: string;
+    organizerName: string;
+    contactEmail?: string;
+    websiteUrl?: string;
 }
-
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080/api/v1';
 
 export const registrationApi = {
     submitRegistration: async (registrationData: RegistrationPayload): Promise<SubmitRegistrationResponse> => {
-    try {
-        const response = await fetch(`${API_BASE_URL}/registrations`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(registrationData)
-        });
-
-        if (!response.ok) {
-            const errorData = await response.json().catch(() => ({})); // Prázdný objekt jako fallback
-            throw new Error(errorData?.message || 'Chyba při odesílání registrace');
+        try {
+            const response = await api.post<SubmitRegistrationResponse>('/registrations', registrationData);
+            return response.data;
+        } catch (error) {
+            console.error('API Error:', error);
+            throw (error as Error);
         }
-
-        return await response.json() as SubmitRegistrationResponse;
-
-    } catch (error) {
-        console.error('API Error:', error);
-        throw (error as Error);
-    }
-},
+    },
 
     getAvailableShows: async (): Promise<AvailableShow[]> => {
         try {
-            const response = await fetch(`${API_BASE_URL}/exhibitions/available`);
-
-            if (!response.ok) {
-                throw new Error(`Chyba při načítání výstav: ${response.status} ${response.statusText}`);
-            }
-
-            const data: AvailableShow[] = await response.json();
-
-            return data;
-
+            const response = await api.get<AvailableShow[]>('/exhibitions/available');
+            return response.data;
         } catch (error) {
-            console.error('API Error:', error);
+            console.error('API Error (getAvailableShows):', error);
             return [];
         }
     }
-
-
 };

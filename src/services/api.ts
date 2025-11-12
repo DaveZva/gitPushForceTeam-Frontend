@@ -1,7 +1,7 @@
 import axios, { AxiosError } from 'axios';
 
 interface User {
-    id: number;
+    id?: number | string;
     firstName: string;
     lastName: string;
     email: string;
@@ -9,7 +9,9 @@ interface User {
 
 interface AuthResponse {
     token: string;
-    user: User;
+    firstName: string;
+    lastName: string;
+    email: string;
 }
 
 interface ApiErrorData {
@@ -26,10 +28,22 @@ const api = axios.create({
     },
 });
 
+api.interceptors.request.use(
+    (config) => {
+        const token = localStorage.getItem('authToken');
+        if (token) {
+            config.headers.Authorization = `Bearer ${token}`;
+        }
+        return config;
+    },
+    (error) => {
+        return Promise.reject(error);
+    }
+);
+
 const handleAuthError = (error: unknown) => {
     if (axios.isAxiosError(error)) {
         const axiosError = error as AxiosError<ApiErrorData>;
-
         if (axiosError.response) {
             console.error("API Error Response:", axiosError.response.data);
             if (axiosError.response.status === 401 || axiosError.response.status === 403) {
@@ -70,24 +84,6 @@ export const register = async (userData: RegisterData): Promise<AuthResponse> =>
         handleAuthError(error);
         throw new Error('Unhandled register error');
     }
-};
-
-interface AvailableShow {
-    id: number;
-    name: string;
-    date: string;
-}
-
-export const registrationApi = {
-    getAvailableShows: async (): Promise<AvailableShow[]> => {
-        try {
-            const response = await axios.get<AvailableShow[]>(`${API_URL}/exhibitions/available`);
-            return response.data;
-        } catch (error) {
-            console.error('API Error (getAvailableShows):', error);
-            return [];
-        }
-    },
 };
 
 export default api;

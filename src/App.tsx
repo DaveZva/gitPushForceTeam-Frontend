@@ -8,6 +8,7 @@ import Dashboard from './pages/Dashboard';
 import Secretariat from './pages/secretariat/ShowManagementPage';
 import CatRegisterPage from './pages/catRegister/CatRegistrationForm';
 import { ShowCreatePage } from './pages/secretariat/ShowCreatePage';
+import MyApplicationsPage from './pages/owner/MyApplicationsPage';
 // import EditExhibition from './pages/secretariat/ExhibitionEditPage';
 
 function App() {
@@ -21,7 +22,7 @@ function App() {
 
                         <Route index element={<Dashboard />} />
                         <Route path="apply" element={<CatRegisterPage />} />
-                        <Route path="my-applications" element={<h2>{t('nav.myApplications')}</h2>} />
+                        <Route path="my-applications" element={<MyApplicationsPage />} />
                         <Route path="my-cats" element={<h2>{t('nav.myCats')}</h2>} />
 
                         <Route path="secretariat">

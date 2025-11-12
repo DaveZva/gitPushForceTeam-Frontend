@@ -46,7 +46,7 @@ export function Step1_Exhibition() {
     useEffect(() => {
         const loadShows = async () => {
             try {
-                const availableShows = await secretariatApi.getAvailableShows();
+                const availableShows = await registrationApi.getAvailableShows();
                 setShows(availableShows);
             } catch (error) {
                 console.error(t('registrationSteps.step1_exhibition.errors.loadShows'), error);

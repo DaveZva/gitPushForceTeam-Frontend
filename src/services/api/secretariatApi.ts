@@ -2,7 +2,7 @@ import api from '../api';
 import { ShowFormData } from '../../schemas/showSchema';
 import { TFunction } from 'i18next';
 import axios, { AxiosError } from 'axios';
-import {AvailableShow} from "@/services/api/registrationApi";
+import { AvailableShow } from "./registrationApi";
 
 export interface Show {
     id: number | string;
@@ -26,7 +26,6 @@ interface ApiErrorData {
     message: string;
 }
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080/api/v1';
 const SECRETARIAT_URL = '/secretariat/shows';
 
 const handleError = (error: unknown, t?: TFunction) => {
@@ -48,7 +47,7 @@ export const secretariatApi = {
     getSecretariatShows: async (): Promise<Show[]> => {
         try {
             const response = await api.get<Show[]>(SECRETARIAT_URL);
-            return response.data; // Axios vrací data v .data
+            return response.data;
         } catch (error) {
             handleError(error, "xx" as any);
             throw error;
@@ -62,24 +61,6 @@ export const secretariatApi = {
         } catch (error) {
             handleError(error, "xx" as any);
             throw error;
-        }
-    },
-
-    getAvailableShows: async (): Promise<AvailableShow[]> => {
-        try {
-            const response = await fetch(`${API_BASE_URL}/exhibitions/available`);
-
-            if (!response.ok) {
-                throw new Error(`Chyba při načítání výstav: ${response.status} ${response.statusText}`);
-            }
-
-            const data: AvailableShow[] = await response.json();
-
-            return data;
-
-        } catch (error) {
-            console.error('API Error:', error);
-            return [];
         }
     },
 
