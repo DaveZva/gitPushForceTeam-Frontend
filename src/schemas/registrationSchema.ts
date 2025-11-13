@@ -10,10 +10,13 @@ const createPersonSchema = (t: TFunction) => ({
     City: z.string().min(2, t('validation.person.city.min')),
     Email: z.string().email(t('validation.person.email.invalid')),
     Phone: z.string().regex(/^((\+420 ?)|(00420 ?))?\d{3} ?\d{3} ?\d{3}$/, t('validation.person.phone.invalid')),
+    LocalOrganization: z.string().min(2, t('validation.person.localOrganization.min')).max(100, t('validation.person.localOrganization.max')),
+    MembershipNumber: z.string()
+        .min(4, t('validation.person.membershipNumber.min'))
+        .max(15, t('validation.person.membershipNumber.max'))
 });
 
 const createCatSchema = (t: TFunction) => z.object({
-    // Základní údaje
     titleBefore: z.string().optional(),
     catName: z.string().min(2, t('validation.cat.name.min')),
     titleAfter: z.string().optional(),
@@ -74,22 +77,24 @@ export const createRegistrationSchema = (t: TFunction) => {
 
         cats: z.array(catSchema).min(1, t('validation.registration.cats.min')),
 
-        breederFirstName: personSchema.FirstName,
-        breederLastName: personSchema.LastName,
-        breederAddress: personSchema.Address,
-        breederZip: personSchema.Zip,
-        breederCity: personSchema.City,
-        breederEmail: personSchema.Email,
-        breederPhone: personSchema.Phone,
+        ownerFirstName: personSchema.FirstName,
+        ownerLastName: personSchema.LastName,
+        ownerAddress: personSchema.Address,
+        ownerZip: personSchema.Zip,
+        ownerCity: personSchema.City,
+        ownerEmail: personSchema.Email,
+        ownerPhone: personSchema.Phone,
+        ownerLocalOrganization: personSchema.LocalOrganization,
+        ownerMembershipNumber: personSchema.MembershipNumber,
 
-        sameAsBreeder: z.boolean().default(false),
-        exhibitorFirstName: personSchema.FirstName.optional(),
-        exhibitorLastName: personSchema.LastName.optional(),
-        exhibitorAddress: personSchema.Address.optional(),
-        exhibitorZip: personSchema.Zip.optional(),
-        exhibitorCity: personSchema.City.optional(),
-        exhibitorEmail: personSchema.Email.optional(),
-        exhibitorPhone: personSchema.Phone.optional(),
+        sameAsOwner: z.boolean().default(false),
+        breederFirstName: personSchema.FirstName.optional(),
+        breederLastName: personSchema.LastName.optional(),
+        breederAddress: personSchema.Address.optional(),
+        breederZip: personSchema.Zip.optional(),
+        breederCity: personSchema.City.optional(),
+        breederEmail: personSchema.Email.optional(),
+        breederPhone: personSchema.Phone.optional(),
 
         notes: z.string().optional(),
         dataAccuracy: z.boolean().refine(val => val === true, {
@@ -100,23 +105,23 @@ export const createRegistrationSchema = (t: TFunction) => {
         }),
 
     }).refine(data => {
-        if (!data.sameAsBreeder) {
+        if (!data.sameAsOwner) {
             return z.object({
-                exhibitorFirstName: personSchema.FirstName,
-                exhibitorLastName: personSchema.LastName,
-                exhibitorAddress: personSchema.Address,
-                exhibitorZip: personSchema.Zip,
-                exhibitorCity: personSchema.City,
-                exhibitorEmail: personSchema.Email,
-                exhibitorPhone: personSchema.Phone,
+                breederFirstName: personSchema.FirstName,
+                breederLastName: personSchema.LastName,
+                breederAddress: personSchema.Address,
+                breederZip: personSchema.Zip,
+                breederCity: personSchema.City,
+                breederEmail: personSchema.Email,
+                breederPhone: personSchema.Phone,
             }).safeParse({
-                exhibitorFirstName: data.exhibitorFirstName,
-                exhibitorLastName: data.exhibitorLastName,
-                exhibitorAddress: data.exhibitorAddress,
-                exhibitorZip: data.exhibitorZip,
-                exhibitorCity: data.exhibitorCity,
-                exhibitorEmail: data.exhibitorEmail,
-                exhibitorPhone: data.exhibitorPhone,
+                breederFirstName: data.breederFirstName,
+                breederLastName: data.breederLastName,
+                breederAddress: data.breederAddress,
+                breederZip: data.breederZip,
+                breederCity: data.breederCity,
+                breederEmail: data.breederEmail,
+                breederPhone: data.breederPhone,
             }).success;
         }
         return true;

@@ -41,7 +41,7 @@ export function Step6_Recap({ onEditStep }: Step6RecapProps) {
                     onClick={() => onEdit(editStep)}
                     className="px-3 py-1 text-sm font-semibold text-blue-600 transition-colors bg-blue-100 rounded-md hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
-                    {t('common.edit')} {/* 'common.edit' je správně, existuje v rootu */}
+                    {t('common.edit')}
                 </button>
             </div>
             <div className="grid grid-cols-1 gap-x-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -59,26 +59,23 @@ export function Step6_Recap({ onEditStep }: Step6RecapProps) {
                 const availableShows = await registrationApi.getAvailableShows();
                 setShows(availableShows);
             } catch (error) {
-                // 1. POUŽITÍ NOVÉHO LOKALIZAČNÍHO KLÍČE
                 console.error(t('registrationSteps.step6_recap.errors.loadShows'), error);
             } finally {
                 setIsLoading(false);
             }
         };
         loadShows();
-    }, [t]); // Přidáno 't' do závislostí
+    }, [t]);
 
     const selectedShow = shows.find(show => String(show.id) === String(data.showId));
-    const showName = isLoading ? t('common.loading') : (selectedShow ? `${selectedShow.name} (${selectedShow.date})` : data.showId);
+    const showName = isLoading ? t('common.loading') : (selectedShow ? `${selectedShow.name} (${selectedShow.startDate})` : data.showId);
 
-    // 2. OPRAVENÉ CESTY z 'common.*' na 'catForm.common.*'
     const daysMap: Record<string, string> = {
         sat: t('catForm.common.sat'),
         sun: t('catForm.common.sun'),
         both: t('catForm.common.both')
     };
     const genderMap: Record<string, string> = { male: t('catForm.male'), female: t('catForm.female') };
-    // 'common.yes' a 'common.no' jsou v pořádku, existují v root 'common' objektu
     const neuteredMap: Record<string, string> = { yes: t('common.yes'), no: t('common.no') };
 
     const classMap: Record<string, string> = {
@@ -94,7 +91,6 @@ export function Step6_Recap({ onEditStep }: Step6RecapProps) {
         neuter: t('catForm.classOptions.c10'),
         junior: t('catForm.classOptions.c11'),
         kitten: t('catForm.classOptions.c12'),
-        // 3. OPRAVEN PŘEKLEP 'classAptions' -> 'classOptions'
         novice_class: t('catForm.classOptions.c13a'),
         control_class: t('catForm.classOptions.c13b'),
         determination_class: t('catForm.classOptions.c13c'),
@@ -129,13 +125,11 @@ export function Step6_Recap({ onEditStep }: Step6RecapProps) {
 
                 {data.cats && data.cats.map((cat, index) => (
                     <RecapSection
-                        // 4. OPRAVENÁ CESTA 'recap.cat' -> 'catForm.recap.cat'
                         title={`${t('catForm.recap.cat')} ${index + 1}`}
                         key={index}
                         editStep={2}
                         onEdit={onEditStep}
                     >
-                        {/* 5. OPRAVENÝ KLÍČ 'catForm.name' -> 'catForm.catName' */}
                         <RecapItem label={t('catForm.catName')} value={`${cat.titleBefore || ''} ${cat.catName} ${cat.titleAfter || ''}`.trim()} />
                         <RecapItem label={t('catForm.gender')} value={genderMap[cat.gender]} />
                         <RecapItem label={t('catForm.neutered')} value={neuteredMap[cat.neutered]} />
@@ -147,33 +141,32 @@ export function Step6_Recap({ onEditStep }: Step6RecapProps) {
                     </RecapSection>
                 ))}
 
-                {/* 6. OPRAVENÉ CESTY pro sekce Chovatel a Vystavovatel */}
                 <RecapSection
-                    title={t('catForm.recap.breeder')}
+                    title={t('catForm.recap.owner')}
                     editStep={3}
                     onEdit={onEditStep}
                 >
-                    <RecapItem label={t('catForm.recap.name')} value={`${data.breederFirstName} ${data.breederLastName}`} />
-                    <RecapItem label={t('catForm.recap.address')} value={`${data.breederAddress}, ${data.breederZip} ${data.breederCity}`} />
-                    <RecapItem label={t('catForm.recap.email')} value={data.breederEmail} />
-                    <RecapItem label={t('catForm.recap.phone')} value={data.breederPhone} />
+                    <RecapItem label={t('catForm.recap.name')} value={`${data.ownerFirstName} ${data.ownerLastName}`} />
+                    <RecapItem label={t('catForm.recap.address')} value={`${data.ownerAddress}, ${data.ownerZip} ${data.ownerCity}`} />
+                    <RecapItem label={t('catForm.recap.email')} value={data.ownerEmail} />
+                    <RecapItem label={t('catForm.recap.phone')} value={data.ownerPhone} />
                 </RecapSection>
 
                 <RecapSection
-                    title={t('catForm.recap.exhibitor')}
+                    title={t('catForm.recap.breeder')}
                     editStep={4}
                     onEdit={onEditStep}
                 >
-                    {data.sameAsBreeder ? (
+                    {data.sameAsOwner ? (
                         <p className="p-3 text-gray-700 bg-gray-100 rounded-md">
-                            {t('catForm.recap.sameAsBreeder')}
+                            {t('catForm.recap.sameAsOwner')}
                         </p>
                     ) : (
                         <>
-                            <RecapItem label={t('catForm.recap.name')} value={`${data.exhibitorFirstName} ${data.exhibitorLastName}`} />
-                            <RecapItem label={t('catForm.recap.address')} value={`${data.exhibitorAddress}, ${data.exhibitorZip} ${data.exhibitorCity}`} />
-                            <RecapItem label={t('catForm.recap.email')} value={data.exhibitorEmail} />
-                            <RecapItem label={t('catForm.recap.phone')} value={data.exhibitorPhone} />
+                            <RecapItem label={t('catForm.recap.name')} value={`${data.breederFirstName} ${data.breederLastName}`} />
+                            <RecapItem label={t('catForm.recap.address')} value={`${data.breederAddress}, ${data.breederZip} ${data.breederCity}`} />
+                            <RecapItem label={t('catForm.recap.email')} value={data.breederEmail} />
+                            <RecapItem label={t('catForm.recap.phone')} value={data.breederPhone} />
                         </>
                     )}
                 </RecapSection>

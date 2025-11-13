@@ -7,7 +7,7 @@ export interface RegistrationPayload {
         days: 'sat' | 'sun' | 'both';
     };
     cats: CatFormData[];
-    breeder: {
+    owner: {
         firstName: string;
         lastName: string;
         address: string;
@@ -15,8 +15,10 @@ export interface RegistrationPayload {
         city: string;
         email: string;
         phone: string;
+        localOrganization: string;
+        membershipNumber: string;
     };
-    exhibitor: {
+    breeder: {
         firstName?: string;
         lastName?: string;
         address?: string;

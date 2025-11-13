@@ -12,8 +12,8 @@ import {
 import { FormStepper } from '../../components/FormStepper';
 import { Step1_Exhibition } from './steps/Step1_Exhibition';
 import { Step2_CatInfo } from './steps/Step2_CatInfo';
-import { Step3_BreederInfo } from './steps/Step3_BreederInfo';
-import { Step4_ExhibitorInfo } from './steps/Step4_ExhibitorInfo';
+import { Step3_OwnerInfo } from './steps/Step3_OwnerInfo';
+import { Step4_BreederInfo } from './steps/Step4_BreederInfo';
 import { Step5_NotesAndConsent } from './steps/Step5_NotesAndConsent';
 import { Step6_Recap } from './steps/Step6_Recap';
 import { storageUtils } from '../../utils/storage';
@@ -53,8 +53,8 @@ const fieldsByStep: (keyof RegistrationFormData)[][] = [
     [],
     ['showId', 'days'],
     ['cats'],
-    ['breederFirstName', 'breederLastName', 'breederAddress', 'breederZip', 'breederCity', 'breederEmail', 'breederPhone'],
-    ['sameAsBreeder', 'exhibitorFirstName', 'exhibitorLastName', 'exhibitorAddress', 'exhibitorZip', 'exhibitorCity', 'exhibitorEmail', 'exhibitorPhone'],
+    ['ownerFirstName', 'ownerLastName', 'ownerAddress', 'ownerZip', 'ownerCity', 'ownerEmail', 'ownerPhone', 'ownerLocalOrganization', 'ownerMembershipNumber'],
+    ['sameAsOwner', 'breederFirstName', 'breederLastName', 'breederAddress', 'breederZip', 'breederCity', 'breederEmail', 'breederPhone'],
     ['dataAccuracy', 'gdprConsent'],
     [],
 ];
@@ -106,8 +106,8 @@ function CatRegistrationForm() {
     const stepLabels = [
         'stepper.exhibition',
         'stepper.cat',
+        'stepper.owner',
         'stepper.breeder',
-        'stepper.exhibitor',
         'stepper.consent',
         'stepper.recap'
     ];
@@ -117,7 +117,7 @@ function CatRegistrationForm() {
     const methods = useForm<RegistrationFormData>({
         resolver: zodResolver(registrationSchema) as Resolver<RegistrationFormData>,
         defaultValues: (storageUtils.getCurrentForm() as RegistrationFormData | null) || {
-            sameAsBreeder: false,
+            sameAsOwner: false,
             cats: [defaultCatValues]
         },
         mode: 'onTouched',
@@ -140,7 +140,18 @@ function CatRegistrationForm() {
             const registrationData: RegistrationPayload = {
                 show: { id: data.showId, days: data.days },
                 cats: data.cats,
-                breeder: {
+                owner: {
+                    firstName: data.ownerFirstName,
+                    lastName: data.ownerLastName,
+                    address: data.ownerAddress,
+                    zip: data.ownerZip,
+                    city: data.ownerCity,
+                    email: data.ownerEmail,
+                    phone: data.ownerPhone,
+                    localOrganization: data.ownerLocalOrganization,
+                    membershipNumber: data.ownerMembershipNumber
+                },
+                breeder: data.sameAsOwner ? null : {
                     firstName: data.breederFirstName,
                     lastName: data.breederLastName,
                     address: data.breederAddress,
@@ -148,15 +159,6 @@ function CatRegistrationForm() {
                     city: data.breederCity,
                     email: data.breederEmail,
                     phone: data.breederPhone
-                },
-                exhibitor: data.sameAsBreeder ? null : {
-                    firstName: data.exhibitorFirstName,
-                    lastName: data.exhibitorLastName,
-                    address: data.exhibitorAddress,
-                    zip: data.exhibitorZip,
-                    city: data.exhibitorCity,
-                    email: data.exhibitorEmail,
-                    phone: data.exhibitorPhone
                 },
                 notes: data.notes,
                 consents: {
@@ -170,10 +172,10 @@ function CatRegistrationForm() {
 
             const response = await registrationApi.submitRegistration(registrationData);
 
-            storageUtils.saveBreeder(registrationData.breeder);
+            storageUtils.saveOwner(registrationData.owner);
 
-            if (registrationData.exhibitor) {
-                storageUtils.saveExhibitor(registrationData.exhibitor);
+            if (registrationData.breeder) {
+                storageUtils.saveBreeder(registrationData.breeder);
             }
 
             storageUtils.clearCurrentForm();
@@ -181,7 +183,7 @@ function CatRegistrationForm() {
             setSubmitSuccessData({ number: String(response.registrationNumber) });
 
             reset({
-                sameAsBreeder: false,
+                sameAsOwner: false,
                 cats: [defaultCatValues]
             });
 
@@ -223,7 +225,7 @@ function CatRegistrationForm() {
     const handleReset = () => {
         if (window.confirm(t('confirm.resetForm'))) {
             reset({
-                sameAsBreeder: false,
+                sameAsOwner: false,
                 cats: [defaultCatValues]
             });
             storageUtils.clearCurrentForm();
@@ -267,8 +269,8 @@ function CatRegistrationForm() {
                                 <form>
                                     {currentStep === 1 && <Step1_Exhibition />}
                                     {currentStep === 2 && <Step2_CatInfo />}
-                                    {currentStep === 3 && <Step3_BreederInfo />}
-                                    {currentStep === 4 && <Step4_ExhibitorInfo />}
+                                    {currentStep === 3 && <Step3_OwnerInfo />}
+                                    {currentStep === 4 && <Step4_BreederInfo />}
                                     {currentStep === 5 && <Step5_NotesAndConsent />}
                                     {currentStep === 6 && <Step6_Recap onEditStep={setCurrentStep} />}
                                 </form>

@@ -155,7 +155,7 @@
     "exhibition": "Výstava",
     "cat": "Kočka",
     "breeder": "Chovatel",
-    "exhibitor": "Vystavovatel",
+    "owner": "Majitel",
     "consent": "Souhlasy",
     "recap": "Rekapitulace"
   },
@@ -177,10 +177,10 @@
         "both": "Oba dny"
       }
     },
-    "step3_breeder": {
-      "title": "Údaje o chovateli",
+    "step3_owner": {
+      "title": "Údaje o majiteli",
       "loadSaved": {
-        "label": "Načíst uloženého chovatele",
+        "label": "Načíst uloženého majitele",
         "placeholder": "-- Vyberte ze seznamu --"
       },
       "firstName": {
@@ -207,15 +207,23 @@
       "phone": {
         "label": "Telefon *",
         "placeholder": "+420 123 456 789"
+      },
+      "localClub": {
+        "label": "Základní organizace *",
+        "placeholder": "ČSCH"
+      },
+      "memberNumber": {
+        "label": "Členské číslo *",
+        "placeholder": "xXxXxX"
       }
     },
-    "step4_exhibitor": {
-      "title": "Údaje o vystavovateli",
+    "step4_breeder": {
+      "title": "Údaje o chovateli",
       "loadSaved": {
-        "label": "Načíst uloženého vystavovatele",
+        "label": "Načíst uloženého chovatele",
         "placeholder": "-- Vyberte ze seznamu --"
       },
-      "sameAsBreeder": "Vystavovatel je stejný jako chovatel",
+      "sameAsOwner": "Chovatel je stejný jako majitel",
       "firstName": {
         "label": "Jméno *"
       },
@@ -343,6 +351,50 @@
     "organizerName": "Jméno organizátora *",
     "contactEmail": "Kontaktní email",
     "websiteUrl": "Webová stránka"
+  },
+  "validation": {
+    "cat": {
+      "name": {
+        "min": "Špatně zadané jméno"
+      },
+      "chipNumber": {
+        "invalid": "Číslo čipu musí mít 15 čísel"
+      },
+      "gender": {
+        "required": "Nutno vybrat pohlaví"
+      },
+      "neutered": {
+        "required": "Katrované?"
+      },
+      "birthDate": {
+        "invalid": "Špatně zadáno datum narození"
+      },
+      "showClass": {
+        "required": "Vyberte soutěžní třídu"
+      },
+      "cageType": {
+        "required": "Zadejte přepravku"
+      }
+    },
+    "registration": {
+      "showId": {
+        "required": "Vyberte výstavu"
+      },
+      "days": {
+        "required": "Vyberte den"
+      }
+    },
+    "person": {
+      "firstName.min": "Špatný formát jména",
+      "lastName.min": "Špatný formát příjmení",
+      "address.min": "Špatně zadaná adresa",
+      "zip.invalid": "Neplatné PSČ",
+      "city.min": "Špatně zadané město",
+      "email.invalid": "Špatný formát e-mailu",
+      "phone.invalid": "Neplatný formát telefonního čísla",
+      "localOrganization.min": "Špatně zadaná základní organizace",
+      "membershipNumber.min": "Špatné členské číslo"
+    }
   },
   "location": "Místo"
 }
