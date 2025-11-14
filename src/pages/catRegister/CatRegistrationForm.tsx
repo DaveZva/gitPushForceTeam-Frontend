@@ -20,6 +20,7 @@ import { storageUtils } from '../../utils/storage';
 import { registrationApi, RegistrationPayload } from '../../services/api/registrationApi';
 import '../../styles/CatRegistration.css';
 import { Button } from '../../components/ui/Button';
+import api from "../../services/api";
 
 export const defaultCatValues: CatFormData = {
     titleBefore: "",
@@ -65,6 +66,36 @@ interface SubmitSuccessProps {
 }
 const SubmitSuccess: React.FC<SubmitSuccessProps> = ({ registrationNumber, onBackToStart }) => {
     const { t } = useTranslation();
+    const [isDownloading, setIsDownloading] = useState(false);
+
+    const handleDownloadPdf = async () => {
+        setIsDownloading(true);
+        try {
+            const response = await api.get(
+                `/my-registrations/pdf/${registrationNumber}`,
+                { responseType: 'blob' }
+            );
+
+            const url = window.URL.createObjectURL(new Blob([response.data]));
+            const link = document.createElement('a');
+            link.href = url;
+
+            const filename = `registrace-${registrationNumber}.pdf`;
+            link.setAttribute('download', filename);
+
+            document.body.appendChild(link);
+            link.click();
+
+            link.parentNode?.removeChild(link);
+            window.URL.revokeObjectURL(url);
+
+        } catch (error) {
+            console.error("Chyba při stahování PDF:", error);
+            alert(t('alert.pdfDownloadError', 'Chyba při stahování PDF.'));
+        } finally {
+            setIsDownloading(false);
+        }
+    };
     return (
         <div className="text-center p-10 bg-white rounded-lg shadow-xl">
             <svg className="w-16 h-16 mx-auto text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
@@ -86,9 +117,12 @@ const SubmitSuccess: React.FC<SubmitSuccessProps> = ({ registrationNumber, onBac
                 </Button>
                 <Button
                     variant="secondary"
-                    onClick={() => alert('Funkce pro stažení PDF se připravuje!')}
+                    onClick={handleDownloadPdf}
+                    disabled={isDownloading}
                 >
-                    Stáhnout PDF (připravuje se)
+                    {isDownloading
+                        ? t('submitSuccess.downloading', 'Stahuji...')
+                        : t('submitSuccess.downloadButton', 'Stáhnout PDF')}
                 </Button>
             </div>
         </div>
@@ -126,12 +160,20 @@ function CatRegistrationForm() {
     const { handleSubmit, watch, reset, trigger } = methods;
 
     useEffect(() => {
-        const subscription = watch((value, { name, type }) => {
-            if (!name && !type) {
+        let debounceTimer: ReturnType<typeof setTimeout>;
+        const subscription = watch((value) => {
+            clearTimeout(debounceTimer);
+
+            debounceTimer = setTimeout(() => {
+                console.log("Autosave: Ukládám formulář do localStorage...");
                 storageUtils.saveCurrentForm(value as RegistrationFormData);
-            }
+            }, 500);
         });
-        return () => subscription.unsubscribe();
+
+        return () => {
+            subscription.unsubscribe();
+            clearTimeout(debounceTimer);
+        };
     }, [watch]);
 
     const onSubmit: SubmitHandler<RegistrationFormData> = async (data) => {

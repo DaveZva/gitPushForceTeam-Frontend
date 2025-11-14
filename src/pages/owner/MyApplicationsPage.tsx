@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../../context/AuthContext';
 import api from '../../services/api';
+import PdfBadgeIcon from '../../components/ui/PDFIcon';
 
 interface MyApplication {
     id: number;
@@ -12,18 +13,27 @@ interface MyApplication {
     catCount: number;
 }
 
+const LoadingSpinner: React.FC = () => (
+    <svg className="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+    </svg>
+);
+
+
 export default function MyApplicationsPage() {
     const { t } = useTranslation();
     const { isAuthenticated } = useAuth();
     const [applications, setApplications] = useState<MyApplication[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
+    const [downloadingId, setDownloadingId] = useState<string | null>(null);
 
     const formatDate = (dateString: string | undefined): string => {
         if (!dateString) return '-';
         return new Date(dateString).toLocaleDateString('cs-CZ', {
             year: 'numeric', month: '2-digit', day: '2-digit',
-            hour: '2-digit', minute: '2-digit' // Přidáno pro čas odeslání
+            hour: '2-digit', minute: '2-digit'
         });
     };
 
@@ -36,6 +46,34 @@ export default function MyApplicationsPage() {
             CANCELLED: 'bg-gray-100 text-gray-800',
         };
         return `${baseClass} ${statuses[status] || ''}`;
+    };
+
+    const handleDownloadPdf = async (registrationNumber: string) => {
+        setDownloadingId(registrationNumber);
+        try {
+            const response = await api.get(
+                `/my-registrations/pdf/${registrationNumber}`,
+                { responseType: 'blob' }
+            );
+
+            const url = window.URL.createObjectURL(new Blob([response.data]));
+            const link = document.createElement('a');
+            link.href = url;
+            const filename = `registrace-${registrationNumber}.pdf`;
+            link.setAttribute('download', filename);
+
+            document.body.appendChild(link);
+            link.click();
+
+            link.parentNode?.removeChild(link);
+            window.URL.revokeObjectURL(url);
+
+        } catch (error) {
+            console.error("Chyba při stahování PDF:", error);
+            alert(t('alert.pdfDownloadError', 'Chyba při stahování PDF.'));
+        } finally {
+            setDownloadingId(null);
+        }
     };
 
     useEffect(() => {
@@ -51,8 +89,6 @@ export default function MyApplicationsPage() {
                 setError(null);
 
                 const response = await api.get<MyApplication[]>('/my-registrations');
-
-                // Axios dává data do 'response.data'
                 setApplications(response.data);
 
             } catch (err: unknown) {
@@ -73,7 +109,7 @@ export default function MyApplicationsPage() {
         if (loading) {
             return (
                 <tr>
-                    <td colSpan={5} className="py-8 text-center text-gray-500">
+                    <td colSpan={6} className="py-8 text-center text-gray-500">
                         {t('common.loading', 'Načítám...')}
                     </td>
                 </tr>
@@ -83,7 +119,7 @@ export default function MyApplicationsPage() {
         if (error) {
             return (
                 <tr>
-                    <td colSpan={5} className="py-8 text-center text-red-600">
+                    <td colSpan={6} className="py-8 text-center text-red-600">
                         {error}
                     </td>
                 </tr>
@@ -93,7 +129,7 @@ export default function MyApplicationsPage() {
         if (applications.length === 0) {
             return (
                 <tr>
-                    <td colSpan={5} className="py-8 text-center text-gray-500">
+                    <td colSpan={6} className="py-8 text-center text-gray-500">
                         {t('myApplications.noApplications', 'Zatím nemáte žádné přihlášky.')}
                     </td>
                 </tr>
@@ -110,6 +146,20 @@ export default function MyApplicationsPage() {
                     <span className={getStatusClass(app.status)}>
                         {t(`regStatuses.${app.status}`, app.status)}
                     </span>
+                </td>
+                <td className="py-4 px-3 text-center">
+                    <button
+                        onClick={() => handleDownloadPdf(app.registrationNumber)}
+                        disabled={downloadingId === app.registrationNumber}
+                        className="p-2 bg-gray-50 text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-full transition-colors disabled:opacity-50 disabled:cursor-wait"
+                        title={t('myApplications.downloadPdf', 'Stáhnout PDF')}
+                    >
+                        {downloadingId === app.registrationNumber ? (
+                            <LoadingSpinner />
+                        ) : (
+                            <PdfBadgeIcon className="h-5 w-5" />
+                        )}
+                    </button>
                 </td>
             </tr>
         ));
@@ -132,6 +182,7 @@ export default function MyApplicationsPage() {
                         <th className="py-3 px-3 text-sm font-semibold text-gray-600">{t('myApplications.col.submittedAt', 'Odesláno')}</th>
                         <th className="py-3 px-3 text-sm font-semibold text-gray-600 text-center">{t('myApplications.col.cats', 'Počet koček')}</th>
                         <th className="py-3 px-3 text-sm font-semibold text-gray-600">{t('myApplications.col.status', 'Status')}</th>
+                        <th className="py-3 px-3 text-sm font-semibold text-gray-600 text-center">{t('myApplications.col.actions', 'Akce')}</th>
                     </tr>
                     </thead>
                     <tbody>
