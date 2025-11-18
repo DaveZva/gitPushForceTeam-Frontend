@@ -58,7 +58,12 @@
     "loginIn": "Přihlásit se",
     "registerIn": "Registovat se",
     "dontHaveAccount": "Nemáte účet? ",
-    "haveAccount": "Již máte vytvořen účet? "
+    "haveAccount": "Již máte vytvořen účet? ",
+    "forgotPassword": "Zapomněli jste heslo? ",
+    "forgotPasswordTitle": "Obnovení hesla",
+    "passwordRecovery": "Obnova hesla",
+    "send": "Požádat o obnovení hesla",
+    "backToLogin": "Vrátit se k přihlášení"
   },
   "form": {
     "actions": {
