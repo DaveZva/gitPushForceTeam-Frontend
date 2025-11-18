@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { login as apiLogin, register as apiRegister } from '../services/api';
+import { login as apiLogin, register as apiRegister, forgotPassword as apiForgotPassword } from '../services/api';
 
 
 interface User {
@@ -21,6 +21,7 @@ interface AuthContextType {
     token: string | null;
     login: (email: string, password: string) => Promise<void>;
     register: (firstName: string, lastName: string, email: string, password: string) => Promise<void>;
+    resetPassword: (email: string) => Promise<void>;
     logout: () => void;
     isAuthenticated: boolean;
     loading: boolean;
@@ -35,7 +36,7 @@ interface AuthProviderProps {
 export function AuthProvider({ children }: AuthProviderProps) {
     const [user, setUser] = useState<User | null>(null);
     const [token, setToken] = useState<string | null>(localStorage.getItem('authToken') || null);
-    const [loading, setLoading] = useState<boolean>(true); // Pro kontrolu při prvním načtení
+    const [loading, setLoading] = useState<boolean>(true);
 
     useEffect(() => {
         const storedToken = localStorage.getItem('authToken');
@@ -81,6 +82,10 @@ export function AuthProvider({ children }: AuthProviderProps) {
         handleAuthResponse(data);
     };
 
+    const resetPassword = async (email: string): Promise<void> => {
+        await apiForgotPassword(email);
+    };
+
     const logout = (): void => {
         setUser(null);
         setToken(null);
@@ -93,6 +98,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
         token,
         login,
         register,
+        resetPassword,
         logout,
         isAuthenticated: !!token,
         loading

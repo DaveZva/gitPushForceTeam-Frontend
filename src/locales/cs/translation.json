@@ -290,7 +290,8 @@
   },
   "errors": {
     "fetchFailed": "Nepodařilo se načíst data.",
-    "submission": "Chyba při odesílání:"
+    "submission": "Chyba při odesílání:",
+    "invalidCredentials": "Neplatné údaje"
   },
   "statuses": {
     "PLANNED": "Naplánováno",

@@ -86,4 +86,13 @@ export const register = async (userData: RegisterData): Promise<AuthResponse> =>
     }
 };
 
+export const forgotPassword = async (email: string): Promise<void> => {
+    try {
+        await api.post('/auth/forgot-password', { email });
+    } catch (error) {
+        handleAuthError(error);
+        throw new Error('Unhandled forgot password error');
+    }
+};
+
 export default api;
