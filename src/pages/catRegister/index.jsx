@@ -1,0 +1,1 @@
+export { CatRegistrationForm as default } from './CatRegistrationForm';

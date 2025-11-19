@@ -1,0 +1,419 @@
+#root {
+  width: 100%;
+  margin: 0 auto;
+  padding: 0;
+  text-align: center;
+}
+
+/* Základní styly (React-like)*/
+
+:root {
+    --color-primary: #027BFF;
+    --color-background: #f4f7f6;
+    --color-surface: #ffffff;
+    --color-text: #333;
+    --color-text-secondary: #777;
+    --color-input-text: #e8e8e8;
+    --border-radius: 8px;
+    --box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    background-color: var(--color-background);
+    color: var(--color-text);
+}
+
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 1.5rem;
+}
+/* Komponenta: MainHeader */
+
+.main-header {
+    background-color: var(--color-surface);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    padding: 1rem 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.main-header .logo {
+    font-weight: bold;
+    font-size: 1.25rem;
+    letter-spacing: -2px;
+    color: var(--color-primary);
+}
+
+.main-header nav a {
+    text-decoration: none;
+    color: var(--color-text-secondary);
+    margin: 0 1rem;
+    font-weight: 500;
+}
+
+.main-header nav a.active {
+    color: var(--color-primary);
+    border-bottom: 1.5px solid var(--color-primary);
+    padding-bottom: 4px;
+}
+
+.main-header .user-actions {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.user-actions .lang-switch {
+    font-size: 0.9rem;
+    cursor: pointer;
+}
+
+
+.user-actions .user-profile {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.user-actions .user-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background-color: var(--color-primary);
+    color: white;
+    display: grid;
+    place-items: center;
+    font-weight: bold;
+}
+/*Komponenta: DashboardContent*/
+
+.dashboard-header h1 {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+}
+
+.dashboard-header p {
+    font-size: 1.1rem;
+    color: var(--color-text-secondary);
+    margin-top: 0;
+}
+
+/*Komponenta: StatRow*/
+.stat-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1.5rem;
+    margin: 2rem auto;
+    max-width: 1400px;
+    flex-wrap: nowrap;
+}
+
+.stat-card {
+    flex: 1;
+    min-width: 0;
+    background-color: var(--color-surface);
+    border-radius: 20px;
+    height: 130px;
+    width: 407px;
+    box-shadow: var(--box-shadow);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 0 25px;
+}
+
+.stat-card .value {
+    font-size: 38px;
+    font-weight: 700;
+    color: var(--color-primary);
+    line-height: 1;
+    letter-spacing: -3.42px;
+    margin: 0;
+    text-align: left;
+}
+.stat-card .label {
+    font-size: 20px;
+    font-weight: 400;
+    color: var(--color-text-secondary);
+    letter-spacing: -1px;
+    line-height: 1.2;
+    margin: 0;
+    text-align: left;
+}
+/*Responzivita*/
+@media (max-width: 1200px) {
+    .stat-row {
+        flex-wrap: wrap;
+    }
+    .stat-card {
+        flex-basis: 48%;
+        width: auto;
+        margin-bottom: 1.5rem;
+    }
+}
+
+
+
+/*Hlavní Grid (Minulost vs Budoucnost)*/
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 1.5rem;
+    margin-top: 2.5rem;
+}
+/* Responzivita */
+@media (max-width: 992px) {
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+        gap: 2.5rem;
+    }
+}
+
+
+/* Komponenta: ApplicationHistory (Tabulka) */
+.history-panel {
+    background-color: #fff;
+    border-radius: 20px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    padding: 2rem;
+    font-family: "Poppins", sans-serif;
+    color: #2A2A2A;
+    max-width: 100%;
+    overflow-x: auto;
+}
+
+.panel-header {
+    margin-bottom: 1.5rem;
+    text-align: left;
+}
+
+.panel-header h2 {
+    font-size: 32px;
+    font-weight: 700;
+    letter-spacing: -0.9px;
+    margin-bottom: 0.5rem;
+}
+
+.panel-header p {
+    color: #888888;
+    font-size: 20px;
+    letter-spacing: -0.5px;
+    margin: 0;
+}
+
+/* Tabulka */
+.history-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 16px;
+    min-width: 600px;
+}
+.history-table th,
+.history-table td {
+    text-align: left;
+    padding: 1rem 0.75rem;
+    border-bottom: 1px solid #eee;
+}
+.history-table th {
+    text-transform: uppercase;
+    font-weight: 600;
+    color: #666;
+    font-size: 14px;
+    letter-spacing: -0.5px;
+}
+.history-table td {
+    font-weight: 400;
+    color: #2A2A2A;
+}
+.history-table .status {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    border-radius: 10px;
+    background-color: #f0f0f0;
+    color: #2A2A2A;
+    font-weight: 600;
+    font-size: 14px;
+    text-align: center;
+    white-space: nowrap;
+}
+.history-table .actions a {
+    text-decoration: none;
+    color: #027BFF;
+    font-weight: 600;
+    font-size: 14px;
+    margin-right: 0.5rem;
+    transition: color 0.2s ease;
+}
+.history-table .actions a:hover {
+    color: #005FCC;
+}
+
+/* --- Responzivita */
+@media (max-width: 600px) {
+    .history-table th,
+    .history-table td {
+        padding: 0.75rem 0.5rem;
+        font-size: 14px;
+    }
+    .history-table th {
+        font-size: 12px;
+    }
+}
+
+/*  Respoznvita --- */
+@media (max-width: 768px) {
+    .stat-row {
+        gap: 1rem;
+        margin: 1.5rem auto;
+    }
+    .stat-card {
+        flex-basis: 100%;
+        height: 100px;
+        padding: 0 20px;
+        min-width: 0;
+        margin-bottom: 1rem;
+    }
+    .stat-card .value {
+        font-size: 32px;
+    }
+    .stat-card .label {
+        font-size: 18px;
+    }
+
+    .history-panel {
+        padding: 1.5rem 1rem;
+    }
+    .panel-header h2 {
+        font-size: 26px;
+    }
+
+    /* Upcoming Card */
+    .upcoming-card {
+        height: auto;
+        padding: 1.25rem 1.5rem;
+    }
+    .upcoming-card h3 {
+        font-size: 22px;
+    }
+}
+
+.upcoming-panel {
+    display: flex;
+    flex-direction: column;
+    /* KLÍČOVÁ ZMĚNA: Mezera mezi kartami */
+    gap: 1.5rem;
+}
+.upcoming-panel .panel-header {
+    text-align: left;
+    margin: 0;
+    padding: 0 0 1rem 0;
+}
+
+.upcoming-panel .panel-header h2 {
+    margin-bottom: 0.5rem;
+}
+
+.upcoming-panel .panel-header p {
+    margin: 0 0 -30px 0;
+    padding: 0;
+}
+/* --- Komponenta: Upcoming card --- */
+.upcoming-card {
+    background-color: var(--color-surface);
+    border-radius: 20px;
+    box-shadow: var(--box-shadow);
+    padding: 1.5rem 1.56rem 1.5rem 1.56rem;
+    box-sizing: border-box;
+    color: #2A2A2A;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    height: auto;
+    min-height: 174px;
+}
+
+.upcoming-card h3,
+.upcoming-card .info {
+    align-self: flex-start;
+}
+
+.upcoming-card h3 {
+    font-size: 24px;
+    font-weight: 700;
+    letter-spacing: -1.8px;
+    color: #2A2A2A;
+    margin: 0 0 0.75rem 0;
+    text-align: left;
+}
+
+.upcoming-card .info {
+    font-size: 16px;
+    line-height: 1.5;
+    letter-spacing: -0.5px;
+    color: var(--color-text-secondary);
+    margin-bottom: 0;
+    text-align: left;
+}
+
+.upcoming-card .info strong {
+    color: #000;
+    font-weight: 600;
+}
+
+.upcoming-card .btn-primary {
+    width: 80%;
+    margin: 1.5rem 0 0 0;
+    background-color: #027BFF;
+    color: #fff;
+    border: 3px solid transparent;
+    height: 50px;
+    border-radius: 25px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 600;
+    font-size: 18px;
+    line-height: 20px;
+    letter-spacing: -1px;
+    text-decoration: none;
+    transition: all 0.25s ease;
+    cursor: pointer;
+    box-sizing: border-box;
+}
+.upcoming-card .btn-primary:hover {
+    background-color: #fff;
+    color: #027BFF;
+    border: 2px solid #027BFF;
+    transform: translateY(-1px);
+    opacity: 1;
+}
+
+/* ====== Responzivita) ====== */
+@media (max-width: 768px) {
+    .upcoming-card {
+        padding: 1.25rem;
+        min-height: 0;
+    }
+    .upcoming-card h3 {
+        font-size: 22px;
+        margin: 0 0 0.5rem 0;
+    }
+    .upcoming-card .info {
+        font-size: 15px;
+    }
+
+    .upcoming-card .btn-primary {
+        width: 100%;
+        height: 48px;
+        font-size: 16px;
+        margin-top: 1rem;
+    }
+}
