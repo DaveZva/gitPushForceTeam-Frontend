@@ -28,7 +28,7 @@ const FormField: React.FC<FormFieldProps> = ({ label, name, children, error }) =
 );
 
 const FormGrid: React.FC<{ children: ReactNode }> = ({ children }) => (
-    <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+    <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 animate-fade-in">
         {children}
     </div>
 );
@@ -40,7 +40,7 @@ interface CatFormProps {
 
 export function CatForm({ catIndex, onRemove }: CatFormProps) {
     const { t } = useTranslation();
-    type ActiveTab = 'basic' | 'pedigree' | 'father';
+    type ActiveTab = 'basic' | 'mother' | 'father';
     const [activeTab, setActiveTab] = useState<ActiveTab>('basic');
 
     const {
@@ -59,21 +59,35 @@ export function CatForm({ catIndex, onRemove }: CatFormProps) {
         return fieldErrors?.[name];
     };
 
-    const emsCodeValue = watch(fieldName("emsCode"));
-    const emsPrefix = emsCodeValue?.substring(0, 3) || '';
-    const emsSuffix = emsCodeValue?.substring(4) || '';
+    // --- LOGIKA PRO EMS KÓDY ---
+    const emsCodeValue = watch(fieldName("emsCode")) || "";
+    const motherEmsCodeValue = watch(fieldName("motherEmsCode")) || "";
+    const fatherEmsCodeValue = watch(fieldName("fatherEmsCode")) || "";
 
-    const handleEmsChange = (e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>) => {
-        const { name, value } = e.target;
-        const newPrefix = (name === "emsPrefix") ? value : emsPrefix;
-        const newSuffix = (name === "emsSuffix") ? value : emsSuffix;
+    const parseEms = (val: string) => ({
+        prefix: val.length >= 3 ? val.substring(0, 3) : "",
+        suffix: val.length > 3 ? val.substring(4) : ""
+    });
 
-        const fullEmsCode = `${newPrefix} ${newSuffix}`.trimStart();
-        const path = fieldName('emsCode');
+    const { prefix: emsPrefix, suffix: emsSuffix } = parseEms(emsCodeValue);
+    const { prefix: motherEmsPrefix, suffix: motherEmsSuffix } = parseEms(motherEmsCodeValue);
+    const { prefix: fatherEmsPrefix, suffix: fatherEmsSuffix } = parseEms(fatherEmsCodeValue);
 
+    const handleGenericEmsChange = (
+        fieldToUpdate: CatFieldName,
+        currentPrefix: string,
+        currentSuffix: string,
+        changeType: 'prefix' | 'suffix',
+        newValue: string
+    ) => {
+        const newPrefix = changeType === 'prefix' ? newValue : currentPrefix;
+        const newSuffix = changeType === 'suffix' ? newValue : currentSuffix;
+        const fullEmsCode = newPrefix ? `${newPrefix} ${newSuffix}` : "";
+
+        const path = fieldName(fieldToUpdate);
         setValue(path, fullEmsCode, { shouldValidate: true, shouldDirty: true });
-        const result = validateEmsCode(fullEmsCode);
 
+        const result = validateEmsCode(fullEmsCode);
         if (result === true) {
             clearErrors(path);
         } else {
@@ -85,7 +99,7 @@ export function CatForm({ catIndex, onRemove }: CatFormProps) {
         switch (activeTab) {
             case 'basic':
                 return (
-                    <FormGrid>
+                    <FormGrid key="basic">
                         <FormField label={t('catForm.titleBefore')} name={fieldName("titleBefore")} error={getError("titleBefore")}>
                             <Select {...register(fieldName("titleBefore"))}>
                                 <option value="">-- {t('common.noTitle')} --</option>
@@ -134,13 +148,11 @@ export function CatForm({ catIndex, onRemove }: CatFormProps) {
                         </FormField>
 
                         <input type="hidden" {...register(fieldName("emsCode"))} />
-
                         <FormField label={t('catForm.emsCode')} name={fieldName("emsCode")} error={getError("emsCode")}>
                             <div className="flex gap-2">
                                 <Select
-                                    name="emsPrefix"
                                     value={emsPrefix}
-                                    onChange={handleEmsChange}
+                                    onChange={(e) => handleGenericEmsChange("emsCode", emsPrefix, emsSuffix, 'prefix', e.target.value)}
                                     className="w-1/3"
                                 >
                                     <option value="">-- Plemeno --</option>
@@ -152,9 +164,8 @@ export function CatForm({ catIndex, onRemove }: CatFormProps) {
                                 </Select>
                                 <Input
                                     type="text"
-                                    name="emsSuffix"
                                     value={emsSuffix}
-                                    onChange={handleEmsChange}
+                                    onChange={(e) => handleGenericEmsChange("emsCode", emsPrefix, emsSuffix, 'suffix', e.target.value)}
                                     className="w-2/3"
                                     placeholder="n 03 24"
                                 />
@@ -204,55 +215,143 @@ export function CatForm({ catIndex, onRemove }: CatFormProps) {
                         </FormField>
                     </FormGrid>
                 );
-            case 'pedigree':
+
+            case 'mother':
                 return (
-                    <FormGrid>
+                    // PŘIDÁN KLÍČ key="mother"
+                    <FormGrid key="mother">
                         <FormField label={t('catForm.titleBefore')} name={fieldName("motherTitleBefore")} error={getError("motherTitleBefore")}>
-                            <Input type="text" {...register(fieldName("motherTitleBefore"))} placeholder="CH" />
+                            <Select {...register(fieldName("motherTitleBefore"))}>
+                                <option value="">-- {t('common.noTitle')} --</option>
+                                <option value="champion">CH</option>
+                                <option value="inter-champion">IC</option>
+                                <option value="grand-inter-champion">GIC</option>
+                                <option value="supreme-champion">SC</option>
+                                <option value="national-winner">NV</option>
+                                <option value="world-winner">WW</option>
+                                <option value="junior-world-winner">JWW</option>
+                            </Select>
                         </FormField>
+
                         <FormField label={t('catForm.name')} name={fieldName("motherName")} error={getError("motherName")}>
                             <Input type="text" {...register(fieldName("motherName"))} placeholder={t('catForm.motherNamePlaceholder')} />
                         </FormField>
+
                         <FormField label={t('catForm.titleAfter')} name={fieldName("motherTitleAfter")} error={getError("motherTitleAfter")}>
-                            <Input type="text" {...register(fieldName("motherTitleAfter"))} />
+                            <Select {...register(fieldName("motherTitleAfter"))}>
+                                <option value="">-- {t('common.noTitle')} --</option>
+                                <option value="junior-winner">JW</option>
+                                <option value="distinguished-show-merit">DSM</option>
+                                <option value="distinguished-variety-merit">DVM</option>
+                                <option value="distinguished-merit">DM</option>
+                            </Select>
                         </FormField>
-                        <FormField label={t('catForm.breed')} name={fieldName("motherBreed")} error={getError("motherBreed")}>
-                            <Input type="text" {...register(fieldName("motherBreed"))} placeholder={t('catForm.breedPlaceholder')} />
+
+                        <input type="hidden" {...register(fieldName("motherEmsCode"))} />
+                        <FormField label={t('catForm.emsCode')} name={fieldName("motherEmsCode")} error={getError("motherEmsCode")}>
+                            <div className="flex gap-2">
+                                <Select
+                                    value={motherEmsPrefix}
+                                    onChange={(e) => handleGenericEmsChange("motherEmsCode", motherEmsPrefix, motherEmsSuffix, 'prefix', e.target.value)}
+                                    className="w-1/3"
+                                >
+                                    <option value="">-- Plemeno --</option>
+                                    {BREED_OPTIONS.map(opt => (
+                                        <option key={opt.value} value={opt.value}>
+                                            {opt.label}
+                                        </option>
+                                    ))}
+                                </Select>
+                                <Input
+                                    type="text"
+                                    value={motherEmsSuffix}
+                                    onChange={(e) => handleGenericEmsChange("motherEmsCode", motherEmsPrefix, motherEmsSuffix, 'suffix', e.target.value)}
+                                    className="w-2/3"
+                                    placeholder="n 03 24"
+                                />
+                            </div>
                         </FormField>
-                        <FormField label={t('catForm.emsCodeShort')} name={fieldName("motherEmsCode")} error={getError("motherEmsCode")}>
-                            <Input type="text" {...register(fieldName("motherEmsCode"))} />
-                        </FormField>
-                        <FormField label={t('catForm.color')} name={fieldName("motherColor")} error={getError("motherColor")}>
-                            <Input type="text" {...register(fieldName("motherColor"))} />
-                        </FormField>
+
                         <FormField label={t('catForm.pedigreeNumber')} name={fieldName("motherPedigreeNumber")} error={getError("motherPedigreeNumber")}>
                             <Input type="text" {...register(fieldName("motherPedigreeNumber"))} />
                         </FormField>
+
+                        <FormField label={t('catForm.chipNumber')} name={fieldName("motherChipNumber")} error={getError("motherChipNumber")}>
+                            <Input type="text" {...register(fieldName("motherChipNumber"))} />
+                        </FormField>
+
+                        <FormField label={t('catForm.birthDate')} name={fieldName("motherBirthDate")} error={getError("motherBirthDate")}>
+                            <Input type="date" {...register(fieldName("motherBirthDate"))} />
+                        </FormField>
                     </FormGrid>
                 );
-            case 'father': // Otec
+
+            case 'father':
                 return (
-                    <FormGrid>
+                    // PŘIDÁN KLÍČ key="father"
+                    <FormGrid key="father">
                         <FormField label={t('catForm.titleBefore')} name={fieldName("fatherTitleBefore")} error={getError("fatherTitleBefore")}>
-                            <Input type="text" {...register(fieldName("fatherTitleBefore"))} placeholder="GIC" />
+                            <Select {...register(fieldName("fatherTitleBefore"))}>
+                                <option value="">-- {t('common.noTitle')} --</option>
+                                <option value="champion">CH</option>
+                                <option value="inter-champion">IC</option>
+                                <option value="grand-inter-champion">GIC</option>
+                                <option value="supreme-champion">SC</option>
+                                <option value="national-winner">NV</option>
+                                <option value="world-winner">WW</option>
+                                <option value="junior-world-winner">JWW</option>
+                            </Select>
                         </FormField>
+
                         <FormField label={t('catForm.name')} name={fieldName("fatherName")} error={getError("fatherName")}>
                             <Input type="text" {...register(fieldName("fatherName"))} placeholder={t('catForm.fatherNamePlaceholder')} />
                         </FormField>
+
                         <FormField label={t('catForm.titleAfter')} name={fieldName("fatherTitleAfter")} error={getError("fatherTitleAfter")}>
-                            <Input type="text" {...register(fieldName("fatherTitleAfter"))} />
+                            <Select {...register(fieldName("fatherTitleAfter"))}>
+                                <option value="">-- {t('common.noTitle')} --</option>
+                                <option value="junior-winner">JW</option>
+                                <option value="distinguished-show-merit">DSM</option>
+                                <option value="distinguished-variety-merit">DVM</option>
+                                <option value="distinguished-merit">DM</option>
+                            </Select>
                         </FormField>
-                        <FormField label={t('catForm.breed')} name={fieldName("fatherBreed")} error={getError("fatherBreed")}>
-                            <Input type="text" {...register(fieldName("fatherBreed"))} placeholder={t('catForm.breedPlaceholder')} />
-                        </FormField>
+
+                        <input type="hidden" {...register(fieldName("fatherEmsCode"))} />
                         <FormField label={t('catForm.emsCodeShort')} name={fieldName("fatherEmsCode")} error={getError("fatherEmsCode")}>
-                            <Input type="text" {...register(fieldName("fatherEmsCode"))} />
+                            <div className="flex gap-2">
+                                <Select
+                                    value={fatherEmsPrefix}
+                                    onChange={(e) => handleGenericEmsChange("fatherEmsCode", fatherEmsPrefix, fatherEmsSuffix, 'prefix', e.target.value)}
+                                    className="w-1/3"
+                                >
+                                    <option value="">-- Plemeno --</option>
+                                    {BREED_OPTIONS.map(opt => (
+                                        <option key={opt.value} value={opt.value}>
+                                            {opt.label}
+                                        </option>
+                                    ))}
+                                </Select>
+                                <Input
+                                    type="text"
+                                    value={fatherEmsSuffix}
+                                    onChange={(e) => handleGenericEmsChange("fatherEmsCode", fatherEmsPrefix, fatherEmsSuffix, 'suffix', e.target.value)}
+                                    className="w-2/3"
+                                    placeholder="n 03 24"
+                                />
+                            </div>
                         </FormField>
-                        <FormField label={t('catForm.color')} name={fieldName("fatherColor")} error={getError("fatherColor")}>
-                            <Input type="text" {...register(fieldName("fatherColor"))} />
-                        </FormField>
+
                         <FormField label={t('catForm.pedigreeNumber')} name={fieldName("fatherPedigreeNumber")} error={getError("fatherPedigreeNumber")}>
                             <Input type="text" {...register(fieldName("fatherPedigreeNumber"))} />
+                        </FormField>
+
+                        <FormField label={t('catForm.chipNumber')} name={fieldName("fatherChipNumber")} error={getError("fatherChipNumber")}>
+                            <Input type="text" {...register(fieldName("fatherChipNumber"))} />
+                        </FormField>
+
+                        <FormField label={t('catForm.birthDate')} name={fieldName("fatherBirthDate")} error={getError("fatherBirthDate")}>
+                            <Input type="date" {...register(fieldName("fatherBirthDate"))} />
                         </FormField>
                     </FormGrid>
                 );
@@ -262,7 +361,7 @@ export function CatForm({ catIndex, onRemove }: CatFormProps) {
     };
 
     return (
-        <div className="p-6 bg-white rounded-2xl shadow-lg border border-gray-200">
+        <div className="p-6 bg-white rounded-2xl shadow-lg border border-gray-200 animate-fade-in">
             <div className="flex flex-col items-stretch gap-6 mb-8 md:flex-row md:items-center md:justify-between">
                 <div className="flex flex-col flex-grow p-1 bg-gray-100 rounded-full md:flex-row">
                     <Button
@@ -274,8 +373,8 @@ export function CatForm({ catIndex, onRemove }: CatFormProps) {
                         {t('catForm.tabs.basic')}
                     </Button>
                     <Button
-                        variant={activeTab === 'pedigree' ? 'primary' : 'secondary'}
-                        onClick={() => setActiveTab('pedigree')}
+                        variant={activeTab === 'mother' ? 'primary' : 'secondary'}
+                        onClick={() => setActiveTab('mother')}
                         style={{ width: "33.3%", margin: "0 5px 0 5px" }}
                         className="hover:bg-primary-500 hover:text-black"
                     >

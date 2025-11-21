@@ -63,7 +63,17 @@
     "forgotPasswordTitle": "Obnovení hesla",
     "passwordRecovery": "Obnova hesla",
     "send": "Požádat o obnovení hesla",
-    "backToLogin": "Vrátit se k přihlášení"
+    "backToLogin": "Vrátit se k přihlášení",
+    "resetPasswordTitle": "Nastavení nového hesla",
+    "newPassword": "Nové heslo",
+    "confirmPassword": "Potvrzení hesla",
+    "changePassword": "Změnit heslo",
+    "passwordChangedSuccess": "Heslo bylo úspěšně změněno.",
+    "backToHome": "Zpět na úvod",
+    "redirecting": "Budete přesměrováni...",
+    "passwordsDoNotMatch": "Hesla se neshodují.",
+    "tokenMissing": "Chybí autorizační token.",
+    "invalidToken": "Neplatný nebo expirovaný odkaz."
   },
   "form": {
     "actions": {
@@ -168,7 +178,8 @@
     "step1_exhibition": {
       "title": "Výběr výstavy",
       "errors": {
-        "loadShows": "Chyba při načítání výstav:"
+        "loadShows": "Chyba při načítání výstav:",
+        "resetPasswordFailed": "Nepodařilo se obnovit heslo. Odkaz je pravděpodobně neplatný."
       },
       "show": {
         "label": "Výstava *",

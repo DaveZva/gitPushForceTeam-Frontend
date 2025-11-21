@@ -30,12 +30,10 @@ const createCatSchema = (t: TFunction) => z.object({
     neutered: z.enum(["yes", "no"], {
         message: t('validation.cat.neutered.required')
     }),
-
     birthDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, t('validation.cat.birthDate.invalid')),
     showClass: z.string().min(1, t('validation.cat.showClass.required')),
     pedigreeNumber: z.string().optional(),
     cageType: z.string().min(1, t('validation.cat.cageType.required')),
-
     emsCode: z.string().superRefine((val, ctx) => {
         const result = validateEmsCode(val);
         if (result !== true) {
@@ -50,19 +48,41 @@ const createCatSchema = (t: TFunction) => z.object({
     motherTitleBefore: z.string().optional(),
     motherName: z.string().optional(),
     motherTitleAfter: z.string().optional(),
-    motherBreed: z.string().optional(),
-    motherEmsCode: z.string().optional(),
-    motherColor: z.string().optional(),
+    motherBirthDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, t('validation.cat.birthDate.invalid')).optional(),
+    motherEmsCode: z.string().superRefine((val, ctx) => {
+        const result = validateEmsCode(val);
+        if (result !== true) {
+            ctx.addIssue({
+                code: z.ZodIssueCode.custom,
+                message: t(result, { defaultValue: result }),
+            });
+        }
+    }),
     motherPedigreeNumber: z.string().optional(),
+    motherChipNumber: z.string().optional(),
+    motherGender: z.enum(['male', 'female'], {
+        message: t('validation.cat.gender.required')
+    }),
 
     // Otec
     fatherTitleBefore: z.string().optional(),
     fatherName: z.string().optional(),
     fatherTitleAfter: z.string().optional(),
-    fatherBreed: z.string().optional(),
-    fatherEmsCode: z.string().optional(),
-    fatherColor: z.string().optional(),
+    fatherBirthDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, t('validation.cat.birthDate.invalid')).optional(),
+    fatherEmsCode: z.string().superRefine((val, ctx) => {
+        const result = validateEmsCode(val);
+        if (result !== true) {
+            ctx.addIssue({
+                code: z.ZodIssueCode.custom,
+                message: t(result, { defaultValue: result }),
+            });
+        }
+    }),
     fatherPedigreeNumber: z.string().optional(),
+    fatherChipNumber: z.string().optional(),
+    fatherGender: z.enum(['male', 'female'], {
+        message: t('validation.cat.gender.required')
+    })
 });
 
 export const createRegistrationSchema = (t: TFunction) => {

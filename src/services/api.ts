@@ -95,4 +95,13 @@ export const forgotPassword = async (email: string): Promise<void> => {
     }
 };
 
+export const resetPasswordConfirm = async (token: string, newPassword: string): Promise<void> => {
+    try {
+        await api.post('/auth/reset-password', { token, newPassword });
+    } catch (error) {
+        handleAuthError(error);
+        throw new Error('errors.resetPasswordFailed');
+    }
+};
+
 export default api;

@@ -58,7 +58,17 @@
     "loginIn": "Log In",
     "registerIn": "Register",
     "dontHaveAccount": "Don't have an account? ",
-    "haveAccount": "Already have an account? "
+    "haveAccount": "Already have an account? ",
+    "resetPasswordTitle": "Set New Password",
+    "newPassword": "New Password",
+    "confirmPassword": "Confirm Password",
+    "changePassword": "Change Password",
+    "passwordChangedSuccess": "Password changed successfully.",
+    "backToHome": "Back to Home",
+    "redirecting": "Redirecting...",
+    "passwordsDoNotMatch": "Passwords do not match.",
+    "tokenMissing": "Authorization token is missing.",
+    "invalidToken": "Invalid or expired link."
   },
   "form": {
     "actions": {
@@ -163,7 +173,8 @@
     "step1_exhibition": {
       "title": "Select Exhibition",
       "errors": {
-        "loadShows": "Error loading exhibitions:"
+        "loadShows": "Error loading exhibitions:",
+        "resetPasswordFailed": "Failed to reset password. Link might be invalid."
       },
       "show": {
         "label": "Exhibition *",

@@ -34,19 +34,23 @@ export const defaultCatValues: CatFormData = {
     showClass: "",
     pedigreeNumber: "",
     cageType: "",
+
     motherTitleBefore: "",
     motherName: "",
     motherTitleAfter: "",
-    motherBreed: "",
+    motherChipNumber: "",
+    motherGender: "female",
     motherEmsCode: "",
-    motherColor: "",
+    motherBirthDate: "",
     motherPedigreeNumber: "",
+
     fatherTitleBefore: "",
     fatherName: "",
     fatherTitleAfter: "",
-    fatherBreed: "",
+    fatherChipNumber: "",
+    fatherGender: "male",
     fatherEmsCode: "",
-    fatherColor: "",
+    fatherBirthDate: "",
     fatherPedigreeNumber: "",
 };
 

@@ -15,6 +15,23 @@ export const BREED_NAMES: Record<string, string> = {
     "XLH": "Neregistrovaná dlouhosrstá", "XSH": "Neregistrovaná krátkosrstá"
 };
 
+//Priprava na moznost skupin u nekterych plemen!
+export const EMS_GROUPS = [
+    { value: '1', label: 'Skupina 1' },
+    { value: '2', label: 'Skupina 2' },
+    { value: '3', label: 'Skupina 3' },
+    { value: '4', label: 'Skupina 4' },
+    { value: '5', label: 'Skupina 5' },
+    { value: '6', label: 'Skupina 6' },
+    { value: '7', label: 'Skupina 7' },
+    { value: '8', label: 'Skupina 8' },
+    { value: '9', label: 'Skupina 9' },
+    { value: '10', label: 'Skupina 10' },
+    { value: '11', label: 'Skupina 11' },
+    { value: '12', label: 'Skupina 12' },
+    { value: '13', label: 'Skupina 13' },
+];
+
 interface BreedOption {
     value: string;
     label: string;
@@ -698,3 +715,9 @@ export function validateEmsCode(fullEmsCode: string | null | undefined): true | 
 
     return masterValidator(suffix, breedRules);
 }
+
+// Priprava pro vyber skupin u plemen..
+export const requiresGroup = (breed: string): boolean => {
+    const breedsWithGroups = ['MCO', 'NFO', 'SIB', 'RAG', 'TUA']; // Příklad plemen s grupami (FIFe)
+    return breedsWithGroups.includes(breed.toUpperCase());
+};
