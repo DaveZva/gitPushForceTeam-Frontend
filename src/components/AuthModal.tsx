@@ -9,12 +9,12 @@ interface AuthModalProps {
 type AuthView = 'login' | 'register' | 'forgot';
 
 export function AuthModal({ onClose }: AuthModalProps) {
-    const { t } = useTranslation();
+    const {t} = useTranslation();
 
     const [view, setView] = useState<AuthView>('login');
 
     const auth = useAuth();
-    const { login, register } = auth;
+    const {login, register} = auth;
     const resetPassword = (auth as any).resetPassword;
 
     const [email, setEmail] = useState<string>('');
@@ -67,148 +67,185 @@ export function AuthModal({ onClose }: AuthModalProps) {
             onClick={onClose}
         >
             <div
-                className="bg-white w-full max-w-[340px] rounded-xl overflow-hidden shadow-2xl border-2 border-blue-600"
+                className="bg-white w-full max-w-[360px] rounded-2xl overflow-hidden shadow-xl"
                 onClick={(e) => e.stopPropagation()}
             >
-                <div className="flex w-full h-11">
-                    {view === 'forgot' ? (
-                        <div className="w-full bg-blue-600 text-white flex items-center justify-center text-xs font-bold uppercase tracking-wider">
-                            {t('auth.passwordRecovery') || 'Obnovení hesla'}
-                        </div>
-                    ) : (
-                        <>
-                            <button
-                                type="button"
-                                onClick={() => switchView('login')}
-                                className={`flex-1 text-xs font-bold uppercase tracking-wider transition-colors duration-200
-                                    ${view === 'login'
-                                    ? 'bg-blue-600 text-white'
-                                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
-                            >
-                                {t('auth.login')}
-                            </button>
-                            <button
-                                type="button"
-                                onClick={() => switchView('register')}
-                                className={`flex-1 text-xs font-bold uppercase tracking-wider transition-colors duration-200
-                                    ${view === 'register'
-                                    ? 'bg-blue-600 text-white'
-                                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
-                            >
-                                {t('auth.registration')}
-                            </button>
-                        </>
-                    )}
-                </div>
 
-                <div className="p-5">
-                    <h2 className="text-lg font-extrabold text-gray-900 mb-4 text-center leading-tight">
-                        {view === 'login' && t('auth.login')}
-                        {view === 'register' && t('auth.registration')}
-                        {view === 'forgot' && (t('auth.forgotPasswordTitle') || 'Zadejte váš email')}
+                {/* CATSHOW – jen login + registrace */}
+                {view !== 'forgot' && (
+                    <div className="pt-5 pb-3 text-center">
+                        <h1 className="text-xl font-extrabold text-[#000000]">
+                            CATSHOW
+                        </h1>
+                    </div>
+                )}
+
+                {/* TABS – posunuty pod CATSHOW */}
+                {view !== 'forgot' && (
+                    <div className="flex w-full justify-center gap-2 pb-2">
+
+                        {/* LOGIN TAB */}
+                        <button
+                            onClick={() => switchView('login')}
+                            className={
+                                view === 'login'
+                                    ? "rounded-[25px] border-2 border-transparent px-14 py-2 text-sm font-bold tracking-[-0.5px] leading-[18px] bg-[#027BFF] text-white transition-all duration-200 ease-in-out hover:bg-white hover:text-[#027BFF] hover:border-[#027BFF]"
+                                    : "rounded-[25px] border-2 border-[#027BFF] px-4 py-2 text-sm font-bold tracking-[-0.5px] leading-[18px] text-[#027BFF] bg-white transition-all duration-200 ease-in-out hover:bg-[#027BFF] hover:text-white"
+                            }
+                        >
+                            Přihlášení
+                        </button>
+
+                        {/* REGISTER TAB */}
+                        <button
+                            onClick={() => switchView('register')}
+                            className={
+                                view === 'register'
+                                    ? "rounded-[25px] border-2 border-transparent px-14 py-2 text-sm font-bold tracking-[-0.5px] leading-[18px] bg-[#027BFF] text-white transition-all duration-200 ease-in-out hover:bg-white hover:text-[#027BFF] hover:border-[#027BFF]"
+                                    : "rounded-[25px] border-2 border-[#027BFF] px-4 py-2 text-sm font-bold tracking-[-0.5px] leading-[18px] text-[#027BFF] bg-white transition-all duration-200 ease-in-out hover:bg-[#027BFF] hover:text-white"
+                            }
+                        >
+                            Registrace
+                        </button>
+
+                    </div>
+                )}
+
+                {/* FORGOT HEADER */}
+                {view === 'forgot' && (
+                    <div className="flex items-center px-4 py-3">
+                        <button
+                            onClick={() => switchView('login')}
+                            className="rounded-[25px] border-2 border-transparent px-4 py-2 text-sm font-bold tracking-[-0.5px] leading-[18px]
+                        bg-[#027BFF] text-white flex items-center gap-2 transition-all duration-200 ease-in-out
+                        hover:bg-white hover:text-[#027BFF] hover:border-[#027BFF]"
+                        >
+                            ← Zpět
+                        </button>
+                    </div>
+                )}
+
+                {/* FORM CONTENT */}
+                <div className={`px-6 ${view === 'forgot' ? 'pt-2 pb-6' : 'py-6'} text-left`}>
+                    <h2 className="text-xl font-extrabold tracking-[-1px] text-gray-900 mb-6">
+                        {view === 'login' && 'Přihlášení uživatele'}
+                        {view === 'register' && 'Vytvoření nového účtu'}
+                        {view === 'forgot' && 'Zapomenuté heslo'}
                     </h2>
 
-                    <form onSubmit={handleSubmit} className="space-y-3">
+                    {view === 'forgot' && (
+                        <p className="text-sm text-gray-600 mb-4">
+                            Pro obnovu hesla zadejte e-mailovou adresu, na kterou Vám zašleme instrukce.
+                        </p>
+                    )}
 
+                    <form onSubmit={handleSubmit} className="space-y-4">
+
+                        {/* Jméno + příjmení */}
                         {view === 'register' && (
                             <>
-                                <div className="space-y-0.5">
-                                    <label className="text-xs font-bold text-gray-700 ml-1">{t('auth.firstName')}</label>
+                                <div>
+                                    <label className="text-sm font-semibold text-gray-800 block mb-1">Jméno</label>
                                     <input
-                                        className="w-full bg-gray-100 text-gray-800 rounded px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-blue-500"
+                                        className="w-full bg-gray-100 rounded-full px-4 py-2.5 text-sm focus:ring-2 focus:ring-[#027BFF] outline-none"
                                         type="text"
                                         value={firstName}
                                         onChange={(e) => setFirstName(e.target.value)}
-                                        required
                                     />
                                 </div>
-                                <div className="space-y-0.5">
-                                    <label className="text-xs font-bold text-gray-700 ml-1">{t('auth.lastName')}</label>
+
+                                <div>
+                                    <label className="text-sm font-semibold text-gray-800 block mb-1">Příjmení</label>
                                     <input
-                                        className="w-full bg-gray-100 text-gray-800 rounded px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-blue-500"
+                                        className="w-full bg-gray-100 rounded-full px-4 py-2.5 text-sm focus:ring-2 focus:ring-[#027BFF] outline-none"
                                         type="text"
                                         value={lastName}
                                         onChange={(e) => setLastName(e.target.value)}
-                                        required
                                     />
                                 </div>
                             </>
                         )}
 
-                        <div className="space-y-0.5">
-                            <label className="text-xs font-bold text-gray-700 ml-1">{t('auth.email')}</label>
+                        {/* Email */}
+                        <div>
+                            <label className="text-sm font-semibold text-gray-800 block mb-1">E-mail</label>
                             <input
-                                className="w-full bg-gray-100 text-gray-800 rounded px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-blue-500"
+                                className="w-full bg-gray-100 rounded-full px-4 py-2.5 text-sm focus:ring-2 focus:ring-[#027BFF] outline-none"
                                 type="email"
                                 value={email}
                                 placeholder="jan.novak@email.cz"
                                 onChange={(e) => setEmail(e.target.value)}
-                                required
                             />
                         </div>
 
+                        {/* Heslo */}
                         {view !== 'forgot' && (
-                            <div className="space-y-0.5">
-                                <label className="text-xs font-bold text-gray-700 ml-1">{t('auth.password')}</label>
+                            <div>
+                                <label className="text-sm font-semibold text-gray-800 block mb-1">Heslo</label>
                                 <input
-                                    className="w-full bg-gray-100 text-gray-800 rounded px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-blue-500"
+                                    className="w-full bg-gray-100 rounded-full px-4 py-2.5 text-sm focus:ring-2 focus:ring-[#027BFF] outline-none"
                                     type="password"
                                     value={password}
                                     placeholder="**********"
                                     onChange={(e) => setPassword(e.target.value)}
-                                    required
                                 />
                             </div>
                         )}
 
+                        {/* Forgot link */}
                         {view === 'login' && (
-                            <div className="text-right -mt-1">
-                                <button
-                                    type="button"
-                                    onClick={() => switchView('forgot')}
-                                    className="text-xs text-gray-400 hover:text-blue-600 hover:bg-transparent p-0 font-medium transition-colors duration-200 bg-transparent border-none cursor-pointer"
-                                >
-                                    {t('auth.forgotPassword')}
-                                </button>
+                            <div className="text-right">
+                            <span
+                                onClick={() => switchView('forgot')}
+                                className="text-sm text-[#027BFF] font-semibold hover:underline cursor-pointer"
+                            >
+                                Zapomněli jste heslo?
+                            </span>
                             </div>
                         )}
 
-                        {error && <p className="text-red-500 text-xs font-medium text-center bg-red-50 p-1 rounded">{error}</p>}
-                        {successMessage && <p className="text-green-600 text-xs font-medium text-center bg-green-50 p-1 rounded">{successMessage}</p>}
+                        {/* Error / Success */}
+                        {error && <p className="text-red-600 text-sm text-center">{error}</p>}
+                        {successMessage && <p className="text-green-600 text-sm text-center">{successMessage}</p>}
 
+                        {/* Submit button */}
                         <button
                             type="submit"
-                            className="w-full bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold py-2.5 rounded-full shadow-sm mt-1"
+                            className="w-full rounded-[25px] border-2 border-transparent px-5 py-3 text-base font-bold tracking-[-1px] leading-[20px] bg-[#027BFF] text-white flex justify-center items-center transition-all duration-200 ease-in-out
+                        hover:bg-white hover:text-[#027BFF] hover:border-[#027BFF]"
                         >
-                            {view === 'login' && t('auth.loginIn')}
-                            {view === 'register' && t('auth.registerIn')}
-                            {view === 'forgot' && (t('auth.send') || 'Odeslat')}
+                            {view === 'login' && 'Přihlásit se'}
+                            {view === 'register' && 'Registrovat se'}
+                            {view === 'forgot' && 'Obnovit heslo'}
                         </button>
                     </form>
 
-                    <div className="mt-4 text-center text-gray-500 text-xs">
-                        {view === 'forgot' ? (
-                            <button
-                                onClick={() => switchView('login')}
-                                className="text-xs text-gray-400 hover:text-blue-600 hover:bg-transparent p-0 font-bold transition-colors duration-200 bg-transparent border-none cursor-pointer"
-                            >
-                                {t('auth.backToLogin') || 'Zpět na přihlášení'}
-                            </button>
-                        ) : (
-                            <>
-                                <span>
-                                    {view === 'login' ? t('auth.dontHaveAccount') : t('auth.haveAccount')}
+                    {/* Bottom text */}
+                    {view !== 'forgot' && (
+                        <div className="mt-6 text-center text-sm text-gray-700">
+                            {view === 'login' ? (
+                                <>
+                                    Nemáte účet?{' '}
+                                    <span
+                                        onClick={() => switchView('register')}
+                                        className="text-[#027BFF] font-semibold hover:underline cursor-pointer"
+                                    >
+                                    Registrace
                                 </span>
-                                {' '}
-                                <button
-                                    onClick={() => switchView(view === 'login' ? 'register' : 'login')}
-                                    className="text-xs text-gray-400 hover:text-blue-600 hover:bg-transparent p-0 font-bold transition-colors duration-200 ml-1 bg-transparent border-none cursor-pointer"
-                                >
-                                    {view === 'login' ? t('auth.registerIn') : t('auth.login')}
-                                </button>
-                            </>
-                        )}
-                    </div>
+                                </>
+                            ) : (
+                                <>
+                                    Máte účet?{' '}
+                                    <span
+                                        onClick={() => switchView('login')}
+                                        className="text-[#027BFF] font-semibold hover:underline cursor-pointer"
+                                    >
+                                    Přihlášení
+                                </span>
+                                </>
+                            )}
+                        </div>
+                    )}
                 </div>
             </div>
         </div>

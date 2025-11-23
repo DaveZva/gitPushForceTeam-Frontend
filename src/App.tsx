@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { AuthProvider } from './context/AuthContext';
-import './App.css';
+import './styles/App.css';
 
 import { AppLayout } from './layouts/AppLayout';
 import Dashboard from './pages/Dashboard';
