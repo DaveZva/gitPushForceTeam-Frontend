@@ -1,7 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { useForm, SubmitHandler } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { resetPasswordConfirm } from '../../services/api';
+import { createResetPasswordSchema, ResetPasswordFormData } from '../../schemas/authSchema';
 
 export default function ResetPasswordPage() {
     const [searchParams] = useSearchParams();
@@ -9,40 +12,35 @@ export default function ResetPasswordPage() {
     const { t } = useTranslation();
 
     const token = searchParams.get('token');
+    const [status, setStatus] = useState<'idle' | 'success' | 'error'>('idle');
+    const [apiError, setApiError] = useState<string>('');
+    const validationSchema = useMemo(() => createResetPasswordSchema(t), [t]);
 
-    const [password, setPassword] = useState('');
-    const [confirmPassword, setConfirmPassword] = useState('');
+    const {
+        register,
+        handleSubmit,
+        formState: { errors, isSubmitting }
+    } = useForm<ResetPasswordFormData>({
+        resolver: zodResolver(validationSchema),
+        mode: 'onTouched'
+    });
 
-    const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
-    const [errorMessage, setErrorMessage] = useState('');
-
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-        setErrorMessage('');
-
-        if (password !== confirmPassword) {
-            setErrorMessage(t('auth.passwordsDoNotMatch'));
-            return;
-        }
-
+    const onSubmit: SubmitHandler<ResetPasswordFormData> = async (data) => {
+        setApiError('');
         if (!token) {
-            setErrorMessage(t('auth.tokenMissing'));
+            setApiError(t('auth.tokenMissing'));
             return;
         }
-
-        setStatus('loading');
 
         try {
-            await resetPasswordConfirm(token, password);
+            await resetPasswordConfirm(token, data.password);
             setStatus('success');
-            // Po 3 sekundách přesměrujeme na hlavní stránku, kde se uživatel může přihlásit
             setTimeout(() => {
                 navigate('/');
             }, 3000);
         } catch (err: any) {
             setStatus('error');
-            // Pokud API vrátí chybu, zkusíme ji přeložit, jinak obecná hláška
-            setErrorMessage(t(err.message) || t('auth.invalidToken'));
+            setApiError(t(err.message) || t('auth.invalidToken'));
         }
     };
 
@@ -61,13 +59,10 @@ export default function ResetPasswordPage() {
             </div>
         );
     }
-
     return (
         <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4 backdrop-blur-sm">
-            {/* Stejný styl karty jako AuthModal */}
             <div className="bg-white w-full max-w-[340px] rounded-xl overflow-hidden shadow-2xl border-2 border-blue-600">
 
-                {/* Hlavička - modrý pruh */}
                 <div className="w-full h-11 bg-blue-600 text-white flex items-center justify-center text-xs font-bold uppercase tracking-wider">
                     {t('auth.resetPasswordTitle')}
                 </div>
@@ -84,52 +79,53 @@ export default function ResetPasswordPage() {
                             <p className="text-sm text-gray-500">{t('auth.redirecting')}</p>
                         </div>
                     ) : (
-                        <form onSubmit={handleSubmit} className="space-y-3">
-
-                            {/* Input Nové heslo */}
+                        <form onSubmit={handleSubmit(onSubmit)} className="space-y-3">
                             <div className="space-y-0.5">
-                                <label className="text-xs font-bold text-gray-700 ml-1">
+                                <label htmlFor="password" className="text-xs font-bold text-gray-700 ml-1">
                                     {t('auth.newPassword')}
                                 </label>
                                 <input
-                                    className="w-full bg-gray-100 text-gray-800 rounded px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-blue-500"
+                                    id="password"
+                                    className={`w-full bg-gray-100 text-gray-800 rounded px-3 py-2 text-sm focus:outline-none focus:ring-1 ${errors.password ? 'ring-1 ring-red-500' : 'focus:ring-blue-500'}`}
                                     type="password"
-                                    value={password}
                                     placeholder="**********"
-                                    onChange={(e) => setPassword(e.target.value)}
-                                    required
-                                    disabled={status === 'loading'}
+                                    disabled={isSubmitting}
+                                    {...register('password')}
                                 />
+                                {errors.password && (
+                                    <p className="text-red-500 text-xs ml-1">{errors.password.message}</p>
+                                )}
                             </div>
-
                             <div className="space-y-0.5">
-                                <label className="text-xs font-bold text-gray-700 ml-1">
+                                <label htmlFor="confirmPassword" className="text-xs font-bold text-gray-700 ml-1">
                                     {t('auth.confirmPassword')}
                                 </label>
                                 <input
-                                    className="w-full bg-gray-100 text-gray-800 rounded px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-blue-500"
+                                    id="confirmPassword"
+                                    className={`w-full bg-gray-100 text-gray-800 rounded px-3 py-2 text-sm focus:outline-none focus:ring-1 ${errors.confirmPassword ? 'ring-1 ring-red-500' : 'focus:ring-blue-500'}`}
                                     type="password"
-                                    value={confirmPassword}
                                     placeholder="**********"
-                                    onChange={(e) => setConfirmPassword(e.target.value)}
-                                    required
-                                    disabled={status === 'loading'}
+                                    disabled={isSubmitting}
+                                    {...register('confirmPassword')}
                                 />
+                                {errors.confirmPassword && (
+                                    <p className="text-red-500 text-xs ml-1">{errors.confirmPassword.message}</p>
+                                )}
                             </div>
 
-                            {errorMessage && (
+                            {apiError && (
                                 <div className="text-red-500 text-xs font-medium text-center bg-red-50 p-2 rounded mt-2">
-                                    {errorMessage}
+                                    {apiError}
                                 </div>
                             )}
 
                             <button
                                 type="submit"
-                                disabled={status === 'loading'}
+                                disabled={isSubmitting}
                                 className={`w-full mt-4 text-white text-sm font-bold py-2.5 rounded-full shadow-sm transition-colors duration-200
-                                    ${status === 'loading' ? 'bg-blue-400 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700'}`}
+                                    ${isSubmitting ? 'bg-blue-400 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700'}`}
                             >
-                                {status === 'loading' ? '...' : t('auth.changePassword')}
+                                {isSubmitting ? '...' : t('auth.changePassword')}
                             </button>
                         </form>
                     )}

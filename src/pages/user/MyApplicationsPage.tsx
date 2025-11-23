@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../../context/AuthContext';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
 import api from '../../services/api';
 import PdfBadgeIcon from '../../components/ui/PDFIcon';
 
@@ -24,6 +25,7 @@ const LoadingSpinner: React.FC = () => (
 export default function MyApplicationsPage() {
     const { t } = useTranslation();
     const { isAuthenticated } = useAuth();
+    const navigate = useNavigate(); // Initialize navigate hook
     const [applications, setApplications] = useState<MyApplication[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
@@ -74,6 +76,10 @@ export default function MyApplicationsPage() {
         } finally {
             setDownloadingId(null);
         }
+    };
+
+    const handlePay = (registrationId: number) => {
+        navigate(`/payment/${registrationId}`);
     };
 
     useEffect(() => {
@@ -147,7 +153,7 @@ export default function MyApplicationsPage() {
                         {t(`regStatuses.${app.status}`, app.status)}
                     </span>
                 </td>
-                <td className="py-4 px-3 text-center">
+                <td className="py-4 px-3 text-center flex items-center justify-center gap-2">
                     <button
                         onClick={() => handleDownloadPdf(app.registrationNumber)}
                         disabled={downloadingId === app.registrationNumber}
@@ -160,6 +166,16 @@ export default function MyApplicationsPage() {
                             <PdfBadgeIcon className="h-5 w-5" />
                         )}
                     </button>
+
+                    {app.status === 'PLANNED' && (
+                        <button
+                            onClick={() => handlePay(app.id)}
+                            className="px-3 py-1 text-xs font-bold text-white bg-green-600 hover:bg-green-700 rounded-full transition-colors"
+                            title={t('actions.pay', 'Zaplatit')}
+                        >
+                            {t('actions.pay', 'Zaplatit')}
+                        </button>
+                    )}
                 </td>
             </tr>
         ));

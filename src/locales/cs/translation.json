@@ -73,7 +73,8 @@
     "redirecting": "Budete přesměrováni...",
     "passwordsDoNotMatch": "Hesla se neshodují.",
     "tokenMissing": "Chybí autorizační token.",
-    "invalidToken": "Neplatný nebo expirovaný odkaz."
+    "invalidToken": "Neplatný nebo expirovaný odkaz.",
+    "resetEmailSent": "E-mail byl odeslán"
   },
   "form": {
     "actions": {
