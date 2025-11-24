@@ -38,20 +38,20 @@ export const defaultCatValues: CatFormData = {
     motherTitleBefore: "",
     motherName: "",
     motherTitleAfter: "",
+    motherEmsCode: "",
+    motherPedigreeNumber: "",
     motherChipNumber: "",
     motherGender: "female",
-    motherEmsCode: "",
     motherBirthDate: "",
-    motherPedigreeNumber: "",
 
     fatherTitleBefore: "",
     fatherName: "",
     fatherTitleAfter: "",
+    fatherEmsCode: "",
+    fatherPedigreeNumber: "",
     fatherChipNumber: "",
     fatherGender: "male",
-    fatherEmsCode: "",
     fatherBirthDate: "",
-    fatherPedigreeNumber: "",
 };
 
 const fieldsByStep: (keyof RegistrationFormData)[][] = [

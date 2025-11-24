@@ -59,7 +59,6 @@ export function CatForm({ catIndex, onRemove }: CatFormProps) {
         return fieldErrors?.[name];
     };
 
-    // --- LOGIKA PRO EMS KÓDY ---
     const emsCodeValue = watch(fieldName("emsCode")) || "";
     const motherEmsCodeValue = watch(fieldName("motherEmsCode")) || "";
     const fatherEmsCodeValue = watch(fieldName("fatherEmsCode")) || "";
@@ -218,7 +217,6 @@ export function CatForm({ catIndex, onRemove }: CatFormProps) {
 
             case 'mother':
                 return (
-                    // PŘIDÁN KLÍČ key="mother"
                     <FormGrid key="mother">
                         <FormField label={t('catForm.titleBefore')} name={fieldName("motherTitleBefore")} error={getError("motherTitleBefore")}>
                             <Select {...register(fieldName("motherTitleBefore"))}>
@@ -288,7 +286,6 @@ export function CatForm({ catIndex, onRemove }: CatFormProps) {
 
             case 'father':
                 return (
-                    // PŘIDÁN KLÍČ key="father"
                     <FormGrid key="father">
                         <FormField label={t('catForm.titleBefore')} name={fieldName("fatherTitleBefore")} error={getError("fatherTitleBefore")}>
                             <Select {...register(fieldName("fatherTitleBefore"))}>
