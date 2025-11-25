@@ -1,1 +1,1 @@
-export { CatRegistrationForm as default } from './CatRegistrationForm';
+export { default as CatRegistrationForm } from './CatRegistrationForm';

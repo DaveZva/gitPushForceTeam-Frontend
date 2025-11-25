@@ -184,7 +184,7 @@ export default function MyApplicationsPage() {
     return (
         <div className="container max-w-7xl mx-auto p-4 sm:p-8">
             <header className="mb-8">
-                <h1 className="text-3xl font-bold text-gray-900">
+                <h1 className="text-3xl font-bold text-gray-900 tracking-[-2px]">
                     {t('nav.myApplications', 'Moje přihlášky')}
                 </h1>
             </header>
