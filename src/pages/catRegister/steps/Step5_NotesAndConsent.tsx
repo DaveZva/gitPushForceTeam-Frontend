@@ -13,7 +13,6 @@ export function Step5_NotesAndConsent() {
             <h2 className="text-2xl font-bold text-gray-800">{t('registrationSteps.step5_consent.title')}</h2>
 
             <div className="flex flex-col gap-2">
-
                 <label htmlFor="notes" className="text-sm font-semibold text-gray-700">
                     {t('registrationSteps.step5_consent.notes.label')}
                 </label>
@@ -29,6 +28,8 @@ export function Step5_NotesAndConsent() {
                 {errors.notes && <p className="mt-1 text-sm text-red-600">{errors.notes.message}</p>}
             </div>
 
+            {/* ZMĚNA ZDE: Odstraněno 'flex flex-col items-center max-w-2xl mx-auto' */}
+            {/* Vráceno zpět na jednoduchý div, který respektuje zarovnání doleva */}
             <div className="space-y-4">
                 <Checkbox
                     id="dataAccuracy"
@@ -36,6 +37,7 @@ export function Step5_NotesAndConsent() {
                     description={t('registrationSteps.step5_consent.dataAccuracy.description')}
                     registration={register("dataAccuracy")}
                     error={errors.dataAccuracy}
+                    variant="simple"
                 />
 
                 <Checkbox
@@ -44,6 +46,7 @@ export function Step5_NotesAndConsent() {
                     description={t('registrationSteps.step5_consent.gdprConsent.description')}
                     registration={register("gdprConsent")}
                     error={errors.gdprConsent}
+                    variant="simple"
                 />
             </div>
 
