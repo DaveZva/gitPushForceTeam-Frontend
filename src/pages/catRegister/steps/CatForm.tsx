@@ -363,31 +363,34 @@ export function CatForm({ catIndex, onRemove }: CatFormProps) {
     return (
         <div className="p-6 bg-white rounded-2xl shadow-lg border border-gray-200 animate-fade-in">
             <div className="flex flex-col items-stretch gap-6 mb-8 md:flex-row md:items-center md:justify-between">
-                <div className="flex flex-col flex-grow p-1 bg-gray-100 rounded-full md:flex-row">
+
+                <div className="flex flex-col flex-grow p-1 rounded-full md:flex-row
+                        gap-2 sm:gap-3 md:gap-4">
+
                     <Button
                         variant={activeTab === 'basic' ? 'primary' : 'secondary'}
                         onClick={() => setActiveTab('basic')}
-                        style={{ width: "33.3%", margin: "0 5px 0 5px" }}
-                        className="hover:bg-primary-500 hover:text-black"
+                        className="flex-1 min-w-[60px] text-sm sm:text-base hover:bg-primary-500 hover:text-blue"
                     >
                         {t('catForm.tabs.basic')}
                     </Button>
+
                     <Button
                         variant={activeTab === 'mother' ? 'primary' : 'secondary'}
                         onClick={() => setActiveTab('mother')}
-                        style={{ width: "33.3%", margin: "0 5px 0 5px" }}
-                        className="hover:bg-primary-500 hover:text-black"
+                        className="flex-1 min-w-[60px] text-sm sm:text-base hover:bg-primary-500 hover:text-blue"
                     >
                         {t('catForm.tabs.mother')}
                     </Button>
+
                     <Button
                         variant={activeTab === 'father' ? 'primary' : 'secondary'}
                         onClick={() => setActiveTab('father')}
-                        style={{ width: "33.3%", margin: "0 5px 0 5px" }}
-                        className="hover:bg-primary-500 hover:text-black"
+                        className="flex-1 min-w-[60px] text-sm sm:text-base hover:bg-primary-500 hover:text-blue"
                     >
                         {t('catForm.tabs.father')}
                     </Button>
+
                 </div>
 
                 {onRemove && (
@@ -398,6 +401,7 @@ export function CatForm({ catIndex, onRemove }: CatFormProps) {
                         {t('catForm.removeCat')}
                     </Button>
                 )}
+
             </div>
 
             <div className="pt-4">

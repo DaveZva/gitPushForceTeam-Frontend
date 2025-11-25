@@ -121,13 +121,10 @@ export default function ShowManagementPage() {
     return (
         <div className="container max-w-7xl mx-auto p-4 sm:p-8">
             <header className="flex justify-between items-center mb-8">
-                <h1 className="text-3xl font-bold text-gray-900">
+                <h1 className="text-3xl font-bold text-gray-900 tracking-[-2px]">
                     {t('admin.shows.title')}
                 </h1>
-                <Link
-                    to="/secretariat/new/show"
-                    className="px-6 py-3 rounded-full font-semibold transition-all duration-300 bg-blue-600 text-white hover:bg-blue-700 shadow-lg"
-                >
+                <Link to="/secretariat/new/show" className="px-6 py-3 rounded-full font-semibold transition-all duration-300 bg-[#027BFF] text-white border-2 border-[#027BFF] hover:bg-transparent hover:text-[#027BFF]">
                     {t('admin.shows.add')}
                 </Link>
             </header>

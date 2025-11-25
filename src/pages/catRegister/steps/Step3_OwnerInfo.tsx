@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { storageUtils } from '../../../utils/storage';
 import { RegistrationFormData } from '../../../schemas/registrationSchema';
 
-const inputClass = "w-full p-3 bg-gray-100 border-none rounded-lg focus:ring-2 focus:ring-blue-500";
+const inputClass = "w-full p-3 bg-gray-100 rounded-lg border-1 border-transparent focus:outline-none focus:ring-1 focus:ring-[#027BFF] focus:border-[#027BFF]";
 
 interface FormFieldProps {
     label: string;
@@ -27,7 +27,7 @@ interface SavedOwner {
 export function Step3_OwnerInfo() {
     const FormField: React.FC<FormFieldProps> = ({ label, name, error, children }) => (
         <div className="flex flex-col gap-2">
-            <label htmlFor={name} className="text-sm font-semibold text-gray-700">
+            <label htmlFor={name} className="text-sm font-semibold text-gray-700 text-left">
                 {label}
             </label>
             {children}
@@ -63,7 +63,7 @@ export function Step3_OwnerInfo() {
 
     return (
         <div className="space-y-6">
-            <h2 className="text-2xl font-bold text-gray-800">{t('registrationSteps.step3_owner.title')}</h2>
+            <h2 className="text-2xl font-bold text-gray-800 tracking-[-2px]">{t('registrationSteps.step3_owner.title')}</h2>
 
             {savedOwners.length > 0 && (
                 <div className="p-4 bg-blue-50 rounded-lg">
