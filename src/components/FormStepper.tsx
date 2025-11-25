@@ -26,7 +26,6 @@ export const FormStepper: React.FC<FormStepperProps> = ({
 
                     return (
                         <div key={step} className="relative flex flex-col items-center">
-                            {/* Čára */}
                             {step < totalSteps && (
                                 <div
                                     className={`absolute top-4 left-1/2 h-0.5 w-full transition-colors duration-300 ${
@@ -35,7 +34,6 @@ export const FormStepper: React.FC<FormStepperProps> = ({
                                 />
                             )}
 
-                            {/* Kroužek */}
                             <div
                                 className={`relative z-10 flex h-8 w-8 items-center justify-center rounded-full font-semibold transition-all duration-300 ${
                                     isCompleted || isCurrent
@@ -46,7 +44,6 @@ export const FormStepper: React.FC<FormStepperProps> = ({
                                 {step}
                             </div>
 
-                            {/* Popisek */}
                             <div
                                 className={`mt-2 text-center text-sm transition-colors duration-300 ${
                                     isCurrent

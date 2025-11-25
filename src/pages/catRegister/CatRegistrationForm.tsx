@@ -95,7 +95,8 @@ const SubmitSuccess: React.FC<SubmitSuccessProps> = ({ registrationNumber, onBac
 
         } catch (error) {
             console.error("Chyba při stahování PDF:", error);
-            alert(t('alert.pdfDownloadError', 'Chyba při stahování PDF.'));
+            // 1. Použití nového klíče
+            alert(t('alert.pdfDownloadError'));
         } finally {
             setIsDownloading(false);
         }
@@ -107,26 +108,27 @@ const SubmitSuccess: React.FC<SubmitSuccessProps> = ({ registrationNumber, onBac
                 {t('alert.submitSuccess', { number: registrationNumber })}
             </h2>
             <p className="text-lg text-gray-700 mb-2">
-                {t('submitSuccess.message', 'Vaše číslo přihlášky je:')}
+                {t('submitSuccess.message')}
             </p>
             <p className="text-3xl font-bold text-gray-900 mb-6">
                 {registrationNumber}
             </p>
             <p className="text-gray-600 mb-8">
-                {t('submitSuccess.info', 'Potvrzení a platební údaje byly odeslány na Váš email.')}
+                {t('submitSuccess.info')}
             </p>
             <div className="flex justify-center gap-4">
                 <Button variant="primary" onClick={onBackToStart}>
-                    {t('submitSuccess.backButton', 'Nová přihláška')}
+                    {t('submitSuccess.backButton')}
                 </Button>
                 <Button
                     variant="secondary"
                     onClick={handleDownloadPdf}
                     disabled={isDownloading}
                 >
+                    {/* 2. Použití nových klíčů pro PDF */}
                     {isDownloading
-                        ? t('submitSuccess.downloading', 'Stahuji...')
-                        : t('submitSuccess.downloadButton', 'Stáhnout PDF')}
+                        ? t('submitSuccess.downloading')
+                        : t('submitSuccess.downloadButton')}
                 </Button>
             </div>
         </div>
@@ -141,6 +143,7 @@ function CatRegistrationForm() {
 
     const [submitSuccessData, setSubmitSuccessData] = useState<{ number: string } | null>(null);
 
+    // 3. Aktualizované labely pro Stepper (Owner místo Breeder, Breeder se posunul)
     const stepLabels = [
         'stepper.exhibition',
         'stepper.cat',
@@ -150,6 +153,8 @@ function CatRegistrationForm() {
         'stepper.recap'
     ];
     const totalSteps = stepLabels.length;
+
+    // Poznámka: createRegistrationSchema(t) zajišťuje lokalizaci chybových hlášek validace
     const registrationSchema = useMemo(() => createRegistrationSchema(t), [i18n.language, t]);
 
     const methods = useForm<RegistrationFormData>({
@@ -169,6 +174,7 @@ function CatRegistrationForm() {
             clearTimeout(debounceTimer);
 
             debounceTimer = setTimeout(() => {
+                // Interní logování necháváme anglicky/česky, pro uživatele není vidět
                 console.log("Autosave: Ukládám formulář do localStorage...");
                 storageUtils.saveCurrentForm(value as RegistrationFormData);
             }, 500);
@@ -244,7 +250,8 @@ function CatRegistrationForm() {
     };
 
     const handleConfirmAndSubmit = () => {
-        if (window.confirm(t('confirm.submitForm', 'Opravdu si přejete finálně odeslat přihlášku? Zkontrolujte prosím všechny údaje.'))) {
+        // 4. Použití nového textu potvrzení
+        if (window.confirm(t('confirm.submitForm'))) {
             handleSubmit(onSubmit)();
         }
     };
@@ -342,13 +349,13 @@ function CatRegistrationForm() {
                                         onClick={handleConfirmAndSubmit}
                                         disabled={isSubmitting}
                                     >
-                                        {isSubmitting ? t('form.submitting', 'Odesílám...') : t('form.submit')}
+                                        {isSubmitting ? t('form.submitting') : t('form.submit')}
                                     </Button>
                                 )}
                             </div>
 
                             <div className="mt-8 text-center text-gray-500">
-                                💾 {t('form.autosaveInfo', 'Údaje se automaticky ukládají.')}
+                                💾 {t('form.autosaveInfo')}
                             </div>
                         </React.Fragment>
                     )}

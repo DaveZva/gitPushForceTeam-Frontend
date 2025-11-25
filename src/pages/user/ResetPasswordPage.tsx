@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useForm, SubmitHandler } from 'react-hook-form';
@@ -40,6 +40,7 @@ export default function ResetPasswordPage() {
             }, 3000);
         } catch (err: any) {
             setStatus('error');
+            // Zde předpokládáme, že err.message může být překladový klíč, nebo použijeme obecnou hlášku
             setApiError(t(err.message) || t('auth.invalidToken'));
         }
     };

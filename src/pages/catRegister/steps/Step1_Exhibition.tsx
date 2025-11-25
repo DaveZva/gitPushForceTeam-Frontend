@@ -5,7 +5,6 @@ import { RegistrationFormData } from '../../../schemas/registrationSchema';
 import { useTranslation } from 'react-i18next';
 import { Select } from '../../../components/ui/Select';
 import { Radio } from '../../../components/ui/Radio';
-import {secretariatApi} from "../../../services/api/secretariatApi";
 
 type ShowForDropdown = {
     id: string | number;
@@ -30,7 +29,9 @@ export function Step1_Exhibition() {
             {error && <p className="text-sm text-red-600">{error.message}</p>}
         </div>
     );
-    const { t } = useTranslation();
+
+    // 1. Získání i18n instance pro zjištění aktuálního jazyka
+    const { t, i18n } = useTranslation();
     const { register, formState: { errors } } = useFormContext<RegistrationFormData>();
 
     const [shows, setShows] = useState<ShowForDropdown[]>([]);
@@ -38,7 +39,8 @@ export function Step1_Exhibition() {
 
     const formatDate = (dateString: string | undefined): string => {
         if (!dateString) return '-';
-        return new Date(dateString).toLocaleDateString('cs-CZ', {
+        // 2. Použití i18n.language místo natvrdo zadaného 'cs-CZ'
+        return new Date(dateString).toLocaleDateString(i18n.language, {
             year: 'numeric', month: '2-digit', day: '2-digit',
         });
     };
@@ -68,7 +70,6 @@ export function Step1_Exhibition() {
                     <Select id="showId" {...register("showId")}>
                         <option value="">{t('registrationSteps.step1_exhibition.show.placeholder')}</option>
 
-                        {/* Toto už je v pořádku, protože 'show' má typ 'ShowForDropdown' */}
                         {shows.map(show => (
                             <option key={show.id} value={show.id}>
                                 {show.name} ({formatDate(show.startDate)})

@@ -18,10 +18,50 @@ const StatCard: React.FC<StatCardProps> = ({ value, labelKey }) => {
     );
 };
 
-function Dashboard() {
-    const { t } = useTranslation();
+// Definice typu pro mock data (pouze pro tento dashboard)
+interface HistoryItem {
+    id: number;
+    name: string;
+    date: string;
+    animals: string;
+    status: 'completed';
+}
 
+interface UpcomingItem {
+    name: string;
+    date: string; // Pro jednoduchost string, v reálu Date ISO string
+    location: string;
+    link: string;
+    actionKey: string;
+}
+
+function Dashboard() {
+    const { t, i18n } = useTranslation();
     const { user, isAuthenticated } = useAuth();
+
+    // Pomocná funkce pro formátování data
+    const formatDate = (dateString: string) => {
+        // Pokud je to rozsah (např. "14. - 15. 12."), necháme to tak,
+        // nebo bychom museli mít logiku pro parsování.
+        // Pro demo účely v tabulce historie (kde je jedno datum) použijeme formátovač:
+        if (dateString.includes('-')) return dateString;
+
+        const date = new Date(dateString);
+        // Pokud je datum neplatné (protože v mock datech máme třeba tečky), vrátíme původní string
+        if (isNaN(date.getTime())) return dateString;
+
+        return date.toLocaleDateString(i18n.language, {
+            year: 'numeric', month: '2-digit', day: '2-digit'
+        });
+    };
+
+    // Mock data pro historii (v reálné aplikaci by přišla z API)
+    // Data držíme v ISO formátu (RRRR-MM-DD) pro správné formátování
+    const historyData: HistoryItem[] = [
+        { id: 1, name: "MVK Olomouc", date: "2025-10-12", animals: "GIC Alf, CZ", status: 'completed' },
+        { id: 2, name: "MVK Brno", date: "2025-06-01", animals: "CH Bára, CZ", status: 'completed' },
+        { id: 3, name: "MVK Pardubice", date: "2025-02-15", animals: "Alf, Bára, Cecilka", status: 'completed' },
+    ];
 
     return (
         <>
@@ -42,7 +82,6 @@ function Dashboard() {
 
             <section className="dashboard-grid">
 
-                {/* Panel s historií */}
                 <article className="history-panel">
                     <div className="panel-header">
                         <h2>{t('dashboard.history.title')}</h2>
@@ -59,27 +98,23 @@ function Dashboard() {
                         </tr>
                         </thead>
                         <tbody>
-                        <tr>
-                            <td>MVK Olomouc</td>
-                            <td>12. 10. 2025</td>
-                            <td>GIC Alf, CZ</td>
-                            <td><span className="status">{t('status.completed')}</span></td>
-                            <td><Link to="/history/1">{t('actions.detail')}</Link> <a href="#">PDF</a></td>
-                        </tr>
-                        <tr>
-                            <td>MVK Brno</td>
-                            <td>1. 6. 2025</td>
-                            <td>CH Bára, CZ</td>
-                            <td><span className="status">{t('status.completed')}</span></td>
-                            <td><Link to="/history/2">{t('actions.detail')}</Link> <a href="#">PDF</a></td>
-                        </tr>
-                        <tr>
-                            <td>MVK Pardubice</td>
-                            <td>15. 2. 2025</td>
-                            <td>Alf, Bára, Cecilka</td>
-                            <td><span className="status">{t('status.completed')}</span></td>
-                            <td><Link to="/history/3">{t('actions.detail')}</Link> <a href="#">PDF</a></td>
-                        </tr>
+                        {historyData.map((item) => (
+                            <tr key={item.id}>
+                                <td>{item.name}</td>
+                                <td>{formatDate(item.date)}</td>
+                                <td>{item.animals}</td>
+                                <td>
+                                    <span className="status">
+                                        {t(`status.${item.status}`)}
+                                    </span>
+                                </td>
+                                <td>
+                                    <Link to={`/history/${item.id}`}>{t('actions.detail')}</Link>
+                                    {' '}
+                                    <a href="#">{t('common.pdf')}</a>
+                                </td>
+                            </tr>
+                        ))}
                         </tbody>
                     </table>
                     <footer className="panel-footer">
@@ -87,11 +122,10 @@ function Dashboard() {
                     </footer>
                 </article>
 
-                {/* Panel s nadcházejícími výstavami */}
                 <aside className="upcoming-panel">
                     <div className="panel-header" style={{ background: 'none', border: 'none', padding: '0 0 1rem 0' }}>
-                        <h2>{t('upcoming.title')}</h2>
-                        <p>{t('upcoming.subtitle')}</p>
+                        <h2>{t('dashboard.upcoming.title')}</h2>
+                        <p>{t('dashboard.upcoming.subtitle')}</p>
                     </div>
 
                     <div className="upcoming-card">

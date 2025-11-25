@@ -113,7 +113,7 @@ export function CatForm({ catIndex, onRemove }: CatFormProps) {
                         </FormField>
 
                         <FormField label={t('catForm.catName')} name={fieldName("catName")} error={getError("catName")}>
-                            <Input type="text" {...register(fieldName("catName"))} placeholder="Molly" />
+                            <Input type="text" {...register(fieldName("catName"))} placeholder={t('catForm.placeholders.catName')} />
                         </FormField>
 
                         <FormField label={t('catForm.titleAfter')} name={fieldName("titleAfter")} error={getError("titleAfter")}>
@@ -127,7 +127,7 @@ export function CatForm({ catIndex, onRemove }: CatFormProps) {
                         </FormField>
 
                         <FormField label={t('catForm.chipNumber')} name={fieldName("chipNumber")} error={getError("chipNumber")}>
-                            <Input type="text" {...register(fieldName("chipNumber"))} placeholder="15 místné číslo" />
+                            <Input type="text" {...register(fieldName("chipNumber"))} placeholder={t('catForm.placeholders.chipNumber')} />
                         </FormField>
 
                         <FormField label={t('catForm.gender')} name={fieldName("gender")} error={getError("gender")}>
@@ -154,7 +154,7 @@ export function CatForm({ catIndex, onRemove }: CatFormProps) {
                                     onChange={(e) => handleGenericEmsChange("emsCode", emsPrefix, emsSuffix, 'prefix', e.target.value)}
                                     className="w-1/3"
                                 >
-                                    <option value="">-- Plemeno --</option>
+                                    <option value="">-- {t('catForm.breed')} --</option>
                                     {BREED_OPTIONS.map(opt => (
                                         <option key={opt.value} value={opt.value}>
                                             {opt.label}
@@ -166,7 +166,7 @@ export function CatForm({ catIndex, onRemove }: CatFormProps) {
                                     value={emsSuffix}
                                     onChange={(e) => handleGenericEmsChange("emsCode", emsPrefix, emsSuffix, 'suffix', e.target.value)}
                                     className="w-2/3"
-                                    placeholder="n 03 24"
+                                    placeholder={t('catForm.placeholders.ems')}
                                 />
                             </div>
                         </FormField>
@@ -201,7 +201,7 @@ export function CatForm({ catIndex, onRemove }: CatFormProps) {
                         </FormField>
 
                         <FormField label={t('catForm.pedigreeNumber')} name={fieldName("pedigreeNumber")} error={getError("pedigreeNumber")}>
-                            <Input type="text" {...register(fieldName("pedigreeNumber"))} placeholder="CSZ FO 1234/18" />
+                            <Input type="text" {...register(fieldName("pedigreeNumber"))} placeholder={t('catForm.placeholders.pedigreeNumber')} />
                         </FormField>
 
                         <FormField label={t('catForm.cageType')} name={fieldName("cageType")} error={getError("cageType")}>
@@ -231,7 +231,7 @@ export function CatForm({ catIndex, onRemove }: CatFormProps) {
                             </Select>
                         </FormField>
 
-                        <FormField label={t('catForm.name')} name={fieldName("motherName")} error={getError("motherName")}>
+                        <FormField label={t('catForm.catName')} name={fieldName("motherName")} error={getError("motherName")}>
                             <Input type="text" {...register(fieldName("motherName"))} placeholder={t('catForm.motherNamePlaceholder')} />
                         </FormField>
 
@@ -253,7 +253,7 @@ export function CatForm({ catIndex, onRemove }: CatFormProps) {
                                     onChange={(e) => handleGenericEmsChange("motherEmsCode", motherEmsPrefix, motherEmsSuffix, 'prefix', e.target.value)}
                                     className="w-1/3"
                                 >
-                                    <option value="">-- Plemeno --</option>
+                                    <option value="">-- {t('catForm.breed')} --</option>
                                     {BREED_OPTIONS.map(opt => (
                                         <option key={opt.value} value={opt.value}>
                                             {opt.label}
@@ -265,7 +265,7 @@ export function CatForm({ catIndex, onRemove }: CatFormProps) {
                                     value={motherEmsSuffix}
                                     onChange={(e) => handleGenericEmsChange("motherEmsCode", motherEmsPrefix, motherEmsSuffix, 'suffix', e.target.value)}
                                     className="w-2/3"
-                                    placeholder="n 03 24"
+                                    placeholder={t('catForm.placeholders.ems')}
                                 />
                             </div>
                         </FormField>
@@ -300,7 +300,7 @@ export function CatForm({ catIndex, onRemove }: CatFormProps) {
                             </Select>
                         </FormField>
 
-                        <FormField label={t('catForm.name')} name={fieldName("fatherName")} error={getError("fatherName")}>
+                        <FormField label={t('catForm.catName')} name={fieldName("fatherName")} error={getError("fatherName")}>
                             <Input type="text" {...register(fieldName("fatherName"))} placeholder={t('catForm.fatherNamePlaceholder')} />
                         </FormField>
 
@@ -322,7 +322,7 @@ export function CatForm({ catIndex, onRemove }: CatFormProps) {
                                     onChange={(e) => handleGenericEmsChange("fatherEmsCode", fatherEmsPrefix, fatherEmsSuffix, 'prefix', e.target.value)}
                                     className="w-1/3"
                                 >
-                                    <option value="">-- Plemeno --</option>
+                                    <option value="">-- {t('catForm.breed')} --</option>
                                     {BREED_OPTIONS.map(opt => (
                                         <option key={opt.value} value={opt.value}>
                                             {opt.label}
@@ -334,7 +334,7 @@ export function CatForm({ catIndex, onRemove }: CatFormProps) {
                                     value={fatherEmsSuffix}
                                     onChange={(e) => handleGenericEmsChange("fatherEmsCode", fatherEmsPrefix, fatherEmsSuffix, 'suffix', e.target.value)}
                                     className="w-2/3"
-                                    placeholder="n 03 24"
+                                    placeholder={t('catForm.placeholders.ems')}
                                 />
                             </div>
                         </FormField>

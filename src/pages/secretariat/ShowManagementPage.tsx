@@ -5,7 +5,8 @@ import { secretariatApi, Show } from '../../services/api/secretariatApi';
 import { useAuth } from '../../context/AuthContext';
 
 export default function ShowManagementPage() {
-    const { t } = useTranslation();
+    // 1. Získání i18n pro formátování data
+    const { t, i18n } = useTranslation();
     const { isAuthenticated } = useAuth();
 
     const [shows, setShows] = useState<Show[]>([]);
@@ -14,7 +15,8 @@ export default function ShowManagementPage() {
 
     const formatDate = (dateString: string | undefined): string => {
         if (!dateString) return '-';
-        return new Date(dateString).toLocaleDateString('cs-CZ', {
+        // 2. Použití dynamického jazyka
+        return new Date(dateString).toLocaleDateString(i18n.language, {
             year: 'numeric', month: '2-digit', day: '2-digit',
         });
     };
@@ -36,6 +38,7 @@ export default function ShowManagementPage() {
     useEffect(() => {
         const fetchShows = async () => {
             if (!isAuthenticated) {
+                // Použití nového klíče
                 setError(t('errors.notAuthenticated'));
                 setLoading(false);
                 return;
@@ -51,7 +54,9 @@ export default function ShowManagementPage() {
                 setShows(sortedData);
             } catch (err: unknown) {
                 if (err instanceof Error) {
-                    setError(t(err.message) || t('errors.fetchFailed'));
+                    // Zde předpokládáme, že err.message může být klíč, nebo použijeme fallback
+                    // Pokud backend vrací anglické texty, možná budete chtít zobrazit jen ten fallback
+                    setError(t('errors.fetchFailed'));
                 } else {
                     setError(t('errors.fetchFailed'));
                 }
@@ -103,7 +108,7 @@ export default function ShowManagementPage() {
                 </td>
                 <td className="py-4 px-3">
                     <span className={getStatusClass(show.status)}>
-                        {t(`statuses.${show.status}`, show.status)}
+                        {t(`statuses.${show.status}`)}
                     </span>
                 </td>
                 <td className="py-4 px-3">

@@ -14,8 +14,8 @@
     "notifications": "Notifications"
   },
   "dashboard": {
-    "welcome": "Welcome back, {{name}}",
-    "subtitle": "Here's a quick overview of your activity.",
+    "welcome": "Welcome back, {{name}}!",
+    "subtitle": "Here is a quick overview of your activity.",
     "welcome_guest": "Welcome back",
     "stats": {
       "active": "Active Applications",
@@ -24,12 +24,60 @@
     },
     "history": {
       "title": "Your Application History",
-      "subtitle": "An overview of all exhibitions you have attended."
+      "subtitle": "Overview of all exhibitions you have attended."
     },
     "upcoming": {
       "title": "Upcoming Exhibitions",
       "subtitle": "New exhibitions you can apply for."
     }
+  },
+  "myApplications": {
+    "noApplications": "You have no applications yet.",
+    "downloadPdf": "Download PDF",
+    "col": {
+      "regNumber": "Registration Number",
+      "exhibition": "Exhibition",
+      "submittedAt": "Submitted At",
+      "cats": "Cat Count",
+      "status": "Status",
+      "actions": "Actions"
+    }
+  },
+  "payment": {
+    "title": "Payment",
+    "subtitle": "Complete your cat's show registration",
+    "initError": "Error initializing payment.",
+    "loading": "Loading payment gateway...",
+    "secureBadge": "⭐ Secure Payment",
+    "features": {
+      "secure": {
+        "title": "Secure Payment",
+        "desc": "Payment is protected by Stripe"
+      },
+      "instant": {
+        "title": "Instant Confirmation",
+        "desc": "You will receive confirmation via email"
+      },
+      "methods": {
+        "title": "Multiple Payment Methods",
+        "desc": "Card, Apple Pay, Google Pay"
+      }
+    },
+    "form": {
+      "title": "Payment Details",
+      "registrationRef": "Registration #"
+    },
+    "success": "Payment succeeded!",
+    "processingStatus": "Your payment is processing.",
+    "requiresPaymentMethod": "Your payment was not successful, please try again.",
+    "genericError": "Something went wrong.",
+    "redirectUrl": "/my-applications",
+    "validationError": "An unexpected error occurred.",
+    "unexpectedError": "An unexpected error occurred.",
+    "processing": "Processing...",
+    "pay": "Pay now",
+    "sslSecure": "SSL Secure",
+    "poweredByStripe": "Powered by Stripe"
   },
   "table": {
     "show": "Exhibition",
@@ -46,7 +94,8 @@
     "showAllHistory": "Show all history →",
     "showAllShows": "Show all exhibitions →",
     "applyToShow": "Apply to Exhibition",
-    "showDetails": "Show Details"
+    "showDetails": "Show Details",
+    "pay": "Pay"
   },
   "auth": {
     "login": "Login",
@@ -59,6 +108,11 @@
     "registerIn": "Register",
     "dontHaveAccount": "Don't have an account? ",
     "haveAccount": "Already have an account? ",
+    "forgotPassword": "Forgot password? ",
+    "forgotPasswordTitle": "Password Recovery",
+    "passwordRecovery": "Password Recovery",
+    "send": "Request password reset",
+    "backToLogin": "Back to login",
     "resetPasswordTitle": "Set New Password",
     "newPassword": "New Password",
     "confirmPassword": "Confirm Password",
@@ -68,7 +122,19 @@
     "redirecting": "Redirecting...",
     "passwordsDoNotMatch": "Passwords do not match.",
     "tokenMissing": "Authorization token is missing.",
-    "invalidToken": "Invalid or expired link."
+    "invalidToken": "Invalid or expired link.",
+    "resetEmailSent": "Email sent",
+    "back": "Back",
+    "loginTitle": "User Login",
+    "registerTitle": "Create New Account",
+    "forgotPasswordDesc": "Enter your email address to receive password reset instructions.",
+    "emailPlaceholder": "john.doe@email.com",
+    "resetAction": "Reset Password",
+    "genericError": "An error occurred.",
+    "unknownError": "An unknown error occurred.",
+    "simulationSent": "Instructions sent (simulation).",
+    "hasAccountShort": "Have an account? ",
+    "forgotPasswordLink": "Forgot password?"
   },
   "form": {
     "actions": {
@@ -91,17 +157,28 @@
     "gender": "Gender,",
     "neutered": "Neutered",
     "emsCode": "EMS Code",
+    "emsCodeShort": "EMS",
+    "breed": "Breed",
     "birthDate": "Date of birth",
     "showClass": "Show class",
-    "pedigreeNumber": "Pedigree number?",
+    "pedigreeNumber": "Pedigree number",
     "cageType": "Cage type",
     "male": "Male",
     "female": "Female",
     "addAnotherCat": "Add another cat",
+    "removeCat": "Remove Cat",
+    "motherNamePlaceholder": "Mother's Name",
+    "fatherNamePlaceholder": "Father's Name",
     "tabs": {
       "basic": "Cat",
       "mother": "Mother",
       "father": "Father"
+    },
+    "placeholders": {
+      "catName": "Molly",
+      "chipNumber": "15-digit number",
+      "pedigreeNumber": "CSZ FO 1234/18",
+      "ems": "n 03 24"
     },
     "common": {
       "loading": "Loading...",
@@ -122,12 +199,14 @@
       "showName": "Exhibition Name",
       "days": "Days of attendance",
       "cat": "Cat",
+      "owner": "Owner",
       "breeder": "Breeder",
       "exhibitor": "Exhibitor",
       "name": "Name and Surname",
       "address": "Address",
       "email": "Email",
       "phone": "Phone",
+      "sameAsOwner": "Same as owner",
       "sameAsBreeder": "Same as breeder",
       "notesAndConsent": "Notes and Consents",
       "notes": "Notes",
@@ -292,11 +371,14 @@
     "yes": "Yes",
     "no": "No",
     "select": "Select",
-    "noTitle": "No title"
+    "noTitle": "No title",
+    "pdf": "PDF"
   },
   "errors": {
     "fetchFailed": "Failed to fetch data.",
-    "submission": "Submission error:"
+    "submission": "Submission error:",
+    "invalidCredentials": "Invalid credentials",
+    "notAuthenticated": "User is not authenticated."
   },
   "statuses": {
     "PLANNED": "Planned",
@@ -305,11 +387,18 @@
     "COMPLETED": "Completed",
     "CANCELLED": "Cancelled"
   },
+  "regStatuses": {
+    "PLANNED": "Awaiting Payment",
+    "CONFIRMED": "Confirmed",
+    "REJECTED": "Rejected",
+    "CANCELLED": "Cancelled"
+  },
   "alert": {
     "submitSuccess": "Application submitted successfully! Application number: {{number}}",
     "submitError": "Error submitting application. Please try again later.",
     "createSuccess": "Exhibition created successfully.",
-    "createError": "Error creating exhibition. Please try again later."
+    "createError": "Error creating exhibition. Please try again later.",
+    "pdfDownloadError": "Error downloading PDF."
   },
   "confirm": {
     "resetForm": "Are you sure you want to delete all entered data?",
@@ -319,7 +408,9 @@
     "title": "Application submitted successfully!",
     "message": "Your application number is:",
     "info": "A confirmation and payment details have been sent to your email.",
-    "backButton": "New Application"
+    "backButton": "New Application",
+    "downloadButton": "Download PDF",
+    "downloading": "Downloading..."
   },
   "admin": {
     "shows": {
