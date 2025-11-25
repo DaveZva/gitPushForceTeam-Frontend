@@ -28,8 +28,6 @@ export function Step5_NotesAndConsent() {
                 {errors.notes && <p className="mt-1 text-sm text-red-600">{errors.notes.message}</p>}
             </div>
 
-            {/* ZMĚNA ZDE: Odstraněno 'flex flex-col items-center max-w-2xl mx-auto' */}
-            {/* Vráceno zpět na jednoduchý div, který respektuje zarovnání doleva */}
             <div className="space-y-4">
                 <Checkbox
                     id="dataAccuracy"
