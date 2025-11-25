@@ -13,8 +13,7 @@ export function Step5_NotesAndConsent() {
             <h2 className="text-2xl font-bold text-gray-800 tracking-[-2px]">{t('registrationSteps.step5_consent.title')}</h2>
 
             <div className="flex flex-col gap-2">
-
-                <label htmlFor="notes" className="text-sm font-semibold text-gray-700 text-left">
+                <label htmlFor="notes" className="text-sm font-semibold text-gray-700">
                     {t('registrationSteps.step5_consent.notes.label')}
                 </label>
 
@@ -36,6 +35,7 @@ export function Step5_NotesAndConsent() {
                     description={t('registrationSteps.step5_consent.dataAccuracy.description')}
                     registration={register("dataAccuracy")}
                     error={errors.dataAccuracy}
+                    variant="simple"
                 />
 
                 <Checkbox
@@ -44,6 +44,7 @@ export function Step5_NotesAndConsent() {
                     description={t('registrationSteps.step5_consent.gdprConsent.description')}
                     registration={register("gdprConsent")}
                     error={errors.gdprConsent}
+                    variant="simple"
                 />
             </div>
 

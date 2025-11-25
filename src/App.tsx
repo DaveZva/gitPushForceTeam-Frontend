@@ -10,6 +10,7 @@ import CatRegisterPage from './pages/catRegister/CatRegistrationForm';
 import { ShowCreatePage } from './pages/secretariat/ShowCreatePage';
 import MyApplicationsPage from './pages/user/MyApplicationsPage';
 import ResetPasswordPage from './pages/user/ResetPasswordPage';
+import PaymentPage from './pages/user/PaymentPage';
 // import EditExhibition from './pages/secretariat/ExhibitionEditPage';
 
 function App() {
@@ -26,7 +27,7 @@ function App() {
                         <Route path="my-applications" element={<MyApplicationsPage />} />
                         <Route path="my-cats" element={<h2>{t('nav.myCats')}</h2>} />
                         <Route path="/reset-password" element={<ResetPasswordPage />} />
-
+                        <Route path="payment/:registrationId" element={<PaymentPage />} />
                         <Route path="secretariat">
                             <Route index element={<Secretariat />} />
                             <Route path="new/show" element={<ShowCreatePage />} />

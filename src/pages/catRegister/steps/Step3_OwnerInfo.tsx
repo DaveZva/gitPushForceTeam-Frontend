@@ -85,6 +85,16 @@ export function Step3_OwnerInfo() {
             )}
 
             <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+                <FormField label={t('registrationSteps.step3_owner.localClub.label')} name="ownerLocalClub" error={errors.ownerLocalOrganization}>
+                    <input type="text" {...register("ownerLocalOrganization")} className={inputClass} placeholder={t('registrationSteps.step3_owner.localClub.placeholder')} />
+                    </FormField>
+
+                <FormField label={t('registrationSteps.step3_owner.memberNumber.label')} name="ownerMemberNumber" error={errors.ownerMembershipNumber}>
+                    <input type="text" {...register("ownerMembershipNumber")} className={inputClass} placeholder={t('registrationSteps.step3_owner.memberNumber.placeholder')} />
+                    </FormField>
+
+                <div className="col-span-1 md:col-span-2 border-t border-gray-200 my-2"></div>
+
                 <FormField label={t('registrationSteps.step3_owner.firstName.label')} name="ownerFirstName" error={errors.ownerFirstName}>
                     <input type="text" {...register("ownerFirstName")} className={inputClass} />
                 </FormField>
@@ -113,15 +123,6 @@ export function Step3_OwnerInfo() {
                     <input type="tel" {...register("ownerPhone")} className={inputClass} placeholder={t('registrationSteps.step3_owner.phone.placeholder')} />
                 </FormField>
 
-                <div className="md:col-span-2 grid grid-cols-1 gap-6 md:grid-cols-2 pt-4 border-t border-gray-200">
-                    <FormField label={t('registrationSteps.step3_owner.localClub.label')} name="ownerLocalClub" error={errors.ownerLocalOrganization}>
-                        <input type="text" {...register("ownerLocalOrganization")} className={inputClass} placeholder={t('registrationSteps.step3_owner.localClub.placeholder')} />
-                    </FormField>
-
-                    <FormField label={t('registrationSteps.step3_owner.memberNumber.label')} name="ownerMemberNumber" error={errors.ownerMembershipNumber}>
-                        <input type="text" {...register("ownerMembershipNumber")} className={inputClass} placeholder={t('registrationSteps.step3_owner.memberNumber.placeholder')} />
-                    </FormField>
-                </div>
             </div>
         </div>
     );

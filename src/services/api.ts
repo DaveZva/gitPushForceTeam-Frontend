@@ -18,6 +18,10 @@ interface ApiErrorData {
     message: string;
 }
 
+interface PaymentIntentResponse {
+    clientSecret: string;
+}
+
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080/api/v1';
 
 const api = axios.create({
@@ -46,9 +50,18 @@ const handleAuthError = (error: unknown) => {
         const axiosError = error as AxiosError<ApiErrorData>;
         if (axiosError.response) {
             console.error("API Error Response:", axiosError.response.data);
-            if (axiosError.response.status === 401 || axiosError.response.status === 403) {
+
+            if (axiosError.response.status === 401) {
+                localStorage.removeItem('authToken');
+                localStorage.removeItem('user');
+                window.location.href = '/';
+                throw new Error('errors.sessionExpired');
+            } else if (axiosError.response.status === 403) {
+                localStorage.removeItem('authToken');
+                localStorage.removeItem('user');
                 throw new Error('errors.invalidCredentials');
             }
+
             throw new Error(axiosError.response.data?.message || 'errors.serverError');
         } else if (axiosError.request) {
             console.error("API Network Error:", axiosError.request);
@@ -101,6 +114,16 @@ export const resetPasswordConfirm = async (token: string, newPassword: string): 
     } catch (error) {
         handleAuthError(error);
         throw new Error('errors.resetPasswordFailed');
+    }
+};
+
+export const createPaymentIntent = async (registrationId: string | number): Promise<PaymentIntentResponse> => {
+    try {
+        const response = await api.post<PaymentIntentResponse>(`/payments/create-intent/${registrationId}`);
+        return response.data;
+    } catch (error) {
+        handleAuthError(error);
+        throw error;
     }
 };
 
