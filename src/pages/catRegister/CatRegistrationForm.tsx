@@ -302,13 +302,9 @@ function CatRegistrationForm() {
                         />
                     ) : (
                         <React.Fragment>
-                            <div className="flex justify-between items-center mb-8">
-                                <h1 className="text-3xl font-bold text-gray-900">
-                                    {t('form.title')}
-                                </h1>
-
-                                <Button variant="reset" onClick={handleReset}>
-                                    {t('form.resetAll')}
+                            <div className="flex flex-col gap-4 md:flex-row md:justify-between md:items-center mb-8">
+                                <h1 className="text-3xl font-bold text-gray-900 tracking-[-2px]">{t('form.title')}</h1>
+                                <Button variant="reset" onClick={handleReset}>{t('form.resetAll')}
                                 </Button>
                             </div>
 

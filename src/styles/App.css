@@ -6,7 +6,6 @@
 }
 
 /* --- Základní styly (React-like) --- */
-
 :root {
     --color-primary: #027BFF;
     --color-background: #f4f7f6;
@@ -50,7 +49,7 @@ body {
 
 .main-header nav a {
     text-decoration: none;
-    color: var(--color-text-secondary);
+    color: var(--color-text);
     margin: 0 1rem;
     font-weight: 500;
 }
@@ -89,12 +88,13 @@ body {
     place-items: center;
     font-weight: bold;
 }
+
 /*Komponenta: DashboardContent*/
 
 .dashboard-header h1 {
     font-size: 2rem;
     font-weight: 800;
-    letter-spacing: -3px;
+    letter-spacing: -2px;
     margin-bottom: 0.5rem;
 }
 
@@ -200,7 +200,7 @@ body {
 .panel-header h2 {
     font-size: 32px;
     font-weight: 700;
-    letter-spacing: -0.9px;
+    letter-spacing: -2px;
     margin-bottom: 0.5rem;
 }
 
@@ -421,4 +421,90 @@ body {
     }
 }
 
+/* === HAMBURGER BUTTON === */
+.hamburger {
+    display: none;                       /* skrytý na desktopu */
+    width: 44px;
+    height: 34px;
+    border: 2px solid var(--color-primary);
+    border-radius: 12px;
+    background: none;
+    cursor: pointer;
+    color: var(--color-primary);
+    justify-content: center;
+    align-items: center;
+    font-size: 1.6rem;
+    line-height: 1;
+    padding: 10px 10px 12px 10px;
+}
 
+/* hover na hamburgeru – jen zmizí border */
+.hamburger:hover {
+    border-color: transparent;
+}
+
+/* === RESPONSIVE MENU – od 1200px dolů === */
+@media (max-width: 1200px) {
+
+    /* hamburger se zobrazí */
+    .hamburger {
+        display: flex;
+    }
+
+    /* hlavička může zalamovat řádky, ale vše začíná nahoře */
+    .main-header {
+        flex-wrap: wrap;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    /* pořadí prvků v headeru */
+    .main-header .logo {
+        order: 1;
+    }
+
+    .main-header .user-actions {
+        order: 2;
+        margin-left: auto;
+        display: flex;
+        gap: 1rem;
+        margin-bottom: 0.6rem;   /* ✨ TADY JE MEZERA POD TLAČÍTKY */
+    }
+
+    /* MENU – vždy až pod logem + tlačítky */
+    .main-header nav {
+        order: 3;
+        display: none;                /* defaultně skryté */
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+        gap: 0.5rem;
+        padding: 0.75rem 0 1rem;
+        background: var(--color-surface);
+        border-top: 1px solid #eee;
+    }
+
+    /* otevřené menu */
+    .main-header nav.open {
+        display: flex;
+    }
+
+    /* položky menu – bez dlouhých čar */
+    .main-header nav a {
+        display: inline-block;
+        margin: 0.15rem 0;
+        padding: 0.35rem 0.9rem;
+        border-radius: 999px;
+        text-decoration: none;
+        border-bottom: none;              /* zrušíme čáru */
+        color: var(--color-text);
+    }
+
+    /* aktivní + hover efekt: modré pozadí, bílý text */
+    .main-header nav a.active,
+    .main-header nav a:hover {
+        background-color: var(--color-primary);
+        color: #fff;
+        border-bottom: none;              /* jistota, že nikde není čára */
+    }
+}

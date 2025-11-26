@@ -16,6 +16,48 @@ const createPersonSchema = (t: TFunction) => ({
         .max(15, t('validation.person.membershipNumber.max'))
 });
 
+const validateCommonDate = (dateString: string | undefined, t: TFunction): string | true => {
+    if (!dateString || dateString.trim() === '') return true;
+    const date = new Date(dateString);
+    const today = new Date();
+    date.setHours(0, 0, 0, 0);
+    today.setHours(0, 0, 0, 0);
+
+    if (isNaN(date.getTime())) return true; // Regex handles format
+
+    // Validace: Nesmí být starší než 2010
+    if (date.getFullYear() < 2010) {
+        return t('validation.cat.age.tooOld') || 'Rok narození nesmí být starší než 2010.';
+    }
+
+    // Validace: Nesmí být narozena v budoucnu
+    if (date > today) {
+        return t('validation.cat.age.future') || 'Datum narození nesmí být v budoucnu.';
+    }
+
+    return true;
+};
+
+const validateCatAge= (dateString: string, t: TFunction): string | true => {
+    const commonValidation = validateCommonDate(dateString, t);
+    if (commonValidation !== true) return commonValidation;
+
+    const birthDate = new Date(dateString);
+    const today = new Date();
+    birthDate.setHours(0, 0, 0, 0);
+    today.setHours(0, 0, 0, 0);
+
+    // Datum před 4 měsíci (kotě musí být starší)
+    const minAgeDate = new Date(today);
+    minAgeDate.setMonth(today.getMonth() - 4);
+
+    if (birthDate > minAgeDate) {
+        return t('validation.cat.age.min') || 'Kočka musí být starší 4 měsíců';
+    }
+
+    return true;
+};
+
 const createCatSchema = (t: TFunction) => z.object({
     titleBefore: z.string().optional(),
     catName: z.string().min(2, t('validation.cat.name.min')),
@@ -64,6 +106,12 @@ const createCatSchema = (t: TFunction) => z.object({
         .refine(val => val === '' || /^\d{4}-\d{2}-\d{2}$/.test(val), {
             message: t('validation.cat.birthDate.invalid')
         })
+        .superRefine((val, ctx) => {
+            const result = validateCommonDate(val, t);
+            if (result !== true) {
+                ctx.addIssue({ code: z.ZodIssueCode.custom, message: result, });
+            }
+        })
         .optional(),
     motherEmsCode: z.string().superRefine((val, ctx) => {
         if (!val || val.trim() === "") return;
@@ -76,7 +124,9 @@ const createCatSchema = (t: TFunction) => z.object({
         }
     }),
     motherPedigreeNumber: z.string().optional(),
-    motherChipNumber: z.string().optional(),
+    motherChipNumber: z.string().optional().refine(val => !val || /^\d{15}$/.test(val), {
+        message: t('validation.cat.chipNumber.invalid')
+    }),
     motherGender: z.enum(['male', 'female'], {
         message: t('validation.cat.gender.required')
     }),
@@ -88,6 +138,12 @@ const createCatSchema = (t: TFunction) => z.object({
     fatherBirthDate: z.string()
         .refine(val => val === '' || /^\d{4}-\d{2}-\d{2}$/.test(val), {
             message: t('validation.cat.birthDate.invalid')
+        })
+        .superRefine((val, ctx) => {
+            const result = validateCommonDate(val, t);
+            if (result !== true) {
+                ctx.addIssue({ code: z.ZodIssueCode.custom, message: result, });
+            }
         })
         .optional(),
     fatherEmsCode: z.string().superRefine((val, ctx) => {
@@ -101,7 +157,9 @@ const createCatSchema = (t: TFunction) => z.object({
         }
     }),
     fatherPedigreeNumber: z.string().optional(),
-    fatherChipNumber: z.string().optional(),
+    fatherChipNumber: z.string().optional().refine(val => !val || /^\d{15}$/.test(val), {
+        message: t('validation.cat.chipNumber.invalid')
+    }),
     fatherGender: z.enum(['male', 'female'], {
         message: t('validation.cat.gender.required')
     })
@@ -115,13 +173,13 @@ const createCatSchema = (t: TFunction) => z.object({
 
     if (isNaN(catDate.getTime()) || isNaN(motherDate.getTime())) return true;
 
-    // Od data narození kočky odečteme 4 měsíce
+    // Od data narození kočky odečteme 1 rok
     const minMotherDate = new Date(catDate);
-    minMotherDate.setMonth(minMotherDate.getMonth() - 4);
+    minMotherDate.setFullYear(minMotherDate.getFullYear() - 1);
 
     return motherDate <= minMotherDate;
 }, {
-    message: t('validation.cat.motherYoungerThanCat') || "Matka musí být starší než kočka alespoň o 4 měsíce.",
+    message: t('validation.cat.motherYoungerThanCat') || "Matka musí být starší než kočka alespoň o 1 rok.",
     path: ["motherBirthDate"]
 }).refine((data) => {   //validace otce
     if (!data.fatherBirthDate || data.fatherBirthDate.trim() === '') return true;
@@ -133,11 +191,11 @@ const createCatSchema = (t: TFunction) => z.object({
     if (isNaN(catDate.getTime()) || isNaN(fatherDate.getTime())) return true;
 
     const minFatherDate = new Date(catDate);
-    minFatherDate.setMonth(minFatherDate.getMonth() - 4);
+    minFatherDate.setFullYear(minFatherDate.getFullYear() - 1);
 
     return fatherDate <= minFatherDate;
 }, {
-    message: t('validation.cat.fatherYoungerThanCat') || "Otec musí být starší než kočka alespoň o 4 měsíce.",
+    message: t('validation.cat.fatherYoungerThanCat') || "Otec musí být starší než kočka alespoň o 1 rok.",
     path: ["fatherBirthDate"]
 });
 
@@ -207,32 +265,6 @@ export const createRegistrationSchema = (t: TFunction) => {
     });
 };
 
-const validateCatAge = (dateString: string, t: TFunction): string | true => {
-    const birthDate = new Date(dateString);
-    const today = new Date();
-
-    // Nastavení času na 00:00:00 pro přesné porovnání data
-    birthDate.setHours(0, 0, 0, 0);
-    today.setHours(0, 0, 0, 0);
-
-    // Datum před 20 lety
-    const maxAgeDate = new Date(today);
-    maxAgeDate.setFullYear(today.getFullYear() - 20);
-
-    if (birthDate < maxAgeDate) {
-        return t('validation.cat.age.max') || 'Kočka nesmí být starší 20 let.';
-    }
-
-    // Datum před 4 měsíci
-    const minAgeDate = new Date(today);
-    minAgeDate.setMonth(today.getMonth() - 4);
-
-    if (birthDate > minAgeDate) {
-        return t('validation.cat.age.min') || 'Kočka musí být starší 4 měsíců.';
-    }
-
-    return true;
-};
-
 export type RegistrationFormData = z.infer<ReturnType<typeof createRegistrationSchema>>;
 export type CatFormData = RegistrationFormData['cats'][0];
+

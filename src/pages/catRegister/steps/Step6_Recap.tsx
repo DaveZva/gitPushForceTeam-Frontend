@@ -33,7 +33,7 @@ export function Step6_Recap({ onEditStep }: Step6RecapProps) {
     const RecapSection: React.FC<RecapSectionProps> = ({ title, editStep, onEdit, children }) => (
         <div className="p-6 bg-white rounded-lg shadow-sm">
             <div className="flex justify-between items-center border-b border-blue-200 pb-2 mb-4">
-                <h3 className="text-lg font-bold text-blue-700">
+                <h3 className="text-lg font-bold text-[#027BFF]">
                     {title}
                 </h3>
                 <button
@@ -119,7 +119,7 @@ export function Step6_Recap({ onEditStep }: Step6RecapProps) {
 
     return (
         <div className="space-y-8">
-            <h2 className="text-2xl font-bold text-gray-800">{t('catForm.recap.title')}</h2>
+            <h2 className="text-2xl font-bold text-gray-800 tracking-[-2px]">{t('catForm.recap.title')}</h2>
             <p className="text-gray-600">
                 {t('catForm.recap.checkData')}
             </p>
