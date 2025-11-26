@@ -84,7 +84,7 @@ export function ShowCreatePage() {
                         <div className="flex flex-col">
                             <label htmlFor="description" className="mb-1 font-semibold text-gray-700">{t('fields.description')}</label>
                             <textarea
-                                className={`w-full p-2 border rounded-md ${errors.description ? 'border-red-500' : 'border-gray-300'}`}
+                                className="w-full p-3 bg-gray-100 rounded-lg border-[1px] border-transparent focus:outline-none focus:ring-1 focus:ring-[#027BFF] focus:border-[#027BFF]"
                             />
 
                             {errors.description && (

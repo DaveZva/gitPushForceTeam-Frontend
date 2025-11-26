@@ -31,7 +31,7 @@ export const FormStepper: React.FC<FormStepperProps> = ({
                                     className={`absolute top-4 left-1/2 h-0.5 w-full transition-colors duration-300 
                                         ${
                                         isCompleted
-                                            ? 'bg-blue-600'
+                                            ? 'bg-[#027BFF]'
                                             : 'bg-gray-300'
                                     }
                                     `}
@@ -44,7 +44,7 @@ export const FormStepper: React.FC<FormStepperProps> = ({
                                     font-semibold transition-all duration-300 
                                     ${
                                     isCompleted || isCurrent
-                                        ? 'bg-blue-600 text-white'
+                                        ? 'bg-[#027BFF] text-white'
                                         : 'border-2 border-gray-300 bg-white text-gray-400'
                                 }
                                 `}
@@ -57,7 +57,7 @@ export const FormStepper: React.FC<FormStepperProps> = ({
                                     mt-2 text-center text-sm transition-colors duration-300 
                                     ${
                                     isCurrent
-                                        ? 'font-bold text-blue-600'
+                                        ? 'font-bold text-[#027BFF]'
                                         : isCompleted
                                             ? 'font-medium text-gray-700'
                                             : 'text-gray-400'

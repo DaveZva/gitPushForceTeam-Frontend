@@ -41,7 +41,7 @@ export function Step2_CatInfo() {
                 <p className="text-sm text-red-600">{errors.cats.message}</p>
             )}
 
-            <button type="button" onClick={handleAddCat} className="w-full px-6 py-4 font-semibold text-blue-600 transition-colors bg-blue-50 border-2 border-blue-200 border-dashed rounded-lg hover:bg-blue-100 hover:border-blue-300">+
+            <button type="button" onClick={handleAddCat} className="w-full px-6 py-4 font-semibold text-[#027BFF] transition-colors bg-[#E5F1FF] border-2 border-[#027BFF] border-dashed rounded-lg hover:bg-white hover:border-[#027BFF] hover:text-[#027BFF]">+
                 {t('catForm.addAnotherCat')}
             </button>
         </div>
