@@ -361,13 +361,13 @@ export function CatForm({ catIndex, onRemove }: CatFormProps) {
         <div className="p-6 bg-white rounded-2xl shadow-lg border border-gray-200 animate-fade-in">
             <div className="flex flex-col items-stretch gap-6 mb-8 md:flex-row md:items-center md:justify-between">
 
-                <div className="flex flex-col flex-grow p-1 rounded-full md:flex-row
-                        gap-2 sm:gap-3 md:gap-4">
+                <div className="flex flex-col flex-grow p-1 bg-gray-100 rounded-full md:flex-row">
 
                     <Button
                         variant={activeTab === 'basic' ? 'primary' : 'secondary'}
                         onClick={() => setActiveTab('basic')}
-                        className="flex-1 min-w-[60px] text-sm sm:text-base hover:bg-primary-500 hover:text-blue"
+                        style={{ width: "33.3%", margin: "0 5px 0 5px" }}
+                        className="hover:bg-primary-500 hover:text-black"
                     >
                         {t('catForm.tabs.basic')}
                     </Button>
@@ -375,7 +375,8 @@ export function CatForm({ catIndex, onRemove }: CatFormProps) {
                     <Button
                         variant={activeTab === 'mother' ? 'primary' : 'secondary'}
                         onClick={() => setActiveTab('mother')}
-                        className="flex-1 min-w-[60px] text-sm sm:text-base hover:bg-primary-500 hover:text-blue"
+                        style={{ width: "33.3%", margin: "0 5px 0 5px" }}
+                        className="hover:bg-primary-500 hover:text-black"
                     >
                         {t('catForm.tabs.mother')}
                     </Button>
@@ -383,7 +384,8 @@ export function CatForm({ catIndex, onRemove }: CatFormProps) {
                     <Button
                         variant={activeTab === 'father' ? 'primary' : 'secondary'}
                         onClick={() => setActiveTab('father')}
-                        className="flex-1 min-w-[60px] text-sm sm:text-base hover:bg-primary-500 hover:text-blue"
+                        style={{ width: "33.3%", margin: "0 5px 0 5px" }}
+                        className="hover:bg-primary-500 hover:text-black"
                     >
                         {t('catForm.tabs.father')}
                     </Button>

@@ -23,12 +23,12 @@ export function Step1_Exhibition() {
 
     const FormField: React.FC<FormFieldProps> = ({ label, name, children, error }) => (
         <div className="flex flex-col gap-2">
-            <label htmlFor={name} className="text-sm font-semibold text-gray-700 text-left">
+            <label htmlFor={name} className="text-sm font-semibold text-gray-700">
                 {label}
             </label>
             {children}
             {error && (
-                <p className="text-sm font-semibold text-red-600">
+                <p className="text-sm text-red-600">
                     {error.message}
                 </p>
             )}
@@ -66,7 +66,7 @@ export function Step1_Exhibition() {
 
     return (
         <div className="space-y-6">
-            <h2 className="text-2xl font-bold text-gray-800 tracking-[-2px]">
+            <h2 className="text-2xl font-bold text-gray-800">
                 {t('registrationSteps.step1_exhibition.title')}
             </h2>
 

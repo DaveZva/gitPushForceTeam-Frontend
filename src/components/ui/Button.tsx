@@ -8,11 +8,11 @@ type ButtonVariant = 'primary' | 'secondary' | 'submit' | 'reset' | 'outlineDang
 
 // Styly pro jednotlivé varianty
 const variants: Record<ButtonVariant, string> = {
-    primary: `${btnBase} border-2 border-transparent px-[1.2em] py-[0.6em] text-[1em] font-bold tracking-[-1px] leading-[20px] bg-[#027BFF] text-white flex justify-center items-center transition-all duration-200 ease-linear hover:bg-white hover:text-[#027BFF] hover:border-[#027BFF]`,
-    secondary: `${btnBase} bg-gray-200 text-gray-800 border-2 border-transparent hover:bg-transparent hover:border-gray-800 hover:text-gray-800`,
-    submit: `${btnBase} bg-green-600 text-white border-2 border-transparent hover:bg-transparent hover:border-green-600 hover:text-green-600 shadow-lg disabled:opacity-50`,
-    reset: `${btnBase} bg-red-100 text-red-700 border-2 border-transparent hover:bg-transparent hover:border-red-700 hover:text-red-700`,
-    outlineDanger: `${btnBase} text-red-600 bg-white border-2 border-red-200 hover:bg-transparent hover:border-red-600 hover:text-red-600 whitespace-nowrap`,
+    primary: `${btnBase} bg-blue-600 text-white hover:bg-blue-700 shadow-lg`,
+    secondary: `${btnBase} bg-gray-200 text-gray-800 hover:bg-gray-300`,
+    submit: `${btnBase} bg-green-600 text-white hover:bg-green-700 shadow-lg disabled:opacity-50`,
+    reset: `${btnBase} bg-red-100 text-red-700 hover:bg-red-200`,
+    outlineDanger: `${btnBase} text-red-600 bg-white border-2 border-red-200 hover:bg-red-50 whitespace-nowrap`,
 };
 
 interface ButtonProps {

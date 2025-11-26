@@ -12,9 +12,7 @@ export const Radio: React.FC<RadioProps> = ({
                                                 value,
                                                 registration
                                             }) => {
-    const baseClass =
-        "flex-1 px-4 py-3 text-center font-semibold transition-colors duration-200 rounded-md cursor-pointer has-[:checked]:bg-[#027BFF] has-[:checked]:text-white";
-
+    const baseClass = "flex-1 px-4 py-3 text-center transition-colors duration-200 rounded-md cursor-pointer has-[:checked]:bg-blue-600 has-[:checked]:text-white";
     return (
         <label className={baseClass}>
             <input

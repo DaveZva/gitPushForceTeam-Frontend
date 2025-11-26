@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { storageUtils } from '../../../utils/storage';
 import { RegistrationFormData } from '../../../schemas/registrationSchema';
 
-const inputClass = "w-full p-3 bg-gray-100 rounded-lg border-1 border-transparent focus:outline-none focus:ring-1 focus:ring-[#027BFF] focus:border-[#027BFF]";
+const inputClass = "w-full p-3 bg-gray-100 border-none rounded-lg focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:bg-gray-200";
 
 interface FormFieldProps {
     label: string;
@@ -84,7 +84,7 @@ export function Step4_BreederInfo() {
 
     return (
         <div className="space-y-6">
-            <h2 className="text-2xl font-bold text-gray-800 tracking-[-2px]">{t('registrationSteps.step4_breeder.title')}</h2>
+            <h2 className="text-2xl font-bold text-gray-800">{t('registrationSteps.step4_breeder.title')}</h2>
 
             {savedBreeders.length > 0 && !sameAsOwner && (
                 <div className="p-4 bg-blue-50 rounded-lg">

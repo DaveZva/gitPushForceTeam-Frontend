@@ -10,7 +10,7 @@ export function Step5_NotesAndConsent() {
 
     return (
         <div className="space-y-6">
-            <h2 className="text-2xl font-bold text-gray-800 tracking-[-2px]">{t('registrationSteps.step5_consent.title')}</h2>
+            <h2 className="text-2xl font-bold text-gray-800">{t('registrationSteps.step5_consent.title')}</h2>
 
             <div className="flex flex-col gap-2">
                 <label htmlFor="notes" className="text-sm font-semibold text-gray-700">
@@ -21,7 +21,7 @@ export function Step5_NotesAndConsent() {
                     id="notes"
                     rows={5}
                     placeholder={t('registrationSteps.step5_consent.notes.placeholder')}
-                    className={`w-full p-3 bg-gray-100 rounded-lg border-1 ${errors.notes ? 'border-red-500' : 'border-transparent'} focus:outline-none focus:ring-1 focus:ring-[#027BFF] focus:border-[#027BFF]`}
+                    className={`w-full p-3 bg-gray-100 border-none rounded-lg focus:ring-2 focus:ring-blue-500 ${errors.notes ? 'ring-2 ring-red-500' : ''} `}
                     {...register("notes")}
                 />
 
@@ -48,7 +48,7 @@ export function Step5_NotesAndConsent() {
                 />
             </div>
 
-            <div className="p-4 bg-yellow-50 text-yellow-800 border-[1px] border-yellow-400 rounded-lg">
+            <div className="p-4 text-yellow-800 bg-yellow-50 border-l-4 border-yellow-400 rounded-lg">
                 <strong className="font-bold">{t('registrationSteps.step5_consent.alert.title')}</strong>
                 {t('registrationSteps.step5_consent.alert.text')}
             </div>

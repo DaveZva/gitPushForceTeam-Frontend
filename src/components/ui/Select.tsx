@@ -8,9 +8,7 @@ interface SelectProps extends SelectHTMLAttributes<HTMLSelectElement> {
 export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
     ({ className = '', children, ...props }, ref) => {
 
-        const baseClass =
-            "w-full p-3 bg-gray-100 rounded-lg border-[1px] border-transparent focus:outline-none focus:ring-1 focus:ring-[#027BFF] focus:border-[#027BFF]";
-
+        const baseClass = "w-full p-3 bg-gray-100 border-none rounded-lg focus:ring-2 focus:ring-blue-500";
         const finalClass = `${baseClass} ${className}`;
 
         return (

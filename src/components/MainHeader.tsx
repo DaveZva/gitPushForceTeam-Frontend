@@ -9,7 +9,7 @@ export function MainHeader() {
     const { user, logout, loading, isAuthenticated } = useAuth();
 
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-    const [menuOpen, setMenuOpen] = useState<boolean>(false);  // ← přidáno
+    const [menuOpen, setMenuOpen] = useState<boolean>(false);
 
     const handleLanguageChange = () => {
         const newLang = i18n.language === 'cs' ? 'en' : 'cs';
