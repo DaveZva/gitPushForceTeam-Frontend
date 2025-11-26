@@ -172,7 +172,7 @@ export default function MyApplicationsPage() {
                     {app.status === 'PLANNED' && (
                         <button
                             onClick={() => handlePay(app.id)}
-                            className="px-3 py-1 text-xs font-bold text-white bg-green-600 hover:bg-green-700 rounded-full transition-colors"
+                            className="px-3 py-1 text-sm font-semibold rounded-full transition-all duration-200 bg-green-600 text-white border-2 border-transparent hover:bg-transparent hover:border-green-600 hover:text-green-600 shadow-lg"
                             title={t('actions.pay')}
                         >
                             {t('actions.pay')}
@@ -186,7 +186,7 @@ export default function MyApplicationsPage() {
     return (
         <div className="container max-w-7xl mx-auto p-4 sm:p-8">
             <header className="mb-8">
-                <h1 className="text-3xl font-bold text-gray-900">
+                <h1 className="text-3xl font-bold text-gray-900 tracking-[-2px]">
                     {t('nav.myApplications')}
                 </h1>
             </header>
