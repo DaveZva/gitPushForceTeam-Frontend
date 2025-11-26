@@ -35,7 +35,8 @@ export function Step1_Exhibition() {
         </div>
     );
 
-    const { t } = useTranslation();
+    // 1. Získání i18n instance pro zjištění aktuálního jazyka
+    const { t, i18n } = useTranslation();
     const { register, formState: { errors } } = useFormContext<RegistrationFormData>();
 
     const [shows, setShows] = useState<ShowForDropdown[]>([]);
@@ -43,7 +44,8 @@ export function Step1_Exhibition() {
 
     const formatDate = (dateString: string | undefined): string => {
         if (!dateString) return '-';
-        return new Date(dateString).toLocaleDateString('cs-CZ', {
+        // 2. Použití i18n.language místo natvrdo zadaného 'cs-CZ'
+        return new Date(dateString).toLocaleDateString(i18n.language, {
             year: 'numeric', month: '2-digit', day: '2-digit',
         });
     };

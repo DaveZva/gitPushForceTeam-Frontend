@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../../context/AuthContext';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate
+import { useNavigate } from 'react-router-dom';
 import api from '../../services/api';
 import PdfBadgeIcon from '../../components/ui/PDFIcon';
 
@@ -23,9 +23,10 @@ const LoadingSpinner: React.FC = () => (
 
 
 export default function MyApplicationsPage() {
-    const { t } = useTranslation();
+    // 1. Získání i18n pro dynamické datum
+    const { t, i18n } = useTranslation();
     const { isAuthenticated } = useAuth();
-    const navigate = useNavigate(); // Initialize navigate hook
+    const navigate = useNavigate();
     const [applications, setApplications] = useState<MyApplication[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
@@ -33,7 +34,8 @@ export default function MyApplicationsPage() {
 
     const formatDate = (dateString: string | undefined): string => {
         if (!dateString) return '-';
-        return new Date(dateString).toLocaleDateString('cs-CZ', {
+        // 2. Použití i18n.language
+        return new Date(dateString).toLocaleDateString(i18n.language, {
             year: 'numeric', month: '2-digit', day: '2-digit',
             hour: '2-digit', minute: '2-digit'
         });
@@ -72,7 +74,7 @@ export default function MyApplicationsPage() {
 
         } catch (error) {
             console.error("Chyba při stahování PDF:", error);
-            alert(t('alert.pdfDownloadError', 'Chyba při stahování PDF.'));
+            alert(t('alert.pdfDownloadError'));
         } finally {
             setDownloadingId(null);
         }
@@ -116,7 +118,7 @@ export default function MyApplicationsPage() {
             return (
                 <tr>
                     <td colSpan={6} className="py-8 text-center text-gray-500">
-                        {t('common.loading', 'Načítám...')}
+                        {t('common.loading')}
                     </td>
                 </tr>
             );
@@ -136,7 +138,7 @@ export default function MyApplicationsPage() {
             return (
                 <tr>
                     <td colSpan={6} className="py-8 text-center text-gray-500">
-                        {t('myApplications.noApplications', 'Zatím nemáte žádné přihlášky.')}
+                        {t('myApplications.noApplications')}
                     </td>
                 </tr>
             );
@@ -150,7 +152,7 @@ export default function MyApplicationsPage() {
                 <td className="py-4 px-3 text-gray-600 text-center">{app.catCount}</td>
                 <td className="py-4 px-3">
                     <span className={getStatusClass(app.status)}>
-                        {t(`regStatuses.${app.status}`, app.status)}
+                        {t(`regStatuses.${app.status}`)}
                     </span>
                 </td>
                 <td className="py-4 px-3 text-center flex items-center justify-center gap-2">
@@ -158,7 +160,7 @@ export default function MyApplicationsPage() {
                         onClick={() => handleDownloadPdf(app.registrationNumber)}
                         disabled={downloadingId === app.registrationNumber}
                         className="p-2 bg-gray-50 text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-full transition-colors disabled:opacity-50 disabled:cursor-wait"
-                        title={t('myApplications.downloadPdf', 'Stáhnout PDF')}
+                        title={t('myApplications.downloadPdf')}
                     >
                         {downloadingId === app.registrationNumber ? (
                             <LoadingSpinner />
@@ -171,9 +173,9 @@ export default function MyApplicationsPage() {
                         <button
                             onClick={() => handlePay(app.id)}
                             className="px-3 py-1 text-xs font-bold text-white bg-green-600 hover:bg-green-700 rounded-full transition-colors"
-                            title={t('actions.pay', 'Zaplatit')}
+                            title={t('actions.pay')}
                         >
-                            {t('actions.pay', 'Zaplatit')}
+                            {t('actions.pay')}
                         </button>
                     )}
                 </td>
@@ -184,8 +186,8 @@ export default function MyApplicationsPage() {
     return (
         <div className="container max-w-7xl mx-auto p-4 sm:p-8">
             <header className="mb-8">
-                <h1 className="text-3xl font-bold text-gray-900 tracking-[-2px]">
-                    {t('nav.myApplications', 'Moje přihlášky')}
+                <h1 className="text-3xl font-bold text-gray-900">
+                    {t('nav.myApplications')}
                 </h1>
             </header>
 
@@ -193,12 +195,12 @@ export default function MyApplicationsPage() {
                 <table className="w-full min-w-max table-auto text-left">
                     <thead className="border-b border-gray-200">
                     <tr>
-                        <th className="py-3 px-3 text-sm font-semibold text-gray-600">{t('myApplications.col.regNumber', 'Číslo registrace')}</th>
-                        <th className="py-3 px-3 text-sm font-semibold text-gray-600">{t('myApplications.col.exhibition', 'Výstava')}</th>
-                        <th className="py-3 px-3 text-sm font-semibold text-gray-600">{t('myApplications.col.submittedAt', 'Odesláno')}</th>
-                        <th className="py-3 px-3 text-sm font-semibold text-gray-600 text-center">{t('myApplications.col.cats', 'Počet koček')}</th>
-                        <th className="py-3 px-3 text-sm font-semibold text-gray-600">{t('myApplications.col.status', 'Status')}</th>
-                        <th className="py-3 px-3 text-sm font-semibold text-gray-600 text-center">{t('myApplications.col.actions', 'Akce')}</th>
+                        <th className="py-3 px-3 text-sm font-semibold text-gray-600">{t('myApplications.col.regNumber')}</th>
+                        <th className="py-3 px-3 text-sm font-semibold text-gray-600">{t('myApplications.col.exhibition')}</th>
+                        <th className="py-3 px-3 text-sm font-semibold text-gray-600">{t('myApplications.col.submittedAt')}</th>
+                        <th className="py-3 px-3 text-sm font-semibold text-gray-600 text-center">{t('myApplications.col.cats')}</th>
+                        <th className="py-3 px-3 text-sm font-semibold text-gray-600">{t('myApplications.col.status')}</th>
+                        <th className="py-3 px-3 text-sm font-semibold text-gray-600 text-center">{t('myApplications.col.actions')}</th>
                     </tr>
                     </thead>
                     <tbody>

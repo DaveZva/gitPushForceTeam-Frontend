@@ -44,7 +44,7 @@ export default function PaymentPage() {
                                 🐱 {t('payment.title')}
                             </h1>
                             <p className="text-xl text-gray-600">
-                                Dokončete registraci vaší kočky na výstavu
+                                {t('payment.subtitle')}
                             </p>
                         </div>
 
@@ -55,7 +55,7 @@ export default function PaymentPage() {
                                 </div>
                             </div>
                             <div className="absolute -top-4 -right-4 bg-yellow-400 text-yellow-900 px-4 py-2 rounded-full font-bold shadow-lg">
-                                ⭐ Bezpečná platba
+                                {t('payment.secureBadge')}
                             </div>
                         </div>
 
@@ -63,24 +63,24 @@ export default function PaymentPage() {
                             <div className="flex items-start gap-3 bg-white p-4 rounded-xl shadow-sm">
                                 <div className="text-2xl">🔒</div>
                                 <div>
-                                    <h3 className="font-semibold text-gray-900">Zabezpečená platba</h3>
-                                    <p className="text-sm text-gray-600">Platba je chráněna pomocí Stripe</p>
+                                    <h3 className="font-semibold text-gray-900">{t('payment.features.secure.title')}</h3>
+                                    <p className="text-sm text-gray-600">{t('payment.features.secure.desc')}</p>
                                 </div>
                             </div>
 
                             <div className="flex items-start gap-3 bg-white p-4 rounded-xl shadow-sm">
                                 <div className="text-2xl">⚡</div>
                                 <div>
-                                    <h3 className="font-semibold text-gray-900">Okamžité potvrzení</h3>
-                                    <p className="text-sm text-gray-600">Dostanete potvrzení e-mailem</p>
+                                    <h3 className="font-semibold text-gray-900">{t('payment.features.instant.title')}</h3>
+                                    <p className="text-sm text-gray-600">{t('payment.features.instant.desc')}</p>
                                 </div>
                             </div>
 
                             <div className="flex items-start gap-3 bg-white p-4 rounded-xl shadow-sm">
                                 <div className="text-2xl">💳</div>
                                 <div>
-                                    <h3 className="font-semibold text-gray-900">Více způsobů platby</h3>
-                                    <p className="text-sm text-gray-600">Karta, Apple Pay, Google Pay</p>
+                                    <h3 className="font-semibold text-gray-900">{t('payment.features.methods.title')}</h3>
+                                    <p className="text-sm text-gray-600">{t('payment.features.methods.desc')}</p>
                                 </div>
                             </div>
                         </div>
@@ -89,10 +89,10 @@ export default function PaymentPage() {
                     <div className="bg-white rounded-3xl shadow-2xl p-8">
                         <div className="mb-6">
                             <h2 className="text-2xl font-bold text-gray-900 mb-2">
-                                Platební údaje
+                                {t('payment.form.title')}
                             </h2>
                             <p className="text-gray-600">
-                                Registrace #{registrationId}
+                                {t('payment.form.registrationRef')} {registrationId}
                             </p>
                         </div>
 

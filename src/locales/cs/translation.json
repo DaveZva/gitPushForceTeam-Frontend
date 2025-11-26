@@ -14,7 +14,7 @@
     "notifications": "Notifikace"
   },
   "dashboard": {
-    "welcome": "Vítejte zpět, {{name}}",
+    "welcome": "Vítejte zpět, {{name}}!",
     "subtitle": "Zde je rychlý přehled vaší aktivity.",
     "welcome_guest": "Vítejte zpět",
     "stats": {
@@ -31,6 +31,54 @@
       "subtitle": "Nové výstavy, na které se můžete přihlásit."
     }
   },
+  "myApplications": {
+    "noApplications": "Zatím nemáte žádné přihlášky.",
+    "downloadPdf": "Stáhnout PDF",
+    "col": {
+      "regNumber": "Číslo registrace",
+      "exhibition": "Výstava",
+      "submittedAt": "Odesláno",
+      "cats": "Počet koček",
+      "status": "Status",
+      "actions": "Akce"
+    }
+  },
+  "payment": {
+    "title": "Platba",
+    "subtitle": "Dokončete registraci vaší kočky na výstavu",
+    "initError": "Chyba při inicializaci platby.",
+    "loading": "Načítám platební bránu...",
+    "secureBadge": "⭐ Bezpečná platba",
+    "features": {
+      "secure": {
+        "title": "Zabezpečená platba",
+        "desc": "Platba je chráněna pomocí Stripe"
+      },
+      "instant": {
+        "title": "Okamžité potvrzení",
+        "desc": "Dostanete potvrzení e-mailem"
+      },
+      "methods": {
+        "title": "Více způsobů platby",
+        "desc": "Karta, Apple Pay, Google Pay"
+      }
+    },
+    "form": {
+      "title": "Platební údaje",
+      "registrationRef": "Registrace #"
+    },
+    "success": "Platba proběhla úspěšně!",
+    "processingStatus": "Vaše platba se zpracovává.",
+    "requiresPaymentMethod": "Platba nebyla úspěšná, zkuste to prosím znovu.",
+    "genericError": "Něco se pokazilo.",
+    "redirectUrl": "/my-applications",
+    "validationError": "Nastala neočekávaná chyba.",
+    "unexpectedError": "Nastala neočekávaná chyba.",
+    "processing": "Zpracovávám...",
+    "pay": "Zaplatit",
+    "sslSecure": "Zabezpečeno SSL",
+    "poweredByStripe": "Powered by Stripe"
+  },
   "table": {
     "show": "Výstava",
     "date": "Datum",
@@ -46,7 +94,8 @@
     "showAllHistory": "Zobrazit celou historii →",
     "showAllShows": "Zobrazit všechny výstavy →",
     "applyToShow": "Přihlásit se na výstavu",
-    "showDetails": "Zobrazit detaily"
+    "showDetails": "Zobrazit detaily",
+    "pay": "Zaplatit"
   },
   "auth": {
     "login": "Přihlášení",
@@ -74,7 +123,18 @@
     "passwordsDoNotMatch": "Hesla se neshodují.",
     "tokenMissing": "Chybí autorizační token.",
     "invalidToken": "Neplatný nebo expirovaný odkaz.",
-    "resetEmailSent": "E-mail byl odeslán"
+    "resetEmailSent": "E-mail byl odeslán",
+    "back": "Zpět",
+    "loginTitle": "Přihlášení uživatele",
+    "registerTitle": "Vytvoření nového účtu",
+    "forgotPasswordDesc": "Pro obnovu hesla zadejte e-mailovou adresu, na kterou Vám zašleme instrukce.",
+    "emailPlaceholder": "jan.novak@email.cz",
+    "resetAction": "Obnovit heslo",
+    "genericError": "Došlo k chybě.",
+    "unknownError": "Došlo k neznámé chybě.",
+    "simulationSent": "Instrukce odeslány (simulace).",
+    "hasAccountShort": "Máte účet? ",
+    "forgotPasswordLink": "Zapomněli jste heslo?"
   },
   "form": {
     "actions": {
@@ -97,17 +157,28 @@
     "gender": "Pohlaví,",
     "neutered": "Kastrované",
     "emsCode": "EMS Kód",
+    "emsCodeShort": "EMS",
+    "breed": "Plemeno",
     "birthDate": "Datum narození",
     "showClass": "Soutěžní třída",
-    "pedigreeNumber": "Číslo kočky?",
+    "pedigreeNumber": "Číslo průkazu původu",
     "cageType": "Typ přepravky",
     "male": "Kocour",
     "female": "Kočka",
     "addAnotherCat": "Přidat další kočku",
+    "removeCat": "Odstranit kočku",
+    "motherNamePlaceholder": "Jméno matky",
+    "fatherNamePlaceholder": "Jméno otce",
     "tabs": {
       "basic": "Kočka",
       "mother": "Matka",
       "father": "Otec"
+    },
+    "placeholders": {
+      "catName": "Molly",
+      "chipNumber": "15 místné číslo",
+      "pedigreeNumber": "CSZ FO 1234/18",
+      "ems": "n 03 24"
     },
     "common": {
       "loading": "Načítám...",
@@ -128,12 +199,14 @@
       "showName": "Název výstavy",
       "days": "Dny účasti",
       "cat": "Kočka",
+      "owner": "Majitel",
       "breeder": "Chovatel",
       "exhibitor": "Vystavovatel",
       "name": "Jméno a Příjmení",
       "address": "Adresa",
       "email": "Email",
       "phone": "Telefon",
+      "sameAsOwner": "Shodný s majitelem",
       "sameAsBreeder": "Shodný s chovatelem",
       "notesAndConsent": "Poznámky a Souhlasy",
       "notes": "Poznámky",
@@ -298,12 +371,14 @@
     "yes": "Ano",
     "no": "Ne",
     "select": "Vyberte",
-    "noTitle": "Bez titulu"
+    "noTitle": "Bez titulu",
+    "pdf": "PDF"
   },
   "errors": {
     "fetchFailed": "Nepodařilo se načíst data.",
     "submission": "Chyba při odesílání:",
-    "invalidCredentials": "Neplatné údaje"
+    "invalidCredentials": "Neplatné údaje",
+    "notAuthenticated": "Uživatel není přihlášen."
   },
   "statuses": {
     "PLANNED": "Naplánováno",
@@ -312,11 +387,18 @@
     "COMPLETED": "Proběhlo",
     "CANCELLED": "Zrušeno"
   },
+  "regStatuses": {
+    "PLANNED": "Čeká na platbu",
+    "CONFIRMED": "Potvrzeno",
+    "REJECTED": "Zamítnuto",
+    "CANCELLED": "Zrušeno"
+  },
   "alert": {
     "submitSuccess": "Přihláška byla úspěšně odeslána! Číslo přihlášky: {{number}}",
     "submitError": "Chyba při odesílání přihlášky. Zkuste to prosím později.",
     "createSuccess": "Výstava byla úspěšně vytvořena.",
-    "createError": "Chyba při vytváření výstavy. Zkuste to prosím později."
+    "createError": "Chyba při vytváření výstavy. Zkuste to prosím později.",
+    "pdfDownloadError": "Chyba při stahování PDF."
   },
   "confirm": {
     "resetForm": "Opravdu chcete smazat všechny vyplněné údaje?",
@@ -326,7 +408,9 @@
     "title": "Přihláška úspěšně odeslána!",
     "message": "Vaše číslo přihlášky je:",
     "info": "Potvrzení a platební údaje byly odeslány na Váš email.",
-    "backButton": "Nová přihláška"
+    "backButton": "Nová přihláška",
+    "downloadButton": "Stáhnout PDF",
+    "downloading": "Stahuji..."
   },
   "admin": {
     "shows": {
