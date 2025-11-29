@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements } from '@stripe/react-stripe-js';
 import { useTranslation } from 'react-i18next';
@@ -13,6 +13,7 @@ export default function PaymentPage() {
     const { registrationId } = useParams();
     const [clientSecret, setClientSecret] = useState("");
     const [error, setError] = useState<string | null>(null);
+    const navigate = useNavigate();
 
     useEffect(() => {
         if (registrationId) {
@@ -21,8 +22,12 @@ export default function PaymentPage() {
                     setClientSecret(data.clientSecret);
                 })
                 .catch((err) => {
-                    console.error("Chyba při inicializaci platby", err);
-                    setError(t('payment.initError'));
+                    console.error("Chyba:", err);
+                    if (err.response && err.response.data) {
+                        setError(err.response.data);
+                    } else {
+                        setError(t('payment.initError'));
+                    }
                 });
         }
     }, [registrationId, t]);
@@ -38,6 +43,7 @@ export default function PaymentPage() {
         <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 py-12 px-4">
             <div className="container max-w-6xl mx-auto">
                 <div className="grid md:grid-cols-2 gap-8 items-center">
+                    {/* Levý sloupec s informacemi - beze změny */}
                     <div className="space-y-8 p-8">
                         <div className="space-y-4">
                             <h1 className="text-4xl font-bold text-gray-900">
@@ -96,15 +102,30 @@ export default function PaymentPage() {
                             </p>
                         </div>
 
-                        {error && (
-                            <div className="mb-6 bg-red-50 border-l-4 border-red-500 p-4 rounded">
-                                <p className="text-red-700">{error}</p>
+                        {error ? (
+                            <div className="text-center py-8">
+                                <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                                    <span className="text-3xl">⚠️</span>
+                                </div>
+                                <h3 className="text-xl font-bold text-gray-900 mb-2">
+                                    {t('payment.errorTitle', 'Nelze provést platbu')}
+                                </h3>
+                                <p className="text-gray-600 mb-6">
+                                    {error}
+                                </p>
+                                <button
+                                    onClick={() => navigate('/my-applications')}
+                                    className="px-6 py-3 bg-blue-600 text-white rounded-xl font-semibold hover:bg-blue-700 transition-colors shadow-lg"
+                                >
+                                    {t('navigation.backToRegistrations', 'Zpět na přihlášky')}
+                                </button>
                             </div>
-                        )}
-
-                        {clientSecret ? (
+                        ) : clientSecret ? (
                             <Elements options={options} stripe={stripePromise}>
-                                <PaymentForm clientSecret={clientSecret} />
+                                <PaymentForm
+                                    clientSecret={clientSecret}
+                                    registrationId={registrationId!}
+                                />
                             </Elements>
                         ) : (
                             <div className="text-center py-12">

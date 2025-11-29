@@ -498,5 +498,20 @@
       "membershipNumber.min": "Špatné členské číslo"
     }
   },
+  "paymentResult": {
+    "successTitle": "Platba úspěšně přijata",
+    "successMessage": "Děkujeme! Vaše registrace byla potvrzena.",
+    "processingTitle": "Zpracovává se",
+    "processingMessage": "Vaše platba se zpracovává. Vyčkejte prosím na potvrzení.",
+    "failedTitle": "Platba zamítnuta",
+    "failedMessage": "Platbu se nepodařilo dokončit.",
+    "transactionId": "ID transakce",
+    "registrationNumber": "Číslo registrace",
+    "totalAmount": "Zaplacená částka",
+    "backToApplications": "Zpět na mé přihlášky",
+    "tryAgain": "Zkusit znovu",
+    "verifying": "Ověřuji stav registrace...",
+    "verificationFailed": "Nepodařilo se ověřit stav registrace, ale platba pravděpodobně proběhla. Zkontrolujte přihlášky."
+  },
   "location": "Místo"
 }
