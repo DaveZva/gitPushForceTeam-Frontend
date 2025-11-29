@@ -5,9 +5,10 @@ import { Button } from './ui/Button';
 
 interface PaymentFormProps {
     clientSecret: string;
+    registrationId: string;
 }
 
-export const PaymentForm: React.FC<PaymentFormProps> = ({ clientSecret }) => {
+export const PaymentForm: React.FC<PaymentFormProps> = ({ clientSecret, registrationId }) => {
     const { t } = useTranslation();
     const stripe = useStripe();
     const elements = useElements();
@@ -52,8 +53,7 @@ export const PaymentForm: React.FC<PaymentFormProps> = ({ clientSecret }) => {
         const { error } = await stripe.confirmPayment({
             elements,
             confirmParams: {
-                return_url: `${window.location.origin}${t('payment.redirectUrl')}`,
-            },
+                return_url: `${window.location.origin}/payment/result?registration_id=${registrationId}`,            },
         });
 
         if (error) {

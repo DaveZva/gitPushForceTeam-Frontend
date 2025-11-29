@@ -23,7 +23,6 @@ const LoadingSpinner: React.FC = () => (
 
 
 export default function MyApplicationsPage() {
-    // 1. Získání i18n pro dynamické datum
     const { t, i18n } = useTranslation();
     const { isAuthenticated } = useAuth();
     const navigate = useNavigate();
@@ -34,7 +33,6 @@ export default function MyApplicationsPage() {
 
     const formatDate = (dateString: string | undefined): string => {
         if (!dateString) return '-';
-        // 2. Použití i18n.language
         return new Date(dateString).toLocaleDateString(i18n.language, {
             year: 'numeric', month: '2-digit', day: '2-digit',
             hour: '2-digit', minute: '2-digit'

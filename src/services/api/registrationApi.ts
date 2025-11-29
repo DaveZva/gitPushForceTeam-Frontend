@@ -56,6 +56,14 @@ export interface AvailableShow {
     websiteUrl?: string;
 }
 
+export interface RegistrationDetail {
+    id: number;
+    registrationNumber: string;
+    status: 'PLANNED' | 'CONFIRMED' | 'REJECTED' | 'CANCELLED';
+    amountPaid?: number;
+    showName?: string;
+}
+
 export const registrationApi = {
     submitRegistration: async (registrationData: RegistrationPayload): Promise<SubmitRegistrationResponse> => {
         try {
@@ -75,5 +83,10 @@ export const registrationApi = {
             console.error('API Error (getAvailableShows):', error);
             return [];
         }
-    }
+    },
+};
+
+export const getRegistrationDetail = async (id: number | string): Promise<RegistrationDetail> => {
+    const response = await api.get<RegistrationDetail>(`/registrations/${id}`);
+    return response.data;
 };
