@@ -159,6 +159,9 @@
     "emsCode": "EMS Code",
     "emsCodeShort": "EMS",
     "breed": "Breed",
+    "group": "Group",
+    "groupOption": "Group {{number}}",
+    "groupNotRequired": "Group is not used for this breed.",
     "birthDate": "Date of birth",
     "showClass": "Show class",
     "pedigreeNumber": "Pedigree number",
@@ -378,7 +381,11 @@
     "fetchFailed": "Failed to fetch data.",
     "submission": "Submission error:",
     "invalidCredentials": "Invalid credentials",
-    "notAuthenticated": "User is not authenticated."
+    "notAuthenticated": "User is not authenticated.",
+    "unauthorized": "Unauthorized access.",
+    "serverError": "Server error occurred.",
+    "networkError": "Network error occurred.",
+    "unknownError": "An unknown error occurred."
   },
   "statuses": {
     "PLANNED": "Planned",
@@ -476,6 +483,18 @@
       },
       "cageType": {
         "required": "Enter cage type"
+      },
+      "age": {
+        "min": "Cat must be older than 4 months",
+        "tooOld": "Birth year cannot be older than 2010.",
+        "future": "Birth date cannot be in the future."
+      },
+      "motherYoungerThanCat": "Mother must be at least 1 year older than the cat.",
+      "fatherYoungerThanCat": "Father must be at least 1 year older than the cat.",
+      "group": {
+        "notRequired": "Breed {{breed}} does not have groups. Leave empty.",
+        "required": "Group (1-{{max}}) is required for breed {{breed}}.",
+        "invalid": "Invalid group. Choose 1-{{max}} for {{breed}}."
       }
     },
     "registration": {
@@ -484,6 +503,18 @@
       },
       "days": {
         "required": "Select a day"
+      },
+      "cats": {
+        "min": "At least one cat is required."
+      },
+      "exhibitor": {
+        "required": "Exhibitor details are required."
+      },
+      "dataAccuracy": {
+        "required": "You must confirm data accuracy."
+      },
+      "gdprConsent": {
+        "required": "You must agree to GDPR."
       }
     },
     "person": {
@@ -495,7 +526,20 @@
       "email.invalid": "Invalid email format",
       "phone.invalid": "Invalid phone number format",
       "localOrganization.min": "Invalid local organization",
-      "membershipNumber.min": "Invalid member number"
+      "localOrganization.max": "Local organization name too long",
+      "membershipNumber.min": "Invalid member number",
+      "membershipNumber.max": "Member number too long"
+    },
+    "exhibition": {
+      "name.min": "Name must be at least 5 characters.",
+      "venueName.min": "Venue name must be at least 3 characters.",
+      "startDate.invalid": "Invalid start date.",
+      "endDate.invalid": "Invalid end date.",
+      "registrationDeadline.invalid": "Invalid deadline.",
+      "organizerName.min": "Organizer name must be at least 3 characters.",
+      "contactEmail.invalid": "Invalid contact email.",
+      "websiteUrl.invalid": "Invalid website URL.",
+      "date.order": "End date must be after start date."
     }
   },
   "location": "Location"

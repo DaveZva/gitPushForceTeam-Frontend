@@ -1,3 +1,5 @@
+import { TFunction } from 'i18next';
+
 export const BREED_NAMES: Record<string, string> = {
     // Cat 1
     "EXO": "Exotic", "PER": "Persian", "RAG": "Ragdoll", "SBI": "Sacred Birman", "TUV": "Turkish Van",
@@ -13,6 +15,61 @@ export const BREED_NAMES: Record<string, string> = {
     "HCL": "Housecat longhair", "HCS": "Housecat shorthair",
     // Non-recognised (Můžeme přidat)
     "XLH": "Neregistrovaná dlouhosrstá", "XSH": "Neregistrovaná krátkosrstá"
+};
+
+// Pomocná funkce pro validaci skupiny
+export const BREED_GROUP_RULES: Record<string, number> = {
+    "ALC" : 11,
+    "ACS" : 11,
+    "LPL" : 11,
+    "LPS" : 11,
+    "MCO" : 9,
+    "NEM" : 4,
+    "NFO" : 9,
+    "SIB" : 9,
+    "TUA" : 9,
+    "BLM" : 2,
+    "CYM" : 3,
+    "KBL" : 4,
+    "KBS" : 4,
+    "MAN" : 3,
+    "SRL" : 9,
+    "SRS" : 9,
+    "CRX" : 9,
+    "DRX" : 9,
+    "DSP" : 5,
+    "GRX" : 9,
+    "JBS" : 1,
+    "PEB" : 5,
+    "SPH" : 5,
+    "LYO" : 1,
+    "HCL" : 1,
+    "HCS" : 1
+};
+
+// Upravená validace s podporou překladů
+export const validateGroupForBreed = (breedCode: string, group: string | undefined | null, t: TFunction): string | true => {
+    const maxGroup = BREED_GROUP_RULES[breedCode];
+
+    // Pokud plemeno nemá definované skupiny
+    if (!maxGroup) {
+        if (group && group.trim() !== "") {
+            return t('validation.cat.group.notRequired', { breed: breedCode });
+        }
+        return true;
+    }
+
+    // Pokud plemeno má skupiny, musí být vyplněna
+    if (!group || group.trim() === "") {
+        return t('validation.cat.group.required', { breed: breedCode, max: maxGroup });
+    }
+
+    const groupNum = parseInt(group, 10);
+    if (isNaN(groupNum) || groupNum < 1 || groupNum > maxGroup) {
+        return t('validation.cat.group.invalid', { breed: breedCode, max: maxGroup });
+    }
+
+    return true;
 };
 
 //Priprava na moznost skupin u nekterych plemen!
@@ -718,6 +775,6 @@ export function validateEmsCode(fullEmsCode: string | null | undefined): true | 
 
 // Priprava pro vyber skupin u plemen..
 export const requiresGroup = (breed: string): boolean => {
-    const breedsWithGroups = ['MCO', 'NFO', 'SIB', 'RAG', 'TUA']; // Příklad plemen s grupami (FIFe)
+    const breedsWithGroups = ['ACL', 'ACS', 'LPL', 'LPS', 'MCO', 'NEM', 'NFO', 'SIB', 'TUA', 'BML', 'CYM', 'KBL', 'KBS', 'MAN', 'SRL', 'SRS', 'CRX', 'DRX', 'DSP', 'GRX', 'JBS', 'PEB', 'SPH', 'LYO', 'HCL', 'HCS']; // Příklad plemen s grupami (FIFe)
     return breedsWithGroups.includes(breed.toUpperCase());
 };

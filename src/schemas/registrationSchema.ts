@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { validateEmsCode } from '../utils/emsRules';
+import { validateEmsCode, validateGroupForBreed } from '../utils/emsRules';
 import { TFunction } from 'i18next';
 
 const createPersonSchema = (t: TFunction) => ({
@@ -23,14 +23,12 @@ const validateCommonDate = (dateString: string | undefined, t: TFunction): strin
     date.setHours(0, 0, 0, 0);
     today.setHours(0, 0, 0, 0);
 
-    if (isNaN(date.getTime())) return true; // Regex handles format
+    if (isNaN(date.getTime())) return true;
 
-    // Validace: Nesmí být starší než 2010
     if (date.getFullYear() < 2010) {
         return t('validation.cat.age.tooOld') || 'Rok narození nesmí být starší než 2010.';
     }
 
-    // Validace: Nesmí být narozena v budoucnu
     if (date > today) {
         return t('validation.cat.age.future') || 'Datum narození nesmí být v budoucnu.';
     }
@@ -47,7 +45,6 @@ const validateCatAge= (dateString: string, t: TFunction): string | true => {
     birthDate.setHours(0, 0, 0, 0);
     today.setHours(0, 0, 0, 0);
 
-    // Datum před 4 měsíci (kotě musí být starší)
     const minAgeDate = new Date(today);
     minAgeDate.setMonth(today.getMonth() - 4);
 
@@ -98,7 +95,9 @@ const createCatSchema = (t: TFunction) => z.object({
         }
     }),
 
-    // Matka
+    // PŘIDÁNO: Pole pro skupinu
+    group: z.string().optional(),
+
     motherTitleBefore: z.string().optional(),
     motherName: z.string().optional(),
     motherTitleAfter: z.string().optional(),
@@ -131,7 +130,6 @@ const createCatSchema = (t: TFunction) => z.object({
         message: t('validation.cat.gender.required')
     }),
 
-    // Otec
     fatherTitleBefore: z.string().optional(),
     fatherName: z.string().optional(),
     fatherTitleAfter: z.string().optional(),
@@ -163,8 +161,22 @@ const createCatSchema = (t: TFunction) => z.object({
     fatherGender: z.enum(['male', 'female'], {
         message: t('validation.cat.gender.required')
     })
+}).superRefine((data, ctx) => {
+    // Validace skupiny na základě EMS kódu s použitím 't'
+    if (data.emsCode && data.emsCode.length >= 3) {
+        const breedCode = data.emsCode.split(' ')[0].toUpperCase();
+
+        const groupResult = validateGroupForBreed(breedCode, data.group, t);
+
+        if (groupResult !== true) {
+            ctx.addIssue({
+                code: z.ZodIssueCode.custom,
+                message: groupResult,
+                path: ["group"]
+            });
+        }
+    }
 }).refine((data) => {
-    // VALIDACE: Matka musí být starší než kočka alespoň o 4 měsíce
     if (!data.motherBirthDate || data.motherBirthDate.trim() === '') return true;
     if (!data.birthDate) return true;
 
@@ -173,7 +185,6 @@ const createCatSchema = (t: TFunction) => z.object({
 
     if (isNaN(catDate.getTime()) || isNaN(motherDate.getTime())) return true;
 
-    // Od data narození kočky odečteme 1 rok
     const minMotherDate = new Date(catDate);
     minMotherDate.setFullYear(minMotherDate.getFullYear() - 1);
 
@@ -181,7 +192,7 @@ const createCatSchema = (t: TFunction) => z.object({
 }, {
     message: t('validation.cat.motherYoungerThanCat') || "Matka musí být starší než kočka alespoň o 1 rok.",
     path: ["motherBirthDate"]
-}).refine((data) => {   //validace otce
+}).refine((data) => {
     if (!data.fatherBirthDate || data.fatherBirthDate.trim() === '') return true;
     if (!data.birthDate) return true;
 
@@ -267,4 +278,3 @@ export const createRegistrationSchema = (t: TFunction) => {
 
 export type RegistrationFormData = z.infer<ReturnType<typeof createRegistrationSchema>>;
 export type CatFormData = RegistrationFormData['cats'][0];
-

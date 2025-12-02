@@ -159,6 +159,9 @@
     "emsCode": "EMS Kód",
     "emsCodeShort": "EMS",
     "breed": "Plemeno",
+    "group": "Skupina",
+    "groupOption": "Skupina {{number}}",
+    "groupNotRequired": "Pro toto plemeno se skupina neuvádí.",
     "birthDate": "Datum narození",
     "showClass": "Soutěžní třída",
     "pedigreeNumber": "Číslo průkazu původu",
@@ -378,7 +381,11 @@
     "fetchFailed": "Nepodařilo se načíst data.",
     "submission": "Chyba při odesílání:",
     "invalidCredentials": "Neplatné údaje",
-    "notAuthenticated": "Uživatel není přihlášen."
+    "notAuthenticated": "Uživatel není přihlášen.",
+    "unauthorized": "Neoprávněný přístup.",
+    "serverError": "Chyba serveru.",
+    "networkError": "Chyba sítě.",
+    "unknownError": "Nastala neznámá chyba."
   },
   "statuses": {
     "PLANNED": "Naplánováno",
@@ -476,6 +483,18 @@
       },
       "cageType": {
         "required": "Zadejte přepravku"
+      },
+      "age": {
+        "min": "Kočka musí být starší 4 měsíců",
+        "tooOld": "Rok narození nesmí být starší než 2010.",
+        "future": "Datum narození nesmí být v budoucnu."
+      },
+      "motherYoungerThanCat": "Matka musí být starší než kočka alespoň o 1 rok.",
+      "fatherYoungerThanCat": "Otec musí být starší než kočka alespoň o 1 rok.",
+      "group": {
+        "notRequired": "Plemeno {{breed}} se nedělí na skupiny. Pole nechte prázdné.",
+        "required": "Pro plemeno {{breed}} je nutné vyplnit skupinu (1-{{max}}).",
+        "invalid": "Neplatná skupina. Pro {{breed}} zvolte 1-{{max}}."
       }
     },
     "registration": {
@@ -484,6 +503,18 @@
       },
       "days": {
         "required": "Vyberte den"
+      },
+      "cats": {
+        "min": "Musíte přidat alespoň jednu kočku."
+      },
+      "exhibitor": {
+        "required": "Nutno vyplnit údaje o vystavovateli."
+      },
+      "dataAccuracy": {
+        "required": "Musíte potvrdit pravdivost údajů."
+      },
+      "gdprConsent": {
+        "required": "Musíte souhlasit s GDPR."
       }
     },
     "person": {
@@ -495,7 +526,20 @@
       "email.invalid": "Špatný formát e-mailu",
       "phone.invalid": "Neplatný formát telefonního čísla",
       "localOrganization.min": "Špatně zadaná základní organizace",
-      "membershipNumber.min": "Špatné členské číslo"
+      "localOrganization.max": "Příliš dlouhý název organizace",
+      "membershipNumber.min": "Špatné členské číslo",
+      "membershipNumber.max": "Příliš dlouhé členské číslo"
+    },
+    "exhibition": {
+      "name.min": "Název musí mít alespoň 5 znaků.",
+      "venueName.min": "Název místa musí mít alespoň 3 znaky.",
+      "startDate.invalid": "Neplatné datum začátku.",
+      "endDate.invalid": "Neplatné datum konce.",
+      "registrationDeadline.invalid": "Neplatná uzávěrka.",
+      "organizerName.min": "Jméno organizátora musí mít alespoň 3 znaky.",
+      "contactEmail.invalid": "Neplatný kontaktní email.",
+      "websiteUrl.invalid": "Neplatná URL webu.",
+      "date.order": "Datum konce musí být až po datu začátku."
     }
   },
   "paymentResult": {
