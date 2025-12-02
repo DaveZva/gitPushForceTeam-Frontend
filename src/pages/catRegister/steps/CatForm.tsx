@@ -87,6 +87,19 @@ export function CatForm({ catIndex, onRemove }: CatFormProps) {
         const fullEmsCode = newPrefix ? `${newPrefix} ${newSuffix}` : "";
 
         const path = fieldName(fieldToUpdate);
+
+        // --- OPRAVA: Automatické mazání skupiny při změně plemene ---
+        if (fieldToUpdate === "emsCode" && changeType === 'prefix') {
+            const newMaxGroup = BREED_GROUP_RULES[newPrefix];
+            // Pokud nové plemeno nemá definované skupiny (nebo se změnilo na jiné),
+            // je bezpečnější skupinu vyresetovat, aby nezůstala viset neplatná hodnota.
+            // Zde specificky řešíme případ, kdy nové plemeno nemá skupiny.
+            if (!newMaxGroup) {
+                setValue(fieldName("group"), "", { shouldValidate: true });
+            }
+        }
+        // -------------------------------------------------------------
+
         setValue(path, fullEmsCode, { shouldValidate: true, shouldDirty: true });
 
         const result = validateEmsCode(fullEmsCode);
@@ -174,7 +187,7 @@ export function CatForm({ catIndex, onRemove }: CatFormProps) {
                             </div>
                         </FormField>
 
-                        {/* NOVÉ POLE: SKUPINA */}
+                        {/* SKUPINA */}
                         <FormField label={t('catForm.group')} name={fieldName("group")} error={getError("group")}>
                             <Select
                                 {...register(fieldName("group"))}
@@ -185,9 +198,6 @@ export function CatForm({ catIndex, onRemove }: CatFormProps) {
                                 {/* Generování možností 1 až 11 */}
                                 {[...Array(11)].map((_, i) => {
                                     const val = i + 1;
-                                    // Zobrazíme všechny, validace proběhne při odeslání/změně, nebo můžeme filtrovat:
-                                    // if (maxGroupForBreed && val > maxGroupForBreed) return null;
-
                                     return (
                                         <option key={val} value={val}>
                                             {t('catForm.groupOption', { number: val })}
