@@ -8,7 +8,8 @@
     "logOut": "Log Out",
     "logIn": "Log In",
     "signUp": "Sign Up",
-    "exhibitions": "Exhibitions"
+    "exhibitions": "Exhibitions",
+    "catalog": "Catalogue"
   },
   "user": {
     "notifications": "Notifications"
@@ -144,7 +145,7 @@
     "back": "Back",
     "toRecap": "Summary",
     "submit": "Submit",
-    "resetAll": "Clear cache",
+    "resetAll": "Clear form",
     "title": "Register cat for exhibition",
     "submitting": "Submitting...",
     "autosaveInfo": "Data is saved automatically."

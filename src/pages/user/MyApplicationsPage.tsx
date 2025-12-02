@@ -170,7 +170,7 @@ export default function MyApplicationsPage() {
                     {app.status === 'PLANNED' && (
                         <button
                             onClick={() => handlePay(app.id)}
-                            className="px-3 py-1 text-sm font-semibold rounded-full transition-all duration-200 bg-green-600 text-white border-2 border-transparent hover:bg-transparent hover:border-green-600 hover:text-green-600 shadow-lg"
+                            className="px-3 py-1 text-sm font-semibold rounded-full transition-all duration-200 bg-green-600 text-white border-2 border-transparent hover:bg-transparent hover:border-green-600 hover:text-green-600 shadow-md"
                             title={t('actions.pay')}
                         >
                             {t('actions.pay')}

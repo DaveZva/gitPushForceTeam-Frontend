@@ -302,10 +302,9 @@ function CatRegistrationForm() {
                         />
                     ) : (
                         <React.Fragment>
-                            <div className="flex flex-col gap-4 md:flex-row md:justify-between md:items-center mb-8">
-                                <h1 className="text-3xl font-bold text-gray-900 tracking-[-2px]">{t('form.title')}</h1>
-                                <Button variant="reset" onClick={handleReset}>{t('form.resetAll')}
-                                </Button>
+                            <div className="relative flex flex-col gap-4 md:flex-row md:items-center md:justify-between mb-8">
+                                <h1 className="w-full text-center text-3xl font-bold text-gray-900 tracking-[-2px] md:absolute md:left-1/2 md:-translate-x-1/2">{t('form.title')}</h1>
+                                <Button variant="reset" onClick={handleReset} className="md:ml-auto z-10">{t('form.resetAll')}</Button>
                             </div>
 
                             <FormStepper
@@ -351,7 +350,7 @@ function CatRegistrationForm() {
                             </div>
 
                             <div className="mt-8 text-center text-gray-500">
-                                💾 {t('form.autosaveInfo')}
+                                {t('form.autosaveInfo')}
                             </div>
                         </React.Fragment>
                     )}
