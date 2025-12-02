@@ -15,6 +15,8 @@ import ResetPasswordPage from './pages/user/ResetPasswordPage';
 import PaymentPage from './pages/user/PaymentPage';
 import { PaymentResultPage } from './pages/user/PaymentResultPage';
 import { PrivateRoute } from './components/PrivateRoute';
+import Catalog from './pages/Catalog';
+import * as path from "path";
 // import EditExhibition from './pages/secretariat/ExhibitionEditPage';
 
 function App() {
@@ -31,6 +33,7 @@ function App() {
                         <Route path="apply" element={<CatRegisterPage />} />
                         <Route path="my-applications" element={<MyApplicationsPage />} />
                         <Route path="my-cats" element={<h2>{t('nav.myCats')}</h2>} />
+                        <Route path="catalog" element={<Catalog />} />
                         <Route path="/reset-password" element={<ResetPasswordPage />} />
                         <Route path="payment/:registrationId" element={<PaymentPage />} />
                         <Route path="secretariat">

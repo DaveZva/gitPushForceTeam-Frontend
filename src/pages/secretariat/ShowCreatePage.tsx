@@ -55,14 +55,14 @@ export function ShowCreatePage() {
     return (
         <FormProvider {...methods}>
             <div className="max-w-4xl mx-auto p-8 bg-gray-50">
-                <h1 className="text-3xl font-bold text-gray-900 mb-8">
+                <h1 className="text-3xl font-bold text-gray-900 mb-8 tracking-[-2px]">
                     {t('admin.create.title')}
                 </h1>
 
                 <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 bg-white p-8 rounded-lg shadow-xl">
 
                     <fieldset className="space-y-4">
-                        <legend className="text-xl font-semibold text-blue-700 border-b pb-2 mb-4">
+                        <legend className="text-xl font-semibold text-[#027BFF] border-b pb-2 mb-4">
                             {t('admin.create.section.basic')}
                         </legend>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -96,7 +96,7 @@ export function ShowCreatePage() {
                     </fieldset>
 
                     <fieldset className="space-y-4">
-                        <legend className="text-xl font-semibold text-blue-700 border-b pb-2 mb-4">
+                        <legend className="text-xl font-semibold text-[#027BFF] border-b pb-2 mb-4">
                             {t('admin.create.section.venue')}
                         </legend>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -109,7 +109,7 @@ export function ShowCreatePage() {
                     </fieldset>
 
                     <fieldset className="space-y-4">
-                        <legend className="text-xl font-semibold text-blue-700 border-b pb-2 mb-4">
+                        <legend className="text-xl font-semibold text-[#027BFF] border-b pb-2 mb-4">
                             {t('admin.create.section.dates')}
                         </legend>
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -120,7 +120,7 @@ export function ShowCreatePage() {
                     </fieldset>
 
                     <fieldset className="space-y-4">
-                        <legend className="text-xl font-semibold text-blue-700 border-b pb-2 mb-4">
+                        <legend className="text-xl font-semibold text-[#027BFF] border-b pb-2 mb-4">
                             {t('admin.create.section.organizer')}
                         </legend>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

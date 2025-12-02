@@ -34,9 +34,18 @@ export function MainHeader() {
 
                 <nav className={menuOpen ? "open" : ""}>
                     <NavLink to="/" className={getNavLinkClass}
-                        onClick={() => setMenuOpen(false)}
+                             onClick={() => setMenuOpen(false)}
                     >
                         {t('nav.dashboard')}
+                    </NavLink>
+
+
+                    <NavLink
+                        to="/catalog"
+                        className={getNavLinkClass}
+                        onClick={() => setMenuOpen(false)}
+                    >
+                        {t('nav.catalog')}
                     </NavLink>
 
                     {isAuthenticated && (

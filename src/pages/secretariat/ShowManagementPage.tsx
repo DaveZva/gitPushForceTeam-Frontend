@@ -114,7 +114,7 @@ export default function ShowManagementPage() {
                 <td className="py-4 px-3">
                     <Link
                         to={`/secretariat/edit/show/${show.id}`}
-                        className="font-medium text-blue-600 hover:text-blue-800"
+                        className="font-medium text-[#027BFF] hover:text-[#005FCC] transition-colors duration-200"
                     >
                         {t('common.edit')}
                     </Link>
@@ -125,11 +125,14 @@ export default function ShowManagementPage() {
 
     return (
         <div className="container max-w-7xl mx-auto p-4 sm:p-8">
-            <header className="flex justify-between items-center mb-8">
-                <h1 className="text-3xl font-bold text-gray-900 tracking-[-2px]">
+            <header className="relative flex flex-col gap-4 md:flex-row md:items-center md:justify-between mb-8">
+                <h1 className="w-full text-center text-3xl font-bold text-gray-900 tracking-[-2px] md:absolute md:left-1/2 md:-translate-x-1/2">
                     {t('admin.shows.title')}
                 </h1>
-                <Link to="/secretariat/new/show" className="px-6 py-3 rounded-full font-semibold transition-all duration-300 bg-[#027BFF] text-white border-2 border-[#027BFF] hover:bg-transparent hover:text-[#027BFF]">
+                <Link
+                    to="/secretariat/new/show"
+                    className="px-6 py-3 rounded-full font-semibold tracking-[-1px] transition-all duration-300 bg-[#027BFF] text-white border-2 border-[#027BFF] hover:bg-transparent hover:text-[#027BFF] md:ml-auto z-10"
+                >
                     {t('admin.shows.add')}
                 </Link>
             </header>
