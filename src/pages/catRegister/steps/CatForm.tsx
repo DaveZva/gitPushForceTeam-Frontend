@@ -1,7 +1,7 @@
 import React, { useState, ReactNode } from 'react';
 import { useFormContext, FieldError, FieldErrors, Path } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { BREED_OPTIONS, validateEmsCode } from "../../../utils/emsRules";
+import { BREED_OPTIONS, validateEmsCode, BREED_GROUP_RULES } from "../../../utils/emsRules";
 import { RegistrationFormData, CatFormData } from '../../../schemas/registrationSchema';
 import { Select } from '../../../components/ui/Select';
 import { Button } from '../../../components/ui/Button';
@@ -71,6 +71,9 @@ export function CatForm({ catIndex, onRemove }: CatFormProps) {
     const { prefix: emsPrefix, suffix: emsSuffix } = parseEms(emsCodeValue);
     const { prefix: motherEmsPrefix, suffix: motherEmsSuffix } = parseEms(motherEmsCodeValue);
     const { prefix: fatherEmsPrefix, suffix: fatherEmsSuffix } = parseEms(fatherEmsCodeValue);
+
+    // Získání limitu skupin pro aktuální plemeno
+    const maxGroupForBreed = BREED_GROUP_RULES[emsPrefix];
 
     const handleGenericEmsChange = (
         fieldToUpdate: CatFieldName,
@@ -169,6 +172,34 @@ export function CatForm({ catIndex, onRemove }: CatFormProps) {
                                     placeholder={t('catForm.placeholders.ems')}
                                 />
                             </div>
+                        </FormField>
+
+                        {/* NOVÉ POLE: SKUPINA */}
+                        <FormField label={t('catForm.group')} name={fieldName("group")} error={getError("group")}>
+                            <Select
+                                {...register(fieldName("group"))}
+                                disabled={!maxGroupForBreed}
+                                className={!maxGroupForBreed ? "bg-gray-200 cursor-not-allowed" : ""}
+                            >
+                                <option value="">{t('common.select')}</option>
+                                {/* Generování možností 1 až 11 */}
+                                {[...Array(11)].map((_, i) => {
+                                    const val = i + 1;
+                                    // Zobrazíme všechny, validace proběhne při odeslání/změně, nebo můžeme filtrovat:
+                                    // if (maxGroupForBreed && val > maxGroupForBreed) return null;
+
+                                    return (
+                                        <option key={val} value={val}>
+                                            {t('catForm.groupOption', { number: val })}
+                                        </option>
+                                    );
+                                })}
+                            </Select>
+                            {!maxGroupForBreed && emsPrefix && (
+                                <span className="text-xs text-gray-500 mt-1 block">
+                                    {t('catForm.groupNotRequired')}
+                                </span>
+                            )}
                         </FormField>
 
                         <FormField label={t('catForm.birthDate')} name={fieldName("birthDate")} error={getError("birthDate")}>
