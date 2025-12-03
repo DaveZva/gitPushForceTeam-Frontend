@@ -24,16 +24,32 @@ body {
     color: var(--color-text);
 }
 
+/* ÚPRAVA: Přidání PADDING-TOP pro odsazení obsahu pod fixním headerem */
 .container {
     max-width: 1400px;
     margin: 0 auto;
     padding: 1.5rem;
+    padding-top: 7rem;
 }
-
-/* --- Komponenta: MainHeader --- */
+/* --- Komponenta: MainHeader (FIXED/FLOATING) --- */
 .main-header {
-    background-color: var(--color-surface);
-    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    /* Fixed pozice pro floating efekt */
+    position: fixed;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    z-index: 100;
+
+    /* Původní styly (včetně glassmorphismu) */
+    max-width: 1355px;
+    margin: 2rem auto 0 auto;
+    border-radius: 16px;
+    background-color: rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
     padding: 1rem 1.5rem;
     display: flex;
     justify-content: space-between;
@@ -71,7 +87,6 @@ body {
     cursor: pointer;
 }
 
-
 .user-actions .user-profile {
     display: flex;
     align-items: center;
@@ -89,12 +104,128 @@ body {
     font-weight: bold;
 }
 
+
+.hamburger {
+    display: none;
+    width: 44px;
+    height: 34px;
+    border: 2px solid var(--color-primary);
+    border-radius: 12px;
+    background: none;
+    cursor: pointer;
+    color: var(--color-primary);
+    justify-content: center;
+    align-items: center;
+    font-size: 1.7rem;
+    line-height: 1;
+    padding: 10px 10px 14px 10px;
+}
+
+.hamburger:hover {
+    border-color: transparent;
+    background: transparent;
+}
+
+@media (max-width: 1200px) {
+    /* Zajištění správného chování v mobilní verzi */
+    .main-header {
+        max-width: calc(100% - 3rem);
+        margin: 0;
+        top: 2rem;
+
+        flex-wrap: wrap;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .hamburger {
+        display: flex;
+    }
+
+    .main-header .logo {
+        order: 1;
+    }
+
+    .main-header .user-actions {
+        order: 2;
+        margin-left: auto;
+        display: flex;
+        gap: 1rem;
+        margin-bottom: 0.6rem;
+    }
+
+    .main-header nav {
+        order: 3;
+        display: none;
+        flex-direction: column;
+        align-items: flex-start;
+        width: 100%;
+        gap: 0;
+        padding: 0;
+        padding-top: 0.5rem;
+        padding-bottom: 0.5rem;
+
+        /* Glassmorphismus pro mobilní menu je zachován */
+        background-color: rgba(255, 255, 255, 0.3);
+        border-top: 1px solid rgba(255, 255, 255, 0.4);
+        border-bottom-left-radius: 16px;
+        border-bottom-right-radius: 16px;
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+    }
+
+    .main-header nav.open {
+        display: flex;
+        border-top-left-radius: 0;
+        border-top-right-radius: 0;
+    }
+
+    /* ZRUŠENÍ DESKTOPOVÉHO STYLU AKTIVNÍ POLOŽKY */
+    .main-header nav a.active {
+        border-bottom: none;
+        padding-bottom: 0.75rem;
+        color: white;
+    }
+
+    .main-header nav a {
+        display: block;
+        width: 100%;
+        margin: 0.25rem 0;
+        padding: 0.75rem 1.5rem;
+        text-decoration: none;
+        color: var(--color-text);
+        font-weight: 500;
+        border-radius: 8px;
+        transition: background-color 0.2s ease, color 0.2s ease;
+    }
+
+    .main-header nav a:first-child {
+        margin-top: 0;
+    }
+
+    .main-header nav a:last-child {
+        margin-bottom: 0;
+    }
+
+    .main-header nav a:hover {
+        background-color: rgba(2, 123, 255, 0.2);
+        color: var(--color-primary);
+    }
+
+    .main-header nav a.active {
+        background-color: var(--color-primary);
+        color: white;
+    }
+}
+
+
 /*Komponenta: DashboardContent*/
 
 .dashboard-header h1 {
     font-size: 2rem;
     font-weight: 800;
     letter-spacing: -2px;
+    margin-top: 2rem;
     margin-bottom: 0.5rem;
 }
 
@@ -270,7 +401,7 @@ body {
     }
 }
 
-/*  Respoznvita --- */
+/* Respoznvita --- */
 @media (max-width: 768px) {
     .stat-row {
         gap: 1rem;
@@ -310,7 +441,6 @@ body {
 .upcoming-panel {
     display: flex;
     flex-direction: column;
-    /* KLÍČOVÁ ZMĚNA: Mezera mezi kartami */
     gap: 1.5rem;
 }
 .upcoming-panel .panel-header {
@@ -418,93 +548,5 @@ body {
         height: 48px;
         font-size: 16px;
         margin-top: 1rem;
-    }
-}
-
-/* === HAMBURGER BUTTON === */
-.hamburger {
-    display: none;                       /* skrytý na desktopu */
-    width: 44px;
-    height: 34px;
-    border: 2px solid var(--color-primary);
-    border-radius: 12px;
-    background: none;
-    cursor: pointer;
-    color: var(--color-primary);
-    justify-content: center;
-    align-items: center;
-    font-size: 1.6rem;
-    line-height: 1;
-    padding: 10px 10px 12px 10px;
-}
-
-/* hover na hamburgeru – jen zmizí border */
-.hamburger:hover {
-    border-color: transparent;
-}
-
-/* === RESPONSIVE MENU – od 1200px dolů === */
-@media (max-width: 1200px) {
-
-    /* hamburger se zobrazí */
-    .hamburger {
-        display: flex;
-    }
-
-    /* hlavička může zalamovat řádky, ale vše začíná nahoře */
-    .main-header {
-        flex-wrap: wrap;
-        justify-content: space-between;
-        align-items: center;
-    }
-
-    /* pořadí prvků v headeru */
-    .main-header .logo {
-        order: 1;
-    }
-
-    .main-header .user-actions {
-        order: 2;
-        margin-left: auto;
-        display: flex;
-        gap: 1rem;
-        margin-bottom: 0.6rem;   /* ✨ TADY JE MEZERA POD TLAČÍTKY */
-    }
-
-    /* MENU – vždy až pod logem + tlačítky */
-    .main-header nav {
-        order: 3;
-        display: none;                /* defaultně skryté */
-        flex-direction: column;
-        align-items: center;
-        width: 100%;
-        gap: 0.5rem;
-        padding: 0.75rem 0 1rem;
-        background: var(--color-surface);
-        border-top: 1px solid #eee;
-    }
-
-    /* otevřené menu */
-    .main-header nav.open {
-        display: flex;
-    }
-
-    /* položky menu – bez dlouhých čar */
-    .main-header nav a {
-        display: inline-block;
-        margin: 0.15rem 0;
-        padding: 0.35rem 0.9rem;
-        border-radius: 999px;
-        text-decoration: none;
-        border-bottom: none;              /* zrušíme čáru */
-        color: var(--color-text);
-    }
-
-    /* aktivní + hover efekt: modré pozadí, bílý text */
-    .main-header nav a.active,
-    .main-header nav a:hover {
-        background-color: var(--color-primary);
-        color: #fff;
-        border-bottom: none;              /* jistota, že nikde není čára */
     }
 }
