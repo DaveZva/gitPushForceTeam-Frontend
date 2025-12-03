@@ -158,7 +158,7 @@ export function AuthModal({ onClose }: AuthModalProps) {
                         {view === 'login' && (
                             <div className="text-right">
                                 <span onClick={() => switchView('forgot')} className="text-sm text-[#027BFF] font-semibold hover:underline cursor-pointer">{t('auth.forgotPasswordLink')}</span>
-                            </div>auth.forgotPasswordLink
+                            </div>
                         )}
 
                         {error && <p className="text-red-600 text-sm text-center">{error}</p>}
