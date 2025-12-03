@@ -15,7 +15,7 @@ import ResetPasswordPage from './pages/user/ResetPasswordPage';
 import PaymentPage from './pages/user/PaymentPage';
 import { PaymentResultPage } from './pages/user/PaymentResultPage';
 import { PrivateRoute } from './components/PrivateRoute';
-import Catalog from './pages/Catalog';
+import Catalog from './pages/./catalog';
 import * as path from "path";
 // import EditExhibition from './pages/secretariat/ExhibitionEditPage';
 
