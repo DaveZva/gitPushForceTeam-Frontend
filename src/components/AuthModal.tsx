@@ -162,7 +162,7 @@ export function AuthModal({ onClose }: AuthModalProps) {
                         )}
 
                         {error && <p className="text-red-600 text-sm text-center">{error}</p>}
-                        {successMessage && <p className="text-green-600 text-sm text-center">{successMessage}</p>}auth.forgotPasswordLink
+                        {successMessage && <p className="text-green-600 text-sm text-center">{successMessage}</p>}
 
                         <button type="submit" className="w-full rounded-[25px] border-2 border-transparent px-5 py-3 text-base font-bold bg-[#027BFF] text-white flex justify-center items-center hover:bg-white hover:text-[#027BFF] hover:border-[#027BFF]">
                             {view === 'login' && t('auth.loginIn')}
