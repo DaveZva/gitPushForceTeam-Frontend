@@ -146,6 +146,8 @@ export function Step6_Recap({ onEditStep }: Step6RecapProps) {
                     editStep={3}
                     onEdit={onEditStep}
                 >
+                    <RecapItem label={t('registrationSteps.step3_owner.localClub.label').replace(' *', '')} value={data.ownerLocalOrganization} />
+                    <RecapItem label={t('registrationSteps.step3_owner.memberNumber.label').replace(' *', '')} value={data.ownerMembershipNumber} />
                     <RecapItem label={t('catForm.recap.name')} value={`${data.ownerFirstName} ${data.ownerLastName}`} />
                     <RecapItem label={t('catForm.recap.address')} value={`${data.ownerAddress}, ${data.ownerZip} ${data.ownerCity}`} />
                     <RecapItem label={t('catForm.recap.email')} value={data.ownerEmail} />
