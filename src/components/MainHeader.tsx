@@ -6,10 +6,10 @@ import { AuthModal } from './AuthModal';
 
 export function MainHeader() {
     const { t, i18n } = useTranslation();
-
     const { user, logout, loading, isAuthenticated } = useAuth();
 
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+    const [menuOpen, setMenuOpen] = useState<boolean>(false);
 
     const handleLanguageChange = () => {
         const newLang = i18n.language === 'cs' ? 'en' : 'cs';
@@ -31,45 +31,83 @@ export function MainHeader() {
         <>
             <header className="main-header">
                 <div className="logo">{t('nav.appName')}</div>
-                <nav>
-                    <NavLink to="/" className={getNavLinkClass}>
+
+                <nav className={menuOpen ? "open" : ""}>
+                    <NavLink to="/" className={getNavLinkClass}
+                             onClick={() => setMenuOpen(false)}
+                    >
                         {t('nav.dashboard')}
                     </NavLink>
+
+
+                    <NavLink
+                        to="/catalog"
+                        className={getNavLinkClass}
+                        onClick={() => setMenuOpen(false)}
+                    >
+                        {t('nav.catalog')}
+                    </NavLink>
+
                     {isAuthenticated && (
                         <>
-                            <NavLink to="/apply" className={getNavLinkClass}>
+                            <NavLink
+                                to="/apply"
+                                className={getNavLinkClass}
+                                onClick={() => setMenuOpen(false)}
+                            >
                                 {t('nav.newApplication')}
                             </NavLink>
-                            <NavLink to="/my-applications" className={getNavLinkClass}>
+
+                            <NavLink
+                                to="/my-applications"
+                                className={getNavLinkClass}
+                                onClick={() => setMenuOpen(false)}
+                            >
                                 {t('nav.myApplications')}
                             </NavLink>
-                            <NavLink to="/my-cats" className={getNavLinkClass}>
+
+                            <NavLink
+                                to="/my-cats"
+                                className={getNavLinkClass}
+                                onClick={() => setMenuOpen(false)}
+                            >
                                 {t('nav.myCats')}
                             </NavLink>
-                            <NavLink to="/secretariat/" className={getNavLinkClass}>
+
+                            <NavLink
+                                to="/secretariat"
+                                className={getNavLinkClass}
+                                onClick={() => setMenuOpen(false)}
+                            >
                                 {t('nav.exhibitions')}
                             </NavLink>
                         </>
                     )}
                 </nav>
 
+
                 <div className="user-actions">
+
                     <button onClick={handleLanguageChange} className="lang-switch">
                         {i18n.language === 'cs' ? 'EN' : 'CS'}
                     </button>
 
                     {isAuthenticated ? (
-                        <div className="user-profile">
-                            <button onClick={logout} className="logout-button">{t('nav.logOut')}</button>
-                        </div>
+                        <button onClick={logout} className="logout-button">
+                            {t('nav.logOut')}
+                        </button>
                     ) : (
-                        <div className="user-profile">
-                            <button onClick={handleOpenModal} className="login-button">
-                                {t('nav.logIn')} / {t('nav.signUp')}
-                            </button>
-                        </div>
+                        <button onClick={handleOpenModal} className="login-button">
+                            {t('nav.logIn')} / {t('nav.signUp')}
+                        </button>
                     )}
 
+                    <button
+                        className="hamburger"
+                        onClick={() => setMenuOpen(!menuOpen)}
+                    >
+                        ☰
+                    </button>
                 </div>
             </header>
 

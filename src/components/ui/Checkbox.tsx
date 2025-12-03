@@ -20,13 +20,11 @@ export const Checkbox: React.FC<CheckboxProps> = ({
                                                   }) => {
 
     const baseClass = "flex gap-3 transition-colors shrink-0";
-
+    const consentBoxClass = "flex items-start gap-3 p-4 border border-gray-200 rounded-lg has-[:checked]:border-blue-400 has-[:checked]:bg-blue-50 text-left";
     const checkboxClass = "w-5 h-5 text-blue-600 rounded cursor-pointer focus:ring-blue-500 mt-0.5";
-
     const variantClasses = variant === 'simple'
         ? "items-start justify-start p-0 border-none bg-transparent text-left"
         : "items-start p-4 border border-gray-200 rounded-lg has-[:checked]:border-blue-400 has-[:checked]:bg-blue-50 text-left";
-
     const errorBoxClass = error ? (variant === 'simple' ? 'text-red-600' : 'border-red-500 bg-red-50') : '';
 
     return (

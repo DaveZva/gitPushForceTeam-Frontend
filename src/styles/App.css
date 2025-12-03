@@ -6,7 +6,6 @@
 }
 
 /* --- Základní styly (React-like) --- */
-
 :root {
     --color-primary: #027BFF;
     --color-background: #f4f7f6;
@@ -25,16 +24,32 @@ body {
     color: var(--color-text);
 }
 
+/* ÚPRAVA: Přidání PADDING-TOP pro odsazení obsahu pod fixním headerem */
 .container {
     max-width: 1400px;
     margin: 0 auto;
     padding: 1.5rem;
+    padding-top: 7rem;
 }
-
-/* --- Komponenta: MainHeader --- */
+/* --- Komponenta: MainHeader (FIXED/FLOATING) --- */
 .main-header {
-    background-color: var(--color-surface);
-    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    /* Fixed pozice pro floating efekt */
+    position: fixed;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    z-index: 100;
+
+    /* Původní styly (včetně glassmorphismu) */
+    max-width: 1355px;
+    margin: 2rem auto 0 auto;
+    border-radius: 16px;
+    background-color: rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
     padding: 1rem 1.5rem;
     display: flex;
     justify-content: space-between;
@@ -50,7 +65,7 @@ body {
 
 .main-header nav a {
     text-decoration: none;
-    color: var(--color-text-secondary);
+    color: var(--color-text);
     margin: 0 1rem;
     font-weight: 500;
 }
@@ -72,7 +87,6 @@ body {
     cursor: pointer;
 }
 
-
 .user-actions .user-profile {
     display: flex;
     align-items: center;
@@ -89,12 +103,129 @@ body {
     place-items: center;
     font-weight: bold;
 }
+
+
+.hamburger {
+    display: none;
+    width: 44px;
+    height: 34px;
+    border: 2px solid var(--color-primary);
+    border-radius: 12px;
+    background: none;
+    cursor: pointer;
+    color: var(--color-primary);
+    justify-content: center;
+    align-items: center;
+    font-size: 1.7rem;
+    line-height: 1;
+    padding: 10px 10px 14px 10px;
+}
+
+.hamburger:hover {
+    border-color: transparent;
+    background: transparent;
+}
+
+@media (max-width: 1200px) {
+    /* Zajištění správného chování v mobilní verzi */
+    .main-header {
+        max-width: calc(100% - 3rem);
+        margin: 0;
+        top: 2rem;
+
+        flex-wrap: wrap;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .hamburger {
+        display: flex;
+    }
+
+    .main-header .logo {
+        order: 1;
+    }
+
+    .main-header .user-actions {
+        order: 2;
+        margin-left: auto;
+        display: flex;
+        gap: 1rem;
+        margin-bottom: 0.6rem;
+    }
+
+    .main-header nav {
+        order: 3;
+        display: none;
+        flex-direction: column;
+        align-items: flex-start;
+        width: 100%;
+        gap: 0;
+        padding: 0;
+        padding-top: 0.5rem;
+        padding-bottom: 0.5rem;
+
+        /* Glassmorphismus pro mobilní menu je zachován */
+        background-color: rgba(255, 255, 255, 0.3);
+        border-top: 1px solid rgba(255, 255, 255, 0.4);
+        border-bottom-left-radius: 16px;
+        border-bottom-right-radius: 16px;
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+    }
+
+    .main-header nav.open {
+        display: flex;
+        border-top-left-radius: 0;
+        border-top-right-radius: 0;
+    }
+
+    /* ZRUŠENÍ DESKTOPOVÉHO STYLU AKTIVNÍ POLOŽKY */
+    .main-header nav a.active {
+        border-bottom: none;
+        padding-bottom: 0.75rem;
+        color: white;
+    }
+
+    .main-header nav a {
+        display: block;
+        width: 100%;
+        margin: 0.25rem 0;
+        padding: 0.75rem 1.5rem;
+        text-decoration: none;
+        color: var(--color-text);
+        font-weight: 500;
+        border-radius: 8px;
+        transition: background-color 0.2s ease, color 0.2s ease;
+    }
+
+    .main-header nav a:first-child {
+        margin-top: 0;
+    }
+
+    .main-header nav a:last-child {
+        margin-bottom: 0;
+    }
+
+    .main-header nav a:hover {
+        background-color: rgba(2, 123, 255, 0.2);
+        color: var(--color-primary);
+    }
+
+    .main-header nav a.active {
+        background-color: var(--color-primary);
+        color: white;
+    }
+}
+
+
 /*Komponenta: DashboardContent*/
 
 .dashboard-header h1 {
     font-size: 2rem;
     font-weight: 800;
-    letter-spacing: -3px;
+    letter-spacing: -2px;
+    margin-top: 2rem;
     margin-bottom: 0.5rem;
 }
 
@@ -200,7 +331,7 @@ body {
 .panel-header h2 {
     font-size: 32px;
     font-weight: 700;
-    letter-spacing: -0.9px;
+    letter-spacing: -2px;
     margin-bottom: 0.5rem;
 }
 
@@ -270,7 +401,7 @@ body {
     }
 }
 
-/*  Respoznvita --- */
+/* Respoznvita --- */
 @media (max-width: 768px) {
     .stat-row {
         gap: 1rem;
@@ -310,7 +441,6 @@ body {
 .upcoming-panel {
     display: flex;
     flex-direction: column;
-    /* KLÍČOVÁ ZMĚNA: Mezera mezi kartami */
     gap: 1.5rem;
 }
 .upcoming-panel .panel-header {
@@ -420,5 +550,3 @@ body {
         margin-top: 1rem;
     }
 }
-
-

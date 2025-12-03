@@ -99,7 +99,14 @@ export function AuthModal({ onClose }: AuthModalProps) {
 
                 {view === 'forgot' && (
                     <div className="flex items-center px-4 py-3">
-                        <button onClick={() => switchView('login')} className="rounded-[25px] border-2 border-transparent px-4 py-2 text-sm font-bold bg-[#027BFF] text-white flex items-center gap-2">← {t('auth.back')}</button>
+                        <button
+                            onClick={() => switchView('login')}
+                            className="rounded-[25px] border-2 border-transparent px-4 py-2 text-sm font-bold tracking-[-0.5px] leading-[18px]
+                        bg-[#027BFF] text-white flex items-center gap-2 transition-all duration-200 ease-in-out
+                        hover:bg-white hover:text-[#027BFF] hover:border-[#027BFF]"
+                        >
+                            ← {t('auth.back')}
+                        </button>
                     </div>
                 )}
 
@@ -150,12 +157,12 @@ export function AuthModal({ onClose }: AuthModalProps) {
 
                         {view === 'login' && (
                             <div className="text-right">
-                                <span onClick={() => switchView('forgot')} className="text-sm text-[#027BFF] font-semibold hover:underline cursor-pointer">{t('Zapomenuté heslo?')}</span>
-                            </div>
+                                <span onClick={() => switchView('forgot')} className="text-sm text-[#027BFF] font-semibold hover:underline cursor-pointer">{t('auth.forgotPasswordLink')}</span>
+                            </div>auth.forgotPasswordLink
                         )}
 
                         {error && <p className="text-red-600 text-sm text-center">{error}</p>}
-                        {successMessage && <p className="text-green-600 text-sm text-center">{successMessage}</p>}
+                        {successMessage && <p className="text-green-600 text-sm text-center">{successMessage}</p>}auth.forgotPasswordLink
 
                         <button type="submit" className="w-full rounded-[25px] border-2 border-transparent px-5 py-3 text-base font-bold bg-[#027BFF] text-white flex justify-center items-center hover:bg-white hover:text-[#027BFF] hover:border-[#027BFF]">
                             {view === 'login' && t('auth.loginIn')}

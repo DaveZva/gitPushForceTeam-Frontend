@@ -10,7 +10,7 @@ interface Step6RecapProps {
 
 export function Step6_Recap({ onEditStep }: Step6RecapProps) {
     const { getValues } = useFormContext<RegistrationFormData>();
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
     const data = getValues();
 
     interface RecapItemProps {
@@ -33,7 +33,7 @@ export function Step6_Recap({ onEditStep }: Step6RecapProps) {
     const RecapSection: React.FC<RecapSectionProps> = ({ title, editStep, onEdit, children }) => (
         <div className="p-6 bg-white rounded-lg shadow-sm">
             <div className="flex justify-between items-center border-b border-blue-200 pb-2 mb-4">
-                <h3 className="text-lg font-bold text-blue-700">
+                <h3 className="text-lg font-bold text-[#027BFF]">
                     {title}
                 </h3>
                 <button
@@ -53,6 +53,14 @@ export function Step6_Recap({ onEditStep }: Step6RecapProps) {
     const [shows, setShows] = useState<AvailableShow[]>([]);
     const [isLoading, setIsLoading] = useState(true);
 
+    // Pomocná funkce pro formátování data (stejná jako v Step 1)
+    const formatDate = (dateString: string | undefined): string => {
+        if (!dateString) return '-';
+        return new Date(dateString).toLocaleDateString(i18n.language, {
+            year: 'numeric', month: '2-digit', day: '2-digit',
+        });
+    };
+
     useEffect(() => {
         const loadShows = async () => {
             try {
@@ -68,7 +76,10 @@ export function Step6_Recap({ onEditStep }: Step6RecapProps) {
     }, [t]);
 
     const selectedShow = shows.find(show => String(show.id) === String(data.showId));
-    const showName = isLoading ? t('common.loading') : (selectedShow ? `${selectedShow.name} (${selectedShow.startDate})` : data.showId);
+    // Zde aplikujeme formátování data
+    const showName = isLoading
+        ? t('common.loading')
+        : (selectedShow ? `${selectedShow.name} (${formatDate(selectedShow.startDate)})` : data.showId);
 
     const daysMap: Record<string, string> = {
         sat: t('catForm.common.sat'),
@@ -108,7 +119,7 @@ export function Step6_Recap({ onEditStep }: Step6RecapProps) {
 
     return (
         <div className="space-y-8">
-            <h2 className="text-2xl font-bold text-gray-800">{t('catForm.recap.title')}</h2>
+            <h2 className="text-2xl font-bold text-gray-800 tracking-[-2px]">{t('catForm.recap.title')}</h2>
             <p className="text-gray-600">
                 {t('catForm.recap.checkData')}
             </p>
@@ -179,7 +190,6 @@ export function Step6_Recap({ onEditStep }: Step6RecapProps) {
                     onEdit={onEditStep}
                 >
                     <RecapItem label={t('catForm.recap.notes')} value={data.notes} />
-                    {/* 7. OPRAVENÉ CESTY pro 'agreed' a 'notAgreed' */}
                     <RecapItem label={t('catForm.recap.dataAccuracy')} value={data.dataAccuracy ? `✓ ${t('catForm.common.agreed')}` : `X ${t('catForm.common.notAgreed')}`} />
                     <RecapItem label={t('catForm.recap.gdprConsent')} value={data.gdprConsent ? `✓ ${t('catForm.common.agreed')}` : `X ${t('catForm.common.notAgreed')}`} />
                 </RecapSection>

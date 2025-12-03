@@ -1,7 +1,7 @@
 import React, { useState, ReactNode } from 'react';
 import { useFormContext, FieldError, FieldErrors, Path } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { BREED_OPTIONS, validateEmsCode } from "../../../utils/emsRules";
+import { BREED_OPTIONS, validateEmsCode, BREED_GROUP_RULES } from "../../../utils/emsRules";
 import { RegistrationFormData, CatFormData } from '../../../schemas/registrationSchema';
 import { Select } from '../../../components/ui/Select';
 import { Button } from '../../../components/ui/Button';
@@ -72,6 +72,9 @@ export function CatForm({ catIndex, onRemove }: CatFormProps) {
     const { prefix: motherEmsPrefix, suffix: motherEmsSuffix } = parseEms(motherEmsCodeValue);
     const { prefix: fatherEmsPrefix, suffix: fatherEmsSuffix } = parseEms(fatherEmsCodeValue);
 
+    // Získání limitu skupin pro aktuální plemeno
+    const maxGroupForBreed = BREED_GROUP_RULES[emsPrefix];
+
     const handleGenericEmsChange = (
         fieldToUpdate: CatFieldName,
         currentPrefix: string,
@@ -113,7 +116,7 @@ export function CatForm({ catIndex, onRemove }: CatFormProps) {
                         </FormField>
 
                         <FormField label={t('catForm.catName')} name={fieldName("catName")} error={getError("catName")}>
-                            <Input type="text" {...register(fieldName("catName"))} placeholder="Molly" />
+                            <Input type="text" {...register(fieldName("catName"))} placeholder={t('catForm.placeholders.catName')} />
                         </FormField>
 
                         <FormField label={t('catForm.titleAfter')} name={fieldName("titleAfter")} error={getError("titleAfter")}>
@@ -127,7 +130,7 @@ export function CatForm({ catIndex, onRemove }: CatFormProps) {
                         </FormField>
 
                         <FormField label={t('catForm.chipNumber')} name={fieldName("chipNumber")} error={getError("chipNumber")}>
-                            <Input type="text" {...register(fieldName("chipNumber"))} placeholder="15 místné číslo" />
+                            <Input type="text" {...register(fieldName("chipNumber"))} placeholder={t('catForm.placeholders.chipNumber')} />
                         </FormField>
 
                         <FormField label={t('catForm.gender')} name={fieldName("gender")} error={getError("gender")}>
@@ -154,7 +157,7 @@ export function CatForm({ catIndex, onRemove }: CatFormProps) {
                                     onChange={(e) => handleGenericEmsChange("emsCode", emsPrefix, emsSuffix, 'prefix', e.target.value)}
                                     className="w-1/3"
                                 >
-                                    <option value="">-- Plemeno --</option>
+                                    <option value="">-- {t('catForm.breed')} --</option>
                                     {BREED_OPTIONS.map(opt => (
                                         <option key={opt.value} value={opt.value}>
                                             {opt.label}
@@ -166,9 +169,37 @@ export function CatForm({ catIndex, onRemove }: CatFormProps) {
                                     value={emsSuffix}
                                     onChange={(e) => handleGenericEmsChange("emsCode", emsPrefix, emsSuffix, 'suffix', e.target.value)}
                                     className="w-2/3"
-                                    placeholder="n 03 24"
+                                    placeholder={t('catForm.placeholders.ems')}
                                 />
                             </div>
+                        </FormField>
+
+                        {/* NOVÉ POLE: SKUPINA */}
+                        <FormField label={t('catForm.group')} name={fieldName("group")} error={getError("group")}>
+                            <Select
+                                {...register(fieldName("group"))}
+                                disabled={!maxGroupForBreed}
+                                className={!maxGroupForBreed ? "bg-gray-200 cursor-not-allowed" : ""}
+                            >
+                                <option value="">{t('common.select')}</option>
+                                {/* Generování možností 1 až 11 */}
+                                {[...Array(11)].map((_, i) => {
+                                    const val = i + 1;
+                                    // Zobrazíme všechny, validace proběhne při odeslání/změně, nebo můžeme filtrovat:
+                                    // if (maxGroupForBreed && val > maxGroupForBreed) return null;
+
+                                    return (
+                                        <option key={val} value={val}>
+                                            {t('catForm.groupOption', { number: val })}
+                                        </option>
+                                    );
+                                })}
+                            </Select>
+                            {!maxGroupForBreed && emsPrefix && (
+                                <span className="text-xs text-gray-500 mt-1 block">
+                                    {t('catForm.groupNotRequired')}
+                                </span>
+                            )}
                         </FormField>
 
                         <FormField label={t('catForm.birthDate')} name={fieldName("birthDate")} error={getError("birthDate")}>
@@ -201,7 +232,7 @@ export function CatForm({ catIndex, onRemove }: CatFormProps) {
                         </FormField>
 
                         <FormField label={t('catForm.pedigreeNumber')} name={fieldName("pedigreeNumber")} error={getError("pedigreeNumber")}>
-                            <Input type="text" {...register(fieldName("pedigreeNumber"))} placeholder="CSZ FO 1234/18" />
+                            <Input type="text" {...register(fieldName("pedigreeNumber"))} placeholder={t('catForm.placeholders.pedigreeNumber')} />
                         </FormField>
 
                         <FormField label={t('catForm.cageType')} name={fieldName("cageType")} error={getError("cageType")}>
@@ -231,7 +262,7 @@ export function CatForm({ catIndex, onRemove }: CatFormProps) {
                             </Select>
                         </FormField>
 
-                        <FormField label={t('catForm.name')} name={fieldName("motherName")} error={getError("motherName")}>
+                        <FormField label={t('catForm.catName')} name={fieldName("motherName")} error={getError("motherName")}>
                             <Input type="text" {...register(fieldName("motherName"))} placeholder={t('catForm.motherNamePlaceholder')} />
                         </FormField>
 
@@ -253,7 +284,7 @@ export function CatForm({ catIndex, onRemove }: CatFormProps) {
                                     onChange={(e) => handleGenericEmsChange("motherEmsCode", motherEmsPrefix, motherEmsSuffix, 'prefix', e.target.value)}
                                     className="w-1/3"
                                 >
-                                    <option value="">-- Plemeno --</option>
+                                    <option value="">-- {t('catForm.breed')} --</option>
                                     {BREED_OPTIONS.map(opt => (
                                         <option key={opt.value} value={opt.value}>
                                             {opt.label}
@@ -265,7 +296,7 @@ export function CatForm({ catIndex, onRemove }: CatFormProps) {
                                     value={motherEmsSuffix}
                                     onChange={(e) => handleGenericEmsChange("motherEmsCode", motherEmsPrefix, motherEmsSuffix, 'suffix', e.target.value)}
                                     className="w-2/3"
-                                    placeholder="n 03 24"
+                                    placeholder={t('catForm.placeholders.ems')}
                                 />
                             </div>
                         </FormField>
@@ -300,7 +331,7 @@ export function CatForm({ catIndex, onRemove }: CatFormProps) {
                             </Select>
                         </FormField>
 
-                        <FormField label={t('catForm.name')} name={fieldName("fatherName")} error={getError("fatherName")}>
+                        <FormField label={t('catForm.catName')} name={fieldName("fatherName")} error={getError("fatherName")}>
                             <Input type="text" {...register(fieldName("fatherName"))} placeholder={t('catForm.fatherNamePlaceholder')} />
                         </FormField>
 
@@ -322,7 +353,7 @@ export function CatForm({ catIndex, onRemove }: CatFormProps) {
                                     onChange={(e) => handleGenericEmsChange("fatherEmsCode", fatherEmsPrefix, fatherEmsSuffix, 'prefix', e.target.value)}
                                     className="w-1/3"
                                 >
-                                    <option value="">-- Plemeno --</option>
+                                    <option value="">-- {t('catForm.breed')} --</option>
                                     {BREED_OPTIONS.map(opt => (
                                         <option key={opt.value} value={opt.value}>
                                             {opt.label}
@@ -334,7 +365,7 @@ export function CatForm({ catIndex, onRemove }: CatFormProps) {
                                     value={fatherEmsSuffix}
                                     onChange={(e) => handleGenericEmsChange("fatherEmsCode", fatherEmsPrefix, fatherEmsSuffix, 'suffix', e.target.value)}
                                     className="w-2/3"
-                                    placeholder="n 03 24"
+                                    placeholder={t('catForm.placeholders.ems')}
                                 />
                             </div>
                         </FormField>
@@ -360,31 +391,33 @@ export function CatForm({ catIndex, onRemove }: CatFormProps) {
     return (
         <div className="p-6 bg-white rounded-2xl shadow-lg border border-gray-200 animate-fade-in">
             <div className="flex flex-col items-stretch gap-6 mb-8 md:flex-row md:items-center md:justify-between">
-                <div className="flex flex-col flex-grow p-1 bg-gray-100 rounded-full md:flex-row">
+
+                <div className="flex flex-col flex-grow p-1 rounded-full md:flex-row gap-2 sm:gap-3 md:gap-4">
+
                     <Button
                         variant={activeTab === 'basic' ? 'primary' : 'secondary'}
                         onClick={() => setActiveTab('basic')}
-                        style={{ width: "33.3%", margin: "0 5px 0 5px" }}
-                        className="hover:bg-primary-500 hover:text-black"
+                        className="flex-1 min-w-[60px] text-sm sm:text-base hover:bg-primary-500 hover:text-blue"
                     >
                         {t('catForm.tabs.basic')}
                     </Button>
+
                     <Button
                         variant={activeTab === 'mother' ? 'primary' : 'secondary'}
                         onClick={() => setActiveTab('mother')}
-                        style={{ width: "33.3%", margin: "0 5px 0 5px" }}
-                        className="hover:bg-primary-500 hover:text-black"
+                        className="flex-1 min-w-[60px] text-sm sm:text-base hover:bg-primary-500 hover:text-blue"
                     >
                         {t('catForm.tabs.mother')}
                     </Button>
+
                     <Button
                         variant={activeTab === 'father' ? 'primary' : 'secondary'}
                         onClick={() => setActiveTab('father')}
-                        style={{ width: "33.3%", margin: "0 5px 0 5px" }}
-                        className="hover:bg-primary-500 hover:text-black"
+                        className="flex-1 min-w-[60px] text-sm sm:text-base hover:bg-primary-500 hover:text-blue"
                     >
                         {t('catForm.tabs.father')}
                     </Button>
+
                 </div>
 
                 {onRemove && (
@@ -395,6 +428,7 @@ export function CatForm({ catIndex, onRemove }: CatFormProps) {
                         {t('catForm.removeCat')}
                     </Button>
                 )}
+
             </div>
 
             <div className="pt-4">
