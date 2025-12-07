@@ -88,7 +88,8 @@
     "actions": "Akce"
   },
   "status": {
-    "completed": "Proběhlo"
+    "completed": "Proběhlo",
+    "registered": "Již přihlášena"
   },
   "actions": {
     "detail": "Detail",
@@ -151,11 +152,15 @@
     "autosaveInfo": "Údaje se automaticky ukládají."
   },
   "catForm": {
+    "manual_mode": "Ruční vyplnění",
+    "saved_mode": "Načteno z uložených koček",
+    "read_only_info": "Identifikační údaje nelze měnit",
+    "manual_info": "Vyplňte všechny údaje o nové kočce",
     "titleBefore": "Titul před jménem",
     "catName": "Jméno",
     "titleAfter": "Titul za jménem",
     "chipNumber": "Číslo čipu",
-    "gender": "Pohlaví,",
+    "gender": "Pohlaví",
     "neutered": "Kastrované",
     "emsCode": "EMS Kód",
     "emsCodeShort": "EMS",
@@ -251,6 +256,19 @@
     "owner": "Majitel",
     "consent": "Souhlasy",
     "recap": "Rekapitulace"
+  },
+  "registration": {
+    "step2": {
+      "choose_saved_title": "Vybrat uloženou kočku",
+      "choose_saved_desc": "Kliknutím na kartu se údaje automaticky vyplní do formuláře.",
+      "clear_selection": "Zrušit výběr a vyplnit ručně",
+      "no_saved_cats": "Nemáte žádné uložené kočky. Formulář vyplňte ručně.",
+      "cat_details_title": "Údaje o kočce",
+      "loading_cats": "Načítám vaše kočky...",
+      "badge_registered": "Hotovo",
+      "badge_selected": "Vybráno",
+      "application_details": "Detaily přihlášky"
+    }
   },
   "registrationSteps": {
     "step1_exhibition": {

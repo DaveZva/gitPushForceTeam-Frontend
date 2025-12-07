@@ -88,7 +88,8 @@
     "actions": "Actions"
   },
   "status": {
-    "completed": "Completed"
+    "completed": "Completed",
+    "registered": "Already registered"
   },
   "actions": {
     "detail": "Detail",
@@ -151,11 +152,15 @@
     "autosaveInfo": "Data is saved automatically."
   },
   "catForm": {
+    "manual_mode": "Manual Entry",
+    "saved_mode": "Loaded from Saved Cats",
+    "read_only_info": "Identification details cannot be changed",
+    "manual_info": "Fill in all details for a new cat",
     "titleBefore": "Title before name",
     "catName": "Name",
     "titleAfter": "Title after name",
     "chipNumber": "Chip number",
-    "gender": "Gender,",
+    "gender": "Gender",
     "neutered": "Neutered",
     "emsCode": "EMS Code",
     "emsCodeShort": "EMS",
@@ -251,6 +256,19 @@
     "owner": "Owner",
     "consent": "Consents",
     "recap": "Summary"
+  },
+  "registration": {
+    "step2": {
+      "choose_saved_title": "Select Saved Cat",
+      "choose_saved_desc": "Click on a card to automatically fill the form.",
+      "clear_selection": "Cancel selection and fill manually",
+      "no_saved_cats": "You have no saved cats. Fill the form manually.",
+      "cat_details_title": "Cat Details",
+      "loading_cats": "Loading your cats...",
+      "badge_registered": "Done",
+      "badge_selected": "Selected",
+      "application_details": "Application Details"
+    }
   },
   "registrationSteps": {
     "step1_exhibition": {
@@ -542,6 +560,21 @@
       "websiteUrl.invalid": "Invalid website URL.",
       "date.order": "End date must be after start date."
     }
+  },
+  "paymentResult": {
+    "successTitle": "Payment Successfully Received",
+    "successMessage": "Thank you! Your registration has been confirmed.",
+    "processingTitle": "Processing",
+    "processingMessage": "Your payment is being processed. Please wait for confirmation.",
+    "failedTitle": "Payment Declined",
+    "failedMessage": "The payment could not be completed.",
+    "transactionId": "Transaction ID",
+    "registrationNumber": "Registration Number",
+    "totalAmount": "Total Amount",
+    "backToApplications": "Back to My Applications",
+    "tryAgain": "Try Again",
+    "verifying": "Verifying registration status...",
+    "verificationFailed": "Could not verify registration status, but payment was likely successful. Check your applications."
   },
   "location": "Location"
 }

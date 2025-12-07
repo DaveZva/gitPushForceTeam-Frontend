@@ -95,7 +95,6 @@ const createCatSchema = (t: TFunction) => z.object({
         }
     }),
 
-    // PŘIDÁNO: Pole pro skupinu
     group: z.string().optional(),
 
     motherTitleBefore: z.string().optional(),
@@ -160,7 +159,8 @@ const createCatSchema = (t: TFunction) => z.object({
     }),
     fatherGender: z.enum(['male', 'female'], {
         message: t('validation.cat.gender.required')
-    })
+    }),
+    isSaved: z.boolean().optional()
 }).superRefine((data, ctx) => {
     // Validace skupiny na základě EMS kódu s použitím 't'
     if (data.emsCode && data.emsCode.length >= 3) {

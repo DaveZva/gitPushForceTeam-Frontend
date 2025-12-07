@@ -34,6 +34,53 @@ export interface RegistrationPayload {
     };
 }
 
+export interface PublicCatalogEntry {
+    id: number;
+    entryNumber: number;
+    name: string;
+    ems: string;
+    sex: string;
+    birthDate: string;
+    registrationNumber: string;
+    father: string;
+    mother: string;
+    ownerName: string;
+    breederName: string;
+    breederCountry: string;
+    category: string;
+    color: string;
+    className: string;
+    group: number | null;
+}
+
+export interface SavedCat {
+    id: number;
+    catName: string;
+    titleBefore?: string;
+    titleAfter?: string;
+    emsCode: string;
+    pedigreeNumber: string;
+    chipNumber: string;
+    birthDate: string;
+    gender: string;
+
+    fatherName?: string;
+    fatherTitleBefore?: string;
+    fatherTitleAfter?: string;
+    fatherEmsCode?: string;
+    fatherBirthDate?: string;
+    fatherChipNumber?: string;
+    fatherPedigreeNumber?: string;
+
+    motherName?: string;
+    motherTitleBefore?: string;
+    motherTitleAfter?: string;
+    motherEmsCode?: string;
+    motherBirthDate?: string;
+    motherChipNumber?: string;
+    motherPedigreeNumber?: string;
+}
+
 export interface SubmitRegistrationResponse {
     registrationNumber: string | number;
 }
@@ -84,6 +131,26 @@ export const registrationApi = {
             return [];
         }
     },
+
+    getCatalog: async (showId: string | number): Promise<PublicCatalogEntry[]> => {
+        try {
+            const response = await api.get<PublicCatalogEntry[]>(`/exhibitions/${showId}/catalog`);
+            return response.data;
+        } catch (error) {
+            console.error('API Error (getCatalog):', error);
+            throw error;
+        }
+    },
+
+    getMyCats: async (): Promise<SavedCat[]> => {
+        const response = await api.get<SavedCat[]>('/cats/my');
+        return response.data;
+    },
+
+    getRegisteredCatIdsForShow: async (showId: string): Promise<number[]> => {
+        const response = await api.get<number[]>(`/cats/registered-in-show/${showId}`);
+        return response.data;
+    }
 };
 
 export const getRegistrationDetail = async (id: number | string): Promise<RegistrationDetail> => {

@@ -18,6 +18,9 @@ http://localhost:5173
 |----------|---------|-------|
 | VITE_API_URL | http://localhost:8080/api | Backend API URL |
 
+## Spuštění Webhooku
+stripe listen --forward-to localhost:8080/api/v1/payments/webhook
+
 ## Build pro produkci
 ```bash
 npm run build

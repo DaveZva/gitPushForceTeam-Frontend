@@ -9,15 +9,19 @@ import { AppLayout } from './layouts/AppLayout';
 import Dashboard from './pages/Dashboard';
 import Secretariat from './pages/secretariat/ShowManagementPage';
 import CatRegisterPage from './pages/catRegister/CatRegistrationForm';
-import { ShowCreatePage } from './pages/secretariat/ShowCreatePage';
 import MyApplicationsPage from './pages/user/MyApplicationsPage';
 import ResetPasswordPage from './pages/user/ResetPasswordPage';
 import PaymentPage from './pages/user/PaymentPage';
 import { PaymentResultPage } from './pages/user/PaymentResultPage';
 import { PrivateRoute } from './components/PrivateRoute';
 import Catalog from './pages/./catalog';
-import * as path from "path";
 // import EditExhibition from './pages/secretariat/ExhibitionEditPage';
+
+import { SecretariatLayout } from './layouts/SecretarialLayout'; // Vytvořeno v předchozím kroku
+import SecretariatDashboard from './pages/secretariat/SecretariatDashboard'; // Vytvořeno v předchozím kroku
+import ShowManagementPage from './pages/secretariat/ShowManagementPage'; // Seznam výstav
+import { ShowCreatePage } from './pages/secretariat/ShowCreatePage';
+import ShowControlCenter from './pages/secretariat/ShowControlCenter'; // Detail výstavy (řídící centrum)
 
 function App() {
     const { t } = useTranslation();
@@ -34,12 +38,14 @@ function App() {
                         <Route path="my-applications" element={<MyApplicationsPage />} />
                         <Route path="my-cats" element={<h2>{t('nav.myCats')}</h2>} />
                         <Route path="catalog" element={<Catalog />} />
+                        <Route path="catalog/:showId" element={<Catalog />} />
                         <Route path="/reset-password" element={<ResetPasswordPage />} />
                         <Route path="payment/:registrationId" element={<PaymentPage />} />
-                        <Route path="secretariat">
-                            <Route index element={<Secretariat />} />
+                        <Route path="secretariat" element={<SecretariatLayout />}>
+                            <Route index element={<SecretariatDashboard />} />
+                            <Route path="shows" element={<ShowManagementPage />} />
                             <Route path="new/show" element={<ShowCreatePage />} />
-                            {/* <Route path="edit/:id" element={<EditExhibition />} /> */}
+                            <Route path="shows/:id" element={<ShowControlCenter />} />
                         </Route>
                         <Route path="/payment/result" element={
                             <PrivateRoute>
