@@ -2,9 +2,8 @@ import api from '../api';
 import { ShowFormData } from '../../schemas/showSchema';
 import { TFunction } from 'i18next';
 import axios, { AxiosError } from 'axios';
-import { AvailableShow } from "./registrationApi";
 
-export interface Show {
+export interface SecretariatShow {
     id: number | string;
     name: string;
     description?: string;
@@ -20,6 +19,9 @@ export interface Show {
     organizerName: string;
     contactEmail?: string;
     websiteUrl?: string;
+    totalRegistrations?: number;
+    confirmedRegistrations?: number;
+    totalCats?: number;
 }
 
 interface ApiErrorData {
@@ -44,9 +46,9 @@ const handleError = (error: unknown, t?: TFunction) => {
 };
 
 export const secretariatApi = {
-    getSecretariatShows: async (): Promise<Show[]> => {
+    getSecretariatShows: async (): Promise<SecretariatShow[]> => {
         try {
-            const response = await api.get<Show[]>(SECRETARIAT_URL);
+            const response = await api.get<SecretariatShow[]>(SECRETARIAT_URL);
             return response.data;
         } catch (error) {
             handleError(error, "xx" as any);
@@ -54,9 +56,9 @@ export const secretariatApi = {
         }
     },
 
-    createShow: async (showData: ShowFormData): Promise<Show> => {
+    createShow: async (showData: ShowFormData): Promise<SecretariatShow> => {
         try {
-            const response = await api.post<Show>(SECRETARIAT_URL, showData);
+            const response = await api.post<SecretariatShow>(SECRETARIAT_URL, showData);
             return response.data;
         } catch (error) {
             handleError(error, "xx" as any);
@@ -64,9 +66,9 @@ export const secretariatApi = {
         }
     },
 
-    getShowById: async (showId: string | number): Promise<Show> => {
+    getShowById: async (showId: string | number): Promise<SecretariatShow> => {
         try {
-            const response = await api.get<Show>(`${SECRETARIAT_URL}/${showId}`);
+            const response = await api.get<SecretariatShow>(`${SECRETARIAT_URL}/${showId}`);
             return response.data;
         } catch (error) {
             handleError(error, "xx" as any);
@@ -74,9 +76,9 @@ export const secretariatApi = {
         }
     },
 
-    updateShow: async (showId: string | number, showData: ShowFormData): Promise<Show> => {
+    updateShow: async (showId: string | number, showData: ShowFormData): Promise<SecretariatShow> => {
         try {
-            const response = await api.put<Show>(`${SECRETARIAT_URL}/${showId}`, showData);
+            const response = await api.put<SecretariatShow>(`${SECRETARIAT_URL}/${showId}`, showData);
             return response.data;
         } catch (error) {
             handleError(error, "xx" as any);
@@ -88,6 +90,16 @@ export const secretariatApi = {
         try {
             await api.delete(`${SECRETARIAT_URL}/${showId}`);
             return;
+        } catch (error) {
+            handleError(error, "xx" as any);
+            throw error;
+        }
+    },
+
+    generateCatalog: async (showId: number | string): Promise<{ message: string; totalCats: number }> => {
+        try {
+            const response = await api.post<{ message: string; totalCats: number }>(`${SECRETARIAT_URL}/${showId}/generate-catalog`);
+            return response.data;
         } catch (error) {
             handleError(error, "xx" as any);
             throw error;
