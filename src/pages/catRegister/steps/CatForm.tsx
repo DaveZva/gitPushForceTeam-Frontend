@@ -70,8 +70,11 @@ export function CatForm({ catIndex, onRemove }: CatFormProps) {
         suffix: val.length > 3 ? val.substring(4) : ""
     });
 
+    // @ts-ignore
     const { prefix: emsPrefix, suffix: emsSuffix } = parseEms(emsCodeValue);
+    // @ts-ignore
     const { prefix: motherEmsPrefix, suffix: motherEmsSuffix } = parseEms(motherEmsCodeValue);
+    // @ts-ignore
     const { prefix: fatherEmsPrefix, suffix: fatherEmsSuffix } = parseEms(fatherEmsCodeValue);
 
     const maxGroupForBreed = BREED_GROUP_RULES[emsPrefix as keyof typeof BREED_GROUP_RULES];

@@ -1,15 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
-import { secretariatApi, Show } from '../../services/api/secretariatApi';
+import { secretariatApi, SecretariatShow } from '../../services/api/secretariatApi';
 import { useAuth } from '../../context/AuthContext';
 
 export default function ShowManagementPage() {
-    // 1. Získání i18n pro formátování data
     const { t, i18n } = useTranslation();
     const { isAuthenticated } = useAuth();
 
-    const [shows, setShows] = useState<Show[]>([]);
+    const [shows, setShows] = useState<SecretariatShow[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
 
@@ -21,7 +20,7 @@ export default function ShowManagementPage() {
         });
     };
 
-    const getStatusClass = (status: Show['status']): string => {
+    const getStatusClass = (status: SecretariatShow['status']): string => {
         const baseClass = "px-3 py-1 rounded-full text-xs font-semibold";
 
         const statuses: Record<string, string> = {
@@ -99,7 +98,7 @@ export default function ShowManagementPage() {
             );
         }
 
-        return shows.map((show: Show) => (
+        return shows.map((show: SecretariatShow) => (
             <tr key={show.id} className="border-b border-gray-100 hover:bg-gray-50">
                 <td className="py-4 px-3 font-semibold text-gray-800">{show.name}</td>
                 <td className="py-4 px-3 text-gray-600">{show.venueName}</td>
