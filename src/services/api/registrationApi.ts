@@ -111,6 +111,15 @@ export interface RegistrationDetail {
     showName?: string;
 }
 
+export interface QuickCatalogEntry {
+    catalogNumber: number;
+    catName: string;
+    gender: 'MALE' | 'FEMALE';
+    emsCode: string;
+    showClass: string;
+    category: number;
+}
+
 export const registrationApi = {
     submitRegistration: async (registrationData: RegistrationPayload): Promise<SubmitRegistrationResponse> => {
         try {
@@ -124,21 +133,11 @@ export const registrationApi = {
 
     getAvailableShows: async (): Promise<AvailableShow[]> => {
         try {
-            const response = await api.get<AvailableShow[]>('/exhibitions/available');
+            const response = await api.get<AvailableShow[]>('/shows/available');
             return response.data;
         } catch (error) {
             console.error('API Error (getAvailableShows):', error);
             return [];
-        }
-    },
-
-    getCatalog: async (showId: string | number): Promise<PublicCatalogEntry[]> => {
-        try {
-            const response = await api.get<PublicCatalogEntry[]>(`/exhibitions/${showId}/catalog`);
-            return response.data;
-        } catch (error) {
-            console.error('API Error (getCatalog):', error);
-            throw error;
         }
     },
 
@@ -149,6 +148,21 @@ export const registrationApi = {
 
     getRegisteredCatIdsForShow: async (showId: string): Promise<number[]> => {
         const response = await api.get<number[]>(`/cats/registered-in-show/${showId}`);
+        return response.data;
+    },
+
+    getCatalog: async (showId: string | number): Promise<PublicCatalogEntry[]> => {
+        try {
+            const response = await api.get<PublicCatalogEntry[]>(`/shows/${showId}/catalog`);
+            return response.data;
+        } catch (error) {
+            console.error('API Error (getCatalog):', error);
+            throw error;
+        }
+    },
+
+    getQuickCatalog: async (showId: string | number): Promise<QuickCatalogEntry[]> => {
+        const response = await api.get<QuickCatalogEntry[]>(`/shows/${showId}/quick-catalog`);
         return response.data;
     }
 };
