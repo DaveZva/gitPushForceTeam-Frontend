@@ -229,7 +229,7 @@ const PrimaryCatalogueContent = ({ showId }: { showId: string | number }) => {
                                                     <li key={entry.cat.entryNumber} className="p-3 bg-white rounded-lg shadow-md border border-gray-100 hover:shadow-lg transition-shadow">
                                                         <div className="flex items-start justify-between flex-wrap">
                                                             <h4 className="text-base font-bold text-gray-900 flex items-baseline">
-                                                                <span className="text-xl text-[#027BFF] mr-2">{entry.cat.entryNumber}.</span>
+                                                                <span className="text-xl text-[#027BFF] mr-2">#.</span>
                                                                 <span className="ml-0 text-sm sm:text-base font-bold">{entry.category} <span className="text-gray-600 font-normal ml-1">({entry.colour})</span></span>
                                                             </h4>
                                                             {entry.group && <div className="text-xs font-medium text-white bg-[#005fcc] px-2 py-0.5 rounded-full mt-1 sm:mt-0">{t('catalog.group') || 'Group'}: {entry.group}</div>}
