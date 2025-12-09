@@ -2,7 +2,7 @@ import React, { useState, useMemo, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 // PŘIDÁNO: QuickCatalogEntry import
-import { registrationApi, QuickCatalogEntry } from "@/services/api/registrationApi";
+import { registrationApi, QuickCatalogEntry } from "../services/api/registrationApi";
 
 const BREED_NAMES: Record<string, string> = {
     EXO: 'Exotic Shorthair',
