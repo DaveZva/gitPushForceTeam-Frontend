@@ -7,7 +7,6 @@ import { Elements } from '@stripe/react-stripe-js';
 
 import { AppLayout } from './layouts/AppLayout';
 import Dashboard from './pages/Dashboard';
-import Secretariat from './pages/secretariat/ShowManagementPage';
 import CatRegisterPage from './pages/catRegister/CatRegistrationForm';
 import MyApplicationsPage from './pages/user/MyApplicationsPage';
 import ResetPasswordPage from './pages/user/ResetPasswordPage';
@@ -15,13 +14,13 @@ import PaymentPage from './pages/user/PaymentPage';
 import { PaymentResultPage } from './pages/user/PaymentResultPage';
 import { PrivateRoute } from './components/PrivateRoute';
 import Catalog from './pages/./catalog';
-// import EditExhibition from './pages/secretariat/ExhibitionEditPage';
 
 import { SecretariatLayout } from './layouts/SecretarialLayout'; // Vytvořeno v předchozím kroku
 import SecretariatDashboard from './pages/secretariat/SecretariatDashboard'; // Vytvořeno v předchozím kroku
 import ShowManagementPage from './pages/secretariat/ShowManagementPage'; // Seznam výstav
 import { ShowCreatePage } from './pages/secretariat/ShowCreatePage';
 import ShowControlCenter from './pages/secretariat/ShowControlCenter'; // Detail výstavy (řídící centrum)
+import ShowEditPage from './pages/secretariat/ShowEditPage';
 
 function App() {
     const { t } = useTranslation();
@@ -46,6 +45,7 @@ function App() {
                             <Route path="shows" element={<ShowManagementPage />} />
                             <Route path="new/show" element={<ShowCreatePage />} />
                             <Route path="shows/:id" element={<ShowControlCenter />} />
+                            <Route path="shows/:id/edit" element={<ShowEditPage />} />
                         </Route>
                         <Route path="/payment/result" element={
                             <PrivateRoute>

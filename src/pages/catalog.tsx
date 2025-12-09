@@ -1,7 +1,8 @@
 import React, { useState, useMemo, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { registrationApi, PublicCatalogEntry } from "../services/api/registrationApi";
+// PŘIDÁNO: QuickCatalogEntry import
+import { registrationApi, QuickCatalogEntry } from "../services/api/registrationApi";
 
 const BREED_NAMES: Record<string, string> = {
     EXO: 'Exotic Shorthair',
@@ -131,6 +132,7 @@ const useSortedCatalogData = (
     }, [cats, searchTerm, filters, sortKey]);
 };
 
+// --- PRIMÁRNÍ KATALOG (DETAILNÍ) ---
 const PrimaryCatalogueContent = ({ showId }: { showId: string | number }) => {
     const { t } = useTranslation();
     const [searchTerm, setSearchTerm] = useState('');
@@ -145,6 +147,7 @@ const PrimaryCatalogueContent = ({ showId }: { showId: string | number }) => {
             setIsLoading(true);
             try {
                 const idToFetch = showId || 1;
+                // Pozn: registrationApi.getCatalog vrací detailní DTO pro primární katalog
                 const apiData = await registrationApi.getCatalog(idToFetch);
                 const mappedData: CatEntry[] = apiData.map(dto => ({
                     cat: {
@@ -308,10 +311,8 @@ const PrimaryCatalogueContent = ({ showId }: { showId: string | number }) => {
     );
 };
 
-// --- 3. STATICKÁ DATA PRO SECONDARY CATALOG (PŮVODNÍ) ---
-
+// --- MOCK DATA PRO OSTATNÍ KOMPONENTY (SOUDY, NOMINACE) ---
 interface JudgeStatus { name: string; sat: number; sun: number; }
-interface CatalogueEntry { no: string; cat: string; sex: string; emsSat: string; classSat: string; resultSat: string; judgeSat: string; emsSun: string; classSun: string; resultSun: string; judgeSun: string; group: string; }
 interface JudgeReportRow { no: number; ems: string; sex: string; class: number; born: string; AdM: string; AdF: string; NeM: string; NeF: string; '11M': string; '11F': string; '12M': string; '12F': string; results: string; [key: string]: any; }
 interface NominationEntry { no: number; breed: string; judge: string; badge: string; }
 
@@ -326,13 +327,7 @@ const judges: JudgeStatus[] = [
     { name: 'Mrs. Anna Wilczek PL', sat: 100, sun: 0 },
 ];
 
-const catalogueData: any[] = [
-    { no: '1', cat: 'NW24 SC JCH SAN-FE ALEX JW', sex: '1,0', emsSat: 'EXO n', classSat: '1', resultSat: 'PH', judgeSat: 'Mrs. Eva Porat SE', emsSun: 'EXO n', classSun: '1', resultSun: 'ABS', judgeSun: 'Mrs. Daria Łukasik-Weber PL', group: 'cat1' },
-    { no: '2', cat: 'CEW25 CH JCH KCH RAY OF HOPE KANDOVAN*PL JW', sex: '0,1', emsSat: 'EXO n 22', classSat: '5', resultSat: 'Ex 1, CAGCIB, NOM', judgeSat: 'Mrs. Daria Łukasik-Weber PL', emsSun: 'EXO n 22', classSun: '5', resultSun: 'ABS', judgeSun: 'Mrs. Eva Porat SE', group: 'cat1' },
-    // Zkráceno pro přehlednost, data se nemění
-];
-
-const JudgeReportDetail = ({ judgeName, date }: { judgeName: string; date: string }) => {
+const JudgeReportDetail = ({}: { judgeName: string; date: string }) => {
     const reportData: JudgeReportRow[] = [
         { no: 1, ems: 'EXO n', sex: '1,0', class: 1, born: '2023-05-04', AdM: 'X', AdF: '', NeM: '', NeF: '', '11M': '', '11F': '', '12M': '', '12F': '', results: 'PH' },
         { no: 7, ems: 'PER as 24 62', sex: '1,0', class: 12, born: '2025-05-09', AdM: '', AdF: '', NeM: '', NeF: 'X', '11M': '', '11F': '', '12M': '', '12F': '', results: 'Ex 1, CACC, NOM' },
@@ -378,15 +373,65 @@ export default function Catalog() {
     const [tab, setTab] = useState<"info" | "primary" | "secondary">("info");
     const { showId } = useParams<{ showId: string }>();
 
+    // --- QUICK CATALOG STATES ---
+    const [quickEntries, setQuickEntries] = useState<QuickCatalogEntry[]>([]);
+    const [quickLoading, setQuickLoading] = useState<boolean>(false);
+    const [quickError, setQuickError] = useState<string | null>(null);
+    const [activeQuickFilter, setActiveQuickFilter] = useState<number | 'ALL'>('ALL');
+    // ----------------------------
+
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
     const [modalDate, setModalDate] = useState<string | null>(null);
     const [modalJudge, setModalJudge] = useState<string | null>(null);
     const [modalCategory, setModalCategory] = useState<string | null>(null);
 
+    // Načtení dat pro Quick Catalog, když se změní ID
+    useEffect(() => {
+        const fetchQuickCatalog = async () => {
+            const idToFetch = showId || 1;
+            setQuickLoading(true);
+            try {
+                const data = await registrationApi.getQuickCatalog(idToFetch);
+                setQuickEntries(data);
+                setQuickError(null);
+            } catch (err) {
+                console.error(err);
+                setQuickError(t('catalog.errorLoadingQuick') || "Nepodařilo se načíst rychlý katalog.");
+            } finally {
+                setQuickLoading(false);
+            }
+        };
+
+        // Voláme pouze, pokud existuje ID a uživatel by mohl potřebovat data (nebo vždy při mountu)
+        fetchQuickCatalog();
+    }, [showId, t]);
+
+    const filteredQuickEntries = useMemo(() => {
+        const filtered = quickEntries.filter(entry => {
+            if (activeQuickFilter === 'ALL') return true;
+            return entry.category === activeQuickFilter;
+        });
+        return filtered.sort((a, b) => a.catalogNumber - b.catalogNumber);
+
+    }, [quickEntries, activeQuickFilter]);
+
     const openModal = (date: string, judgeName: string | null = null, category: string | null = null) => {
         setModalDate(date); setModalJudge(judgeName); setModalCategory(category); setIsModalOpen(true);
     };
     const closeModal = () => { setIsModalOpen(false); setModalDate(null); setModalJudge(null); setModalCategory(null); };
+
+    // Pomocná komponenta pro filtrační tlačítko
+    const QuickFilterButton = ({ label, value }: { label: string, value: number | 'ALL' }) => (
+        <button
+            onClick={() => setActiveQuickFilter(value)}
+            className={`px-3 py-1.5 text-sm rounded-lg font-semibold whitespace-nowrap transition 
+                ${activeQuickFilter === value
+                ? 'bg-[#027BFF] text-white shadow-md'
+                : 'bg-gray-100 text-gray-500 hover:bg-gray-200'}`}
+        >
+            {label}
+        </button>
+    );
 
     return (
         <div className="bg-white rounded-2xl shadow-xl p-6">
@@ -423,26 +468,94 @@ export default function Catalog() {
                 {/* TAB 2 – PRIMARY CATALOG */}
                 {tab === "primary" && <PrimaryCatalogueContent showId={showId || 1} />}
 
-                {/* TAB 3 – SECONDARY CATALOG */}
+                {/* TAB 3 – SECONDARY CATALOG (QUICK CATALOG & RESULTS) */}
                 {tab === "secondary" && (
                     <div className="py-10 space-y-8">
+                        {/* Static Info Section */}
                         <section className="backdrop-blur-2xl bg-white/30 rounded-2xl p-6 shadow-[0_8px_32px_0_rgba(31,38,135,0.37)] border border-white/40 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                             <div className="text-left"><h2 className="text-xl font-semibold text-gray-900">Cat Show: FP – Poznań</h2><p className="text-sm text-gray-500">Date: 2025–11–15 &amp; 2025–11–16</p></div>
                             <div className="text-sm text-gray-700 text-left sm:text-right"><p className="font-semibold">Judges &amp; colours:</p><div className="flex flex-wrap gap-3 mt-1 sm:justify-end"><a href="#" onClick={(e) => { e.preventDefault(); openModal("2025–11–15", null); }} className="text-[#027BFF] font-semibold hover:underline">[2025–11–15]</a><a href="#" onClick={(e) => { e.preventDefault(); openModal("2025–11–16", null); }} className="text-[#027BFF] font-semibold hover:underline">[2025–11–16]</a></div></div>
                         </section>
+
+                        {/* Static Judges Reports */}
                         <section className="backdrop-blur-2xl bg-white/30 rounded-2xl p-6 shadow-[0_8px_32px_0_rgba(31,38,135,0.37)] border border-white/40 px-6 sm:px-8 py-6">
                             <h3 className="text-lg sm:text-xl font-semibold tracking-[-1px] text-gray-900 mb-4">Judges&apos; reports</h3>
                             <div className="divide-y divide-gray-200">{judges.map((j, idx) => (<div key={idx} className="py-3 flex flex-col gap-3 md:flex-row md:items-center md:justify-between"><div className="md:w-1/3 font-medium text-gray-900 text-left">{j.name}</div><div className="md:w-1/3 flex items-center gap-3"><span className="text-xs font-semibold text-gray-700 whitespace-nowrap">{j.sat}%</span><div className="w-full bg-gray-200 h-2 rounded-full overflow-hidden"><div className="h-full bg-[#027BFF]" style={{ width: `${j.sat}%` }} /></div><a href="#" onClick={(e) => { e.preventDefault(); openModal("2025-11-15", j.name); }} className="text-xs sm:text-sm text-[#027BFF] font-semibold hover:underline whitespace-nowrap">[2025–11–15]</a></div><div className="md:w-1/3 flex items-center gap-3"><span className="text-xs font-semibold text-gray-700 whitespace-nowrap">{j.sun}%</span><div className="w-full bg-gray-200 h-2 rounded-full overflow-hidden"><div className={`h-full ${j.sun === 0 ? 'bg-gray-300' : 'bg-[#027BFF]'}`} style={{ width: `${j.sun}%` }} /></div><a href="#" onClick={(e) => { e.preventDefault(); openModal("2025-11-16", j.name); }} className="text-xs sm:text-sm text-[#027BFF] font-semibold hover:underline whitespace-nowrap">[2025–11–16]</a></div></div>))}</div>
                         </section>
+
+                        {/* Static Nominations */}
                         <section className="backdrop-blur-2xl bg-white/30 rounded-2xl p-6 shadow-[0_8px_32px_0_rgba(31,38,135,0.37)] border border-white/40 px-6 sm:px-8 py-6">
                             <h3 className="text-lg sm:text-xl font-semibold text-gray-900 mb-4 tracking-[-1px] text-left">Nominations</h3>
                             <div className="space-y-4 text-sm sm:text-base"><div><div className="text-[#027BFF] font-bold mb-1 text-left">2025–11–15</div><div className="flex flex-wrap gap-x-4 gap-y-2">{['Cat 1', 'Cat 2', 'Cat 3', 'Cat 4', 'DOM', 'NFO'].map((cat, i) => (<a key={i} href="#" onClick={(e) => { e.preventDefault(); openModal('2025–11–15', null, cat); }} className="font-medium text-gray-900 border-b border-dashed border-gray-900 hover:text-[#027BFF] hover:border-[#027BFF]">[{cat}]</a>))}</div></div><div><div className="text-[#027BFF] font-bold mb-1 text-left">2025–11–16</div><div className="flex flex-wrap gap-x-4 gap-y-2">{['Cat 1', 'Cat 2', 'Cat 3', 'Cat 4', 'DOM'].map((cat, i) => (<a key={i} href="#" onClick={(e) => { e.preventDefault(); openModal('2025–11–16', null, cat); }} className="font-medium text-gray-900 border-b border-dashed border-gray-900 hover:text-[#027BFF] hover:border-[#027BFF]">[{cat}]</a>))}</div></div></div>
                         </section>
+
+                        {/* DYNAMIC QUICK CATALOGUE SECTION */}
                         <div className="backdrop-blur-2xl bg-white/30 rounded-2xl p-6 shadow-[0_8px_32px_0_rgba(31,38,135,0.37)] border border-white/40 p-4 sm:p-6">
                             <h3 className="text-lg sm:text-xl font-semibold text-gray-900 mb-4 tracking-[-1px] text-left">Quick catalogue & results</h3>
-                            <div className="flex gap-2 mb-4 overflow-x-auto pb-2">{['[cat 1]', '[cat 2]', '[cat 3]', '[cat 4]', '[HGS/HCL]', '[XSH/XLH]', '[ALL]'].map((label, i) => (<button key={i} className={`px-3 py-1.5 text-sm rounded-lg font-semibold whitespace-nowrap transition ${label === '[cat 1]' ? 'bg-[#027BFF] text-white' : 'bg-gray-100 text-gray-500 hover:bg-gray-200'}`}>{label}</button>))}</div>
-                            <div className="hidden md:block overflow-x-auto"><table className="w-full border-collapse text-sm"><thead><tr className="bg-[#027BFF] text-white"><th className="p-2">No.</th><th className="p-2 text-left">Cat</th><th className="p-2 text-center">Sex</th><th className="p-2">EMS (Sat)</th><th className="p-2 text-center">Class (Sat)</th><th className="p-2">Result Sat.</th><th className="p-2">Judge Sat.</th><th className="p-2">EMS (Sun)</th><th className="p-2 text-center">Class (Sun)</th><th className="p-2">Result Sun.</th><th className="p-2">Judge Sun.</th></tr></thead><tbody>{catalogueData.map((row: CatalogueEntry) => (<tr key={row.no} className="border-b hover:bg-gray-50"><td className="p-2">{row.no}</td><td className="p-2 font-semibold">{row.cat}</td><td className="p-2 text-center">{row.sex}</td><td className="p-2">{row.emsSat}</td><td className="p-2 text-center">{row.classSat}</td><td className="p-2">{row.resultSat}</td><td className="p-2">{row.judgeSat}</td><td className="p-2">{row.emsSun}</td><td className="p-2 text-center">{row.classSun}</td><td className="p-2">{row.resultSun}</td><td className="p-2">{row.judgeSun}</td></tr>))}</tbody></table></div>
-                            <div className="md:hidden flex flex-col gap-4">{catalogueData.map((row: CatalogueEntry) => (<details key={row.no} className="border rounded-xl shadow-sm p-4"><summary className="font-semibold cursor-pointer text-left">#{row.no} — {row.cat}</summary><p className="text-gray-500 text-sm mt-1 text-left">Sex: {row.sex} • EMS: {row.emsSat} • Class: {row.classSat}</p><div className="mt-3 border-t pt-3 text-sm space-y-1 text-left"><p className="font-semibold text-[#027BFF]">Saturday</p><p><span className="font-semibold">Result:</span> {row.resultSat}</p><p><span className="font-semibold">Judge:</span> {row.judgeSat}</p><p className="font-semibold text-[#027BFF]">Sunday</p><p><span className="font-semibold">Result:</span> {row.resultSun}</p><p><span className="font-semibold">Judge:</span> {row.judgeSun}</p></div></details>))}</div>
+
+                            {/* Filtrační tlačítka */}
+                            <div className="flex gap-2 mb-4 overflow-x-auto pb-2">
+                                <QuickFilterButton label="[ALL]" value="ALL" />
+                                <QuickFilterButton label="[cat 1]" value={1} />
+                                <QuickFilterButton label="[cat 2]" value={2} />
+                                <QuickFilterButton label="[cat 3]" value={3} />
+                                <QuickFilterButton label="[cat 4]" value={4} />
+                                <QuickFilterButton label="[DOM]" value={5} />
+                            </div>
+
+                            {/* Obsah tabulky */}
+                            {quickLoading ? (
+                                <div className="text-center py-8 text-gray-500">Načítám data...</div>
+                            ) : quickError ? (
+                                <div className="text-center py-8 text-red-500">{quickError}</div>
+                            ) : filteredQuickEntries.length === 0 ? (
+                                <div className="text-center py-8 text-gray-500 italic">Žádné kočky v této kategorii.</div>
+                            ) : (
+                                <>
+                                    {/* Desktop Table */}
+                                    <div className="hidden md:block overflow-x-auto">
+                                        <table className="w-full border-collapse text-sm">
+                                            <thead>
+                                            <tr className="bg-[#027BFF] text-white">
+                                                <th className="p-2 text-left">No.</th>
+                                                <th className="p-2 text-left">EMS</th>
+                                                <th className="p-2 text-left">Name</th>
+                                                <th className="p-2 text-center">Sex</th>
+                                                <th className="p-2 text-left">Class</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            {filteredQuickEntries.map((row) => (
+                                                <tr key={row.catalogNumber} className="border-b hover:bg-gray-50">
+                                                    <td className="p-2 font-bold">{row.catalogNumber}</td>
+                                                    <td className="p-2 font-semibold text-blue-600">{row.emsCode}</td>
+                                                    <td className="p-2 font-medium">{row.catName}</td>
+                                                    <td className="p-2 text-center">{row.gender === 'MALE' ? '1,0' : '0,1'}</td>
+                                                    <td className="p-2">{row.showClass.replace(/_/g, ' ')}</td>
+                                                </tr>
+                                            ))}
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                    {/* Mobile Cards */}
+                                    <div className="md:hidden flex flex-col gap-4">
+                                        {filteredQuickEntries.map((row) => (
+                                            <div key={row.catalogNumber} className="border rounded-xl shadow-sm p-4 bg-white">
+                                                <div className="flex justify-between items-start mb-2">
+                                                    <span className="font-bold text-lg text-[#027BFF]">#{row.catalogNumber}</span>
+                                                    <span className="bg-gray-100 text-gray-600 px-2 py-0.5 rounded text-xs font-bold">{row.emsCode}</span>
+                                                </div>
+                                                <h4 className="font-semibold text-gray-900 mb-1 text-left">{row.catName}</h4>
+                                                <div className="text-sm text-gray-500 flex gap-4 text-left">
+                                                    <span>Sex: {row.gender === 'MALE' ? '1,0' : '0,1'}</span>
+                                                    <span>Class: {row.showClass.replace(/_/g, ' ')}</span>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </>
+                            )}
                         </div>
                     </div>
                 )}

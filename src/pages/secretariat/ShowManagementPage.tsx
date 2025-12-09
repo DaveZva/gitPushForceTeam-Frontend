@@ -112,7 +112,7 @@ export default function ShowManagementPage() {
                 </td>
                 <td className="py-4 px-3">
                     <Link
-                        to={`/secretariat/edit/show/${show.id}`}
+                        to={`/secretariat/shows/${show.id}/edit`}
                         className="font-medium text-[#027BFF] hover:text-[#005FCC] transition-colors duration-200"
                     >
                         {t('common.edit')}
