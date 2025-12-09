@@ -3,7 +3,7 @@ import { Outlet, Link, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 export const SecretariatLayout = () => {
-    const { t } = useTranslation();
+    const {  t } = useTranslation();
     const location = useLocation();
 
     const menuItems = [
