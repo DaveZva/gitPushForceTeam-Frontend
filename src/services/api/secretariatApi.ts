@@ -8,6 +8,10 @@ export interface SecretariatShow {
     name: string;
     description?: string;
     status: 'PLANNED' | 'OPEN' | 'CLOSED' | 'COMPLETED' | 'CANCELLED';
+    maxCats: number;
+    vetCheckStart?: string;
+    judgingStart?: string;
+    judgingEnd?: string;
     venueName: string;
     venueAddress?: string;
     venueCity?: string;

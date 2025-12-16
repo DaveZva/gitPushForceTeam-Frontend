@@ -43,6 +43,9 @@ export default function ShowEditPage() {
                     startDate: formatDateTime(data.startDate),
                     endDate: formatDateTime(data.endDate),
                     registrationDeadline: formatDateTime(data.registrationDeadline),
+                    vetCheckStart: formatDateTime(data.vetCheckStart),
+                    judgingStart: formatDateTime(data.judgingStart),
+                    judgingEnd: formatDateTime(data.judgingEnd),
                     status: data.status || 'PLANNED'
                 };
 
@@ -61,9 +64,8 @@ export default function ShowEditPage() {
     const onSubmit = async (data: ShowFormData) => {
         if (!id) return;
         try {
-            const formatForBackend = (val: string): string => {
-                if (!val) return ""; // Pojistka, vrátí prázdný string místo null
-                // Pokud má řetězec 16 znaků (chybí :ss), přidáme :00
+            const formatForBackend = (val: string | undefined): string => {
+                if (!val) return "";
                 return val.length === 16 ? `${val}:00` : val;
             };
 
@@ -71,7 +73,10 @@ export default function ShowEditPage() {
                 ...data,
                 startDate: formatForBackend(data.startDate),
                 endDate: formatForBackend(data.endDate),
-                registrationDeadline: formatForBackend(data.registrationDeadline)
+                registrationDeadline: formatForBackend(data.registrationDeadline),
+                vetCheckStart: formatForBackend(data.vetCheckStart),
+                judgingStart: formatForBackend(data.judgingStart),
+                judgingEnd: formatForBackend(data.judgingEnd),
             };
 
             await secretariatApi.updateShow(id, payload);
@@ -144,6 +149,10 @@ export default function ShowEditPage() {
                             />
                         </FormField>
 
+                        <FormField label={t('fields.maxCats')} error={errors.maxCats?.message}>
+                            <Input type="number" {...register('maxCats')} />
+                        </FormField>
+
                         <h3 className="text-lg font-semibold text-gray-900 pt-4 border-t">Místo konání</h3>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <FormField label="Název haly / místa" error={errors.venueName?.message}>
@@ -175,6 +184,19 @@ export default function ShowEditPage() {
                             </FormField>
                             <FormField label="Uzávěrka registrací" error={errors.registrationDeadline?.message}>
                                 <Input type="datetime-local" {...register('registrationDeadline')} />
+                            </FormField>
+                        </div>
+
+                        <h3 className="text-lg font-semibold text-gray-900 pt-4 border-t">Harmonogram</h3>
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            <FormField label={t('fields.vetCheckStart')} error={errors.vetCheckStart?.message}>
+                                <Input type="datetime-local" {...register('vetCheckStart')} />
+                            </FormField>
+                            <FormField label={t('fields.judgingStart')} error={errors.judgingStart?.message}>
+                                <Input type="datetime-local" {...register('judgingStart')} />
+                            </FormField>
+                            <FormField label={t('fields.judgingEnd')} error={errors.judgingEnd?.message}>
+                                <Input type="datetime-local" {...register('judgingEnd')} />
                             </FormField>
                         </div>
 

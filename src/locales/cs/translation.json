@@ -478,7 +478,11 @@
     "registrationDeadline": "Uzávěrka registrací *",
     "organizerName": "Jméno organizátora *",
     "contactEmail": "Kontaktní email",
-    "websiteUrl": "Webová stránka"
+    "websiteUrl": "Webová stránka",
+    "maxCats": "Kapacita výstavy (max. koček) *",
+    "vetCheckStart": "Veterinární přejímka",
+    "judgingStart": "Začátek posuzování",
+    "judgingEnd": "Předpokládaný konec"
   },
   "validation": {
     "cat": {
@@ -558,7 +562,12 @@
       "organizerName.min": "Jméno organizátora musí mít alespoň 3 znaky.",
       "contactEmail.invalid": "Neplatný kontaktní email.",
       "websiteUrl.invalid": "Neplatná URL webu.",
-      "date.order": "Datum konce musí být až po datu začátku."
+      "date.order": "Datum konce musí být až po datu začátku.",
+      "maxCats.min": "Kapacita musí být alespoň 10 koček.",
+      "maxCats.max": "Kapacita nesmí přesáhnout 2000 koček.",
+      "vetCheckStart.invalid": "Neplatný čas veterinární přejímky.",
+      "judgingStart.invalid": "Neplatný čas začátku posuzování.",
+      "judgingEnd.invalid": "Neplatný čas konce posuzování."
     }
   },
   "paymentResult": {
