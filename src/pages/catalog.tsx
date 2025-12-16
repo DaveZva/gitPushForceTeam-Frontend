@@ -1,7 +1,6 @@
 import React, { useState, useMemo, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-// PŘIDÁNO: QuickCatalogEntry import
 import { registrationApi, QuickCatalogEntry } from "../services/api/registrationApi";
 
 const BREED_NAMES: Record<string, string> = {
@@ -41,7 +40,7 @@ const FIFE_CATEGORIES: Record<string, { name: string; index: number; ems: string
     'SPH': { name: 'Siamo-Orientale cats', index: 4, ems: 'IV.' },
 };
 
-
+// --- INTERFACES ---
 interface CatDetail {
     entryNumber: number;
     name: string;
@@ -64,6 +63,7 @@ interface CatEntry {
     group: number | null;
 }
 
+// --- HELPERS ---
 const getClassSortOrder = (className: string): number => {
     const match = className.match(/(\d+)/);
     if (match) return parseInt(match[1], 10);
@@ -132,7 +132,7 @@ const useSortedCatalogData = (
     }, [cats, searchTerm, filters, sortKey]);
 };
 
-// --- PRIMÁRNÍ KATALOG (DETAILNÍ) ---
+// --- KOMPONENTA: PRIMÁRNÍ KATALOG ---
 const PrimaryCatalogueContent = ({ showId }: { showId: string | number }) => {
     const { t } = useTranslation();
     const [searchTerm, setSearchTerm] = useState('');
@@ -147,7 +147,6 @@ const PrimaryCatalogueContent = ({ showId }: { showId: string | number }) => {
             setIsLoading(true);
             try {
                 const idToFetch = showId || 1;
-                // Pozn: registrationApi.getCatalog vrací detailní DTO pro primární katalog
                 const apiData = await registrationApi.getCatalog(idToFetch);
                 const mappedData: CatEntry[] = apiData.map(dto => ({
                     cat: {
@@ -172,7 +171,7 @@ const PrimaryCatalogueContent = ({ showId }: { showId: string | number }) => {
                 setError(null);
             } catch (err) {
                 console.error("Chyba při načítání katalogu:", err);
-                setError(t('catalog.errorLoading') || "Nepodařilo se načíst katalog.");
+                setError(t('catalog.errorLoading'));
             } finally {
                 setIsLoading(false);
             }
@@ -198,17 +197,17 @@ const PrimaryCatalogueContent = ({ showId }: { showId: string | number }) => {
         <div className="text-sm space-y-1 mt-2 text-gray-700">
             <div className="flex flex-wrap gap-x-4">
                 <span className="font-black text-[#027BFF] tracking-tight">{entry.cat.name}</span>
-                <span className="font-medium text-gray-500 text-xs mt-0.5">({t('catalog.regNo') || 'Reg. No.'}: {entry.cat.regNumber})</span>
+                <span className="font-medium text-gray-500 text-xs mt-0.5">({t('catalog.regNo')}: {entry.cat.regNumber})</span>
             </div>
             <div className="flex flex-wrap gap-x-4 text-xs sm:text-sm">
                 <span className="font-medium"><strong className="text-gray-900">EMS:</strong> {entry.cat.ems}</span>
-                <span className="font-medium"><strong className="text-gray-900">{t('catalog.sex') || 'Sex'}:</strong> {entry.cat.sex}</span>
-                <span className="font-medium"><strong className="text-gray-900">{t('catalog.dob') || 'Born'}:</strong> {entry.cat.dob}</span>
+                <span className="font-medium"><strong className="text-gray-900">{t('catalog.sex')}:</strong> {entry.cat.sex}</span>
+                <span className="font-medium"><strong className="text-gray-900">{t('catalog.dob')}:</strong> {entry.cat.dob}</span>
             </div>
             <div className="pl-4 text-xs space-y-0.5 mt-2 border-l-2 border-gray-100">
-                <p className="text-gray-600 truncate"><strong className="text-gray-900">{t('catalog.father') || 'Father'}:</strong> {entry.cat.father}</p>
-                <p className="text-gray-600 truncate"><strong className="text-gray-900">{t('catalog.mother') || 'Mother'}:</strong> {entry.cat.mother}</p>
-                <p className="text-gray-600"><strong className="text-gray-900">{t('catalog.owner') || 'Owner'}:</strong> {entry.cat.owner} <span className="mx-1 text-gray-400">|</span> <strong className="text-gray-900">{t('catalog.breeder') || 'Breeder'}:</strong> {entry.cat.breeder} ({entry.cat.breederCountry})</p>
+                <p className="text-gray-600 truncate"><strong className="text-gray-900">{t('catalog.father')}:</strong> {entry.cat.father}</p>
+                <p className="text-gray-600 truncate"><strong className="text-gray-900">{t('catalog.mother')}:</strong> {entry.cat.mother}</p>
+                <p className="text-gray-600"><strong className="text-gray-900">{t('catalog.owner')}:</strong> {entry.cat.owner} <span className="mx-1 text-gray-400">|</span> <strong className="text-gray-900">{t('catalog.breeder')}:</strong> {entry.cat.breeder} ({entry.cat.breederCountry})</p>
             </div>
         </div>
     );
@@ -217,7 +216,9 @@ const PrimaryCatalogueContent = ({ showId }: { showId: string | number }) => {
         <div className="space-y-12">
             {Array.from(sortedData.entries()).map(([catIndex, byBreed]) => (
                 <div key={catIndex} className="mt-12 p-6 bg-white rounded-xl shadow-2xl border-t-8 border-[#027BFF]">
-                    <h1 className="text-2xl sm:text-3xl font-extrabold text-gray-900 border-b-2 border-gray-300 pb-4 mb-6">{t('catalog.category') || 'CATEGORY'} {catIndex === 99 ? 'Other' : catIndex}</h1>
+                    <h1 className="text-2xl sm:text-3xl font-extrabold text-gray-900 border-b-2 border-gray-300 pb-4 mb-6">
+                        {t('catalog.category')} {catIndex === 99 ? t('catalog.categoryOther') : catIndex}
+                    </h1>
                     {Array.from(byBreed.entries()).map(([breedName, byColour]) => (
                         <div key={breedName} className="mt-10 p-6 bg-white rounded-xl shadow-lg border-t-4 border-gray-300">
                             <h1 className="text-xl sm:text-2xl font-extrabold text-gray-900 border-b border-gray-200 pb-3 mb-4">{BREED_NAMES[breedName] || breedName} <span className="text-[#027BFF]">({breedName})</span></h1>
@@ -235,7 +236,7 @@ const PrimaryCatalogueContent = ({ showId }: { showId: string | number }) => {
                                                                 <span className="text-xl text-[#027BFF] mr-2">#.</span>
                                                                 <span className="ml-0 text-sm sm:text-base font-bold">{entry.category} <span className="text-gray-600 font-normal ml-1">({entry.colour})</span></span>
                                                             </h4>
-                                                            {entry.group && <div className="text-xs font-medium text-white bg-[#005fcc] px-2 py-0.5 rounded-full mt-1 sm:mt-0">{t('catalog.group') || 'Group'}: {entry.group}</div>}
+                                                            {entry.group && <div className="text-xs font-medium text-white bg-[#005fcc] px-2 py-0.5 rounded-full mt-1 sm:mt-0">{t('catalog.group')}: {entry.group}</div>}
                                                         </div>
                                                         {renderCatDetails(entry)}
                                                     </li>
@@ -257,7 +258,7 @@ const PrimaryCatalogueContent = ({ showId }: { showId: string | number }) => {
         sortedData.forEach(byCategory => byCategory.forEach(byBreed => byBreed.forEach(byColour => byColour.forEach(entries => flatList.push(...entries)))));
         return (
             <div className="p-6 bg-white rounded-xl shadow-2xl border-t-8 border-[#027BFF]">
-                <h1 className="text-2xl sm:text-3xl font-extrabold text-gray-900 border-b-2 border-gray-300 pb-4 mb-6">{t('catalog.listSorted') || 'Seznam koček'}</h1>
+                <h1 className="text-2xl sm:text-3xl font-extrabold text-gray-900 border-b-2 border-gray-300 pb-4 mb-6">{t('catalog.listSorted')}</h1>
                 <ul className="list-none space-y-4 mt-6">
                     {flatList.map(entry => (
                         <li key={entry.cat.entryNumber} className="p-3 bg-white rounded-lg shadow-md border border-gray-100 hover:shadow-lg transition-shadow">
@@ -276,42 +277,53 @@ const PrimaryCatalogueContent = ({ showId }: { showId: string | number }) => {
         );
     };
 
-    if (isLoading) return <div className="flex flex-col items-center justify-center py-24"><div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-[#027BFF]"></div><p className="mt-6 text-gray-600 font-medium text-lg">{t('catalog.loading') || 'Načítám katalog...'}</p></div>;
-    if (error) return <div className="p-8 mt-8 bg-red-50 text-red-600 rounded-xl border border-red-200 text-center shadow-sm"><h3 className="text-lg font-bold">{t('catalog.errorTitle') || 'Chyba'}</h3><p>{error}</p></div>;
-    if (catalogData.length === 0) return <div className="flex flex-col items-center justify-center py-20 bg-gray-50 rounded-xl border border-gray-200 mt-8"><h3 className="text-lg font-bold text-gray-900">{t('catalog.preparingTitle') || 'Katalog se připravuje'}</h3><p className="text-gray-500 mt-2 max-w-md text-center">{t('catalog.preparingDesc') || 'Pro tuto výstavu zatím nejsou potvrzeny žádné registrace.'}</p></div>;
+    if (isLoading) return <div className="flex flex-col items-center justify-center py-24"><div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-[#027BFF]"></div><p className="mt-6 text-gray-600 font-medium text-lg">{t('catalog.loading')}</p></div>;
+    if (error) return <div className="p-8 mt-8 bg-red-50 text-red-600 rounded-xl border border-red-200 text-center shadow-sm"><h3 className="text-lg font-bold">{t('catalog.errorTitle')}</h3><p>{error}</p></div>;
+    if (catalogData.length === 0) return <div className="flex flex-col items-center justify-center py-20 bg-gray-50 rounded-xl border border-gray-200 mt-8"><h3 className="text-lg font-bold text-gray-900">{t('catalog.preparingTitle')}</h3><p className="text-gray-500 mt-2 max-w-md text-center">{t('catalog.preparingDesc')}</p></div>;
 
     return (
         <div className="py-10">
             <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-6 border-b pb-4">
-                <h2 className="text-2xl font-bold tracking-[-1px] text-gray-900 whitespace-nowrap">{t('catalog.primaryTitle') || 'Primární Katalog'}</h2>
+                <h2 className="text-2xl font-bold tracking-[-1px] text-gray-900 whitespace-nowrap">{t('catalog.primaryTitle')}</h2>
                 <div className="w-full sm:w-2/3 flex flex-col md:flex-row gap-3">
                     <div className="relative w-full">
-                        <input type="text" placeholder={t('catalog.searchPlaceholder') || "Hledat (Jméno, EMS, Reg. No.)..."} value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-full focus:ring-[#027BFF] focus:border-[#027BFF] transition" />
+                        <input type="text" placeholder={t('catalog.searchPlaceholder')} value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-full focus:ring-[#027BFF] focus:border-[#027BFF] transition" />
                         <svg className="w-5 h-5 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
                     </div>
-                    <button className="w-full sm:w-auto px-4 py-2 bg-white text-[#027BFF] border-2 border-[#027BFF] rounded-full font-semibold text-sm transition-all duration-300 hover:bg-[#027BFF] hover:text-white hover:shadow-lg whitespace-nowrap">{t('catalog.exportPdf') || 'Export PDF'}</button>
+                    <button className="w-full sm:w-auto px-4 py-2 bg-white text-[#027BFF] border-2 border-[#027BFF] rounded-full font-semibold text-sm transition-all duration-300 hover:bg-[#027BFF] hover:text-white hover:shadow-lg whitespace-nowrap">{t('catalog.exportPdf')}</button>
                 </div>
             </div>
             <div className="flex flex-wrap gap-4 mb-6 p-4 bg-gray-50 rounded-xl border border-gray-200 shadow-sm">
                 <select value={sortKey} onChange={(e) => setSortKey(e.target.value)} className="py-2 px-3 border border-gray-300 rounded-lg bg-white text-gray-700 focus:ring-[#027BFF] focus:border-[#027BFF] text-sm cursor-pointer hover:border-gray-400 transition">
-                    <option value="fifeOrder">{t('catalog.sortFife') || 'Třídit dle: FIFE Hierarchie'}</option>
-                    <option value="entryNumber">{t('catalog.sortNumber') || 'Třídit dle: Katalogové číslo'}</option>
-                    <option value="name">{t('catalog.sortName') || 'Třídit dle: Jméno kočky'}</option>
-                    <option value="breed">{t('catalog.sortBreed') || 'Třídit dle: Plemeno / EMS'}</option>
+                    <option value="fifeOrder">{t('catalog.sortFife')}</option>
+                    <option value="entryNumber">{t('catalog.sortNumber')}</option>
+                    <option value="name">{t('catalog.sortName')}</option>
+                    <option value="breed">{t('catalog.sortBreed')}</option>
                 </select>
-                <select value={filters.breed} onChange={(e) => handleFilterChange('breed', e.target.value)} className="py-2 px-3 border border-gray-300 rounded-lg bg-white text-gray-700 focus:ring-[#027BFF] focus:border-[#027BFF] text-sm cursor-pointer"><option value="All">{t('catalog.filterBreed') || 'Filtr Plemeno: Vše'}</option>{uniqueBreeds.filter(c => c !== 'All').map(breed => <option key={breed} value={breed}>{BREED_NAMES[breed] || breed} ({breed})</option>)}</select>
-                <select value={filters.sex} onChange={(e) => handleFilterChange('sex', e.target.value)} className="py-2 px-3 border border-gray-300 rounded-lg bg-white text-gray-700 focus:ring-[#027BFF] focus:border-[#027BFF] text-sm cursor-pointer"><option value="All">{t('catalog.filterSex') || 'Filtr Pohlaví: Vše'}</option>{uniqueSex.filter(s => s !== 'All').map(sex => <option key={sex} value={sex}>{sex}</option>)}</select>
-                <select value={filters.class} onChange={(e) => handleFilterChange('class', e.target.value)} className="py-2 px-3 border border-gray-300 rounded-lg bg-white text-gray-700 focus:ring-[#027BFF] focus:border-[#027BFF] text-sm cursor-pointer"><option value="All">{t('catalog.filterClass') || 'Filtr Třída: Vše'}</option>{uniqueClasses.filter(c => c !== 'All').map(cls => <option key={cls} value={cls}>{cls}</option>)}</select>
+                <select value={filters.breed} onChange={(e) => handleFilterChange('breed', e.target.value)} className="py-2 px-3 border border-gray-300 rounded-lg bg-white text-gray-700 focus:ring-[#027BFF] focus:border-[#027BFF] text-sm cursor-pointer">
+                    <option value="All">{t('catalog.filterBreed')}</option>
+                    {uniqueBreeds.filter(c => c !== 'All').map(breed => <option key={breed} value={breed}>{BREED_NAMES[breed] || breed} ({breed})</option>)}
+                </select>
+                <select value={filters.sex} onChange={(e) => handleFilterChange('sex', e.target.value)} className="py-2 px-3 border border-gray-300 rounded-lg bg-white text-gray-700 focus:ring-[#027BFF] focus:border-[#027BFF] text-sm cursor-pointer">
+                    <option value="All">{t('catalog.filterSex')}</option>
+                    {uniqueSex.filter(s => s !== 'All').map(sex => <option key={sex} value={sex}>{sex}</option>)}
+                </select>
+                <select value={filters.class} onChange={(e) => handleFilterChange('class', e.target.value)} className="py-2 px-3 border border-gray-300 rounded-lg bg-white text-gray-700 focus:ring-[#027BFF] focus:border-[#027BFF] text-sm cursor-pointer">
+                    <option value="All">{t('catalog.filterClass')}</option>
+                    {uniqueClasses.filter(c => c !== 'All').map(cls => <option key={cls} value={cls}>{cls}</option>)}
+                </select>
             </div>
-            <p className="text-gray-600 text-sm mb-6 text-left font-medium">{t('catalog.shownCount', { count: totalFilteredCats, total: catalogData.length }) || `Zobrazeno ${totalFilteredCats} koček z ${catalogData.length} celkem.`}</p>
-            {totalFilteredCats === 0 && (searchTerm !== '' || filters.breed !== 'All' || filters.sex !== 'All' || filters.class !== 'All') && <div className="p-8 bg-yellow-50 rounded-xl border border-yellow-200 text-yellow-800 font-medium text-center">{t('catalog.noResults') || 'Nenalezeny žádné záznamy odpovídající zadaným kritériím.'}</div>}
+            <p className="text-gray-600 text-sm mb-6 text-left font-medium">
+                {t('catalog.shownCount', { count: totalFilteredCats, total: catalogData.length })}
+            </p>
+            {totalFilteredCats === 0 && (searchTerm !== '' || filters.breed !== 'All' || filters.sex !== 'All' || filters.class !== 'All') && <div className="p-8 bg-yellow-50 rounded-xl border border-yellow-200 text-yellow-800 font-medium text-center">{t('catalog.noResults')}</div>}
             {sortKey === 'fifeOrder' ? renderHierarchicalList() : renderFlatList()}
-            <footer className="mt-10 pt-4 border-t text-center text-gray-500 text-sm">{t('catalog.footerTotal', { count: catalogData.length }) || `Celkový počet záznamů v katalogu: ${catalogData.length}`}</footer>
+            <footer className="mt-10 pt-4 border-t text-center text-gray-500 text-sm">{t('catalog.footerTotal', { count: catalogData.length })}</footer>
         </div>
     );
 };
 
-// --- MOCK DATA PRO OSTATNÍ KOMPONENTY (SOUDY, NOMINACE) ---
+// --- MOCK DATA A KOMPONENTY PRO OSTATNÍ ZÁLOŽKY ---
 interface JudgeStatus { name: string; sat: number; sun: number; }
 interface JudgeReportRow { no: number; ems: string; sex: string; class: number; born: string; AdM: string; AdF: string; NeM: string; NeF: string; '11M': string; '11F': string; '12M': string; '12F': string; results: string; [key: string]: any; }
 interface NominationEntry { no: number; breed: string; judge: string; badge: string; }
@@ -328,6 +340,7 @@ const judges: JudgeStatus[] = [
 ];
 
 const JudgeReportDetail = ({}: { judgeName: string; date: string }) => {
+    // Note: This data is mock/technical, translation of keys like 'Results' is usually sufficient.
     const reportData: JudgeReportRow[] = [
         { no: 1, ems: 'EXO n', sex: '1,0', class: 1, born: '2023-05-04', AdM: 'X', AdF: '', NeM: '', NeF: '', '11M': '', '11F': '', '12M': '', '12F': '', results: 'PH' },
         { no: 7, ems: 'PER as 24 62', sex: '1,0', class: 12, born: '2025-05-09', AdM: '', AdF: '', NeM: '', NeF: 'X', '11M': '', '11F': '', '12M': '', '12F': '', results: 'Ex 1, CACC, NOM' },
@@ -366,7 +379,7 @@ const NominationDetailTable = ({ category, date, location = "FP – Poznań" }: 
     );
 };
 
-// --- 4. HLAVNÍ KOMPONENTA ---
+// --- HLAVNÍ KOMPONENTA ---
 
 export default function Catalog() {
     const { t } = useTranslation();
@@ -385,7 +398,6 @@ export default function Catalog() {
     const [modalJudge, setModalJudge] = useState<string | null>(null);
     const [modalCategory, setModalCategory] = useState<string | null>(null);
 
-    // Načtení dat pro Quick Catalog, když se změní ID
     useEffect(() => {
         const fetchQuickCatalog = async () => {
             const idToFetch = showId || 1;
@@ -396,13 +408,11 @@ export default function Catalog() {
                 setQuickError(null);
             } catch (err) {
                 console.error(err);
-                setQuickError(t('catalog.errorLoadingQuick') || "Nepodařilo se načíst rychlý katalog.");
+                setQuickError(t('catalog.errorLoadingQuick'));
             } finally {
                 setQuickLoading(false);
             }
         };
-
-        // Voláme pouze, pokud existuje ID a uživatel by mohl potřebovat data (nebo vždy při mountu)
         fetchQuickCatalog();
     }, [showId, t]);
 
@@ -420,7 +430,6 @@ export default function Catalog() {
     };
     const closeModal = () => { setIsModalOpen(false); setModalDate(null); setModalJudge(null); setModalCategory(null); };
 
-    // Pomocná komponenta pro filtrační tlačítko
     const QuickFilterButton = ({ label, value }: { label: string, value: number | 'ALL' }) => (
         <button
             onClick={() => setActiveQuickFilter(value)}
@@ -436,7 +445,7 @@ export default function Catalog() {
     return (
         <div className="bg-white rounded-2xl shadow-xl p-6">
             <div className="max-w-6xl mx-auto px-4 pt-10 pb-6 border-b border-gray-200">
-                <h1 className="text-3xl sm:text-4xl font-bold tracking-[-4px] text-gray-900 mb-4">{t('catalog.mainTitle') || 'MVK Praha Winter'}</h1>
+                <h1 className="text-3xl sm:text-4xl font-bold tracking-[-4px] text-gray-900 mb-4">{t('catalog.mainTitle')}</h1>
                 <div className="flex flex-col sm:flex-row sm:items-center sm:gap-10 gap-3 text-gray-700">
                     <div className="flex items-center gap-3"><div className="w-10 h-10 rounded-full bg-[#027BFF]/10 flex items-center justify-center"><svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 text-[#027BFF]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg></div><p className="text-sm font-medium">14. 12. 2025 – 15. 12. 2025</p></div>
                     <div className="flex items-center gap-3"><div className="w-10 h-10 rounded-full bg-[#027BFF]/10 flex items-center justify-center"><svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 text-[#027BFF]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M12 11a3 3 0 110-6 3 3 0 010 6zm0 0c-4.418 0-8 2.239-8 5v2h16v-2c0-2.761-3.582-5-8-5z"/></svg></div><p className="text-sm font-medium">PVA Expo Letňany, Praha</p></div>
@@ -444,9 +453,9 @@ export default function Catalog() {
             </div>
             <div className="max-w-6xl mx-auto px-4 mt-8">
                 <div className="flex gap-2 sm:gap-4 md:gap-8 justify-start">
-                    <button onClick={() => setTab("info")} className={`flex items-center gap-1.5 px-3 py-2 text-sm rounded-xl font-semibold tracking-[-1px] transition ${tab === "info" ? "bg-[#027BFF] text-white shadow-lg" : "bg-gray-100 text-gray-500 hover:bg-gray-200"}`}><svg className={`w-4 h-4 ${tab === "info" ? "text-white" : "text-gray-400"}`} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" /><path strokeLinecap="round" strokeLinejoin="round" d="M12 8h.01M11.5 12h1v4h-1" /></svg>{t('catalog.tabInfo') || 'Informace'}</button>
-                    <button onClick={() => setTab("primary")} className={`flex items-center gap-1.5 px-3 py-2 text-sm rounded-xl font-semibold tracking-[-1px] transition ${tab === "primary" ? "bg-[#027BFF] text-white shadow-lg" : "bg-gray-100 text-gray-500 hover:bg-gray-200"}`}><svg className={`w-4 h-4 ${tab === "primary" ? "text-white" : "text-gray-400"}`} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M4 7h16M4 12h16M4 17h16" /></svg>{t('catalog.tabPrimary') || 'Primární katalog'}</button>
-                    <button onClick={() => setTab("secondary")} className={`flex items-center gap-1.5 px-3 py-2 text-sm rounded-xl font-semibold tracking-[-1px] transition ${tab === "secondary" ? "bg-[#027BFF] text-white shadow-lg" : "bg-gray-100 text-gray-500 hover:bg-gray-200"}`}><svg className={`w-4 h-4 ${tab === "secondary" ? "text-white" : "text-gray-400"}`} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M4 7h16M4 12h16M4 17h16" /></svg>{t('catalog.tabSecondary') || 'Výsledky'}</button>
+                    <button onClick={() => setTab("info")} className={`flex items-center gap-1.5 px-3 py-2 text-sm rounded-xl font-semibold tracking-[-1px] transition ${tab === "info" ? "bg-[#027BFF] text-white shadow-lg" : "bg-gray-100 text-gray-500 hover:bg-gray-200"}`}><svg className={`w-4 h-4 ${tab === "info" ? "text-white" : "text-gray-400"}`} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" /><path strokeLinecap="round" strokeLinejoin="round" d="M12 8h.01M11.5 12h1v4h-1" /></svg>{t('catalog.tabInfo')}</button>
+                    <button onClick={() => setTab("primary")} className={`flex items-center gap-1.5 px-3 py-2 text-sm rounded-xl font-semibold tracking-[-1px] transition ${tab === "primary" ? "bg-[#027BFF] text-white shadow-lg" : "bg-gray-100 text-gray-500 hover:bg-gray-200"}`}><svg className={`w-4 h-4 ${tab === "primary" ? "text-white" : "text-gray-400"}`} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M4 7h16M4 12h16M4 17h16" /></svg>{t('catalog.tabPrimary')}</button>
+                    <button onClick={() => setTab("secondary")} className={`flex items-center gap-1.5 px-3 py-2 text-sm rounded-xl font-semibold tracking-[-1px] transition ${tab === "secondary" ? "bg-[#027BFF] text-white shadow-lg" : "bg-gray-100 text-gray-500 hover:bg-gray-200"}`}><svg className={`w-4 h-4 ${tab === "secondary" ? "text-white" : "text-gray-400"}`} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M4 7h16M4 12h16M4 17h16" /></svg>{t('catalog.tabSecondary')}</button>
                 </div>
             </div>
 
@@ -455,12 +464,29 @@ export default function Catalog() {
                 {tab === "info" && (
                     <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
                         <div className="lg:col-span-2 space-y-10">
-                            <section className="text-left"><h2 className="text-xl font-bold text-gray-900 tracking-[-1px] mb-2">{t('catalog.infoTitle') || 'Informace'}</h2><p className="text-gray-600 mt-4 leading-relaxed">{t('catalog.infoText') || 'Tato prestižní mezinárodní výstava koček "MVVK Praha Winter" je vyvrcholením celoročního úsilí chovatelů a milovníků koček z celé Evropy. Akce je ideální příležitostí pro veřejnost, aby se seznámila s různými plemeny, promluvila si s chovateli o péči a genetice a získala cenné rady pro své vlastní mazlíčky. Dva dny plné soutěží nabízejí možnost získat cenné certifikáty, které jsou klíčové pro získání mezinárodního titulu šampiona. Posuzování probíhá pod dohledem mezinárodně uznávaných porotců, kteří pečlivě hodnotí stav srsti, kondici, typ a temperament každého zvířete.'}</p></section>
-                            <section><h2 className="text-xl font-bold text-gray-900 tracking-[-1px] mb-2">Harmonogram</h2><div className="flex flex-col gap-6"><div className="flex items-center gap-4"><div className="w-14 h-10 bg-[#027BFF]/10 text-[#027BFF] font-bold text-sm flex items-center justify-center rounded-lg">08:00</div><p className="text-gray-800 font-medium">Veterinární prohlídka</p></div><div className="flex items-center gap-4"><div className="w-14 h-10 bg-[#027BFF]/10 text-[#027BFF] font-bold text-sm flex items-center justify-center rounded-lg">10:00</div><p className="text-gray-800 font-medium">Zahájení posuzování</p></div><div className="flex items-center gap-4"><div className="w-14 h-10 bg-[#027BFF]/10 text-[#027BFF] font-bold text-sm flex items-center justify-center rounded-lg">16:00</div><p className="text-gray-800 font-medium">Výstava</p></div></div></section>
+                            <section className="text-left"><h2 className="text-xl font-bold text-gray-900 tracking-[-1px] mb-2">{t('catalog.infoTitle')}</h2><p className="text-gray-600 mt-4 leading-relaxed">{t('catalog.infoText')}</p></section>
+                            <section><h2 className="text-xl font-bold text-gray-900 tracking-[-1px] mb-2">{t('catalog.schedule')}</h2>
+                                <div className="flex flex-col gap-6">
+                                    <div className="flex items-center gap-4"><div className="w-14 h-10 bg-[#027BFF]/10 text-[#027BFF] font-bold text-sm flex items-center justify-center rounded-lg">08:00</div><p className="text-gray-800 font-medium">{t('catalog.vetCheck')}</p></div>
+                                    <div className="flex items-center gap-4"><div className="w-14 h-10 bg-[#027BFF]/10 text-[#027BFF] font-bold text-sm flex items-center justify-center rounded-lg">10:00</div><p className="text-gray-800 font-medium">{t('catalog.judgingStart')}</p></div>
+                                    <div className="flex items-center gap-4"><div className="w-14 h-10 bg-[#027BFF]/10 text-[#027BFF] font-bold text-sm flex items-center justify-center rounded-lg">16:00</div><p className="text-gray-800 font-medium">{t('catalog.showOpen')}</p></div>
+                                </div>
+                            </section>
                         </div>
                         <aside className="space-y-8">
-                            <div className="rounded-2xl p-6 shadow-xl bg-gradient-to-br from-[#027BFF] to-[#005fcc] text-white"><h3 className="text-lg font-semibold mb-3">Registrace</h3><p className="text-3xl font-bold tracking-[-1px] mb-2">156 / 250</p><div className="w-full h-2 bg-white/30 rounded-full mb-3 overflow-hidden"><div className="h-full bg-white rounded-full" style={{ width: "62%" }}></div></div><p className="text-sm text-white/90 mb-5">Místa se zaplňují! Zaregistrujte své kočky.</p><Link to="/apply" className="block w-full text-center py-2.5 bg-white text-[#027BFF] tracking-[-1px] font-semibold rounded-full border-2 border-white hover:bg-transparent hover:text-white transition-all">Registrovat</Link></div>
-                            <div className="backdrop-blur-2xl bg-white/30 rounded-2xl p-6 shadow-[0_8px_32px_0_rgba(31,38,135,0.37)] border border-white/40"><div className="flex items-center gap-3 mb-4"><div className="w-10 h-10 rounded-full bg-[#027BFF]/10 flex items-center justify-center"><svg className="w-6 h-6 text-[#027BFF]" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M12 12c2.485 0 4.5-2.015 4.5-4.5S14.485 3 12 3 7.5 5.015 7.5 7.5 9.515 12 12 12z" /><path strokeLinecap="round" strokeLinejoin="round" d="M19.5 21a7.5 7.5 0 00-15 0" /></svg></div><h3 className="text-lg font-bold text-gray-900 tracking-[-1px]">Organizátor</h3></div><p className="font-semibold text-gray-800 mb-1 text-left">SO Ostrava</p><p className="text-sm text-gray-600 text-left">fife-ostrava.cz</p><Link to="/apply" className="block w-full text-center py-2.5 mt-2 bg-white text-[#027BFF] font-semibold rounded-full border-2 border-[#027BFF] tracking-[-1px] hover:bg-[#027BFF] hover:text-white transition-all duration-300">Kontaktovat</Link></div>
+                            <div className="rounded-2xl p-6 shadow-xl bg-gradient-to-br from-[#027BFF] to-[#005fcc] text-white">
+                                <h3 className="text-lg font-semibold mb-3">{t('catalog.registrationStatus')}</h3>
+                                <p className="text-3xl font-bold tracking-[-1px] mb-2">156 / 250</p>
+                                <div className="w-full h-2 bg-white/30 rounded-full mb-3 overflow-hidden"><div className="h-full bg-white rounded-full" style={{ width: "62%" }}></div></div>
+                                <p className="text-sm text-white/90 mb-5">{t('catalog.spotsFilling')}</p>
+                                <Link to="/apply" className="block w-full text-center py-2.5 bg-white text-[#027BFF] tracking-[-1px] font-semibold rounded-full border-2 border-white hover:bg-transparent hover:text-white transition-all">{t('catalog.registerBtn')}</Link>
+                            </div>
+                            <div className="backdrop-blur-2xl bg-white/30 rounded-2xl p-6 shadow-[0_8px_32px_0_rgba(31,38,135,0.37)] border border-white/40">
+                                <div className="flex items-center gap-3 mb-4"><div className="w-10 h-10 rounded-full bg-[#027BFF]/10 flex items-center justify-center"><svg className="w-6 h-6 text-[#027BFF]" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M12 12c2.485 0 4.5-2.015 4.5-4.5S14.485 3 12 3 7.5 5.015 7.5 7.5 9.515 12 12 12z" /><path strokeLinecap="round" strokeLinejoin="round" d="M19.5 21a7.5 7.5 0 00-15 0" /></svg></div><h3 className="text-lg font-bold text-gray-900 tracking-[-1px]">{t('catalog.organizerTitle')}</h3></div>
+                                <p className="font-semibold text-gray-800 mb-1 text-left">SO Ostrava</p>
+                                <p className="text-sm text-gray-600 text-left">fife-ostrava.cz</p>
+                                <Link to="/apply" className="block w-full text-center py-2.5 mt-2 bg-white text-[#027BFF] font-semibold rounded-full border-2 border-[#027BFF] tracking-[-1px] hover:bg-[#027BFF] hover:text-white transition-all duration-300">{t('catalog.contactBtn')}</Link>
+                            </div>
                         </aside>
                     </div>
                 )}
@@ -473,25 +499,25 @@ export default function Catalog() {
                     <div className="py-10 space-y-8">
                         {/* Static Info Section */}
                         <section className="backdrop-blur-2xl bg-white/30 rounded-2xl p-6 shadow-[0_8px_32px_0_rgba(31,38,135,0.37)] border border-white/40 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-                            <div className="text-left"><h2 className="text-xl font-semibold text-gray-900">Cat Show: FP – Poznań</h2><p className="text-sm text-gray-500">Date: 2025–11–15 &amp; 2025–11–16</p></div>
-                            <div className="text-sm text-gray-700 text-left sm:text-right"><p className="font-semibold">Judges &amp; colours:</p><div className="flex flex-wrap gap-3 mt-1 sm:justify-end"><a href="#" onClick={(e) => { e.preventDefault(); openModal("2025–11–15", null); }} className="text-[#027BFF] font-semibold hover:underline">[2025–11–15]</a><a href="#" onClick={(e) => { e.preventDefault(); openModal("2025–11–16", null); }} className="text-[#027BFF] font-semibold hover:underline">[2025–11–16]</a></div></div>
+                            <div className="text-left"><h2 className="text-xl font-semibold text-gray-900">Cat Show: FP – Poznań</h2><p className="text-sm text-gray-500">{t('catalog.dateAndPlace') || 'Date: 2025–11–15 & 2025–11–16'}</p></div>
+                            <div className="text-sm text-gray-700 text-left sm:text-right"><p className="font-semibold">{t('catalog.judgesAndColours')}</p><div className="flex flex-wrap gap-3 mt-1 sm:justify-end"><a href="#" onClick={(e) => { e.preventDefault(); openModal("2025–11–15", null); }} className="text-[#027BFF] font-semibold hover:underline">[2025–11–15]</a><a href="#" onClick={(e) => { e.preventDefault(); openModal("2025–11–16", null); }} className="text-[#027BFF] font-semibold hover:underline">[2025–11–16]</a></div></div>
                         </section>
 
                         {/* Static Judges Reports */}
                         <section className="backdrop-blur-2xl bg-white/30 rounded-2xl p-6 shadow-[0_8px_32px_0_rgba(31,38,135,0.37)] border border-white/40 px-6 sm:px-8 py-6">
-                            <h3 className="text-lg sm:text-xl font-semibold tracking-[-1px] text-gray-900 mb-4">Judges&apos; reports</h3>
+                            <h3 className="text-lg sm:text-xl font-semibold tracking-[-1px] text-gray-900 mb-4">{t('catalog.judgesReports')}</h3>
                             <div className="divide-y divide-gray-200">{judges.map((j, idx) => (<div key={idx} className="py-3 flex flex-col gap-3 md:flex-row md:items-center md:justify-between"><div className="md:w-1/3 font-medium text-gray-900 text-left">{j.name}</div><div className="md:w-1/3 flex items-center gap-3"><span className="text-xs font-semibold text-gray-700 whitespace-nowrap">{j.sat}%</span><div className="w-full bg-gray-200 h-2 rounded-full overflow-hidden"><div className="h-full bg-[#027BFF]" style={{ width: `${j.sat}%` }} /></div><a href="#" onClick={(e) => { e.preventDefault(); openModal("2025-11-15", j.name); }} className="text-xs sm:text-sm text-[#027BFF] font-semibold hover:underline whitespace-nowrap">[2025–11–15]</a></div><div className="md:w-1/3 flex items-center gap-3"><span className="text-xs font-semibold text-gray-700 whitespace-nowrap">{j.sun}%</span><div className="w-full bg-gray-200 h-2 rounded-full overflow-hidden"><div className={`h-full ${j.sun === 0 ? 'bg-gray-300' : 'bg-[#027BFF]'}`} style={{ width: `${j.sun}%` }} /></div><a href="#" onClick={(e) => { e.preventDefault(); openModal("2025-11-16", j.name); }} className="text-xs sm:text-sm text-[#027BFF] font-semibold hover:underline whitespace-nowrap">[2025–11–16]</a></div></div>))}</div>
                         </section>
 
                         {/* Static Nominations */}
                         <section className="backdrop-blur-2xl bg-white/30 rounded-2xl p-6 shadow-[0_8px_32px_0_rgba(31,38,135,0.37)] border border-white/40 px-6 sm:px-8 py-6">
-                            <h3 className="text-lg sm:text-xl font-semibold text-gray-900 mb-4 tracking-[-1px] text-left">Nominations</h3>
+                            <h3 className="text-lg sm:text-xl font-semibold text-gray-900 mb-4 tracking-[-1px] text-left">{t('catalog.nominations')}</h3>
                             <div className="space-y-4 text-sm sm:text-base"><div><div className="text-[#027BFF] font-bold mb-1 text-left">2025–11–15</div><div className="flex flex-wrap gap-x-4 gap-y-2">{['Cat 1', 'Cat 2', 'Cat 3', 'Cat 4', 'DOM', 'NFO'].map((cat, i) => (<a key={i} href="#" onClick={(e) => { e.preventDefault(); openModal('2025–11–15', null, cat); }} className="font-medium text-gray-900 border-b border-dashed border-gray-900 hover:text-[#027BFF] hover:border-[#027BFF]">[{cat}]</a>))}</div></div><div><div className="text-[#027BFF] font-bold mb-1 text-left">2025–11–16</div><div className="flex flex-wrap gap-x-4 gap-y-2">{['Cat 1', 'Cat 2', 'Cat 3', 'Cat 4', 'DOM'].map((cat, i) => (<a key={i} href="#" onClick={(e) => { e.preventDefault(); openModal('2025–11–16', null, cat); }} className="font-medium text-gray-900 border-b border-dashed border-gray-900 hover:text-[#027BFF] hover:border-[#027BFF]">[{cat}]</a>))}</div></div></div>
                         </section>
 
                         {/* DYNAMIC QUICK CATALOGUE SECTION */}
                         <div className="backdrop-blur-2xl bg-white/30 rounded-2xl p-6 shadow-[0_8px_32px_0_rgba(31,38,135,0.37)] border border-white/40 p-4 sm:p-6">
-                            <h3 className="text-lg sm:text-xl font-semibold text-gray-900 mb-4 tracking-[-1px] text-left">Quick catalogue & results</h3>
+                            <h3 className="text-lg sm:text-xl font-semibold text-gray-900 mb-4 tracking-[-1px] text-left">{t('catalog.quickCatalogTitle')}</h3>
 
                             {/* Filtrační tlačítka */}
                             <div className="flex gap-2 mb-4 overflow-x-auto pb-2">
@@ -505,11 +531,11 @@ export default function Catalog() {
 
                             {/* Obsah tabulky */}
                             {quickLoading ? (
-                                <div className="text-center py-8 text-gray-500">Načítám data...</div>
+                                <div className="text-center py-8 text-gray-500">{t('catalog.loadingQuick')}</div>
                             ) : quickError ? (
                                 <div className="text-center py-8 text-red-500">{quickError}</div>
                             ) : filteredQuickEntries.length === 0 ? (
-                                <div className="text-center py-8 text-gray-500 italic">Žádné kočky v této kategorii.</div>
+                                <div className="text-center py-8 text-gray-500 italic">{t('catalog.noQuickResults')}</div>
                             ) : (
                                 <>
                                     {/* Desktop Table */}
@@ -519,9 +545,9 @@ export default function Catalog() {
                                             <tr className="bg-[#027BFF] text-white">
                                                 <th className="p-2 text-left">No.</th>
                                                 <th className="p-2 text-left">EMS</th>
-                                                <th className="p-2 text-left">Name</th>
-                                                <th className="p-2 text-center">Sex</th>
-                                                <th className="p-2 text-left">Class</th>
+                                                <th className="p-2 text-left">{t('catForm.catName')}</th>
+                                                <th className="p-2 text-center">{t('catForm.gender')}</th>
+                                                <th className="p-2 text-left">{t('catForm.showClass')}</th>
                                             </tr>
                                             </thead>
                                             <tbody>
@@ -566,13 +592,13 @@ export default function Catalog() {
                 <div className="fixed inset-0 z-50 flex justify-center p-4 pt-32">
                     <div className="fixed inset-0 bg-gray-900 bg-opacity-70 backdrop-blur-sm transition-opacity" onClick={closeModal}></div>
                     <div className="bg-white rounded-2xl shadow-2xl relative z-10 w-full max-w-7xl max-h-[75vh] overflow-y-auto">
-                        <button onClick={closeModal} className="absolute top-4 right-4 z-20 transition-all duration-200 bg-white text-[#027BFF] border-2 border-[#027BFF] hover:bg-[#027BFF] hover:text-white hover:shadow-lg w-8 h-8 p-1 rounded-full flex items-center justify-center sm:w-auto sm:h-auto sm:px-4 sm:py-2"><span className="sm:hidden">X</span><span className="hidden sm:inline font-semibold">Zavřít</span></button>
+                        <button onClick={closeModal} className="absolute top-4 right-4 z-20 transition-all duration-200 bg-white text-[#027BFF] border-2 border-[#027BFF] hover:bg-[#027BFF] hover:text-white hover:shadow-lg w-8 h-8 p-1 rounded-full flex items-center justify-center sm:w-auto sm:h-auto sm:px-4 sm:py-2"><span className="sm:hidden">X</span><span className="hidden sm:inline font-semibold">{t('catalog.close')}</span></button>
                         {modalJudge ? (
                             <div className="p-6"><h2 className="text-xl sm:text-3xl font-bold tracking-[-2px] text-gray-900 mb-6 text-left">{modalJudge} — {modalDate} — Category 1</h2><JudgeReportDetail judgeName={modalJudge} date={modalDate} /></div>
                         ) : modalCategory ? (
                             <NominationDetailTable category={modalCategory} date={modalDate} />
                         ) : (
-                            <div className="p-6 pt-10"><h2 className="text-xl sm:text-3xl font-bold tracking-[-2px] text-gray-900 mb-6 text-left">Přidělení porotců a plemen pro — {modalDate}</h2><p>Zde by byla tabulka přidělení (statický mock)...</p></div>
+                            <div className="p-6 pt-10"><h2 className="text-xl sm:text-3xl font-bold tracking-[-2px] text-gray-900 mb-6 text-left">{t('catalog.judgeAssignment')} — {modalDate}</h2><p>Zde by byla tabulka přidělení (statický mock)...</p></div>
                         )}
                     </div>
                 </div>
