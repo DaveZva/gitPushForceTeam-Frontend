@@ -29,6 +29,7 @@ export function ShowCreatePage() {
         resolver: zodResolver(showSchema) as Resolver<ShowFormData>,
         defaultValues: {
             status: 'PLANNED',
+            maxCats: 200
         },
     });
 
@@ -36,8 +37,21 @@ export function ShowCreatePage() {
 
     const onSubmit: SubmitHandler<ShowFormData> = async (data) => {
         setIsSubmitting(true);
-        console.log("Data k odeslání:", data);
         try {
+            const formatForBackend = (val: string | undefined | null): string | undefined => {
+                if (!val) return undefined;
+                return val.length === 16 ? `${val}:00` : val;
+            };
+
+            const payload = {
+                ...data,
+                startDate: formatForBackend(data.startDate)!,
+                endDate: formatForBackend(data.endDate)!,
+                registrationDeadline: formatForBackend(data.registrationDeadline)!,
+                vetCheckStart: formatForBackend(data.vetCheckStart),
+                judgingStart: formatForBackend(data.judgingStart),
+                judgingEnd: formatForBackend(data.judgingEnd),
+            };
             await secretariatApi.createShow(data);
 
             // Použití lokalizovaného textu
@@ -68,6 +82,8 @@ export function ShowCreatePage() {
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <FormField name="name" label={t('fields.name')} error={errors.name?.message} />
 
+                            <FormField name="maxCats" label={t('fields.maxCats')} type="number" error={errors.maxCats?.message} />
+
                             <div className="flex flex-col">
                                 <label htmlFor="status" className="mb-1 font-semibold text-gray-700">{t('fields.status')}</label>
                                 <Select id="status" {...register('status')}>
@@ -84,14 +100,24 @@ export function ShowCreatePage() {
                         <div className="flex flex-col">
                             <label htmlFor="description" className="mb-1 font-semibold text-gray-700">{t('fields.description')}</label>
                             <textarea
+                                {...register('description')}
                                 className="w-full p-3 bg-gray-100 rounded-lg border-[1px] border-transparent focus:outline-none focus:ring-1 focus:ring-[#027BFF] focus:border-[#027BFF]"
+                                rows={3}
                             />
 
-                            {errors.description && (
-                                <span className="text-sm text-red-600 mt-1">
-            {errors.description.message}
-        </span>
+                            {errors.description && (<span className="text-sm text-red-600 mt-1">{errors.description.message}</span>
                             )}
+                        </div>
+                    </fieldset>
+
+                    <fieldset className="space-y-4">
+                        <legend className="text-xl font-semibold text-[#027BFF] border-b pb-2 mb-4">
+                            Harmonogram
+                        </legend>
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <FormField name="vetCheckStart" label={t('fields.vetCheckStart')} type="datetime-local" error={errors.vetCheckStart?.message} />
+                            <FormField name="judgingStart" label={t('fields.judgingStart')} type="datetime-local" error={errors.judgingStart?.message} />
+                            <FormField name="judgingEnd" label={t('fields.judgingEnd')} type="datetime-local" error={errors.judgingEnd?.message} />
                         </div>
                     </fieldset>
 
