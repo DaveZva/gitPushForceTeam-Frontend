@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { registrationApi, QuickCatalogEntry } from "../services/api/registrationApi";
+import { registrationApi, QuickCatalogEntry, PublicShowDetail } from "../services/api/registrationApi";
 
 const BREED_NAMES: Record<string, string> = {
     EXO: 'Exotic Shorthair',
@@ -40,7 +40,6 @@ const FIFE_CATEGORIES: Record<string, { name: string; index: number; ems: string
     'SPH': { name: 'Siamo-Orientale cats', index: 4, ems: 'IV.' },
 };
 
-// --- INTERFACES ---
 interface CatDetail {
     entryNumber: number;
     name: string;
@@ -63,7 +62,16 @@ interface CatEntry {
     group: number | null;
 }
 
-// --- HELPERS ---
+const formatTime = (isoString?: string) => {
+    if (!isoString) return "--:--";
+    return new Date(isoString).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+};
+
+const formatDate = (isoString?: string) => {
+    if (!isoString) return "";
+    return new Date(isoString).toLocaleDateString([], { day: '2-digit', month: '2-digit', year: 'numeric' });
+};
+
 const getClassSortOrder = (className: string): number => {
     const match = className.match(/(\d+)/);
     if (match) return parseInt(match[1], 10);
@@ -132,7 +140,6 @@ const useSortedCatalogData = (
     }, [cats, searchTerm, filters, sortKey]);
 };
 
-// --- KOMPONENTA: PRIMÁRNÍ KATALOG ---
 const PrimaryCatalogueContent = ({ showId }: { showId: string | number }) => {
     const { t } = useTranslation();
     const [searchTerm, setSearchTerm] = useState('');
@@ -323,7 +330,6 @@ const PrimaryCatalogueContent = ({ showId }: { showId: string | number }) => {
     );
 };
 
-// --- MOCK DATA A KOMPONENTY PRO OSTATNÍ ZÁLOŽKY ---
 interface JudgeStatus { name: string; sat: number; sun: number; }
 interface JudgeReportRow { no: number; ems: string; sex: string; class: number; born: string; AdM: string; AdF: string; NeM: string; NeF: string; '11M': string; '11F': string; '12M': string; '12F': string; results: string; [key: string]: any; }
 interface NominationEntry { no: number; breed: string; judge: string; badge: string; }
@@ -339,8 +345,7 @@ const judges: JudgeStatus[] = [
     { name: 'Mrs. Anna Wilczek PL', sat: 100, sun: 0 },
 ];
 
-const JudgeReportDetail = ({}: { judgeName: string; date: string }) => {
-    // Note: This data is mock/technical, translation of keys like 'Results' is usually sufficient.
+const JudgeReportDetail = ({ judgeName, date }: { judgeName: string; date: string }) => {
     const reportData: JudgeReportRow[] = [
         { no: 1, ems: 'EXO n', sex: '1,0', class: 1, born: '2023-05-04', AdM: 'X', AdF: '', NeM: '', NeF: '', '11M': '', '11F': '', '12M': '', '12F': '', results: 'PH' },
         { no: 7, ems: 'PER as 24 62', sex: '1,0', class: 12, born: '2025-05-09', AdM: '', AdF: '', NeM: '', NeF: 'X', '11M': '', '11F': '', '12M': '', '12F': '', results: 'Ex 1, CACC, NOM' },
@@ -379,19 +384,19 @@ const NominationDetailTable = ({ category, date, location = "FP – Poznań" }: 
     );
 };
 
-// --- HLAVNÍ KOMPONENTA ---
-
 export default function Catalog() {
     const { t } = useTranslation();
     const [tab, setTab] = useState<"info" | "primary" | "secondary">("info");
     const { showId } = useParams<{ showId: string }>();
 
-    // --- QUICK CATALOG STATES ---
     const [quickEntries, setQuickEntries] = useState<QuickCatalogEntry[]>([]);
     const [quickLoading, setQuickLoading] = useState<boolean>(false);
     const [quickError, setQuickError] = useState<string | null>(null);
     const [activeQuickFilter, setActiveQuickFilter] = useState<number | 'ALL'>('ALL');
-    // ----------------------------
+
+    const [showInfo, setShowInfo] = useState<PublicShowDetail | null>(null);
+    const [infoLoading, setInfoLoading] = useState<boolean>(true);
+    const [infoError, setInfoError] = useState<string | null>(null);
 
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
     const [modalDate, setModalDate] = useState<string | null>(null);
@@ -399,21 +404,31 @@ export default function Catalog() {
     const [modalCategory, setModalCategory] = useState<string | null>(null);
 
     useEffect(() => {
-        const fetchQuickCatalog = async () => {
+        const loadAllData = async () => {
             const idToFetch = showId || 1;
+            setInfoLoading(true);
             setQuickLoading(true);
             try {
-                const data = await registrationApi.getQuickCatalog(idToFetch);
-                setQuickEntries(data);
+                const [infoData, catalogData] = await Promise.all([
+                    registrationApi.getShowInfo(idToFetch),
+                    registrationApi.getQuickCatalog(idToFetch)
+                ]);
+
+                setShowInfo(infoData);
+                setQuickEntries(catalogData);
+                setInfoError(null);
                 setQuickError(null);
             } catch (err) {
                 console.error(err);
+                setInfoError(t('catalog.errorLoading'));
                 setQuickError(t('catalog.errorLoadingQuick'));
             } finally {
+                setInfoLoading(false);
                 setQuickLoading(false);
             }
         };
-        fetchQuickCatalog();
+
+        loadAllData();
     }, [showId, t]);
 
     const filteredQuickEntries = useMemo(() => {
@@ -424,6 +439,12 @@ export default function Catalog() {
         return filtered.sort((a, b) => a.catalogNumber - b.catalogNumber);
 
     }, [quickEntries, activeQuickFilter]);
+
+    const capacityPercentage = useMemo(() => {
+        if (!showInfo || !showInfo.maxCats) return 0;
+        const pct = (showInfo.occupiedSpots / showInfo.maxCats) * 100;
+        return Math.min(pct, 100);
+    }, [showInfo]);
 
     const openModal = (date: string, judgeName: string | null = null, category: string | null = null) => {
         setModalDate(date); setModalJudge(judgeName); setModalCategory(category); setIsModalOpen(true);
@@ -444,150 +465,192 @@ export default function Catalog() {
 
     return (
         <div className="bg-white rounded-2xl shadow-xl p-6">
-            <div className="max-w-6xl mx-auto px-4 pt-10 pb-6 border-b border-gray-200">
-                <h1 className="text-3xl sm:text-4xl font-bold tracking-[-4px] text-gray-900 mb-4">{t('catalog.mainTitle')}</h1>
-                <div className="flex flex-col sm:flex-row sm:items-center sm:gap-10 gap-3 text-gray-700">
-                    <div className="flex items-center gap-3"><div className="w-10 h-10 rounded-full bg-[#027BFF]/10 flex items-center justify-center"><svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 text-[#027BFF]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg></div><p className="text-sm font-medium">14. 12. 2025 – 15. 12. 2025</p></div>
-                    <div className="flex items-center gap-3"><div className="w-10 h-10 rounded-full bg-[#027BFF]/10 flex items-center justify-center"><svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 text-[#027BFF]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M12 11a3 3 0 110-6 3 3 0 010 6zm0 0c-4.418 0-8 2.239-8 5v2h16v-2c0-2.761-3.582-5-8-5z"/></svg></div><p className="text-sm font-medium">PVA Expo Letňany, Praha</p></div>
+            {infoLoading ? (
+                <div className="flex flex-col items-center justify-center py-20">
+                    <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-b-4 border-[#027BFF]"></div>
+                    <p className="mt-4 text-gray-500">{t('catalog.loading')}</p>
                 </div>
-            </div>
-            <div className="max-w-6xl mx-auto px-4 mt-8">
-                <div className="flex gap-2 sm:gap-4 md:gap-8 justify-start">
-                    <button onClick={() => setTab("info")} className={`flex items-center gap-1.5 px-3 py-2 text-sm rounded-xl font-semibold tracking-[-1px] transition ${tab === "info" ? "bg-[#027BFF] text-white shadow-lg" : "bg-gray-100 text-gray-500 hover:bg-gray-200"}`}><svg className={`w-4 h-4 ${tab === "info" ? "text-white" : "text-gray-400"}`} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" /><path strokeLinecap="round" strokeLinejoin="round" d="M12 8h.01M11.5 12h1v4h-1" /></svg>{t('catalog.tabInfo')}</button>
-                    <button onClick={() => setTab("primary")} className={`flex items-center gap-1.5 px-3 py-2 text-sm rounded-xl font-semibold tracking-[-1px] transition ${tab === "primary" ? "bg-[#027BFF] text-white shadow-lg" : "bg-gray-100 text-gray-500 hover:bg-gray-200"}`}><svg className={`w-4 h-4 ${tab === "primary" ? "text-white" : "text-gray-400"}`} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M4 7h16M4 12h16M4 17h16" /></svg>{t('catalog.tabPrimary')}</button>
-                    <button onClick={() => setTab("secondary")} className={`flex items-center gap-1.5 px-3 py-2 text-sm rounded-xl font-semibold tracking-[-1px] transition ${tab === "secondary" ? "bg-[#027BFF] text-white shadow-lg" : "bg-gray-100 text-gray-500 hover:bg-gray-200"}`}><svg className={`w-4 h-4 ${tab === "secondary" ? "text-white" : "text-gray-400"}`} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M4 7h16M4 12h16M4 17h16" /></svg>{t('catalog.tabSecondary')}</button>
+            ) : infoError ? (
+                <div className="p-8 text-center text-red-600 bg-red-50 rounded-xl">
+                    <h3 className="font-bold text-lg">{t('catalog.errorTitle')}</h3>
+                    <p>{infoError}</p>
                 </div>
-            </div>
-
-            <div className="max-w-6xl mx-auto px-4 mt-10">
-                {/* TAB 1 – INFO */}
-                {tab === "info" && (
-                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
-                        <div className="lg:col-span-2 space-y-10">
-                            <section className="text-left"><h2 className="text-xl font-bold text-gray-900 tracking-[-1px] mb-2">{t('catalog.infoTitle')}</h2><p className="text-gray-600 mt-4 leading-relaxed">{t('catalog.infoText')}</p></section>
-                            <section><h2 className="text-xl font-bold text-gray-900 tracking-[-1px] mb-2">{t('catalog.schedule')}</h2>
-                                <div className="flex flex-col gap-6">
-                                    <div className="flex items-center gap-4"><div className="w-14 h-10 bg-[#027BFF]/10 text-[#027BFF] font-bold text-sm flex items-center justify-center rounded-lg">08:00</div><p className="text-gray-800 font-medium">{t('catalog.vetCheck')}</p></div>
-                                    <div className="flex items-center gap-4"><div className="w-14 h-10 bg-[#027BFF]/10 text-[#027BFF] font-bold text-sm flex items-center justify-center rounded-lg">10:00</div><p className="text-gray-800 font-medium">{t('catalog.judgingStart')}</p></div>
-                                    <div className="flex items-center gap-4"><div className="w-14 h-10 bg-[#027BFF]/10 text-[#027BFF] font-bold text-sm flex items-center justify-center rounded-lg">16:00</div><p className="text-gray-800 font-medium">{t('catalog.showOpen')}</p></div>
+            ) : showInfo && (
+                <>
+                    <div className="max-w-6xl mx-auto px-4 pt-4 pb-6 border-b border-gray-200">
+                        <h1 className="text-3xl sm:text-4xl font-bold tracking-[-2px] text-gray-900 mb-4">{showInfo.name}</h1>
+                        <div className="flex flex-col sm:flex-row sm:items-center sm:gap-10 gap-3 text-gray-700">
+                            <div className="flex items-center gap-3">
+                                <div className="w-10 h-10 rounded-full bg-[#027BFF]/10 flex items-center justify-center text-[#027BFF]">
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
                                 </div>
-                            </section>
+                                <p className="text-sm font-medium">{formatDate(showInfo.startDate)} – {formatDate(showInfo.endDate)}</p>
+                            </div>
+                            <div className="flex items-center gap-3">
+                                <div className="w-10 h-10 rounded-full bg-[#027BFF]/10 flex items-center justify-center text-[#027BFF]">
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path strokeLinecap="round" strokeLinejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                                </div>
+                                <p className="text-sm font-medium">{showInfo.venueName}, {showInfo.venueCity}</p>
+                            </div>
                         </div>
-                        <aside className="space-y-8">
-                            <div className="rounded-2xl p-6 shadow-xl bg-gradient-to-br from-[#027BFF] to-[#005fcc] text-white">
-                                <h3 className="text-lg font-semibold mb-3">{t('catalog.registrationStatus')}</h3>
-                                <p className="text-3xl font-bold tracking-[-1px] mb-2">156 / 250</p>
-                                <div className="w-full h-2 bg-white/30 rounded-full mb-3 overflow-hidden"><div className="h-full bg-white rounded-full" style={{ width: "62%" }}></div></div>
-                                <p className="text-sm text-white/90 mb-5">{t('catalog.spotsFilling')}</p>
-                                <Link to="/apply" className="block w-full text-center py-2.5 bg-white text-[#027BFF] tracking-[-1px] font-semibold rounded-full border-2 border-white hover:bg-transparent hover:text-white transition-all">{t('catalog.registerBtn')}</Link>
-                            </div>
-                            <div className="backdrop-blur-2xl bg-white/30 rounded-2xl p-6 shadow-[0_8px_32px_0_rgba(31,38,135,0.37)] border border-white/40">
-                                <div className="flex items-center gap-3 mb-4"><div className="w-10 h-10 rounded-full bg-[#027BFF]/10 flex items-center justify-center"><svg className="w-6 h-6 text-[#027BFF]" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M12 12c2.485 0 4.5-2.015 4.5-4.5S14.485 3 12 3 7.5 5.015 7.5 7.5 9.515 12 12 12z" /><path strokeLinecap="round" strokeLinejoin="round" d="M19.5 21a7.5 7.5 0 00-15 0" /></svg></div><h3 className="text-lg font-bold text-gray-900 tracking-[-1px]">{t('catalog.organizerTitle')}</h3></div>
-                                <p className="font-semibold text-gray-800 mb-1 text-left">SO Ostrava</p>
-                                <p className="text-sm text-gray-600 text-left">fife-ostrava.cz</p>
-                                <Link to="/apply" className="block w-full text-center py-2.5 mt-2 bg-white text-[#027BFF] font-semibold rounded-full border-2 border-[#027BFF] tracking-[-1px] hover:bg-[#027BFF] hover:text-white transition-all duration-300">{t('catalog.contactBtn')}</Link>
-                            </div>
-                        </aside>
                     </div>
-                )}
 
-                {/* TAB 2 – PRIMARY CATALOG */}
-                {tab === "primary" && <PrimaryCatalogueContent showId={showId || 1} />}
+                    <div className="max-w-6xl mx-auto px-4 mt-8">
+                        <div className="flex gap-2 sm:gap-4 md:gap-8 justify-start">
+                            <button onClick={() => setTab("info")} className={`flex items-center gap-1.5 px-3 py-2 text-sm rounded-xl font-semibold tracking-[-1px] transition ${tab === "info" ? "bg-[#027BFF] text-white shadow-lg" : "bg-gray-100 text-gray-500 hover:bg-gray-200"}`}>{t('catalog.tabInfo')}</button>
+                            <button onClick={() => setTab("primary")} className={`flex items-center gap-1.5 px-3 py-2 text-sm rounded-xl font-semibold tracking-[-1px] transition ${tab === "primary" ? "bg-[#027BFF] text-white shadow-lg" : "bg-gray-100 text-gray-500 hover:bg-gray-200"}`}>{t('catalog.tabPrimary')}</button>
+                            <button onClick={() => setTab("secondary")} className={`flex items-center gap-1.5 px-3 py-2 text-sm rounded-xl font-semibold tracking-[-1px] transition ${tab === "secondary" ? "bg-[#027BFF] text-white shadow-lg" : "bg-gray-100 text-gray-500 hover:bg-gray-200"}`}>{t('catalog.tabSecondary')}</button>
+                        </div>
+                    </div>
 
-                {/* TAB 3 – SECONDARY CATALOG (QUICK CATALOG & RESULTS) */}
-                {tab === "secondary" && (
-                    <div className="py-10 space-y-8">
-                        {/* Static Info Section */}
-                        <section className="backdrop-blur-2xl bg-white/30 rounded-2xl p-6 shadow-[0_8px_32px_0_rgba(31,38,135,0.37)] border border-white/40 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-                            <div className="text-left"><h2 className="text-xl font-semibold text-gray-900">Cat Show: FP – Poznań</h2><p className="text-sm text-gray-500">{t('catalog.dateAndPlace') || 'Date: 2025–11–15 & 2025–11–16'}</p></div>
-                            <div className="text-sm text-gray-700 text-left sm:text-right"><p className="font-semibold">{t('catalog.judgesAndColours')}</p><div className="flex flex-wrap gap-3 mt-1 sm:justify-end"><a href="#" onClick={(e) => { e.preventDefault(); openModal("2025–11–15", null); }} className="text-[#027BFF] font-semibold hover:underline">[2025–11–15]</a><a href="#" onClick={(e) => { e.preventDefault(); openModal("2025–11–16", null); }} className="text-[#027BFF] font-semibold hover:underline">[2025–11–16]</a></div></div>
-                        </section>
-
-                        {/* Static Judges Reports */}
-                        <section className="backdrop-blur-2xl bg-white/30 rounded-2xl p-6 shadow-[0_8px_32px_0_rgba(31,38,135,0.37)] border border-white/40 px-6 sm:px-8 py-6">
-                            <h3 className="text-lg sm:text-xl font-semibold tracking-[-1px] text-gray-900 mb-4">{t('catalog.judgesReports')}</h3>
-                            <div className="divide-y divide-gray-200">{judges.map((j, idx) => (<div key={idx} className="py-3 flex flex-col gap-3 md:flex-row md:items-center md:justify-between"><div className="md:w-1/3 font-medium text-gray-900 text-left">{j.name}</div><div className="md:w-1/3 flex items-center gap-3"><span className="text-xs font-semibold text-gray-700 whitespace-nowrap">{j.sat}%</span><div className="w-full bg-gray-200 h-2 rounded-full overflow-hidden"><div className="h-full bg-[#027BFF]" style={{ width: `${j.sat}%` }} /></div><a href="#" onClick={(e) => { e.preventDefault(); openModal("2025-11-15", j.name); }} className="text-xs sm:text-sm text-[#027BFF] font-semibold hover:underline whitespace-nowrap">[2025–11–15]</a></div><div className="md:w-1/3 flex items-center gap-3"><span className="text-xs font-semibold text-gray-700 whitespace-nowrap">{j.sun}%</span><div className="w-full bg-gray-200 h-2 rounded-full overflow-hidden"><div className={`h-full ${j.sun === 0 ? 'bg-gray-300' : 'bg-[#027BFF]'}`} style={{ width: `${j.sun}%` }} /></div><a href="#" onClick={(e) => { e.preventDefault(); openModal("2025-11-16", j.name); }} className="text-xs sm:text-sm text-[#027BFF] font-semibold hover:underline whitespace-nowrap">[2025–11–16]</a></div></div>))}</div>
-                        </section>
-
-                        {/* Static Nominations */}
-                        <section className="backdrop-blur-2xl bg-white/30 rounded-2xl p-6 shadow-[0_8px_32px_0_rgba(31,38,135,0.37)] border border-white/40 px-6 sm:px-8 py-6">
-                            <h3 className="text-lg sm:text-xl font-semibold text-gray-900 mb-4 tracking-[-1px] text-left">{t('catalog.nominations')}</h3>
-                            <div className="space-y-4 text-sm sm:text-base"><div><div className="text-[#027BFF] font-bold mb-1 text-left">2025–11–15</div><div className="flex flex-wrap gap-x-4 gap-y-2">{['Cat 1', 'Cat 2', 'Cat 3', 'Cat 4', 'DOM', 'NFO'].map((cat, i) => (<a key={i} href="#" onClick={(e) => { e.preventDefault(); openModal('2025–11–15', null, cat); }} className="font-medium text-gray-900 border-b border-dashed border-gray-900 hover:text-[#027BFF] hover:border-[#027BFF]">[{cat}]</a>))}</div></div><div><div className="text-[#027BFF] font-bold mb-1 text-left">2025–11–16</div><div className="flex flex-wrap gap-x-4 gap-y-2">{['Cat 1', 'Cat 2', 'Cat 3', 'Cat 4', 'DOM'].map((cat, i) => (<a key={i} href="#" onClick={(e) => { e.preventDefault(); openModal('2025–11–16', null, cat); }} className="font-medium text-gray-900 border-b border-dashed border-gray-900 hover:text-[#027BFF] hover:border-[#027BFF]">[{cat}]</a>))}</div></div></div>
-                        </section>
-
-                        {/* DYNAMIC QUICK CATALOGUE SECTION */}
-                        <div className="backdrop-blur-2xl bg-white/30 rounded-2xl p-6 shadow-[0_8px_32px_0_rgba(31,38,135,0.37)] border border-white/40 p-4 sm:p-6">
-                            <h3 className="text-lg sm:text-xl font-semibold text-gray-900 mb-4 tracking-[-1px] text-left">{t('catalog.quickCatalogTitle')}</h3>
-
-                            {/* Filtrační tlačítka */}
-                            <div className="flex gap-2 mb-4 overflow-x-auto pb-2">
-                                <QuickFilterButton label="[ALL]" value="ALL" />
-                                <QuickFilterButton label="[cat 1]" value={1} />
-                                <QuickFilterButton label="[cat 2]" value={2} />
-                                <QuickFilterButton label="[cat 3]" value={3} />
-                                <QuickFilterButton label="[cat 4]" value={4} />
-                                <QuickFilterButton label="[DOM]" value={5} />
-                            </div>
-
-                            {/* Obsah tabulky */}
-                            {quickLoading ? (
-                                <div className="text-center py-8 text-gray-500">{t('catalog.loadingQuick')}</div>
-                            ) : quickError ? (
-                                <div className="text-center py-8 text-red-500">{quickError}</div>
-                            ) : filteredQuickEntries.length === 0 ? (
-                                <div className="text-center py-8 text-gray-500 italic">{t('catalog.noQuickResults')}</div>
-                            ) : (
-                                <>
-                                    {/* Desktop Table */}
-                                    <div className="hidden md:block overflow-x-auto">
-                                        <table className="w-full border-collapse text-sm">
-                                            <thead>
-                                            <tr className="bg-[#027BFF] text-white">
-                                                <th className="p-2 text-left">No.</th>
-                                                <th className="p-2 text-left">EMS</th>
-                                                <th className="p-2 text-left">{t('catForm.catName')}</th>
-                                                <th className="p-2 text-center">{t('catForm.gender')}</th>
-                                                <th className="p-2 text-left">{t('catForm.showClass')}</th>
-                                            </tr>
-                                            </thead>
-                                            <tbody>
-                                            {filteredQuickEntries.map((row) => (
-                                                <tr key={row.catalogNumber} className="border-b hover:bg-gray-50">
-                                                    <td className="p-2 font-bold">{row.catalogNumber}</td>
-                                                    <td className="p-2 font-semibold text-blue-600">{row.emsCode}</td>
-                                                    <td className="p-2 font-medium">{row.catName}</td>
-                                                    <td className="p-2 text-center">{row.gender === 'MALE' ? '1,0' : '0,1'}</td>
-                                                    <td className="p-2">{row.showClass.replace(/_/g, ' ')}</td>
-                                                </tr>
-                                            ))}
-                                            </tbody>
-                                        </table>
+                    <div className="max-w-6xl mx-auto px-4 mt-10">
+                        {tab === "info" && (
+                            <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
+                                <div className="lg:col-span-2 space-y-10">
+                                    <section className="text-left">
+                                        <h2 className="text-xl font-bold text-gray-900 tracking-[-1px] mb-2">{t('catalog.infoTitle')}</h2>
+                                        <div className="text-gray-600 mt-4 leading-relaxed whitespace-pre-line">{showInfo.description}</div>
+                                    </section>
+                                    <section>
+                                        <h2 className="text-xl font-bold text-gray-900 tracking-[-1px] mb-4">{t('catalog.schedule')}</h2>
+                                        <div className="flex flex-col gap-4 bg-gray-50 p-6 rounded-xl border border-gray-100">
+                                            {showInfo.vetCheckStart && (
+                                                <div className="flex items-center gap-4">
+                                                    <div className="w-16 h-10 bg-blue-100 text-blue-700 font-bold text-sm flex items-center justify-center rounded-lg">{formatTime(showInfo.vetCheckStart)}</div>
+                                                    <p className="text-gray-800 font-medium">{t('catalog.vetCheck')}</p>
+                                                </div>
+                                            )}
+                                            {showInfo.judgingStart && (
+                                                <div className="flex items-center gap-4">
+                                                    <div className="w-16 h-10 bg-blue-100 text-blue-700 font-bold text-sm flex items-center justify-center rounded-lg">{formatTime(showInfo.judgingStart)}</div>
+                                                    <p className="text-gray-800 font-medium">{t('catalog.judgingStart')}</p>
+                                                </div>
+                                            )}
+                                            {showInfo.judgingEnd && (
+                                                <div className="flex items-center gap-4">
+                                                    <div className="w-16 h-10 bg-blue-100 text-blue-700 font-bold text-sm flex items-center justify-center rounded-lg">{formatTime(showInfo.judgingEnd)}</div>
+                                                    <p className="text-gray-800 font-medium">{t('catalog.showOpen')}</p>
+                                                </div>
+                                            )}
+                                        </div>
+                                    </section>
+                                </div>
+                                <aside className="space-y-8">
+                                    <div className="rounded-2xl p-6 shadow-xl bg-gradient-to-br from-[#027BFF] to-[#005fcc] text-white">
+                                        <h3 className="text-lg font-semibold mb-3">{t('catalog.registrationStatus')}</h3>
+                                        <p className="text-3xl font-bold tracking-[-1px] mb-2">{showInfo.occupiedSpots} / {showInfo.maxCats}</p>
+                                        <div className="w-full h-3 bg-black/20 rounded-full mb-3 overflow-hidden">
+                                            <div className={`h-full rounded-full transition-all duration-1000 ${capacityPercentage > 90 ? 'bg-red-400' : 'bg-white'}`} style={{ width: `${capacityPercentage}%` }}></div>
+                                        </div>
+                                        <p className="text-sm text-white/90 mb-5">{showInfo.occupiedSpots >= showInfo.maxCats ? t('catalog.capacityFull') : t('catalog.spotsFilling')}</p>
+                                        {showInfo.occupiedSpots < showInfo.maxCats ? (
+                                            <Link to="/apply" className="block w-full text-center py-2.5 bg-white text-[#027BFF] tracking-[-1px] font-semibold rounded-full border-2 border-white hover:bg-transparent hover:text-white transition-all">{t('catalog.registerBtn')}</Link>
+                                        ) : (
+                                            <button disabled className="block w-full text-center py-2.5 bg-gray-400 text-white font-semibold rounded-full cursor-not-allowed opacity-80">{t('catalog.registrationClosed')}</button>
+                                        )}
                                     </div>
-
-                                    {/* Mobile Cards */}
-                                    <div className="md:hidden flex flex-col gap-4">
-                                        {filteredQuickEntries.map((row) => (
-                                            <div key={row.catalogNumber} className="border rounded-xl shadow-sm p-4 bg-white">
-                                                <div className="flex justify-between items-start mb-2">
-                                                    <span className="font-bold text-lg text-[#027BFF]">#{row.catalogNumber}</span>
-                                                    <span className="bg-gray-100 text-gray-600 px-2 py-0.5 rounded text-xs font-bold">{row.emsCode}</span>
-                                                </div>
-                                                <h4 className="font-semibold text-gray-900 mb-1 text-left">{row.catName}</h4>
-                                                <div className="text-sm text-gray-500 flex gap-4 text-left">
-                                                    <span>Sex: {row.gender === 'MALE' ? '1,0' : '0,1'}</span>
-                                                    <span>Class: {row.showClass.replace(/_/g, ' ')}</span>
-                                                </div>
+                                    <div className="backdrop-blur-2xl bg-white/30 rounded-2xl p-6 shadow-[0_8px_32px_0_rgba(31,38,135,0.37)] border border-white/40">
+                                        <div className="flex items-center gap-3 mb-4">
+                                            <div className="w-10 h-10 rounded-full bg-[#027BFF]/10 flex items-center justify-center text-[#027BFF]">
+                                                <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M12 12c2.485 0 4.5-2.015 4.5-4.5S14.485 3 12 3 7.5 5.015 7.5 7.5 9.515 12 12 12z" /><path strokeLinecap="round" strokeLinejoin="round" d="M19.5 21a7.5 7.5 0 00-15 0" /></svg>
                                             </div>
-                                        ))}
+                                            <h3 className="text-lg font-bold text-gray-900 tracking-[-1px]">{t('catalog.organizerTitle')}</h3>
+                                        </div>
+                                        <p className="font-semibold text-gray-800 mb-1 text-left">{showInfo.organizerName}</p>
+                                        {showInfo.organizerWebsiteUrl && (
+                                            <a href={showInfo.organizerWebsiteUrl} target="_blank" rel="noreferrer" className="text-sm text-blue-600 hover:underline text-left block mb-2">{showInfo.organizerWebsiteUrl}</a>
+                                        )}
+                                        <Link to="/apply" className="block w-full text-center py-2.5 mt-2 bg-white text-[#027BFF] font-semibold rounded-full border-2 border-[#027BFF] tracking-[-1px] hover:bg-[#027BFF] hover:text-white transition-all duration-300">{t('catalog.contactBtn')}</Link>
                                     </div>
-                                </>
-                            )}
-                        </div>
-                    </div>
-                )}
-            </div>
+                                </aside>
+                            </div>
+                        )}
 
-            {/* MODAL WINDOW */}
+                        {tab === "primary" && <PrimaryCatalogueContent showId={showId || 1} />}
+
+                        {tab === "secondary" && (
+                            <div className="py-10 space-y-8">
+                                <section className="backdrop-blur-2xl bg-white/30 rounded-2xl p-6 shadow-[0_8px_32px_0_rgba(31,38,135,0.37)] border border-white/40 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                                    <div className="text-left"><h2 className="text-xl font-semibold text-gray-900">Cat Show: FP – Poznań</h2><p className="text-sm text-gray-500">{t('catalog.dateAndPlace') || 'Date: 2025–11–15 & 2025–11–16'}</p></div>
+                                    <div className="text-sm text-gray-700 text-left sm:text-right"><p className="font-semibold">{t('catalog.judgesAndColours')}</p><div className="flex flex-wrap gap-3 mt-1 sm:justify-end"><a href="#" onClick={(e) => { e.preventDefault(); openModal("2025–11–15", null); }} className="text-[#027BFF] font-semibold hover:underline">[2025–11–15]</a><a href="#" onClick={(e) => { e.preventDefault(); openModal("2025–11–16", null); }} className="text-[#027BFF] font-semibold hover:underline">[2025–11–16]</a></div></div>
+                                </section>
+
+                                <section className="backdrop-blur-2xl bg-white/30 rounded-2xl p-6 shadow-[0_8px_32px_0_rgba(31,38,135,0.37)] border border-white/40 px-6 sm:px-8 py-6">
+                                    <h3 className="text-lg sm:text-xl font-semibold tracking-[-1px] text-gray-900 mb-4">{t('catalog.judgesReports')}</h3>
+                                    <div className="divide-y divide-gray-200">{judges.map((j, idx) => (<div key={idx} className="py-3 flex flex-col gap-3 md:flex-row md:items-center md:justify-between"><div className="md:w-1/3 font-medium text-gray-900 text-left">{j.name}</div><div className="md:w-1/3 flex items-center gap-3"><span className="text-xs font-semibold text-gray-700 whitespace-nowrap">{j.sat}%</span><div className="w-full bg-gray-200 h-2 rounded-full overflow-hidden"><div className="h-full bg-[#027BFF]" style={{ width: `${j.sat}%` }} /></div><a href="#" onClick={(e) => { e.preventDefault(); openModal("2025-11-15", j.name); }} className="text-xs sm:text-sm text-[#027BFF] font-semibold hover:underline whitespace-nowrap">[2025–11–15]</a></div><div className="md:w-1/3 flex items-center gap-3"><span className="text-xs font-semibold text-gray-700 whitespace-nowrap">{j.sun}%</span><div className="w-full bg-gray-200 h-2 rounded-full overflow-hidden"><div className={`h-full ${j.sun === 0 ? 'bg-gray-300' : 'bg-[#027BFF]'}`} style={{ width: `${j.sun}%` }} /></div><a href="#" onClick={(e) => { e.preventDefault(); openModal("2025-11-16", j.name); }} className="text-xs sm:text-sm text-[#027BFF] font-semibold hover:underline whitespace-nowrap">[2025–11–16]</a></div></div>))}</div>
+                                </section>
+
+                                <section className="backdrop-blur-2xl bg-white/30 rounded-2xl p-6 shadow-[0_8px_32px_0_rgba(31,38,135,0.37)] border border-white/40 px-6 sm:px-8 py-6">
+                                    <h3 className="text-lg sm:text-xl font-semibold text-gray-900 mb-4 tracking-[-1px] text-left">{t('catalog.nominations')}</h3>
+                                    <div className="space-y-4 text-sm sm:text-base"><div><div className="text-[#027BFF] font-bold mb-1 text-left">2025–11–15</div><div className="flex flex-wrap gap-x-4 gap-y-2">{['Cat 1', 'Cat 2', 'Cat 3', 'Cat 4', 'DOM', 'NFO'].map((cat, i) => (<a key={i} href="#" onClick={(e) => { e.preventDefault(); openModal('2025–11–15', null, cat); }} className="font-medium text-gray-900 border-b border-dashed border-gray-900 hover:text-[#027BFF] hover:border-[#027BFF]">[{cat}]</a>))}</div></div><div><div className="text-[#027BFF] font-bold mb-1 text-left">2025–11–16</div><div className="flex flex-wrap gap-x-4 gap-y-2">{['Cat 1', 'Cat 2', 'Cat 3', 'Cat 4', 'DOM'].map((cat, i) => (<a key={i} href="#" onClick={(e) => { e.preventDefault(); openModal('2025–11–16', null, cat); }} className="font-medium text-gray-900 border-b border-dashed border-gray-900 hover:text-[#027BFF] hover:border-[#027BFF]">[{cat}]</a>))}</div></div></div>
+                                </section>
+
+                                <div className="backdrop-blur-2xl bg-white/30 rounded-2xl p-6 shadow-[0_8px_32px_0_rgba(31,38,135,0.37)] border border-white/40 p-4 sm:p-6">
+                                    <h3 className="text-lg sm:text-xl font-semibold text-gray-900 mb-4 tracking-[-1px] text-left">{t('catalog.quickCatalogTitle')}</h3>
+                                    <div className="flex gap-2 mb-4 overflow-x-auto pb-2">
+                                        <QuickFilterButton label="[ALL]" value="ALL" />
+                                        <QuickFilterButton label="[cat 1]" value={1} />
+                                        <QuickFilterButton label="[cat 2]" value={2} />
+                                        <QuickFilterButton label="[cat 3]" value={3} />
+                                        <QuickFilterButton label="[cat 4]" value={4} />
+                                        <QuickFilterButton label="[DOM]" value={5} />
+                                    </div>
+                                    {quickLoading ? (
+                                        <div className="text-center py-8 text-gray-500">{t('catalog.loadingQuick')}</div>
+                                    ) : quickError ? (
+                                        <div className="text-center py-8 text-red-500">{quickError}</div>
+                                    ) : filteredQuickEntries.length === 0 ? (
+                                        <div className="text-center py-8 text-gray-500 italic">{t('catalog.noQuickResults')}</div>
+                                    ) : (
+                                        <>
+                                            <div className="hidden md:block overflow-x-auto">
+                                                <table className="w-full border-collapse text-sm">
+                                                    <thead>
+                                                    <tr className="bg-[#027BFF] text-white">
+                                                        <th className="p-2 text-left">No.</th>
+                                                        <th className="p-2 text-left">EMS</th>
+                                                        <th className="p-2 text-left">{t('catForm.catName')}</th>
+                                                        <th className="p-2 text-center">{t('catForm.gender')}</th>
+                                                        <th className="p-2 text-left">{t('catForm.showClass')}</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    {filteredQuickEntries.map((row) => (
+                                                        <tr key={row.catalogNumber} className="border-b hover:bg-gray-50">
+                                                            <td className="p-2 font-bold">{row.catalogNumber}</td>
+                                                            <td className="p-2 font-semibold text-blue-600">{row.emsCode}</td>
+                                                            <td className="p-2 font-medium">{row.catName}</td>
+                                                            <td className="p-2 text-center">{row.gender === 'MALE' ? '1,0' : '0,1'}</td>
+                                                            <td className="p-2">{row.showClass.replace(/_/g, ' ')}</td>
+                                                        </tr>
+                                                    ))}
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            <div className="md:hidden flex flex-col gap-4">
+                                                {filteredQuickEntries.map((row) => (
+                                                    <div key={row.catalogNumber} className="border rounded-xl shadow-sm p-4 bg-white">
+                                                        <div className="flex justify-between items-start mb-2">
+                                                            <span className="font-bold text-lg text-[#027BFF]">#{row.catalogNumber}</span>
+                                                            <span className="bg-gray-100 text-gray-600 px-2 py-0.5 rounded text-xs font-bold">{row.emsCode}</span>
+                                                        </div>
+                                                        <h4 className="font-semibold text-gray-900 mb-1 text-left">{row.catName}</h4>
+                                                        <div className="text-sm text-gray-500 flex gap-4 text-left">
+                                                            <span>Sex: {row.gender === 'MALE' ? '1,0' : '0,1'}</span>
+                                                            <span>Class: {row.showClass.replace(/_/g, ' ')}</span>
+                                                        </div>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        </>
+                                    )}
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                </>
+            )}
+
             {isModalOpen && modalDate && (
                 <div className="fixed inset-0 z-50 flex justify-center p-4 pt-32">
                     <div className="fixed inset-0 bg-gray-900 bg-opacity-70 backdrop-blur-sm transition-opacity" onClick={closeModal}></div>

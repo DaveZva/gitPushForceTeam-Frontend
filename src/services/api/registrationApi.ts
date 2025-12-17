@@ -120,6 +120,23 @@ export interface QuickCatalogEntry {
     category: number;
 }
 
+export interface PublicShowDetail {
+    id: number;
+    name: string;
+    description: string;
+    venueName: string;
+    venueCity: string;
+    organizerName: string;
+    organizerWebsiteUrl: string;
+    startDate: string;
+    endDate: string;
+    vetCheckStart: string;
+    judgingStart: string;
+    judgingEnd: string;
+    maxCats: number;
+    occupiedSpots: number;
+}
+
 export const registrationApi = {
     submitRegistration: async (registrationData: RegistrationPayload): Promise<SubmitRegistrationResponse> => {
         try {
@@ -159,6 +176,11 @@ export const registrationApi = {
             console.error('API Error (getCatalog):', error);
             throw error;
         }
+    },
+
+    getShowInfo: async (showId: string | number): Promise<PublicShowDetail> => {
+        const response = await api.get<PublicShowDetail>(`/shows/${showId}/details`);
+        return response.data;
     },
 
     getQuickCatalog: async (showId: string | number): Promise<QuickCatalogEntry[]> => {
