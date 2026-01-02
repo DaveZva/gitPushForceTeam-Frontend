@@ -31,6 +31,7 @@ export const defaultCatValues: CatFormData = {
     neutered: "no",
     emsCode: "",
     birthDate: "",
+    group: "",
     showClass: "",
     pedigreeNumber: "",
     cageType: "",

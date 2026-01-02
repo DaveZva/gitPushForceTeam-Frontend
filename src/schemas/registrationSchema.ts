@@ -81,7 +81,7 @@ const createCatSchema = (t: TFunction) => z.object({
                 });
             }
         }),
-
+    group: z.string().optional(),
     showClass: z.string().min(1, t('validation.cat.showClass.required')),
     pedigreeNumber: z.string().optional(),
     cageType: z.string().min(1, t('validation.cat.cageType.required')),
@@ -94,8 +94,6 @@ const createCatSchema = (t: TFunction) => z.object({
             });
         }
     }),
-
-    group: z.string().optional(),
 
     motherTitleBefore: z.string().optional(),
     motherName: z.string().optional(),

@@ -50,7 +50,7 @@ export interface PublicCatalogEntry {
     category: string;
     color: string;
     className: string;
-    group: number | null;
+    group: string | null;
 }
 
 export interface SavedCat {
@@ -63,6 +63,7 @@ export interface SavedCat {
     chipNumber: string;
     birthDate: string;
     gender: string;
+    group: string | null;
 
     fatherName?: string;
     fatherTitleBefore?: string;
@@ -118,6 +119,7 @@ export interface QuickCatalogEntry {
     emsCode: string;
     showClass: string;
     category: number;
+    group: string | null;
 }
 
 export interface PublicShowDetail {

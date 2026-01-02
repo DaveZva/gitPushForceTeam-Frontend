@@ -59,7 +59,7 @@ interface CatEntry {
     category: string;
     colour: string;
     class: string;
-    group: number | null;
+    group: string | null;
 }
 
 const formatTime = (isoString?: string) => {
@@ -243,7 +243,11 @@ const PrimaryCatalogueContent = ({ showId }: { showId: string | number }) => {
                                                                 <span className="text-xl text-[#027BFF] mr-2">#.</span>
                                                                 <span className="ml-0 text-sm sm:text-base font-bold">{entry.category} <span className="text-gray-600 font-normal ml-1">({entry.colour})</span></span>
                                                             </h4>
-                                                            {entry.group && <div className="text-xs font-medium text-white bg-[#005fcc] px-2 py-0.5 rounded-full mt-1 sm:mt-0">{t('catalog.group')}: {entry.group}</div>}
+                                                            {entry.group && (
+                                                                <div className="text-xs font-bold text-white bg-[#027BFF] px-2 py-0.5 rounded-full">
+                                                                    {t('catalog.group')} {entry.group}
+                                                                </div>
+                                                            )}
                                                         </div>
                                                         {renderCatDetails(entry)}
                                                     </li>
@@ -621,7 +625,7 @@ export default function Catalog() {
                                                             <td className="p-2 font-semibold text-blue-600">{row.emsCode}</td>
                                                             <td className="p-2 font-medium">{row.catName}</td>
                                                             <td className="p-2 text-center">{row.gender === 'MALE' ? '1,0' : '0,1'}</td>
-                                                            <td className="p-2">{row.showClass.replace(/_/g, ' ')}</td>
+                                                            <td className="p-2">{row.showClass.replace(/_/g, ' ')}{row.group && (<span className="ml-1 text-blue-600 font-bold">({t('catalog.group')} {row.group})</span>)}</td>
                                                         </tr>
                                                     ))}
                                                     </tbody>
@@ -637,7 +641,10 @@ export default function Catalog() {
                                                         <h4 className="font-semibold text-gray-900 mb-1 text-left">{row.catName}</h4>
                                                         <div className="text-sm text-gray-500 flex gap-4 text-left">
                                                             <span>Sex: {row.gender === 'MALE' ? '1,0' : '0,1'}</span>
-                                                            <span>Class: {row.showClass.replace(/_/g, ' ')}</span>
+                                                            <span>Class:
+                                                                {row.showClass.replace(/_/g, ' ')}
+                                                                {row.group && ` (${t('catalog.group')} ${row.group})`}
+                                                            </span>
                                                         </div>
                                                     </div>
                                                 ))}
