@@ -54,6 +54,7 @@ export function Step2_CatInfo() {
             catName: cat.catName,
             chipNumber: cat.chipNumber || '',
             emsCode: cat.emsCode,
+            group: cat.group || '',
             birthDate: cat.birthDate,
             pedigreeNumber: cat.pedigreeNumber || '',
             gender: cat.gender.toLowerCase() as 'male' | 'female',
