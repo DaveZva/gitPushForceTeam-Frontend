@@ -1,65 +1,129 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { secretariatApi } from '../services/api/secretariatApi';
+import { EditEntryModal } from './EditEntryModal';
 
-export const RegistrationsTab = ({ showId }: any) => {
+export const RegistrationsTab = ({ showId }: { showId: string }) => {
+    const { t } = useTranslation();
+    const [registrations, setRegistrations] = useState<any[]>([]);
+    const [selectedEntryId, setSelectedEntryId] = useState<number | null>(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [loading, setLoading] = useState(true);
+
+    const loadRegistrations = async () => {
+        setLoading(true);
+        try {
+            const data = await secretariatApi.getRegistrationsByShow(showId);
+            setRegistrations(data);
+        } catch (err) {
+            console.error(err);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        loadRegistrations();
+    }, [showId]);
+
+    const handleOpenDetail = (entryId: number) => {
+        setSelectedEntryId(entryId);
+        setIsModalOpen(true);
+    };
+
+    if (loading) {
+        return <div className="p-8 text-center text-gray-500">{t('common.loading')}</div>;
+    }
 
     return (
-        <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
-            {/* Toolbar */}
-            <div className="p-4 border-b border-gray-200 flex flex-wrap gap-4 justify-between bg-gray-50">
-                <div className="flex gap-2">
-                    <input type="text" placeholder="Hledat jméno, EMS, majitele..." className="px-3 py-2 border rounded-lg text-sm w-64" />
-                    <select className="px-3 py-2 border rounded-lg text-sm bg-white">
-                        <option>Všechny stavy</option>
-                        <option>Potvrzeno</option>
-                        <option>Čeká na platbu</option>
-                    </select>
-                </div>
-                <div className="flex gap-2">
-                    <button className="px-3 py-2 bg-white border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50">
-                        Export CSV
-                    </button>
-                </div>
+        <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
+            <div className="overflow-x-auto">
+                <table className="w-full text-left text-sm">
+                    <thead className="bg-gray-50 border-b border-gray-100">
+                    <tr>
+                        <th className="px-6 py-4 font-semibold text-gray-900 uppercase tracking-wider text-xs">
+                            {t('catalog.regNo')}
+                        </th>
+                        <th className="px-6 py-4 font-semibold text-gray-900 uppercase tracking-wider text-xs">
+                            {t('catForm.catName')}
+                        </th>
+                        <th className="px-6 py-4 font-semibold text-gray-900 uppercase tracking-wider text-xs">
+                            EMS / {t('catForm.showClass')}
+                        </th>
+                        <th className="px-6 py-4 font-semibold text-gray-900 uppercase tracking-wider text-xs">
+                            {t('catalog.owner')}
+                        </th>
+                        <th className="px-6 py-4 font-semibold text-gray-900 uppercase tracking-wider text-xs">
+                            {t('catalog.status')}
+                        </th>
+                        <th className="px-6 py-4 text-right font-semibold text-gray-900 uppercase tracking-wider text-xs">
+                            {t('admin.shows.col.actions')}
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody className="divide-y divide-gray-100">
+                    {registrations.length === 0 ? (
+                        <tr>
+                            <td colSpan={6} className="px-6 py-8 text-center text-gray-500">
+                                {t('catalog.noResults')}
+                            </td>
+                        </tr>
+                    ) : (
+                        registrations.map((reg) => (
+                            <tr key={reg.id} className="hover:bg-gray-50 transition-colors">
+                                <td className="px-6 py-4 font-mono text-gray-500 font-medium">
+                                    {reg.registrationNumber}
+                                </td>
+                                <td className="px-6 py-4">
+                                    <div className="font-bold text-gray-900">{reg.catName}</div>
+                                    <div className="text-xs text-gray-500 mt-0.5">
+                                        {reg.gender === 'MALE' ? '1,0' : '0,1'}
+                                    </div>
+                                </td>
+                                <td className="px-6 py-4">
+                                    <div className="flex flex-col items-start gap-1">
+                                            <span className="bg-blue-50 text-blue-700 px-2 py-0.5 rounded text-xs font-bold border border-blue-100">
+                                                {reg.emsCode}
+                                            </span>
+                                        <span className="text-gray-500 text-xs">
+                                                {reg.showClass}
+                                            </span>
+                                    </div>
+                                </td>
+                                <td className="px-6 py-4">
+                                    <div className="text-gray-900 font-medium">{reg.ownerName}</div>
+                                    <div className="text-xs text-gray-500">{reg.ownerEmail}</div>
+                                </td>
+                                <td className="px-6 py-4">
+                                        <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                                            reg.status === 'CONFIRMED'
+                                                ? 'bg-green-100 text-green-800'
+                                                : 'bg-yellow-100 text-yellow-800'
+                                        }`}>
+                                            {t(`statuses.${reg.status}`)}
+                                        </span>
+                                </td>
+                                <td className="px-6 py-4 text-right">
+                                    <button
+                                        onClick={() => handleOpenDetail(reg.id)}
+                                        className="text-[#027BFF] font-semibold hover:text-[#0056b3] transition-colors text-sm hover:underline"
+                                    >
+                                        {t('common.edit')}
+                                    </button>
+                                </td>
+                            </tr>
+                        ))
+                    )}
+                    </tbody>
+                </table>
             </div>
 
-            {/* Tabulka */}
-            <table className="w-full text-left text-sm">
-                <thead className="bg-gray-100 text-gray-600 uppercase text-xs font-semibold">
-                <tr>
-                    <th className="p-4">Reg. Číslo</th>
-                    <th className="p-4">Kočka</th>
-                    <th className="p-4">EMS / Třída</th>
-                    <th className="p-4">Majitel</th>
-                    <th className="p-4">Stav</th>
-                    <th className="p-4 text-right">Akce</th>
-                </tr>
-                </thead>
-                <tbody className="divide-y divide-gray-100">
-                {/* MOCK ROW */}
-                <tr className="hover:bg-blue-50/50 transition">
-                    <td className="p-4 font-mono text-gray-500">REG-2025-101</td>
-                    <td className="p-4">
-                        <div className="font-bold text-gray-900">IC Micka z Horní Dolní</div>
-                        <div className="text-xs text-gray-500">2021-05-12 • Female</div>
-                    </td>
-                    <td className="p-4">
-                        <div className="badge bg-blue-100 text-blue-800 px-2 py-0.5 rounded inline-block mb-1">MCO n 22</div>
-                        <div className="text-gray-600">Třída 5 (CAGCIB)</div>
-                    </td>
-                    <td className="p-4">
-                        <div>Jan Novák</div>
-                        <div className="text-xs text-gray-400">jan.novak@email.cz</div>
-                    </td>
-                    <td className="p-4">
-                            <span className="px-2 py-1 rounded-full text-xs font-bold bg-green-100 text-green-700">
-                                CONFIRMED
-                            </span>
-                    </td>
-                    <td className="p-4 text-right">
-                        <button className="text-[#027BFF] font-medium hover:underline">Detail</button>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
+            <EditEntryModal
+                entryId={selectedEntryId}
+                isOpen={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
+                onSave={loadRegistrations}
+            />
         </div>
     );
-}
+};

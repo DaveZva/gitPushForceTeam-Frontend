@@ -1,21 +1,27 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { secretariatApi, SecretariatShow } from '../../services/api/secretariatApi';
 import { useAuth } from '../../context/AuthContext';
 
 export default function ShowManagementPage() {
     const { t, i18n } = useTranslation();
     const { isAuthenticated } = useAuth();
+    const navigate = useNavigate();
 
     const [shows, setShows] = useState<SecretariatShow[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
 
-    const formatDate = (dateString: string | undefined): string => {
+    const formatDate = (dateString: string | number[] | undefined): string => {
         if (!dateString) return '-';
-        // 2. Použití dynamického jazyka
-        return new Date(dateString).toLocaleDateString(i18n.language, {
+
+        let dateToParse = dateString;
+        if (Array.isArray(dateString)) {
+            dateToParse = new Date(dateString[0], dateString[1] - 1, dateString[2]).toISOString();
+        }
+
+        return new Date(dateToParse as string).toLocaleDateString(i18n.language, {
             year: 'numeric', month: '2-digit', day: '2-digit',
         });
     };
@@ -33,11 +39,9 @@ export default function ShowManagementPage() {
         return `${baseClass} ${statuses[status] || ''}`;
     };
 
-
     useEffect(() => {
         const fetchShows = async () => {
             if (!isAuthenticated) {
-                // Použití nového klíče
                 setError(t('errors.notAuthenticated'));
                 setLoading(false);
                 return;
@@ -49,12 +53,19 @@ export default function ShowManagementPage() {
 
                 const data = await secretariatApi.getSecretariatShows();
 
-                const sortedData = data.sort((a, b) => new Date(b.startDate).getTime() - new Date(a.startDate).getTime());
+                const sortedData = data.sort((a, b) => {
+                    const dateA = Array.isArray(a.startDate)
+                        ? new Date(a.startDate[0], a.startDate[1] - 1, a.startDate[2])
+                        : new Date(a.startDate);
+                    const dateB = Array.isArray(b.startDate)
+                        ? new Date(b.startDate[0], b.startDate[1] - 1, b.startDate[2])
+                        : new Date(b.startDate);
+                    return dateB.getTime() - dateA.getTime();
+                });
+
                 setShows(sortedData);
             } catch (err: unknown) {
                 if (err instanceof Error) {
-                    // Zde předpokládáme, že err.message může být klíč, nebo použijeme fallback
-                    // Pokud backend vrací anglické texty, možná budete chtít zobrazit jen ten fallback
                     setError(t('errors.fetchFailed'));
                 } else {
                     setError(t('errors.fetchFailed'));
@@ -99,7 +110,11 @@ export default function ShowManagementPage() {
         }
 
         return shows.map((show: SecretariatShow) => (
-            <tr key={show.id} className="border-b border-gray-100 hover:bg-gray-50">
+            <tr
+                key={show.id}
+                className="border-b border-gray-100 hover:bg-gray-50 cursor-pointer transition-colors duration-200"
+                onClick={() => navigate(`/secretariat/shows/${show.id}`)}
+            >
                 <td className="py-4 px-3 font-semibold text-gray-800">{show.name}</td>
                 <td className="py-4 px-3 text-gray-600">{show.venueName}</td>
                 <td className="py-4 px-3 text-gray-600">
@@ -113,6 +128,7 @@ export default function ShowManagementPage() {
                 <td className="py-4 px-3">
                     <Link
                         to={`/secretariat/shows/${show.id}/edit`}
+                        onClick={(e) => e.stopPropagation()}
                         className="font-medium text-[#027BFF] hover:text-[#005FCC] transition-colors duration-200"
                     >
                         {t('common.edit')}

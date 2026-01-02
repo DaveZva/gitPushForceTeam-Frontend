@@ -26,6 +26,27 @@ export interface SecretariatShow {
     totalRegistrations?: number;
     confirmedRegistrations?: number;
     totalCats?: number;
+    judgesCount?: number;
+}
+
+export interface SecretariatStats {
+    totalCats: number;
+    confirmedCats: number;
+    totalUsers: number;
+    totalRevenue: number;
+}
+
+export interface SecretariatEntryDetail {
+    entryId: number;
+    catId: number;
+    catName: string;
+    emsCode: string;
+    gender: string;
+    birthDate: string;
+    pedigreeNumber: string;
+    chipNumber: string;
+    showClass: string;
+    catalogNumber?: string;
 }
 
 interface ApiErrorData {
@@ -55,7 +76,7 @@ export const secretariatApi = {
             const response = await api.get<SecretariatShow[]>(SECRETARIAT_URL);
             return response.data;
         } catch (error) {
-            handleError(error, "xx" as any);
+            handleError(error);
             throw error;
         }
     },
@@ -65,7 +86,7 @@ export const secretariatApi = {
             const response = await api.post<SecretariatShow>(SECRETARIAT_URL, showData);
             return response.data;
         } catch (error) {
-            handleError(error, "xx" as any);
+            handleError(error);
             throw error;
         }
     },
@@ -75,7 +96,7 @@ export const secretariatApi = {
             const response = await api.get<SecretariatShow>(`${SECRETARIAT_URL}/${showId}`);
             return response.data;
         } catch (error) {
-            handleError(error, "xx" as any);
+            handleError(error);
             throw error;
         }
     },
@@ -85,7 +106,7 @@ export const secretariatApi = {
             const response = await api.put<SecretariatShow>(`${SECRETARIAT_URL}/${showId}`, showData);
             return response.data;
         } catch (error) {
-            handleError(error, "xx" as any);
+            handleError(error);
             throw error;
         }
     },
@@ -95,7 +116,7 @@ export const secretariatApi = {
             await api.delete(`${SECRETARIAT_URL}/${showId}`);
             return;
         } catch (error) {
-            handleError(error, "xx" as any);
+            handleError(error);
             throw error;
         }
     },
@@ -105,8 +126,40 @@ export const secretariatApi = {
             const response = await api.post<{ message: string; totalCats: number }>(`${SECRETARIAT_URL}/${showId}/generate-catalog`);
             return response.data;
         } catch (error) {
-            handleError(error, "xx" as any);
+            handleError(error);
             throw error;
         }
+    },
+
+    getGlobalStats: async (): Promise<SecretariatStats> => {
+        const response = await api.get<SecretariatStats>('/secretariat/shows/stats');
+        return response.data;
+    },
+
+    getRegistrationsByShow: async (showId: string | number): Promise<any[]> => {
+        const response = await api.get(`/secretariat/shows/${showId}/registrations`);
+        return response.data;
+    },
+
+    getAllJudges: async (): Promise<any[]> => {
+        const response = await api.get('/secretariat/judges');
+        return response.data;
+    },
+
+    assignJudgeToShow: async (showId: string | number, judgeId: number): Promise<void> => {
+        await api.post(`${SECRETARIAT_URL}/${showId}/judges`, { judgeId });
+    },
+
+    removeJudgeFromShow: async (showId: string | number, judgeId: number): Promise<void> => {
+        await api.delete(`${SECRETARIAT_URL}/${showId}/judges/${judgeId}`);
+    },
+
+    getEntryDetail: async (entryId: number): Promise<SecretariatEntryDetail> => {
+        const response = await api.get(`${SECRETARIAT_URL}/entries/${entryId}`);
+        return response.data;
+    },
+
+    updateEntry: async (entryId: number, data: SecretariatEntryDetail): Promise<void> => {
+        await api.put(`${SECRETARIAT_URL}/entries/${entryId}`, data);
     }
 };
