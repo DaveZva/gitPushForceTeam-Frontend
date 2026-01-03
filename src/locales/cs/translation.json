@@ -1,6 +1,6 @@
 {
   "nav": {
-    "appName": "CatShow",
+    "appName": "Pawdium",
     "dashboard": "Dashboard",
     "newApplication": "Nové přihlášky",
     "myApplications": "Moje přihlášky",
@@ -394,7 +394,17 @@
     "no": "Ne",
     "select": "Vyberte",
     "noTitle": "Bez titulu",
-    "pdf": "PDF"
+    "pdf": "PDF",
+    "settings": "Nastavení",
+    "processing": "Zpracovávám...",
+    "paid": "Zaplaceno",
+    "waitingForPayment": "Čeká na platbu",
+    "preparingContent": "Obsah se připravuje...",
+    "id": "ID",
+    "days": "dní",
+    "closed": "Uzavřeno",
+    "in": "za",
+    "now": "Teď"
   },
   "errors": {
     "fetchFailed": "Nepodařilo se načíst data.",
@@ -407,11 +417,12 @@
     "unknownError": "Nastala neznámá chyba."
   },
   "statuses": {
-    "PLANNED": "Naplánováno",
+    "PLANNED": "Nezaplaceno",
     "OPEN": "Registrace otevřena",
     "CLOSED": "Registrace uzavřena",
     "COMPLETED": "Proběhlo",
-    "CANCELLED": "Zrušeno"
+    "CANCELLED": "Zrušeno",
+    "CONFIRMED": "Zaplaceno"
   },
   "regStatuses": {
     "PLANNED": "Čeká na platbu",
@@ -539,8 +550,43 @@
     "nominations": "Nominace",
     "judgesAndColours": "Porotci & barvy",
     "dateAndPlace": "Datum a místo",
-    "backToList": "Zpět na seznam"
-},
+    "backToList": "Zpět na seznam",
+    "status": "Status"
+  },
+  "secretariat": {
+    "dashboard": {
+      "title": "Nástěnka sekretariátu",
+      "welcome": "Vítejte v administraci výstav.",
+      "capacityTitle": "Stav naplnění výstavy",
+      "timelineTitle": "Důležité termíny",
+      "recentRegistrations": "Poslední registrace"
+    },
+    "stats": {
+      "totalCats": "Celkem koček",
+      "confirmedRegs": "Potvrzeno",
+      "confirmedCats": "Zaplacené kočky",
+      "pending": "Čeká na platbu",
+      "capacity": "kapacity",
+      "users": "Uživatelů",
+      "revenue": "Tržby"
+    },
+    "tabs": {
+      "overview": "Přehled",
+      "registrations": "Přihlášky",
+      "judges": "Rozhodčí",
+      "payments": "Platby",
+      "catalog": "Katalog"
+    },
+    "confirmGenerate": "Opravdu chcete uzavřít výstavu a vygenerovat katalog? Tato akce je nevratná.",
+    "generateSuccess": "Katalog úspěšně vygenerován",
+    "generateError": "Chyba při generování katalogu",
+    "showNotFound": "Výstava nenalezena",
+    "closeAndGenerate": "Uzavřít a generovat",
+    "viewPublicCatalog": "Zobrazit katalog",
+    "registrationDeadline": "Uzávěrka přihlášek",
+    "showStart": "Začátek výstavy",
+    "showEnd": "Konec výstavy"
+  },
   "validation": {
     "cat": {
       "name": {

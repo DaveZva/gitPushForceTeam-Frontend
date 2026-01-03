@@ -8,7 +8,7 @@ import PdfBadgeIcon from '../../components/ui/PDFIcon';
 interface MyApplication {
     id: number;
     registrationNumber: string;
-    exhibitionName: string;
+    showName: string;
     submittedAt: string;
     status: string;
     catCount: number;
@@ -145,7 +145,7 @@ export default function MyApplicationsPage() {
         return applications.map((app: MyApplication) => (
             <tr key={app.id} className="border-b border-gray-100 hover:bg-gray-50">
                 <td className="py-4 px-3 font-semibold text-gray-800">{app.registrationNumber}</td>
-                <td className="py-4 px-3 text-gray-600">{app.exhibitionName}</td>
+                <td className="py-4 px-3 text-gray-600">{app.showName}</td>
                 <td className="py-4 px-3 text-gray-600">{formatDate(app.submittedAt)}</td>
                 <td className="py-4 px-3 text-gray-600 text-center">{app.catCount}</td>
                 <td className="py-4 px-3">

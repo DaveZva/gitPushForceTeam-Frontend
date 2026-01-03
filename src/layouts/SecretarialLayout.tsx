@@ -20,7 +20,7 @@ export const SecretariatLayout = () => {
             <aside className="w-64 bg-white border-r border-gray-200 flex flex-col">
                 <div className="p-6 border-b border-gray-100">
                     <h1 className="text-xl font-bold text-gray-800 flex items-center gap-2">
-                        <span className="text-[#027BFF]">CatShow</span> Admin
+                        <span className="text-[#027BFF]">Pawdium</span> Admin
                     </h1>
                 </div>
                 <nav className="flex-1 p-4 space-y-1 overflow-y-auto">

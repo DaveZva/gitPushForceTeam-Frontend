@@ -15,7 +15,8 @@ interface AuthResponse {
 }
 
 interface ApiErrorData {
-    message: string;
+    message?: string;
+    error?: string;
 }
 
 interface PaymentIntentResponse {
@@ -45,24 +46,43 @@ api.interceptors.request.use(
     }
 );
 
-const handleAuthError = (error: unknown) => {
-    if (axios.isAxiosError(error)) {
-        const axiosError = error as AxiosError<ApiErrorData>;
-        if (axiosError.response) {
-            console.error("API Error Response:", axiosError.response.data);
+api.interceptors.response.use(
+    (response) => response,
+    (error: AxiosError<ApiErrorData>) => {
+        if (error.response) {
+            const { status, data } = error.response;
 
-            if (axiosError.response.status === 401) {
+            if (status === 403) {
+                const errorMsg = data?.error;
+
+                if (errorMsg === 'Token expired' || errorMsg === 'Invalid token') {
+                    localStorage.removeItem('authToken');
+                    localStorage.removeItem('user');
+                    window.location.href = '/?expired=true';
+                    return Promise.reject(new Error('errors.sessionExpired'));
+                }
+            }
+
+            if (status === 401) {
                 localStorage.removeItem('authToken');
                 localStorage.removeItem('user');
                 window.location.href = '/';
-                throw new Error('errors.sessionExpired');
-            } else if (axiosError.response.status === 403) {
-                localStorage.removeItem('authToken');
-                localStorage.removeItem('user');
-                throw new Error('errors.invalidCredentials');
+                return Promise.reject(new Error('errors.unauthorized'));
             }
+        }
+        return Promise.reject(error);
+    }
+);
 
-            throw new Error(axiosError.response.data?.message || 'errors.serverError');
+const handleAuthError = (error: unknown) => {
+    if (axios.isAxiosError(error)) {
+        const axiosError = error as AxiosError<ApiErrorData>;
+
+        if (axiosError.response) {
+            console.error("API Error Response:", axiosError.response.data);
+
+            const serverMessage = axiosError.response.data?.message || axiosError.response.data?.error;
+            throw new Error(serverMessage || 'errors.serverError');
         } else if (axiosError.request) {
             console.error("API Network Error:", axiosError.request);
             throw new Error('errors.networkError');
@@ -72,13 +92,14 @@ const handleAuthError = (error: unknown) => {
     throw new Error((error as Error).message || 'errors.unknownError');
 };
 
+
 export const login = async (email: string, password: string): Promise<AuthResponse> => {
     try {
         const response = await api.post<AuthResponse>('/auth/login', { email, password });
         return response.data;
     } catch (error) {
         handleAuthError(error);
-        throw new Error('Unhandled login error');
+        throw error;
     }
 };
 
@@ -95,7 +116,7 @@ export const register = async (userData: RegisterData): Promise<AuthResponse> =>
         return response.data;
     } catch (error) {
         handleAuthError(error);
-        throw new Error('Unhandled register error');
+        throw error;
     }
 };
 
@@ -104,7 +125,7 @@ export const forgotPassword = async (email: string): Promise<void> => {
         await api.post('/auth/forgot-password', { email });
     } catch (error) {
         handleAuthError(error);
-        throw new Error('Unhandled forgot password error');
+        throw error;
     }
 };
 
