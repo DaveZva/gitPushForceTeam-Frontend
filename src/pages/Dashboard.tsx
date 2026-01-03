@@ -32,7 +32,6 @@ export default function Dashboard() {
         const fetchShows = async () => {
             try {
                 const shows = await registrationApi.getAvailableShows();
-                // Filtrujeme pouze aktivní/plánované výstavy, pokud to backend neřeší sám
                 const activeShows = shows.filter(s => s.status === 'PLANNED' || s.status === 'OPEN');
                 setUpcomingShows(activeShows);
             } catch (error) {
@@ -45,7 +44,6 @@ export default function Dashboard() {
         fetchShows();
     }, []);
 
-    // Pomocná funkce pro formátování rozsahu dat (např. 14. – 15. 12. 2025)
     const formatShowDateRange = (startDateStr: string, endDateStr: string) => {
         const start = new Date(startDateStr);
         const end = new Date(endDateStr);
@@ -54,17 +52,15 @@ export default function Dashboard() {
 
         const locale = i18n.language;
 
-        // Pokud je to stejný měsíc a rok
         if (start.getMonth() === end.getMonth() && start.getFullYear() === end.getFullYear()) {
             return `${start.getDate()}. – ${end.toLocaleDateString(locale, { day: 'numeric', month: '2-digit', year: 'numeric' })}`;
         }
 
-        // Pokud je to jiné datum
         return `${start.toLocaleDateString(locale)} – ${end.toLocaleDateString(locale)}`;
     };
 
     const formatDate = (dateString: string) => {
-        if (dateString.includes('-')) return dateString; // Fallback pokud je formát jiný
+        if (dateString.includes('-')) return dateString;
         const date = new Date(dateString);
         if (isNaN(date.getTime())) return dateString;
 
@@ -73,7 +69,6 @@ export default function Dashboard() {
         });
     };
 
-    // Mock data historie (zde by se také volalo API pro historii přihlášek uživatele)
     const historyData = [
         { id: 1, name: "MVK Olomouc", date: "2025-10-12", animals: "GIC Alf, CZ", status: 'completed' },
         { id: 2, name: "MVK Brno", date: "2025-06-01", animals: "CH Bára, CZ", status: 'completed' },
@@ -82,7 +77,6 @@ export default function Dashboard() {
 
     return (
         <>
-            {/* HLAVIČKA */}
             <header className="dashboard-header">
                 {isAuthenticated && user ? (
                     <h1>{t('dashboard.welcome', { name: user.firstName })}!</h1>
@@ -92,7 +86,6 @@ export default function Dashboard() {
                 <p>{t('dashboard.subtitle')}</p>
             </header>
 
-            {/* STATISTIKY */}
             <section className="stat-row">
                 <StatCard value="2" labelKey="dashboard.stats.active" />
                 <StatCard value="1" labelKey="dashboard.stats.approved" />

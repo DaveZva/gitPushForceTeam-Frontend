@@ -6,7 +6,6 @@ import { RegistrationsTab } from '../../components/RegistrationsTab';
 import { JudgesSteawardsTab } from '../../components/JudgesStewardsTab';
 import { Button } from '../../components/ui/Button';
 
-// Komponenta grafu (beze změny logiky, jen CSS třídy pro jistotu)
 const DonutChart = ({ confirmed, total, max }: { confirmed: number, total: number, max: number }) => {
     const radius = 35;
     const circumference = 2 * Math.PI * radius;
@@ -109,6 +108,7 @@ export default function ShowControlCenter() {
 
     const daysToDeadline = getDaysRemaining(show.registrationDeadline);
     const daysToShow = getDaysRemaining(show.startDate);
+    const daysToEndShow = getDaysRemaining(show.endDate);
 
     return (
         <div className="space-y-4 md:space-y-6 pb-20 md:pb-0">
@@ -122,7 +122,6 @@ export default function ShowControlCenter() {
                 </div>
             )}
 
-            {/* --- HEADER --- */}
             <div className="bg-white p-4 md:p-6 rounded-2xl border border-gray-200 shadow-sm flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 md:gap-6">
                 <div className="w-full lg:w-auto">
                     <div className="flex flex-wrap items-center gap-2 md:gap-3 mb-2">
@@ -136,7 +135,7 @@ export default function ShowControlCenter() {
                         </span>
                     </div>
                     <p className="text-gray-500 text-xs md:text-sm font-medium flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2">
-                        <span>ID: {show.id}</span>
+                        <span>{t('common.id')}: {show.id}</span>
                         <span className="hidden sm:inline">•</span>
                         <span>{show.venueCity}</span>
                         <span className="hidden sm:inline">•</span>
@@ -144,7 +143,6 @@ export default function ShowControlCenter() {
                     </p>
                 </div>
 
-                {/* Tlačítka - na mobilu pod sebe nebo vedle sebe dle místa */}
                 <div className="flex flex-col sm:flex-row w-full lg:w-auto gap-3">
                     <div className="w-full sm:w-auto">
                         <Button
@@ -179,8 +177,6 @@ export default function ShowControlCenter() {
                 </div>
             </div>
 
-            {/* --- TABS --- */}
-            {/* Scroll kontejner pro taby na mobilu */}
             <div className="-mx-4 px-4 md:mx-0 md:px-0 overflow-x-auto pb-2 scrollbar-hide">
                 <nav className="flex space-x-2 min-w-max" aria-label="Tabs">
                     {tabs.map((tab) => {
@@ -203,14 +199,12 @@ export default function ShowControlCenter() {
                 </nav>
             </div>
 
-            {/* --- CONTENT AREA --- */}
             <div className="min-h-[400px] animate-fade-in">
                 {activeTab === 'overview' && (
                     <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6">
 
-                        {/* Karta 1: Graf a čísla (Na mobilu stacked, na tabletu vedle sebe) */}
                         <div className="bg-white p-4 md:p-6 rounded-2xl border border-gray-200 shadow-sm lg:col-span-2">
-                            <h3 className="text-gray-900 font-bold text-lg mb-4 md:mb-6">{t('secretariat.dashboard.capacityTitle', 'Stav naplnění')}</h3>
+                            <h3 className="text-gray-900 font-bold text-lg mb-4 md:mb-6">{t('secretariat.dashboard.capacityTitle')}</h3>
 
                             <div className="flex flex-col md:flex-row items-center gap-6 md:gap-8">
                                 <div className="flex-shrink-0">
@@ -222,14 +216,13 @@ export default function ShowControlCenter() {
                                 </div>
 
                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full">
-                                    {/* Statistiky - karty */}
                                     <div className="bg-gray-50 p-3 md:p-4 rounded-xl">
                                         <div className="flex items-center gap-2 mb-1">
                                             <div className="w-2.5 h-2.5 rounded-full bg-blue-400"></div>
                                             <span className="text-xs md:text-sm text-gray-500">{t('secretariat.stats.totalCats')}</span>
                                         </div>
                                         <p className="text-xl md:text-2xl font-bold text-gray-900">{show.totalCats || 0}</p>
-                                        <p className="text-xs text-gray-400">{((show.totalCats || 0) / show.maxCats * 100).toFixed(1)}%</p>
+                                        <p className="text-xs text-gray-400">{((show.totalCats || 0) / show.maxCats * 100).toFixed(1)}% {t('secretariat.stats.capacity', 'kapacity')}</p>
                                     </div>
 
                                     <div className="bg-green-50 p-3 md:p-4 rounded-xl border border-green-100">
@@ -253,15 +246,14 @@ export default function ShowControlCenter() {
                             </div>
                         </div>
 
-                        {/* Karta 2: Termíny */}
                         <div className="bg-white p-4 md:p-6 rounded-2xl border border-gray-200 shadow-sm flex flex-col">
-                            <h3 className="text-gray-900 font-bold text-lg mb-4 md:mb-6">{t('secretariat.dashboard.timelineTitle', 'Důležité termíny')}</h3>
+                            <h3 className="text-gray-900 font-bold text-lg mb-4 md:mb-6">{t('secretariat.dashboard.timelineTitle')}</h3>
                             <div className="space-y-4 md:space-y-6 flex-1">
                                 <div>
                                     <div className="flex justify-between items-center mb-1">
-                                        <span className="text-sm font-medium text-gray-600">{t('secretariat.registrationDeadline', 'Uzávěrka')}</span>
+                                        <span className="text-sm font-medium text-gray-600">{t('secretariat.registrationDeadline')}</span>
                                         <span className={`text-xs font-bold px-2 py-0.5 rounded ${daysToDeadline < 7 ? 'bg-red-100 text-red-700' : 'bg-gray-100 text-gray-600'}`}>
-                                            {daysToDeadline > 0 ? `${daysToDeadline} dní` : 'Uzavřeno'}
+                                            {daysToDeadline > 0 ? `${daysToDeadline} ${t('common.days')}` : t('common.closed')}
                                         </span>
                                     </div>
                                     <p className="text-sm text-gray-900">{new Date(show.registrationDeadline).toLocaleDateString()}</p>
@@ -271,39 +263,30 @@ export default function ShowControlCenter() {
 
                                 <div>
                                     <div className="flex justify-between items-center mb-1">
-                                        <span className="text-sm font-medium text-gray-600">{t('secretariat.showStart', 'Začátek')}</span>
+                                        <span className="text-sm font-medium text-gray-600">{t('secretariat.showStart')}</span>
                                         <span className="text-xs font-bold bg-blue-50 text-blue-700 px-2 py-0.5 rounded">
-                                            {daysToShow > 0 ? `za ${daysToShow} dní` : 'Teď'}
+                                            {daysToShow > 0 ? `${t('common.in', 'za')} ${daysToShow} ${t('common.days')}` : t('common.now')}
                                         </span>
                                     </div>
                                     <p className="text-sm text-gray-900">{new Date(show.startDate).toLocaleDateString()}</p>
                                 </div>
 
-                                <div className="mt-auto pt-4 md:pt-6">
-                                    <div className="bg-gray-50 rounded-xl p-3 md:p-4 border border-gray-100">
-                                        <h4 className="text-xs font-bold text-gray-500 uppercase mb-2">Rychlé akce</h4>
-                                        <div className="flex flex-col gap-2">
-                                            <button
-                                                onClick={() => setActiveTab('registrations')}
-                                                className="text-left text-sm text-[#027BFF] hover:underline"
-                                            >
-                                                → Nové přihlášky
-                                            </button>
-                                            <button
-                                                onClick={() => setActiveTab('judges')}
-                                                className="text-left text-sm text-[#027BFF] hover:underline"
-                                            >
-                                                → Rozhodčí
-                                            </button>
-                                        </div>
+                                <div className="w-full h-px bg-gray-100"></div>
+
+                                <div>
+                                    <div className="flex justify-between items-center mb-1">
+                                        <span className="text-sm font-medium text-gray-600">{t('secretariat.showEnd')}</span>
+                                        <span className="text-xs font-bold bg-blue-50 text-blue-700 px-2 py-0.5 rounded">
+                                            {daysToEndShow > 0 ? `${t('common.in', 'za')} ${daysToEndShow} ${t('common.days')}` : t('common.now')}
+                                        </span>
                                     </div>
+                                    <p className="text-sm text-gray-900">{new Date(show.endDate).toLocaleDateString()}</p>
                                 </div>
+
                             </div>
                         </div>
                     </div>
                 )}
-
-                {/* Wrapper pro tabulky - overflow-x-auto aby na mobilu neutekly */}
                 <div className="w-full overflow-hidden">
                     {activeTab === 'registrations' && (
                         <div className="overflow-x-auto">

@@ -1,6 +1,6 @@
 {
   "nav": {
-    "appName": "CatShow",
+    "appName": "Pawdium",
     "dashboard": "Dashboard",
     "newApplication": "New Applications",
     "myApplications": "My Applications",
@@ -8,8 +8,8 @@
     "logOut": "Log Out",
     "logIn": "Log In",
     "signUp": "Sign Up",
-    "exhibitions": "Exhibitions",
-    "catalog": "Catalogue"
+    "exhibitions": "Shows",
+    "catalog": "Catalog"
   },
   "user": {
     "notifications": "Notifications"
@@ -20,16 +20,16 @@
     "welcome_guest": "Welcome back",
     "stats": {
       "active": "Active Applications",
-      "approved": "Approved Entries",
+      "approved": "Approved Participations",
       "cats": "Cats in Profile"
     },
     "history": {
-      "title": "Your Application History",
-      "subtitle": "Overview of all exhibitions you have attended."
+      "title": "Application History",
+      "subtitle": "Overview of all shows you have participated in."
     },
     "upcoming": {
-      "title": "Upcoming Exhibitions",
-      "subtitle": "New exhibitions you can apply for."
+      "title": "Upcoming Shows",
+      "subtitle": "New shows you can apply for."
     }
   },
   "myApplications": {
@@ -37,8 +37,8 @@
     "downloadPdf": "Download PDF",
     "col": {
       "regNumber": "Registration Number",
-      "exhibition": "Exhibition",
-      "submittedAt": "Submitted At",
+      "exhibition": "Show",
+      "submittedAt": "Submitted",
       "cats": "Cat Count",
       "status": "Status",
       "actions": "Actions"
@@ -46,7 +46,7 @@
   },
   "payment": {
     "title": "Payment",
-    "subtitle": "Complete your cat's show registration",
+    "subtitle": "Complete your cat's registration for the show",
     "initError": "Error initializing payment.",
     "loading": "Loading payment gateway...",
     "secureBadge": "⭐ Secure Payment",
@@ -68,20 +68,20 @@
       "title": "Payment Details",
       "registrationRef": "Registration #"
     },
-    "success": "Payment succeeded!",
-    "processingStatus": "Your payment is processing.",
-    "requiresPaymentMethod": "Your payment was not successful, please try again.",
+    "success": "Payment successful!",
+    "processingStatus": "Your payment is being processed.",
+    "requiresPaymentMethod": "Payment was not successful, please try again.",
     "genericError": "Something went wrong.",
     "redirectUrl": "/my-applications",
     "validationError": "An unexpected error occurred.",
     "unexpectedError": "An unexpected error occurred.",
     "processing": "Processing...",
-    "pay": "Pay now",
+    "pay": "Pay",
     "sslSecure": "SSL Secure",
     "poweredByStripe": "Powered by Stripe"
   },
   "table": {
-    "show": "Exhibition",
+    "show": "Show",
     "date": "Date",
     "animals": "Animals",
     "status": "Status",
@@ -89,13 +89,13 @@
   },
   "status": {
     "completed": "Completed",
-    "registered": "Already registered"
+    "registered": "Registered"
   },
   "actions": {
     "detail": "Detail",
-    "showAllHistory": "Show all history →",
-    "showAllShows": "Show all exhibitions →",
-    "applyToShow": "Apply to Exhibition",
+    "showAllHistory": "Show Full History →",
+    "showAllShows": "Show All Shows →",
+    "applyToShow": "Apply for Show",
     "showDetails": "Show Details",
     "pay": "Pay"
   },
@@ -104,7 +104,7 @@
     "registration": "Registration",
     "firstName": "First Name",
     "lastName": "Last Name",
-    "email": "Email",
+    "email": "E-mail",
     "password": "Password",
     "loginIn": "Log In",
     "registerIn": "Register",
@@ -113,23 +113,23 @@
     "forgotPassword": "Forgot password? ",
     "forgotPasswordTitle": "Password Recovery",
     "passwordRecovery": "Password Recovery",
-    "send": "Request password reset",
-    "backToLogin": "Back to login",
+    "send": "Request Password Reset",
+    "backToLogin": "Back to Login",
     "resetPasswordTitle": "Set New Password",
     "newPassword": "New Password",
     "confirmPassword": "Confirm Password",
     "changePassword": "Change Password",
-    "passwordChangedSuccess": "Password changed successfully.",
+    "passwordChangedSuccess": "Password successfully changed.",
     "backToHome": "Back to Home",
     "redirecting": "Redirecting...",
     "passwordsDoNotMatch": "Passwords do not match.",
-    "tokenMissing": "Authorization token is missing.",
+    "tokenMissing": "Missing authorization token.",
     "invalidToken": "Invalid or expired link.",
     "resetEmailSent": "Email sent",
     "back": "Back",
     "loginTitle": "User Login",
     "registerTitle": "Create New Account",
-    "forgotPasswordDesc": "Enter your email address to receive password reset instructions.",
+    "forgotPasswordDesc": "Enter your email address to recover your password. We will send you instructions.",
     "emailPlaceholder": "john.doe@email.com",
     "resetAction": "Reset Password",
     "genericError": "An error occurred.",
@@ -140,14 +140,14 @@
   },
   "form": {
     "actions": {
-      "saveAndContinue": "Save and continue."
+      "saveAndContinue": "Save and Continue"
     },
     "continue": "Continue",
     "back": "Back",
-    "toRecap": "Summary",
+    "toRecap": "Recap",
     "submit": "Submit",
-    "resetAll": "Clear form",
-    "title": "Register cat for exhibition",
+    "resetAll": "Clear Form",
+    "title": "Cat Registration for Show",
     "submitting": "Submitting...",
     "autosaveInfo": "Data is saved automatically."
   },
@@ -155,11 +155,11 @@
     "manual_mode": "Manual Entry",
     "saved_mode": "Loaded from Saved Cats",
     "read_only_info": "Identification details cannot be changed",
-    "manual_info": "Fill in all details for a new cat",
-    "titleBefore": "Title before name",
+    "manual_info": "Fill in all details for the new cat",
+    "titleBefore": "Title Before Name",
     "catName": "Name",
-    "titleAfter": "Title after name",
-    "chipNumber": "Chip number",
+    "titleAfter": "Title After Name",
+    "chipNumber": "Chip Number",
     "gender": "Gender",
     "neutered": "Neutered",
     "emsCode": "EMS Code",
@@ -167,14 +167,14 @@
     "breed": "Breed",
     "group": "Group",
     "groupOption": "Group {{number}}",
-    "groupNotRequired": "Group is not used for this breed.",
-    "birthDate": "Date of birth",
-    "showClass": "Show class",
-    "pedigreeNumber": "Pedigree number",
-    "cageType": "Cage type",
+    "groupNotRequired": "Group is not required for this breed.",
+    "birthDate": "Date of Birth",
+    "showClass": "Show Class",
+    "pedigreeNumber": "Pedigree Number",
+    "cageType": "Cage Type",
     "male": "Male",
     "female": "Female",
-    "addAnotherCat": "Add another cat",
+    "addAnotherCat": "Add Another Cat",
     "removeCat": "Remove Cat",
     "motherNamePlaceholder": "Mother's Name",
     "fatherNamePlaceholder": "Father's Name",
@@ -185,41 +185,41 @@
     },
     "placeholders": {
       "catName": "Molly",
-      "chipNumber": "15-digit number",
+      "chipNumber": "15 digit number",
       "pedigreeNumber": "CSZ FO 1234/18",
       "ems": "n 03 24"
     },
     "common": {
       "loading": "Loading...",
       "select": "Select",
-      "noTitle": "No title",
+      "noTitle": "No Title",
       "yes": "Yes",
       "no": "No",
       "sat": "Saturday",
       "sun": "Sunday",
-      "both": "Both days",
-      "agreed": "I agree",
-      "notAgreed": "I do not agree"
+      "both": "Both Days",
+      "agreed": "I Agree",
+      "notAgreed": "I Disagree"
     },
     "recap": {
-      "title": "Application Summary",
+      "title": "Registration Recap",
       "checkData": "Please check all entered data. If everything is correct, submit the application.",
-      "exhibition": "Exhibition",
-      "showName": "Exhibition Name",
-      "days": "Days of attendance",
+      "exhibition": "Show",
+      "showName": "Show Name",
+      "days": "Attendance Days",
       "cat": "Cat",
       "owner": "Owner",
       "breeder": "Breeder",
       "exhibitor": "Exhibitor",
-      "name": "Name and Surname",
+      "name": "Full Name",
       "address": "Address",
       "email": "Email",
       "phone": "Phone",
-      "sameAsOwner": "Same as owner",
-      "sameAsBreeder": "Same as breeder",
+      "sameAsOwner": "Same as Owner",
+      "sameAsBreeder": "Same as Breeder",
       "notesAndConsent": "Notes and Consents",
       "notes": "Notes",
-      "dataAccuracy": "Data accuracy",
+      "dataAccuracy": "Data Accuracy",
       "gdprConsent": "GDPR Consent"
     },
     "classOptions": {
@@ -232,36 +232,36 @@
       "c7": "Champion",
       "c8": "Premior",
       "c9": "Open Class",
-      "c10": "Neutered Class",
-      "c11": "8-12 months",
-      "c12": "4-8 months",
+      "c10": "Neuters",
+      "c11": "8-12 Months",
+      "c12": "4-8 Months",
       "c13a": "Novice Class",
       "c13b": "Control Class",
-      "c13c": "Verification Class",
-      "c14": "Household Pets",
-      "c15": "Out of competition",
+      "c13c": "Determination Class",
+      "c14": "Domestic Cats",
+      "c15": "Out of Competition",
       "c16": "Litters (min. 3 kittens)",
       "c17": "Veterans (over 7 years)"
     },
     "cageOptions": {
-      "own": "Own cage - 1700 CZK",
-      "rentSmall": "Rentable cage 70x70 - 2200 CZK",
-      "rentLarge": "Rentable cage 120x70 - 2800 CZK"
+      "own": "Own Cage - 1700 CZK",
+      "rentSmall": "Rented Cage 70x70 - 2200 CZK",
+      "rentLarge": "Rented Cage 120x70 - 2800 CZK"
     }
   },
   "stepper": {
-    "exhibition": "Exhibition",
+    "exhibition": "Show",
     "cat": "Cat",
     "breeder": "Breeder",
     "owner": "Owner",
     "consent": "Consents",
-    "recap": "Summary"
+    "recap": "Recap"
   },
   "registration": {
     "step2": {
       "choose_saved_title": "Select Saved Cat",
       "choose_saved_desc": "Click on a card to automatically fill the form.",
-      "clear_selection": "Cancel selection and fill manually",
+      "clear_selection": "Clear Selection and Fill Manually",
       "no_saved_cats": "You have no saved cats. Fill the form manually.",
       "cat_details_title": "Cat Details",
       "loading_cats": "Loading your cats...",
@@ -272,27 +272,27 @@
   },
   "registrationSteps": {
     "step1_exhibition": {
-      "title": "Select Exhibition",
+      "title": "Select Show",
       "errors": {
-        "loadShows": "Error loading exhibitions:",
-        "resetPasswordFailed": "Failed to reset password. Link might be invalid."
+        "loadShows": "Error loading shows:",
+        "resetPasswordFailed": "Failed to reset password. Link is likely invalid."
       },
       "show": {
-        "label": "Exhibition *",
-        "loading": "Loading exhibitions...",
-        "placeholder": "Select an exhibition..."
+        "label": "Show *",
+        "loading": "Loading shows...",
+        "placeholder": "Select a show..."
       },
       "attendance": {
-        "label": "Exhibition attendance *",
+        "label": "Show Attendance *",
         "saturday": "Saturday",
         "sunday": "Sunday",
-        "both": "Both days"
+        "both": "Both Days"
       }
     },
     "step3_owner": {
       "title": "Owner Details",
       "loadSaved": {
-        "label": "Load saved owner",
+        "label": "Load Saved Owner",
         "placeholder": "-- Select from list --"
       },
       "firstName": {
@@ -302,8 +302,8 @@
         "label": "Last Name *"
       },
       "address": {
-        "label": "Street and house number *",
-        "placeholder": "E.g. Main 123"
+        "label": "Street and Number *",
+        "placeholder": "e.g. Main St 123"
       },
       "zip": {
         "label": "ZIP Code *",
@@ -321,21 +321,21 @@
         "placeholder": "+420 123 456 789"
       },
       "localClub": {
-        "label": "Local Organization *",
-        "placeholder": "ČSCH"
+        "label": "Local Club *",
+        "placeholder": "FIFE / TICA"
       },
       "memberNumber": {
-        "label": "Member number *",
+        "label": "Member Number *",
         "placeholder": "xXxXxX"
       }
     },
     "step4_breeder": {
       "title": "Breeder Details",
       "loadSaved": {
-        "label": "Load saved breeder",
+        "label": "Load Saved Breeder",
         "placeholder": "-- Select from list --"
       },
-      "sameAsOwner": "Breeder is the same as owner",
+      "sameAsOwner": "Breeder is same as owner",
       "firstName": {
         "label": "First Name *"
       },
@@ -343,8 +343,8 @@
         "label": "Last Name *"
       },
       "address": {
-        "label": "Street and house number *",
-        "placeholder": "E.g. Main 123"
+        "label": "Street and Number *",
+        "placeholder": "e.g. Main St 123"
       },
       "zip": {
         "label": "ZIP Code *",
@@ -363,27 +363,27 @@
       }
     },
     "step5_consent": {
-      "title": "Notes and consent",
+      "title": "Notes and Consent",
       "notes": {
-        "label": "Application notes",
-        "placeholder": "You can add any notes to your application here..."
+        "label": "Application Notes",
+        "placeholder": "You can add any notes regarding your application here..."
       },
       "dataAccuracy": {
-        "label": "I declare that all provided data is true and complete.",
-        "description": "I am aware that providing false information may lead to exclusion from the exhibition."
+        "label": "I declare that all entered data is true and complete.",
+        "description": "I am aware that providing false information may lead to disqualification from the show."
       },
       "gdprConsent": {
-        "label": "I consent to the processing of personal data",
-        "description": "in accordance with the GDPR regulation for the purpose of registration for the exhibition and related activities."
+        "label": "I agree to the processing of personal data",
+        "description": "in accordance with GDPR regulations for the purpose of show registration and related activities."
       },
       "alert": {
         "title": "⚠️ Warning:",
-        "text": "After submitting the application, you will receive a confirmation email with payment details. The application will be active once the payment is credited to our account."
+        "text": "After submitting the application, you will receive a confirmation email with payment details. The application will be active after the payment is credited to our account."
       }
     },
     "step6_recap": {
       "errors": {
-        "loadShows": "Error loading exhibitions in summary:"
+        "loadShows": "Error loading shows in recap:"
       }
     }
   },
@@ -393,58 +393,69 @@
     "yes": "Yes",
     "no": "No",
     "select": "Select",
-    "noTitle": "No title",
-    "pdf": "PDF"
+    "noTitle": "No Title",
+    "pdf": "PDF",
+    "settings": "Settings",
+    "processing": "Processing...",
+    "paid": "Paid",
+    "waitingForPayment": "Waiting for Payment",
+    "preparingContent": "Content is being prepared...",
+    "id": "ID",
+    "days": "days",
+    "closed": "Closed",
+    "in": "in",
+    "now": "Now"
   },
   "errors": {
     "fetchFailed": "Failed to fetch data.",
-    "submission": "Submission error:",
+    "submission": "Submission Error:",
     "invalidCredentials": "Invalid credentials",
     "notAuthenticated": "User is not authenticated.",
     "unauthorized": "Unauthorized access.",
-    "serverError": "Server error occurred.",
-    "networkError": "Network error occurred.",
+    "serverError": "Server error.",
+    "networkError": "Network error.",
     "unknownError": "An unknown error occurred."
   },
   "statuses": {
     "PLANNED": "Planned",
-    "OPEN": "Registration open",
-    "CLOSED": "Registration closed",
+    "OPEN": "Registration Open",
+    "CLOSED": "Registration Closed",
     "COMPLETED": "Completed",
-    "CANCELLED": "Cancelled"
+    "CANCELLED": "Cancelled",
+    "CONFIRMED": "Paid"
   },
   "regStatuses": {
-    "PLANNED": "Awaiting Payment",
+    "PLANNED": "Pending Payment",
     "CONFIRMED": "Confirmed",
     "REJECTED": "Rejected",
     "CANCELLED": "Cancelled"
   },
   "alert": {
-    "submitSuccess": "Application submitted successfully! Application number: {{number}}",
+    "submitSuccess": "Application successfully submitted! Application number: {{number}}",
     "submitError": "Error submitting application. Please try again later.",
-    "createSuccess": "Exhibition created successfully.",
-    "createError": "Error creating exhibition. Please try again later.",
+    "createSuccess": "Show successfully created.",
+    "createError": "Error creating show. Please try again later.",
     "pdfDownloadError": "Error downloading PDF."
   },
   "confirm": {
-    "resetForm": "Are you sure you want to delete all entered data?",
+    "resetForm": "Are you sure you want to clear all entered data?",
     "submitForm": "Are you sure you want to submit the application? Data cannot be changed after submission."
   },
   "submitSuccess": {
-    "title": "Application submitted successfully!",
+    "title": "Application Successfully Submitted!",
     "message": "Your application number is:",
-    "info": "A confirmation and payment details have been sent to your email.",
+    "info": "Confirmation and payment details have been sent to your email.",
     "backButton": "New Application",
     "downloadButton": "Download PDF",
     "downloading": "Downloading..."
   },
   "admin": {
     "shows": {
-      "title": "Exhibition Management",
-      "add": "Add Exhibition",
-      "noShows": "No exhibitions have been scheduled yet.",
+      "title": "Show Management",
+      "add": "Add Show",
+      "noShows": "No shows planned yet.",
       "col": {
-        "name": "Exhibition Name",
+        "name": "Show Name",
         "venue": "Venue",
         "date": "Date",
         "status": "Status",
@@ -452,9 +463,9 @@
       }
     },
     "create": {
-      "title": "Create New Exhibition",
-      "back": "Back to list",
-      "submit": "Create Exhibition",
+      "title": "Create New Show",
+      "back": "Back to List",
+      "submit": "Create Show",
       "submitting": "Creating...",
       "section": {
         "basic": "Basic Information",
@@ -465,7 +476,7 @@
     }
   },
   "fields": {
-    "name": "Exhibition Name *",
+    "name": "Show Name *",
     "description": "Description",
     "status": "Status *",
     "venueName": "Venue Name *",
@@ -473,24 +484,28 @@
     "venueCity": "City",
     "venueState": "State",
     "venueZip": "ZIP Code",
-    "startDate": "Start date and time *",
-    "endDate": "End date and time *",
-    "registrationDeadline": "Registration deadline *",
+    "startDate": "Start Date and Time *",
+    "endDate": "End Date and Time *",
+    "registrationDeadline": "Registration Deadline *",
     "organizerName": "Organizer Name *",
     "contactEmail": "Contact Email",
-    "websiteUrl": "Website URL"
+    "websiteUrl": "Website",
+    "maxCats": "Capacity (max cats) *",
+    "vetCheckStart": "Veterinary Check",
+    "judgingStart": "Judging Start",
+    "judgingEnd": "Estimated End"
   },
   "catalog": {
     "mainTitle": "MVK Prague Winter",
     "tabInfo": "Information",
     "tabPrimary": "Primary Catalog",
     "tabSecondary": "Results",
-    "infoTitle": "Exhibition Information",
-    "infoText": "This prestigious international cat show \"MVK Prague Winter\" is the culmination of year-long efforts by breeders and cat lovers from all over Europe. The event is an ideal opportunity for the public to learn about different breeds, talk to breeders about care and genetics, and get valuable advice for their own pets. Two days full of competitions offer the chance to win valuable certificates that are key to obtaining the international champion title. Judging takes place under the supervision of internationally recognized judges who carefully evaluate the coat condition, fitness, type, and temperament of each animal.",
+    "infoTitle": "Show Information",
+    "infoText": "This prestigious international cat show \"MVK Prague Winter\" is the culmination of year-round efforts by breeders and cat lovers from all over Europe. The event is an ideal opportunity for the public to learn about various breeds, talk to breeders about care and genetics, and get valuable advice for their own pets. Two days full of competitions offer the chance to win valuable certificates key for obtaining the international champion title. Judging takes place under the supervision of internationally recognized judges who carefully evaluate the coat condition, fitness, type, and temperament of each animal.",
     "schedule": "Schedule",
     "vetCheck": "Veterinary Check",
-    "judgingStart": "Judging Starts",
-    "showOpen": "Exhibition Open",
+    "judgingStart": "Judging Start",
+    "showOpen": "Open to Public",
     "registrationStatus": "Registration",
     "spotsFilling": "Spots are filling up! Register your cats.",
     "registerBtn": "Register",
@@ -506,15 +521,15 @@
     "filterBreed": "Filter Breed: All",
     "filterSex": "Filter Sex: All",
     "filterClass": "Filter Class: All",
-    "shownCount": "Showing {{count}} cats out of {{total}} total.",
-    "noResults": "No records found matching your criteria.",
-    "listSorted": "List of Cats",
+    "shownCount": "Showing {{count}} cats of {{total}} total.",
+    "noResults": "No records found matching the criteria.",
+    "listSorted": "Cat List",
     "category": "CATEGORY",
     "categoryOther": "Other",
     "group": "Group",
     "regNo": "Reg. No.",
     "sex": "Sex",
-    "dob": "Born",
+    "dob": "DOB",
     "father": "Father",
     "mother": "Mother",
     "owner": "Owner",
@@ -523,39 +538,74 @@
     "errorTitle": "Error",
     "errorLoading": "Failed to load catalog.",
     "preparingTitle": "Catalog is being prepared",
-    "preparingDesc": "No registrations have been confirmed for this exhibition yet.",
+    "preparingDesc": "No registrations confirmed for this show yet.",
     "footerTotal": "Total records in catalog: {{count}}",
-    "quickCatalogTitle": "Quick catalogue & results",
+    "quickCatalogTitle": "Quick Catalog & Results",
     "loadingQuick": "Loading data...",
     "errorLoadingQuick": "Failed to load quick catalog.",
     "noQuickResults": "No cats in this category.",
     "close": "Close",
     "judgeAssignment": "Judge and Breed Assignments for",
-    "judgesReports": "Judges' reports",
+    "judgesReports": "Judges' Reports",
     "nominations": "Nominations",
-    "judgesAndColours": "Judges & colours",
-    "dateAndPlace": "Date and Venue",
-    "backToList": "Back to List"
-},
+    "judgesAndColours": "Judges & Colours",
+    "dateAndPlace": "Date and Place",
+    "backToList": "Back to List",
+    "status": "Status"
+  },
+  "secretariat": {
+    "dashboard": {
+      "title": "Secretariat Dashboard",
+      "welcome": "Welcome to show administration.",
+      "capacityTitle": "Show Capacity Status",
+      "timelineTitle": "Important Dates",
+      "recentRegistrations": "Recent Registrations"
+    },
+    "stats": {
+      "totalCats": "Total Cats",
+      "confirmedRegs": "Confirmed",
+      "confirmedCats": "Paid Cats",
+      "pending": "Waiting for Payment",
+      "capacity": "capacity",
+      "users": "Users",
+      "revenue": "Revenue"
+    },
+    "tabs": {
+      "overview": "Overview",
+      "registrations": "Applications",
+      "judges": "Judges",
+      "payments": "Payments",
+      "catalog": "Catalog"
+    },
+    "confirmGenerate": "Are you sure you want to close the show and generate the catalog? This action is irreversible.",
+    "generateSuccess": "Catalog successfully generated",
+    "generateError": "Error generating catalog",
+    "showNotFound": "Show not found",
+    "closeAndGenerate": "Close and Generate",
+    "viewPublicCatalog": "View Catalog",
+    "registrationDeadline": "Registration Deadline",
+    "showStart": "Show Start",
+    "showEnd": "Show End"
+  },
   "validation": {
     "cat": {
       "name": {
         "min": "Invalid name"
       },
       "chipNumber": {
-        "invalid": "Chip number must be 15 digits"
+        "invalid": "Chip number must have 15 digits"
       },
       "gender": {
-        "required": "Gender is required"
+        "required": "Gender must be selected"
       },
       "neutered": {
         "required": "Neutered?"
       },
       "birthDate": {
-        "invalid": "Invalid date of birth"
+        "invalid": "Invalid birth date"
       },
       "showClass": {
-        "required": "Select a show class"
+        "required": "Select show class"
       },
       "cageType": {
         "required": "Enter cage type"
@@ -568,23 +618,23 @@
       "motherYoungerThanCat": "Mother must be at least 1 year older than the cat.",
       "fatherYoungerThanCat": "Father must be at least 1 year older than the cat.",
       "group": {
-        "notRequired": "Breed {{breed}} does not have groups. Leave empty.",
+        "notRequired": "Breed {{breed}} is not divided into groups. Leave blank.",
         "required": "Group (1-{{max}}) is required for breed {{breed}}.",
         "invalid": "Invalid group. Choose 1-{{max}} for {{breed}}."
       }
     },
     "registration": {
       "showId": {
-        "required": "Select an exhibition"
+        "required": "Select a show"
       },
       "days": {
-        "required": "Select a day"
+        "required": "Select days"
       },
       "cats": {
-        "min": "At least one cat is required."
+        "min": "You must add at least one cat."
       },
       "exhibitor": {
-        "required": "Exhibitor details are required."
+        "required": "Exhibitor details required."
       },
       "dataAccuracy": {
         "required": "You must confirm data accuracy."
@@ -601,8 +651,8 @@
       "city.min": "Invalid city",
       "email.invalid": "Invalid email format",
       "phone.invalid": "Invalid phone number format",
-      "localOrganization.min": "Invalid local organization",
-      "localOrganization.max": "Local organization name too long",
+      "localOrganization.min": "Invalid local club name",
+      "localOrganization.max": "Local club name too long",
       "membershipNumber.min": "Invalid member number",
       "membershipNumber.max": "Member number too long"
     },
@@ -615,19 +665,24 @@
       "organizerName.min": "Organizer name must be at least 3 characters.",
       "contactEmail.invalid": "Invalid contact email.",
       "websiteUrl.invalid": "Invalid website URL.",
-      "date.order": "End date must be after start date."
+      "date.order": "End date must be after start date.",
+      "maxCats.min": "Capacity must be at least 10 cats.",
+      "maxCats.max": "Capacity must not exceed 2000 cats.",
+      "vetCheckStart.invalid": "Invalid veterinary check time.",
+      "judgingStart.invalid": "Invalid judging start time.",
+      "judgingEnd.invalid": "Invalid judging end time."
     }
   },
   "paymentResult": {
-    "successTitle": "Payment Successfully Received",
+    "successTitle": "Payment Received",
     "successMessage": "Thank you! Your registration has been confirmed.",
     "processingTitle": "Processing",
     "processingMessage": "Your payment is being processed. Please wait for confirmation.",
     "failedTitle": "Payment Declined",
-    "failedMessage": "The payment could not be completed.",
+    "failedMessage": "Payment could not be completed.",
     "transactionId": "Transaction ID",
     "registrationNumber": "Registration Number",
-    "totalAmount": "Total Amount",
+    "totalAmount": "Amount Paid",
     "backToApplications": "Back to My Applications",
     "tryAgain": "Try Again",
     "verifying": "Verifying registration status...",
