@@ -267,6 +267,7 @@ export const createRegistrationSchema = (t: TFunction) => {
                 breederAddress: data.breederAddress,
                 breederZip: data.breederZip,
                 breederCity: data.breederCity,
+                breederCountry: data.breederCountry,
                 breederEmail: data.breederEmail,
                 breederPhone: data.breederPhone,
             }).success;

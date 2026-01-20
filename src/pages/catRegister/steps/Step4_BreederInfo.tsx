@@ -1,8 +1,9 @@
 import React, { useState, useEffect, ReactNode } from 'react';
-import { useFormContext, FieldError } from 'react-hook-form';
+import {useFormContext, FieldError, Controller} from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { storageUtils } from '../../../utils/storage';
 import { RegistrationFormData } from '../../../schemas/registrationSchema';
+import {CountrySelect} from "../../../components/ui/CountrySelect";
 
 const inputClass = "w-full p-3 bg-gray-100 rounded-lg border-1 border-transparent focus:outline-none focus:ring-1 focus:ring-[#027BFF] focus:border-[#027BFF]";
 
@@ -20,6 +21,7 @@ interface SavedBreeder {
     address: string;
     zip: string;
     city: string;
+    country: string;
     email: string;
     phone: string;
 }
@@ -36,7 +38,7 @@ export function Step4_BreederInfo() {
     );
 
     const { t } = useTranslation();
-    const { register, setValue, watch, formState: { errors } } = useFormContext<RegistrationFormData>();
+    const { register, setValue, control, watch, formState: { errors } } = useFormContext<RegistrationFormData>();
     const [savedBreeders, setSavedBreeders] = useState<SavedBreeder[]>([]);
     const sameAsOwner = watch("sameAsOwner");
     const ownerData = watch([
@@ -45,6 +47,7 @@ export function Step4_BreederInfo() {
         "ownerAddress",
         "ownerZip",
         "ownerCity",
+        "ownerCountry",
         "ownerEmail",
         "ownerPhone",
     ]);
@@ -63,6 +66,7 @@ export function Step4_BreederInfo() {
                 setValue("breederAddress", breeder.address, { shouldValidate: true });
                 setValue("breederZip", breeder.zip, { shouldValidate: true });
                 setValue("breederCity", breeder.city, { shouldValidate: true });
+                setValue("breederCountry", breeder.country, { shouldValidate: true });
                 setValue("breederEmail", breeder.email, { shouldValidate: true });
                 setValue("breederPhone", breeder.phone, { shouldValidate: true });
                 setValue("sameAsOwner", false);
@@ -77,8 +81,9 @@ export function Step4_BreederInfo() {
             setValue("breederAddress", ownerData[2]);
             setValue("breederZip", ownerData[3]);
             setValue("breederCity", ownerData[4]);
-            setValue("breederEmail", ownerData[5]);
-            setValue("breederPhone", ownerData[6]);
+            setValue("breederCountry", ownerData[5]);
+            setValue("breederEmail", ownerData[6]);
+            setValue("breederPhone", ownerData[7]);
         }
     }, [sameAsOwner, ownerData, setValue]);
 
@@ -140,6 +145,20 @@ export function Step4_BreederInfo() {
                     <FormField label={t('registrationSteps.step4_breeder.city.label')} name="breederCity" error={errors.breederCity}>
                         <input type="text" {...register("breederCity")} className={inputClass} disabled={sameAsOwner} />
                     </FormField>
+
+                    <Controller
+                        name="breederCountry"
+                        control={control}
+                        defaultValue="CZ"
+                        render={({ field: { onChange, value } }) => (
+                            <CountrySelect
+                                label={t('registrationSteps.step4_breeder.country.label')}
+                                value={value || ''}
+                                onChange={onChange}
+                                error={errors.breederCountry?.message}
+                            />
+                        )}
+                    />
 
                     <FormField label={t('registrationSteps.step4_breeder.email.label')} name="breederEmail" error={errors.breederEmail}>
                         <input type="email" {...register("breederEmail")} className={inputClass} placeholder={t('registrationSteps.step4_breeder.email.placeholder')} disabled={sameAsOwner} />

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useForm, Resolver, Controller } from 'react-hook-form'; // Přidán Controller
+import { useForm, Resolver, Controller } from 'react-hook-form';
 import { useNavigate, useParams, Link } from 'react-router-dom';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useTranslation } from 'react-i18next';
@@ -23,7 +23,7 @@ export default function ShowEditPage() {
         register,
         handleSubmit,
         reset,
-        control, // Přidán control
+        control,
         formState: { errors, isSubmitting }
     } = useForm<ShowFormData>({
         resolver: zodResolver(createShowSchema(t)) as Resolver<ShowFormData>
@@ -33,7 +33,7 @@ export default function ShowEditPage() {
         const loadData = async () => {
             if (!id) return;
             try {
-                const data = await secretariatApi.getShowById(id);
+                const data: any = await secretariatApi.getShowById(id);
 
                 const formatDateTime = (isoString?: string | null) => {
                     if (!isoString) return '';
@@ -42,17 +42,21 @@ export default function ShowEditPage() {
 
                 const formattedData = {
                     ...data,
+                    contactEmail: data.organizerContactEmail || data.contactEmail,
+                    websiteUrl: data.organizerWebsiteUrl || data.websiteUrl,
+
                     startDate: formatDateTime(data.startDate),
                     endDate: formatDateTime(data.endDate),
                     registrationDeadline: formatDateTime(data.registrationDeadline),
                     vetCheckStart: formatDateTime(data.vetCheckStart),
                     judgingStart: formatDateTime(data.judgingStart),
                     judgingEnd: formatDateTime(data.judgingEnd),
+
                     status: data.status || 'PLANNED',
-                    venueState: data.venueState || 'CZ' // Default, kdyby chybělo
+                    venueState: data.venueState || 'CZ'
                 };
 
-                reset(formattedData as unknown as ShowFormData);
+                reset(formattedData);
             } catch (err) {
                 console.error(err);
                 setLoadError(t('error.loadFailed', 'Nepodařilo se načíst data výstavy.'));
@@ -172,7 +176,6 @@ export default function ShowEditPage() {
                                     <Input {...register('venueZip')} />
                                 </FormField>
 
-                                {/* ZMĚNA: Použití CountrySelect přes Controller */}
                                 <FormField label="Stát" error={errors.venueState?.message}>
                                     <Controller
                                         name="venueState"
