@@ -13,6 +13,7 @@ export interface RegistrationPayload {
         address: string;
         zip: string;
         city: string;
+        country: string;
         email: string;
         phone: string;
         localOrganization: string;
@@ -24,6 +25,7 @@ export interface RegistrationPayload {
         address?: string;
         zip?: string;
         city?: string;
+        country?: string;
         email?: string;
         phone?: string;
     } | null;
