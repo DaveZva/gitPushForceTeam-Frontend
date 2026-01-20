@@ -104,8 +104,6 @@ export const login = async (email: string, password: string): Promise<AuthRespon
 };
 
 interface RegisterData {
-    firstName: string;
-    lastName: string;
     email: string;
     password: string;
 }
