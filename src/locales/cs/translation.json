@@ -577,6 +577,52 @@
       "payments": "Platby",
       "catalog": "Katalog"
     },
+    "payments": {
+      "title": "Správa plateb",
+      "col": {
+        "regNumber": "Reg. číslo",
+        "owner": "Majitel",
+        "cats": "Kočky",
+        "amount": "Částka",
+        "status": "Stav",
+        "method": "Metoda",
+        "date": "Datum platby",
+        "actions": "Akce"
+      },
+      "confirmBtn": "Potvrdit platbu",
+      "filterAll": "Vše",
+      "filterPaid": "Zaplaceno",
+      "filterUnpaid": "Nezaplaceno",
+      "methodStripe": "Karta (Stripe)",
+      "methodManual": "Hotově / Převod",
+      "methodPending": "-"
+    },
+    "judges": {
+      "title": "Správa rozhodčích",
+      "addBtn": "Přidat rozhodčího",
+      "noJudges": "K této výstavě zatím nejsou přiřazeni žádní rozhodčí.",
+      "col": {
+        "name": "Jméno",
+        "email": "Email",
+        "country": "Země",
+        "groups": "Kvalifikace (Skupiny)",
+        "actions": "Akce"
+      },
+      "modal": {
+        "title": "Přiřadit rozhodčího",
+        "tabExisting": "Vybrat ze seznamu",
+        "tabNew": "Vytvořit nového",
+        "selectLabel": "Vyberte rozhodčího",
+        "selectPlaceholder": "-- Vyberte --",
+        "firstName": "Jméno",
+        "lastName": "Příjmení",
+        "email": "Email",
+        "country": "Země",
+        "groupsLabel": "Oprávnění pro skupiny",
+        "assign": "Přiřadit",
+        "createAndAssign": "Vytvořit a přiřadit"
+      }
+    },
     "confirmGenerate": "Opravdu chcete uzavřít výstavu a vygenerovat katalog? Tato akce je nevratná.",
     "generateSuccess": "Katalog úspěšně vygenerován",
     "generateError": "Chyba při generování katalogu",

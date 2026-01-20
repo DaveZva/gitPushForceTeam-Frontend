@@ -1,11 +1,12 @@
 import React, { useMemo, useState } from 'react';
-import { useForm, FormProvider, SubmitHandler, useFormContext, type Resolver } from 'react-hook-form';
+import { useForm, FormProvider, SubmitHandler, useFormContext, Controller, type Resolver } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { createShowSchema, ShowFormData } from '../../schemas/showSchema';
 import { secretariatApi } from '../../services/api/secretariatApi';
 import { Button, Input, Select } from '../../components/ui';
+import { CountrySelect } from '../../components/ui/CountrySelect';
 
 const FormField: React.FC<{ name: string, label: string, type?: string, error?: string }> = ({ name, label, type = 'text', error }) => {
     const { register } = useFormContext();
@@ -29,11 +30,12 @@ export function ShowCreatePage() {
         resolver: zodResolver(showSchema) as Resolver<ShowFormData>,
         defaultValues: {
             status: 'PLANNED',
-            maxCats: 200
+            maxCats: 200,
+            venueState: 'CZ' // Defaultní hodnota pro novou výstavu
         },
     });
 
-    const { register, handleSubmit, formState: { errors } } = methods;
+    const { register, handleSubmit, control, formState: { errors } } = methods;
 
     const onSubmit: SubmitHandler<ShowFormData> = async (data) => {
         setIsSubmitting(true);
@@ -52,9 +54,9 @@ export function ShowCreatePage() {
                 judgingStart: formatForBackend(data.judgingStart),
                 judgingEnd: formatForBackend(data.judgingEnd),
             };
+
             await secretariatApi.createShow(data);
 
-            // Použití lokalizovaného textu
             alert(t('alert.createSuccess'));
             navigate('/');
 
@@ -112,17 +114,6 @@ export function ShowCreatePage() {
 
                     <fieldset className="space-y-4">
                         <legend className="text-xl font-semibold text-[#027BFF] border-b pb-2 mb-4">
-                            Harmonogram
-                        </legend>
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                            <FormField name="vetCheckStart" label={t('fields.vetCheckStart')} type="datetime-local" error={errors.vetCheckStart?.message} />
-                            <FormField name="judgingStart" label={t('fields.judgingStart')} type="datetime-local" error={errors.judgingStart?.message} />
-                            <FormField name="judgingEnd" label={t('fields.judgingEnd')} type="datetime-local" error={errors.judgingEnd?.message} />
-                        </div>
-                    </fieldset>
-
-                    <fieldset className="space-y-4">
-                        <legend className="text-xl font-semibold text-[#027BFF] border-b pb-2 mb-4">
                             {t('admin.create.section.venue')}
                         </legend>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -130,7 +121,25 @@ export function ShowCreatePage() {
                             <FormField name="venueAddress" label={t('fields.venueAddress')} error={errors.venueAddress?.message} />
                             <FormField name="venueCity" label={t('fields.venueCity')} error={errors.venueCity?.message} />
                             <FormField name="venueZip" label={t('fields.venueZip')} error={errors.venueZip?.message} />
-                            <FormField name="venueState" label={t('fields.venueState')} error={errors.venueState?.message} />
+
+                            <div className="flex flex-col">
+                                <label htmlFor="venueState" className="mb-1 font-semibold text-gray-700">
+                                    {t('fields.venueState')}
+                                </label>
+                                <Controller
+                                    name="venueState"
+                                    control={control}
+                                    render={({ field: { onChange, value } }) => (
+                                        <CountrySelect
+                                            value={value || ''}
+                                            onChange={onChange}
+                                            error={errors.venueState?.message}
+                                            placeholder={t('common.select')}
+                                        />
+                                    )}
+                                />
+                            </div>
+
                         </div>
                     </fieldset>
 
@@ -142,6 +151,17 @@ export function ShowCreatePage() {
                             <FormField name="startDate" label={t('fields.startDate')} type="datetime-local" error={errors.startDate?.message} />
                             <FormField name="endDate" label={t('fields.endDate')} type="datetime-local" error={errors.endDate?.message} />
                             <FormField name="registrationDeadline" label={t('fields.registrationDeadline')} type="datetime-local" error={errors.registrationDeadline?.message} />
+                        </div>
+                    </fieldset>
+
+                    <fieldset className="space-y-4">
+                        <legend className="text-xl font-semibold text-[#027BFF] border-b pb-2 mb-4">
+                            Harmonogram
+                        </legend>
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <FormField name="vetCheckStart" label={t('fields.vetCheckStart')} type="datetime-local" error={errors.vetCheckStart?.message} />
+                            <FormField name="judgingStart" label={t('fields.judgingStart')} type="datetime-local" error={errors.judgingStart?.message} />
+                            <FormField name="judgingEnd" label={t('fields.judgingEnd')} type="datetime-local" error={errors.judgingEnd?.message} />
                         </div>
                     </fieldset>
 

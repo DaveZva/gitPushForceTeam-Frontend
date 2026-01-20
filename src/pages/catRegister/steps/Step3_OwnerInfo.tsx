@@ -1,8 +1,9 @@
 import React, { useState, useEffect, ReactNode } from 'react';
-import { useFormContext, FieldError } from 'react-hook-form';
+import { useFormContext, FieldError, Controller } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { storageUtils } from '../../../utils/storage';
 import { RegistrationFormData } from '../../../schemas/registrationSchema';
+import { CountrySelect } from '../../../components/ui/CountrySelect';
 
 const inputClass = "w-full p-3 bg-gray-100 rounded-lg border-1 border-transparent focus:outline-none focus:ring-1 focus:ring-[#027BFF] focus:border-[#027BFF]";
 
@@ -36,7 +37,7 @@ export function Step3_OwnerInfo() {
     );
 
     const { t } = useTranslation();
-    const { register, setValue, formState: { errors } } = useFormContext<RegistrationFormData>();
+    const { register, setValue, control, formState: { errors } } = useFormContext<RegistrationFormData>();
     const [savedOwners, setSavedOwners] = useState<SavedOwner[]>([]);
 
     useEffect(() => {
@@ -87,11 +88,11 @@ export function Step3_OwnerInfo() {
             <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
                 <FormField label={t('registrationSteps.step3_owner.localClub.label')} name="ownerLocalClub" error={errors.ownerLocalOrganization}>
                     <input type="text" {...register("ownerLocalOrganization")} className={inputClass} placeholder={t('registrationSteps.step3_owner.localClub.placeholder')} />
-                    </FormField>
+                </FormField>
 
                 <FormField label={t('registrationSteps.step3_owner.memberNumber.label')} name="ownerMemberNumber" error={errors.ownerMembershipNumber}>
                     <input type="text" {...register("ownerMembershipNumber")} className={inputClass} placeholder={t('registrationSteps.step3_owner.memberNumber.placeholder')} />
-                    </FormField>
+                </FormField>
 
                 <div className="col-span-1 md:col-span-2 border-t border-gray-200 my-2"></div>
 
@@ -114,6 +115,20 @@ export function Step3_OwnerInfo() {
                 <FormField label={t('registrationSteps.step3_owner.city.label')} name="ownerCity" error={errors.ownerCity}>
                     <input type="text" {...register("ownerCity")} className={inputClass} />
                 </FormField>
+
+                <Controller
+                    name="ownerCountry"
+                    control={control}
+                    defaultValue="CZ"
+                    render={({ field: { onChange, value } }) => (
+                        <CountrySelect
+                            label={t('registrationSteps.step3_owner.country.label') || "Země"}
+                            value={value}
+                            onChange={onChange}
+                            error={errors.ownerCountry?.message}
+                        />
+                    )}
+                />
 
                 <FormField label={t('registrationSteps.step3_owner.email.label')} name="ownerEmail" error={errors.ownerEmail}>
                     <input type="email" {...register("ownerEmail")} className={inputClass} placeholder={t('registrationSteps.step3_owner.email.placeholder')} />
