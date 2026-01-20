@@ -8,6 +8,7 @@ const createPersonSchema = (t: TFunction) => ({
     Address: z.string().min(5, t('validation.person.address.min')),
     Zip: z.string().regex(/^\d{3} ?\d{2}$/, t('validation.person.zip.invalid')),
     City: z.string().min(2, t('validation.person.city.min')),
+    Country: z.string().min(2, t('validation.person.country.min')),
     Email: z.string().email(t('validation.person.email.invalid')),
     Phone: z.string().regex(/^((\+420 ?)|(00420 ?))?\d{3} ?\d{3} ?\d{3}$/, t('validation.person.phone.invalid')),
     LocalOrganization: z.string().min(2, t('validation.person.localOrganization.min')).max(100, t('validation.person.localOrganization.max')),
@@ -225,6 +226,7 @@ export const createRegistrationSchema = (t: TFunction) => {
         ownerAddress: personSchema.Address,
         ownerZip: personSchema.Zip,
         ownerCity: personSchema.City,
+        ownerCountry: personSchema.Country,
         ownerEmail: personSchema.Email,
         ownerPhone: personSchema.Phone,
         ownerLocalOrganization: personSchema.LocalOrganization,
@@ -236,6 +238,7 @@ export const createRegistrationSchema = (t: TFunction) => {
         breederAddress: personSchema.Address.optional(),
         breederZip: personSchema.Zip.optional(),
         breederCity: personSchema.City.optional(),
+        breederCountry: personSchema.Country.optional(),
         breederEmail: personSchema.Email.optional(),
         breederPhone: personSchema.Phone.optional(),
 
@@ -255,6 +258,7 @@ export const createRegistrationSchema = (t: TFunction) => {
                 breederAddress: personSchema.Address,
                 breederZip: personSchema.Zip,
                 breederCity: personSchema.City,
+                breederCountry: personSchema.Country,
                 breederEmail: personSchema.Email,
                 breederPhone: personSchema.Phone,
             }).safeParse({

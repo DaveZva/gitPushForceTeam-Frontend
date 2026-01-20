@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useForm, Resolver } from 'react-hook-form';
+import { useForm, Resolver, Controller } from 'react-hook-form'; // Přidán Controller
 import { useNavigate, useParams, Link } from 'react-router-dom';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useTranslation } from 'react-i18next';
@@ -7,6 +7,7 @@ import { useTranslation } from 'react-i18next';
 import { createShowSchema, ShowFormData } from '../../schemas/showSchema';
 import { Input } from '../../components/ui/Input';
 import { Button } from '../../components/ui/Button';
+import { CountrySelect } from '../../components/ui/CountrySelect';
 import { secretariatApi } from '../../services/api/secretariatApi';
 import { MainHeader } from '../../components/MainHeader';
 
@@ -22,6 +23,7 @@ export default function ShowEditPage() {
         register,
         handleSubmit,
         reset,
+        control, // Přidán control
         formState: { errors, isSubmitting }
     } = useForm<ShowFormData>({
         resolver: zodResolver(createShowSchema(t)) as Resolver<ShowFormData>
@@ -46,7 +48,8 @@ export default function ShowEditPage() {
                     vetCheckStart: formatDateTime(data.vetCheckStart),
                     judgingStart: formatDateTime(data.judgingStart),
                     judgingEnd: formatDateTime(data.judgingEnd),
-                    status: data.status || 'PLANNED'
+                    status: data.status || 'PLANNED',
+                    venueState: data.venueState || 'CZ' // Default, kdyby chybělo
                 };
 
                 reset(formattedData as unknown as ShowFormData);
@@ -168,8 +171,20 @@ export default function ShowEditPage() {
                                 <FormField label="PSČ" error={errors.venueZip?.message}>
                                     <Input {...register('venueZip')} />
                                 </FormField>
+
+                                {/* ZMĚNA: Použití CountrySelect přes Controller */}
                                 <FormField label="Stát" error={errors.venueState?.message}>
-                                    <Input {...register('venueState')} />
+                                    <Controller
+                                        name="venueState"
+                                        control={control}
+                                        render={({ field: { onChange, value } }) => (
+                                            <CountrySelect
+                                                value={value || ''}
+                                                onChange={onChange}
+                                                placeholder={t('common.select')}
+                                            />
+                                        )}
+                                    />
                                 </FormField>
                             </div>
                         </div>

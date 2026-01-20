@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { secretariatApi, SecretariatShow } from '../../services/api/secretariatApi';
 import { RegistrationsTab } from '../../components/RegistrationsTab';
 import { JudgesSteawardsTab } from '../../components/JudgesStewardsTab';
+import { PaymentsTab } from '../../components/PaymentsTab';
 import { Button } from '../../components/ui/Button';
 
 const DonutChart = ({ confirmed, total, max }: { confirmed: number, total: number, max: number }) => {
@@ -302,10 +303,7 @@ export default function ShowControlCenter() {
                 </div>
 
                 {(activeTab === 'payments' || activeTab === 'catalog') && (
-                    <div className="flex flex-col items-center justify-center p-8 md:p-12 bg-gray-50 rounded-2xl border-2 border-dashed border-gray-200 text-center">
-                        <p className="text-gray-500 font-medium">{t('common.preparingContent')}</p>
-                        <span className="text-sm text-gray-400 mt-1">{activeTab}</span>
-                    </div>
+                    <PaymentsTab showId={id!} />
                 )}
             </div>
         </div>

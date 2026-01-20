@@ -49,6 +49,28 @@ export interface SecretariatEntryDetail {
     catalogNumber?: string;
 }
 
+export interface SecretariatPayment {
+    registrationId: number;
+    registrationNumber: string;
+    ownerName: string;
+    ownerEmail: string;
+    amount: number;
+    status: 'PLANNED' | 'CONFIRMED' | 'REJECTED' | 'CANCELLED';
+    paymentMethod: string;
+    paidAt?: string;
+    createdAt: string;
+    catCount: number;
+}
+
+export interface SecretariatJudge {
+    id: number;
+    firstName: string;
+    lastName: string;
+    email: string;
+    country: string;
+    validGroups: string[];
+}
+
 interface ApiErrorData {
     message: string;
 }
@@ -141,19 +163,6 @@ export const secretariatApi = {
         return response.data;
     },
 
-    getAllJudges: async (): Promise<any[]> => {
-        const response = await api.get('/secretariat/judges');
-        return response.data;
-    },
-
-    assignJudgeToShow: async (showId: string | number, judgeId: number): Promise<void> => {
-        await api.post(`${SECRETARIAT_URL}/${showId}/judges`, { judgeId });
-    },
-
-    removeJudgeFromShow: async (showId: string | number, judgeId: number): Promise<void> => {
-        await api.delete(`${SECRETARIAT_URL}/${showId}/judges/${judgeId}`);
-    },
-
     getEntryDetail: async (entryId: number): Promise<SecretariatEntryDetail> => {
         const response = await api.get(`${SECRETARIAT_URL}/entries/${entryId}`);
         return response.data;
@@ -161,5 +170,72 @@ export const secretariatApi = {
 
     updateEntry: async (entryId: number, data: SecretariatEntryDetail): Promise<void> => {
         await api.put(`${SECRETARIAT_URL}/entries/${entryId}`, data);
+    },
+
+    getPaymentsByShow: async (showId: string | number): Promise<SecretariatPayment[]> => {
+        try {
+            const response = await api.get<SecretariatPayment[]>(`${SECRETARIAT_URL}/${showId}/payments`);
+            return response.data;
+        } catch (error) {
+            handleError(error);
+            throw error;
+        }
+    },
+
+    confirmPayment: async (registrationId: number): Promise<void> => {
+        try {
+            await api.post(`${SECRETARIAT_URL}/payments/${registrationId}/confirm`);
+        } catch (error) {
+            handleError(error);
+            throw error;
+        }
+    },
+
+    getAllJudges: async (): Promise<SecretariatJudge[]> => {
+        try {
+            const response = await api.get<SecretariatJudge[]>(`${SECRETARIAT_URL}/judges`);
+            return response.data;
+        } catch (error) {
+            handleError(error);
+            throw error;
+        }
+    },
+
+    createJudge: async (judge: Omit<SecretariatJudge, 'id'>): Promise<SecretariatJudge> => {
+        try {
+            const response = await api.post<SecretariatJudge>(`${SECRETARIAT_URL}/judges`, judge);
+            return response.data;
+        } catch (error) {
+            handleError(error);
+            throw error;
+        }
+    },
+
+    getJudgesByShow: async (showId: string | number): Promise<SecretariatJudge[]> => {
+        try {
+            const response = await api.get<SecretariatJudge[]>(`${SECRETARIAT_URL}/${showId}/judges`);
+            return response.data;
+        } catch (error) {
+            handleError(error);
+            throw error;
+        }
+    },
+
+    assignJudgeToShow: async (showId: string | number, judgeId: number): Promise<void> => {
+        try {
+            await api.post(`${SECRETARIAT_URL}/${showId}/judges`, { judgeId });
+        } catch (error) {
+            handleError(error);
+            throw error;
+        }
+    },
+
+    removeJudgeFromShow: async (showId: string | number, judgeId: number): Promise<void> => {
+        try {
+            await api.delete(`${SECRETARIAT_URL}/${showId}/judges/${judgeId}`);
+        } catch (error) {
+            handleError(error);
+            throw error;
+        }
     }
 };
