@@ -6,6 +6,7 @@ interface BasePerson {
     address: string;
     zip: string;
     city: string;
+    country: string;
     email: string;
     phone: string;
 }

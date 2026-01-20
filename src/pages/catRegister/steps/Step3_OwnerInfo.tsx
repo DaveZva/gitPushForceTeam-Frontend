@@ -123,7 +123,7 @@ export function Step3_OwnerInfo() {
                     render={({ field: { onChange, value } }) => (
                         <CountrySelect
                             label={t('registrationSteps.step3_owner.country.label') || "Země"}
-                            value={value}
+                            value={value || ''}
                             onChange={onChange}
                             error={errors.ownerCountry?.message}
                         />
