@@ -84,6 +84,21 @@ export interface SavedCat {
     motherPedigreeNumber?: string;
 }
 
+export interface SavedPerson {
+    id: number;
+    firstName: string;
+    lastName: string;
+    address: string;
+    zip: string;
+    city: string;
+    country: string;
+    email?: string;
+    phone?: string;
+
+    ownerLocalOrganization?: string;
+    ownerMembershipNumber?: string;
+}
+
 export interface SubmitRegistrationResponse {
     registrationNumber: string | number;
 }
@@ -189,6 +204,16 @@ export const registrationApi = {
 
     getQuickCatalog: async (showId: string | number): Promise<QuickCatalogEntry[]> => {
         const response = await api.get<QuickCatalogEntry[]>(`/shows/${showId}/quick-catalog`);
+        return response.data;
+    },
+
+    getPreviousOwners: async (): Promise<SavedPerson[]> => {
+        const response = await api.get<SavedPerson[]>('/registrations/history/owners');
+        return response.data;
+    },
+
+    getPreviousBreeders: async (): Promise<SavedPerson[]> => {
+        const response = await api.get<SavedPerson[]>('/registrations/history/breeders');
         return response.data;
     }
 };
