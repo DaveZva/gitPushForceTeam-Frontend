@@ -1,7 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { login as apiLogin, register as apiRegister, forgotPassword as apiForgotPassword } from '../services/api';
 
-
 interface User {
     id?: number | string;
     firstName: string;
@@ -20,7 +19,7 @@ interface AuthContextType {
     user: User | null;
     token: string | null;
     login: (email: string, password: string) => Promise<void>;
-    register: (firstName: string, lastName: string, email: string, password: string) => Promise<void>;
+    register: (email: string, password: string) => Promise<void>;
     resetPassword: (email: string) => Promise<void>;
     logout: () => void;
     isAuthenticated: boolean;
@@ -77,8 +76,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
         handleAuthResponse(data);
     };
 
-    const register = async (firstName: string, lastName: string, email: string, password: string): Promise<void> => {
-        const data = await apiRegister({ firstName, lastName, email, password });
+    const register = async (email: string, password: string): Promise<void> => {
+        const data = await apiRegister({ email, password });
         handleAuthResponse(data);
     };
 

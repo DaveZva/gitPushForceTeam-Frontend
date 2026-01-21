@@ -59,8 +59,8 @@ const fieldsByStep: (keyof RegistrationFormData)[][] = [
     [],
     ['showId', 'days'],
     ['cats'],
-    ['ownerFirstName', 'ownerLastName', 'ownerAddress', 'ownerZip', 'ownerCity', 'ownerEmail', 'ownerPhone', 'ownerLocalOrganization', 'ownerMembershipNumber'],
-    ['sameAsOwner', 'breederFirstName', 'breederLastName', 'breederAddress', 'breederZip', 'breederCity', 'breederEmail', 'breederPhone'],
+    ['ownerFirstName', 'ownerLastName', 'ownerAddress', 'ownerZip', 'ownerCity', 'ownerCountry', 'ownerEmail', 'ownerPhone', 'ownerLocalOrganization', 'ownerMembershipNumber'],
+    ['sameAsOwner', 'breederFirstName', 'breederLastName', 'breederAddress', 'breederZip', 'breederCity', 'breederCountry', 'breederEmail', 'breederPhone'],
     ['dataAccuracy', 'gdprConsent'],
     [],
 ];
@@ -144,7 +144,6 @@ function CatRegistrationForm() {
 
     const [submitSuccessData, setSubmitSuccessData] = useState<{ number: string } | null>(null);
 
-    // 3. Aktualizované labely pro Stepper (Owner místo Breeder, Breeder se posunul)
     const stepLabels = [
         'stepper.exhibition',
         'stepper.cat',
@@ -155,7 +154,6 @@ function CatRegistrationForm() {
     ];
     const totalSteps = stepLabels.length;
 
-    // Poznámka: createRegistrationSchema(t) zajišťuje lokalizaci chybových hlášek validace
     const registrationSchema = useMemo(() => createRegistrationSchema(t), [i18n.language, t]);
 
     const methods = useForm<RegistrationFormData>({
@@ -175,7 +173,6 @@ function CatRegistrationForm() {
             clearTimeout(debounceTimer);
 
             debounceTimer = setTimeout(() => {
-                // Interní logování necháváme anglicky/česky, pro uživatele není vidět
                 console.log("Autosave: Ukládám formulář do localStorage...");
                 storageUtils.saveCurrentForm(value as RegistrationFormData);
             }, 500);
@@ -199,6 +196,7 @@ function CatRegistrationForm() {
                     address: data.ownerAddress,
                     zip: data.ownerZip,
                     city: data.ownerCity,
+                    country: data.ownerCountry,
                     email: data.ownerEmail,
                     phone: data.ownerPhone,
                     localOrganization: data.ownerLocalOrganization,
@@ -210,6 +208,7 @@ function CatRegistrationForm() {
                     address: data.breederAddress,
                     zip: data.breederZip,
                     city: data.breederCity,
+                    country: data.breederCountry,
                     email: data.breederEmail,
                     phone: data.breederPhone
                 },
@@ -251,7 +250,6 @@ function CatRegistrationForm() {
     };
 
     const handleConfirmAndSubmit = () => {
-        // 4. Použití nového textu potvrzení
         if (window.confirm(t('confirm.submitForm'))) {
             handleSubmit(onSubmit)();
         }

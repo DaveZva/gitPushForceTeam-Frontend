@@ -13,15 +13,12 @@ export function AuthModal({ onClose }: AuthModalProps) {
     const [view, setView] = useState<AuthView>('login');
     const auth = useAuth();
     const { login, register } = auth;
+
     const resetPassword = (auth as any).resetPassword;
 
     const [email, setEmail] = useState<string>('');
     const [password, setPassword] = useState<string>('');
-    // NOVÉ POLE:
     const [confirmPassword, setConfirmPassword] = useState<string>('');
-
-    const [firstName, setFirstName] = useState<string>('');
-    const [lastName, setLastName] = useState<string>('');
 
     const [error, setError] = useState<string>('');
     const [successMessage, setSuccessMessage] = useState<string>('');
@@ -42,15 +39,16 @@ export function AuthModal({ onClose }: AuthModalProps) {
                 onClose();
             } else if (view === 'register') {
                 if (password !== confirmPassword) {
-                    setError(t('auth.passwordsDoNotMatch') || 'Hesla se neshodují.');
-                    return;
-                }
-                if (!validatePassword(password)) {
-                    setError('Heslo musí obsahovat alespoň 8 znaků, obsahovat velké a malé písmeno, číslo a speciální znak.');
+                    setError(t('auth.passwordsDoNotMatch'));
                     return;
                 }
 
-                await register(firstName, lastName, email, password);
+                if (!validatePassword(password)) {
+                    setError(t('auth.passwordComplexity'));
+                    return;
+                }
+
+                await register(email, password);
                 onClose();
             } else if (view === 'forgot') {
                 if (resetPassword) {
@@ -112,8 +110,8 @@ export function AuthModal({ onClose }: AuthModalProps) {
 
                 <div className={`px-6 ${view === 'forgot' ? 'pt-2 pb-6' : 'py-6'} text-left`}>
                     <h2 className="text-xl font-extrabold tracking-[-1px] text-gray-900 mb-6">
-                        {view === 'login' && t('Přihlášení')}
-                        {view === 'register' && t('Registrace')}
+                        {view === 'login' && t('auth.login')}
+                        {view === 'register' && t('auth.registration')}
                         {view === 'forgot' && t('auth.forgotPasswordTitle')}
                     </h2>
 
@@ -121,22 +119,9 @@ export function AuthModal({ onClose }: AuthModalProps) {
 
                     <form onSubmit={handleSubmit} className="space-y-4">
 
-                        {view === 'register' && (
-                            <>
-                                <div>
-                                    <label className="text-sm font-semibold text-gray-800 block mb-1">{t('auth.firstName')}</label>
-                                    <input className="w-full bg-gray-100 rounded-full px-4 py-2.5 text-sm focus:ring-2 focus:ring-[#027BFF] outline-none" type="text" value={firstName} onChange={(e) => setFirstName(e.target.value)} />
-                                </div>
-                                <div>
-                                    <label className="text-sm font-semibold text-gray-800 block mb-1">{t('auth.lastName')}</label>
-                                    <input className="w-full bg-gray-100 rounded-full px-4 py-2.5 text-sm focus:ring-2 focus:ring-[#027BFF] outline-none" type="text" value={lastName} onChange={(e) => setLastName(e.target.value)} />
-                                </div>
-                            </>
-                        )}
-
                         <div>
                             <label className="text-sm font-semibold text-gray-800 block mb-1">{t('auth.email')}</label>
-                            <input className="w-full bg-gray-100 rounded-full px-4 py-2.5 text-sm focus:ring-2 focus:ring-[#027BFF] outline-none" type="email" value={email} placeholder={t('Zadejte email')} onChange={(e) => setEmail(e.target.value)} />
+                            <input className="w-full bg-gray-100 rounded-full px-4 py-2.5 text-sm focus:ring-2 focus:ring-[#027BFF] outline-none" type="email" value={email} placeholder={t('auth.emailPlaceholder') || 'Zadejte email'} onChange={(e) => setEmail(e.target.value)} />
                         </div>
 
                         {view !== 'forgot' && (
@@ -148,7 +133,7 @@ export function AuthModal({ onClose }: AuthModalProps) {
 
                                 {view === 'register' && (
                                     <div>
-                                        <label className="text-sm font-semibold text-gray-800 block mb-1">{t('auth.confirmPassword') || 'Zopakovat heslo'}</label>
+                                        <label className="text-sm font-semibold text-gray-800 block mb-1">{t('auth.confirmPassword')}</label>
                                         <input className="w-full bg-gray-100 rounded-full px-4 py-2.5 text-sm focus:ring-2 focus:ring-[#027BFF] outline-none" type="password" value={confirmPassword} placeholder="**********" onChange={(e) => setConfirmPassword(e.target.value)} />
                                     </div>
                                 )}

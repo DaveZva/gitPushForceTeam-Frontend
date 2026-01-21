@@ -1,9 +1,9 @@
 import React, { useState, useEffect, ReactNode } from 'react';
-import {useFormContext, FieldError, Controller} from 'react-hook-form';
+import { useFormContext, FieldError, Controller } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { storageUtils } from '../../../utils/storage';
 import { RegistrationFormData } from '../../../schemas/registrationSchema';
-import {CountrySelect} from "../../../components/ui/CountrySelect";
+import { CountrySelect } from "../../../components/ui/CountrySelect";
+import { registrationApi, SavedPerson } from '../../../services/api/registrationApi';
 
 const inputClass = "w-full p-3 bg-gray-100 rounded-lg border-1 border-transparent focus:outline-none focus:ring-1 focus:ring-[#027BFF] focus:border-[#027BFF]";
 
@@ -12,18 +12,6 @@ interface FormFieldProps {
     name: string;
     error?: FieldError;
     children: ReactNode;
-}
-
-interface SavedBreeder {
-    id: number;
-    firstName: string;
-    lastName: string;
-    address: string;
-    zip: string;
-    city: string;
-    country: string;
-    email: string;
-    phone: string;
 }
 
 export function Step4_BreederInfo() {
@@ -39,7 +27,10 @@ export function Step4_BreederInfo() {
 
     const { t } = useTranslation();
     const { register, setValue, control, watch, formState: { errors } } = useFormContext<RegistrationFormData>();
-    const [savedBreeders, setSavedBreeders] = useState<SavedBreeder[]>([]);
+
+    const [savedBreeders, setSavedBreeders] = useState<SavedPerson[]>([]);
+    const [isLoading, setIsLoading] = useState(false);
+
     const sameAsOwner = watch("sameAsOwner");
     const ownerData = watch([
         "ownerFirstName",
@@ -53,7 +44,21 @@ export function Step4_BreederInfo() {
     ]);
 
     useEffect(() => {
-        setSavedBreeders(storageUtils.getBreeders() as SavedBreeder[]);
+        const loadHistory = async () => {
+            setIsLoading(true);
+            try {
+                const breeders = await registrationApi.getPreviousBreeders();
+                const uniqueBreeders = breeders.filter((v, i, a) =>
+                    a.findIndex(t => (t.firstName === v.firstName && t.lastName === v.lastName)) === i
+                );
+                setSavedBreeders(uniqueBreeders);
+            } catch (error) {
+                console.error(error);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+        loadHistory();
     }, []);
 
     const handleLoadBreeder = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -66,9 +71,9 @@ export function Step4_BreederInfo() {
                 setValue("breederAddress", breeder.address, { shouldValidate: true });
                 setValue("breederZip", breeder.zip, { shouldValidate: true });
                 setValue("breederCity", breeder.city, { shouldValidate: true });
-                setValue("breederCountry", breeder.country, { shouldValidate: true });
-                setValue("breederEmail", breeder.email, { shouldValidate: true });
-                setValue("breederPhone", breeder.phone, { shouldValidate: true });
+                setValue("breederCountry", breeder.country || 'CZ', { shouldValidate: true });
+                setValue("breederEmail", breeder.email || '', { shouldValidate: true });
+                setValue("breederPhone", breeder.phone || '', { shouldValidate: true });
                 setValue("sameAsOwner", false);
             }
         }
@@ -98,9 +103,9 @@ export function Step4_BreederInfo() {
                             onChange={handleLoadBreeder}
                             defaultValue=""
                             className={inputClass}
-                            disabled={sameAsOwner}
+                            disabled={sameAsOwner || isLoading}
                         >
-                            <option value="">{t('registrationSteps.step4_breeder.loadSaved.placeholder')}</option>
+                            <option value="">{isLoading ? t('common.loading') : t('registrationSteps.step4_breeder.loadSaved.placeholder')}</option>
                             {savedBreeders.map(breeder => (
                                 <option key={breeder.id} value={breeder.id}>
                                     {breeder.firstName} {breeder.lastName} ({breeder.email})
@@ -124,7 +129,7 @@ export function Step4_BreederInfo() {
                 </label>
             </div>
 
-            <div className={`space-y-6 transition-opacity ${sameAsOwner ? 'opacity-50' : 'opacity-100'}`}>
+            <div className={`space-y-6 transition-opacity duration-200 ${sameAsOwner ? 'opacity-50 pointer-events-none' : 'opacity-100'}`}>
                 <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
                     <FormField label={t('registrationSteps.step4_breeder.firstName.label')} name="breederFirstName" error={errors.breederFirstName}>
                         <input type="text" {...register("breederFirstName")} className={inputClass} disabled={sameAsOwner} />

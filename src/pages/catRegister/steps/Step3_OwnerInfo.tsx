@@ -1,9 +1,9 @@
 import React, { useState, useEffect, ReactNode } from 'react';
 import { useFormContext, FieldError, Controller } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { storageUtils } from '../../../utils/storage';
 import { RegistrationFormData } from '../../../schemas/registrationSchema';
 import { CountrySelect } from '../../../components/ui/CountrySelect';
+import { registrationApi, SavedPerson } from '../../../services/api/registrationApi';
 
 const inputClass = "w-full p-3 bg-gray-100 rounded-lg border-1 border-transparent focus:outline-none focus:ring-1 focus:ring-[#027BFF] focus:border-[#027BFF]";
 
@@ -12,17 +12,6 @@ interface FormFieldProps {
     name: string;
     error?: FieldError;
     children: ReactNode;
-}
-
-interface SavedOwner {
-    id: number;
-    firstName: string;
-    lastName: string;
-    address: string;
-    zip: string;
-    city: string;
-    email: string;
-    phone: string;
 }
 
 export function Step3_OwnerInfo() {
@@ -38,10 +27,26 @@ export function Step3_OwnerInfo() {
 
     const { t } = useTranslation();
     const { register, setValue, control, formState: { errors } } = useFormContext<RegistrationFormData>();
-    const [savedOwners, setSavedOwners] = useState<SavedOwner[]>([]);
+
+    const [savedOwners, setSavedOwners] = useState<SavedPerson[]>([]);
+    const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
-        setSavedOwners(storageUtils.getBreeders() as SavedOwner[]);
+        const loadHistory = async () => {
+            setIsLoading(true);
+            try {
+                const owners = await registrationApi.getPreviousOwners();
+                const uniqueOwners = owners.filter((v, i, a) =>
+                    a.findIndex(t => (t.firstName === v.firstName && t.lastName === v.lastName && t.city === v.city)) === i
+                );
+                setSavedOwners(uniqueOwners);
+            } catch (error) {
+                console.error(error);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+        loadHistory();
     }, []);
 
     const handleLoadOwner = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -54,10 +59,11 @@ export function Step3_OwnerInfo() {
                 setValue("ownerAddress", owner.address, { shouldValidate: true });
                 setValue("ownerZip", owner.zip, { shouldValidate: true });
                 setValue("ownerCity", owner.city, { shouldValidate: true });
-                setValue("ownerEmail", owner.email, { shouldValidate: true });
-                setValue("ownerPhone", owner.phone, { shouldValidate: true });
-                setValue("ownerLocalOrganization", "", { shouldValidate: true });
-                setValue("ownerMembershipNumber", "", { shouldValidate: true });
+                setValue("ownerCountry", owner.country || 'CZ', { shouldValidate: true });
+                setValue("ownerEmail", owner.email || '', { shouldValidate: true });
+                setValue("ownerPhone", owner.phone || '', { shouldValidate: true });
+                setValue("ownerLocalOrganization", owner.ownerLocalOrganization || "", { shouldValidate: true });
+                setValue("ownerMembershipNumber", owner.ownerMembershipNumber || "", { shouldValidate: true });
             }
         }
     };
@@ -73,11 +79,12 @@ export function Step3_OwnerInfo() {
                             onChange={handleLoadOwner}
                             defaultValue=""
                             className={inputClass}
+                            disabled={isLoading}
                         >
-                            <option value="">{t('registrationSteps.step3_owner.loadSaved.placeholder')}</option>
+                            <option value="">{isLoading ? t('common.loading') : t('registrationSteps.step3_owner.loadSaved.placeholder')}</option>
                             {savedOwners.map(owner => (
                                 <option key={owner.id} value={owner.id}>
-                                    {owner.firstName} {owner.lastName} ({owner.email})
+                                    {owner.firstName} {owner.lastName} ({owner.city})
                                 </option>
                             ))}
                         </select>
