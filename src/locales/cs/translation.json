@@ -404,7 +404,12 @@
     "days": "dní",
     "closed": "Uzavřeno",
     "in": "za",
-    "now": "Teď"
+    "now": "Teď",
+    "error": "Nastala chyba při ukládání",
+    "saveChanges": "Uložit změny",
+    "cancel": "Zrušit",
+    "male": "Kocour",
+    "female": "Kočka"
   },
   "errors": {
     "fetchFailed": "Nepodařilo se načíst data.",
@@ -622,6 +627,9 @@
         "assign": "Přiřadit",
         "createAndAssign": "Vytvořit a přiřadit"
       }
+    },
+    "editModal": {
+      "title": "Upravit záznam kočky"
     },
     "confirmGenerate": "Opravdu chcete uzavřít výstavu a vygenerovat katalog? Tato akce je nevratná.",
     "generateSuccess": "Katalog úspěšně vygenerován",

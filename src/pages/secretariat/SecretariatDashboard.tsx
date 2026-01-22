@@ -13,7 +13,7 @@ const StatCard = ({ title, value, trend, color }: any) => (
 );
 
 const CapacityBar = ({ show }: { show: SecretariatShow }) => {
-    const current = show.totalCats || 0;
+    const current = show.totalRegistrations || 0;
     const max = show.maxCats || 1;
     const percentage = Math.min(100, Math.round((current / max) * 100));
 
