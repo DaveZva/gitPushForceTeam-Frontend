@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { secretariatApi, SecretariatEntryDetail } from '../services/api/secretariatApi';
+import { BREED_OPTIONS, validateEmsCode } from '../utils/emsRules';
 
 interface Props {
     entryId: number | null;
@@ -9,25 +10,99 @@ interface Props {
     onSave: () => void;
 }
 
+const SHOW_CLASSES = [
+    { value: 'supreme_champion', labelKey: 'c1', number: '01' },
+    { value: 'supreme_premior', labelKey: 'c2', number: '02' },
+    { value: 'grant_inter_champion', labelKey: 'c3', number: '03' },
+    { value: 'grant_inter_premier', labelKey: 'c4', number: '04' },
+    { value: 'international_champion', labelKey: 'c5', number: '05' },
+    { value: 'international_premier', labelKey: 'c6', number: '06' },
+    { value: 'champion', labelKey: 'c7', number: '07' },
+    { value: 'premier', labelKey: 'c8', number: '08' },
+    { value: 'open', labelKey: 'c9', number: '09' },
+    { value: 'neuter', labelKey: 'c10', number: '10' },
+    { value: 'junior', labelKey: 'c11', number: '11' },
+    { value: 'kitten', labelKey: 'c12', number: '12' },
+    { value: 'novice_class', labelKey: 'c13a', number: '13a' },
+    { value: 'control_class', labelKey: 'c13b', number: '13b' },
+    { value: 'determination_class', labelKey: 'c13c', number: '13c' },
+    { value: 'domestic_cat', labelKey: 'c14', number: '14' },
+    { value: 'out_of_competition', labelKey: 'c15', number: '15' },
+    { value: 'litter', labelKey: 'c16', number: '16' },
+    { value: 'veteran', labelKey: 'c17', number: '17' },
+];
+
 export const EditEntryModal = ({ entryId, isOpen, onClose, onSave }: Props) => {
     const { t } = useTranslation();
     const [formData, setFormData] = useState<SecretariatEntryDetail | null>(null);
     const [loading, setLoading] = useState(false);
 
+    const [breed, setBreed] = useState<string>('');
+    const [emsSuffix, setEmsSuffix] = useState<string>('');
+    const [catGroup, setCatGroup] = useState<string>(''); // Nové: Skupina
+    const [emsError, setEmsError] = useState<string | null>(null);
+
     useEffect(() => {
         if (isOpen && entryId) {
             setLoading(true);
+            setEmsError(null);
             secretariatApi.getEntryDetail(entryId)
-                .then(setFormData)
+                .then(data => {
+                    if (data.showClass) {
+                        data.showClass = data.showClass.toLowerCase();
+                    }
+
+                    setFormData(data);
+
+                    setCatGroup(data.catGroup || '');
+
+                    if (data.emsCode) {
+                        const parts = data.emsCode.split(' ');
+                        const loadedBreed = parts[0];
+                        const loadedSuffix = parts.slice(1).join(' ');
+                        setBreed(loadedBreed);
+                        setEmsSuffix(loadedSuffix);
+                    } else {
+                        setBreed('');
+                        setEmsSuffix('');
+                    }
+                })
                 .catch(console.error)
                 .finally(() => setLoading(false));
         }
     }, [isOpen, entryId]);
 
+    const handleEmsChange = (newBreed: string, newSuffix: string) => {
+        setBreed(newBreed);
+        setEmsSuffix(newSuffix);
+
+        const fullEms = `${newBreed} ${newSuffix}`.trim();
+        const validation = validateEmsCode(fullEms);
+
+        if (validation === true) {
+            setEmsError(null);
+        } else {
+            setEmsError(typeof validation === 'string' ? validation : t('validation.cat.group.invalid'));
+        }
+    };
+
     const handleSave = async () => {
         if (!formData || !entryId) return;
+
+        const fullEms = `${breed} ${emsSuffix}`.trim();
+        const validation = validateEmsCode(fullEms);
+
+        if (validation !== true) {
+            setEmsError(typeof validation === 'string' ? validation : t('validation.cat.group.invalid'));
+            return;
+        }
+
         try {
-            await secretariatApi.updateEntry(entryId, formData);
+            await secretariatApi.updateEntry(entryId, {
+                ...formData,
+                emsCode: fullEms,
+                catGroup: catGroup
+            });
             onSave();
             onClose();
         } catch (error) {
@@ -38,7 +113,7 @@ export const EditEntryModal = ({ entryId, isOpen, onClose, onSave }: Props) => {
 
     if (!isOpen) return null;
 
-    const inputClass = "w-full px-4 py-2 bg-white border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#027BFF] focus:border-transparent outline-none transition-all";
+    const inputClass = "w-full px-4 py-2 bg-white border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#027BFF] focus:border-transparent outline-none transition-all disabled:bg-gray-100";
     const labelClass = "block text-sm font-medium text-gray-700 mb-1";
 
     return (
@@ -58,26 +133,97 @@ export const EditEntryModal = ({ entryId, isOpen, onClose, onSave }: Props) => {
                         </div>
                     ) : (
                         <div className="space-y-5">
-                            <div>
-                                <label className={labelClass}>{t('catForm.catName')}</label>
-                                <input
-                                    type="text"
-                                    className={inputClass}
-                                    value={formData.catName}
-                                    onChange={e => setFormData({...formData, catName: e.target.value})}
-                                />
-                            </div>
-
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                                <div>
-                                    <label className={labelClass}>{t('catForm.emsCode')}</label>
+                            {/* Row 1: Titles & Name */}
+                            <div className="grid grid-cols-12 gap-4">
+                                <div className="col-span-12 sm:col-span-3">
+                                    <label className={labelClass}>{t('catForm.titleBefore')}</label>
+                                    <select
+                                        className={inputClass}
+                                        value={formData.titleBefore || ''}
+                                        onChange={e => setFormData({...formData, titleBefore: e.target.value})}
+                                    >
+                                        <option value="">-- {t('common.noTitle')} --</option>
+                                        <option value="champion">CH</option>
+                                        <option value="inter-champion">IC</option>
+                                        <option value="grand-inter-champion">GIC</option>
+                                        <option value="supreme-champion">SC</option>
+                                        <option value="national-winner">NV</option>
+                                        <option value="world-winner">WW</option>
+                                        <option value="junior-world-winner">JWW</option>
+                                    </select>
+                                </div>
+                                <div className="col-span-12 sm:col-span-6">
+                                    <label className={labelClass}>{t('catForm.catName')}</label>
                                     <input
                                         type="text"
                                         className={inputClass}
-                                        value={formData.emsCode}
-                                        onChange={e => setFormData({...formData, emsCode: e.target.value})}
+                                        value={formData.catName}
+                                        onChange={e => setFormData({...formData, catName: e.target.value})}
                                     />
                                 </div>
+                                <div className="col-span-12 sm:col-span-3">
+                                    <label className={labelClass}>{t('catForm.titleAfter')}</label>
+                                    <select
+                                        className={inputClass}
+                                        value={formData.titleAfter || ''}
+                                        onChange={e => setFormData({...formData, titleAfter: e.target.value})}
+                                    >
+                                        <option value="">-- {t('common.noTitle')} --</option>
+                                        <option value="junior-winner">JW</option>
+                                        <option value="distinguished-show-merit">DSM</option>
+                                        <option value="distinguished-variety-merit">DVM</option>
+                                        <option value="distinguished-merit">DM</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            {/* Row 2: EMS Logic + Group */}
+                            <div className="grid grid-cols-12 gap-4">
+                                <div className="col-span-12 sm:col-span-5">
+                                    <label className={labelClass}>{t('catForm.breed')}</label>
+                                    <select
+                                        className={inputClass}
+                                        value={breed}
+                                        onChange={e => handleEmsChange(e.target.value, emsSuffix)}
+                                    >
+                                        <option value="">{t('common.select')}</option>
+                                        {BREED_OPTIONS.map(opt => (
+                                            <option key={opt.value} value={opt.value}>
+                                                {opt.label}
+                                            </option>
+                                        ))}
+                                    </select>
+                                </div>
+                                <div className="col-span-12 sm:col-span-4">
+                                    <label className={labelClass}>{t('catForm.emsCodeShort')} (Suffix)</label>
+                                    <input
+                                        type="text"
+                                        className={`${inputClass} ${emsError ? 'border-red-500 bg-red-50' : ''}`}
+                                        value={emsSuffix}
+                                        onChange={e => handleEmsChange(breed, e.target.value)}
+                                        placeholder="n 03 22"
+                                    />
+                                    {emsError && <p className="text-red-500 text-xs mt-1">{emsError}</p>}
+                                </div>
+                                <div className="col-span-12 sm:col-span-3">
+                                    <label className={labelClass}>{t('catForm.group')}</label>
+                                    <select
+                                        className={inputClass}
+                                        value={catGroup}
+                                        onChange={e => setCatGroup(e.target.value)}
+                                    >
+                                        <option value="">-</option>
+                                        {[...Array(12)].map((_, i) => (
+                                            <option key={i + 1} value={String(i + 1)}>
+                                                {t('catForm.groupOption', { number: i + 1 })}
+                                            </option>
+                                        ))}
+                                    </select>
+                                </div>
+                            </div>
+
+                            {/* Row 3: Gender & Show Class */}
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                                 <div>
                                     <label className={labelClass}>{t('catForm.gender')}</label>
                                     <select
@@ -89,30 +235,24 @@ export const EditEntryModal = ({ entryId, isOpen, onClose, onSave }: Props) => {
                                         <option value="FEMALE">{t('common.female')} (0,1)</option>
                                     </select>
                                 </div>
-                            </div>
-
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                                 <div>
                                     <label className={labelClass}>{t('catForm.showClass')}</label>
-                                    <input
-                                        type="text"
+                                    <select
                                         className={inputClass}
                                         value={formData.showClass}
                                         onChange={e => setFormData({...formData, showClass: e.target.value})}
-                                    />
-                                </div>
-                                <div>
-                                    <label className={labelClass}>{t('catalog.catalogNumber')}</label>
-                                    <input
-                                        type="text"
-                                        className={inputClass}
-                                        placeholder={t('secretariat.editModal.notAssigned')}
-                                        value={formData.catalogNumber || ''}
-                                        onChange={e => setFormData({...formData, catalogNumber: e.target.value})}
-                                    />
+                                    >
+                                        <option value="">-- {t('common.select')} --</option>
+                                        {SHOW_CLASSES.map(cls => (
+                                            <option key={cls.value} value={cls.value}>
+                                                {cls.number} - {t(`catForm.classOptions.${cls.labelKey}`)}
+                                            </option>
+                                        ))}
+                                    </select>
                                 </div>
                             </div>
 
+                            {/* Row 4: Identifiers */}
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                                 <div>
                                     <label className={labelClass}>{t('catForm.chip')}</label>

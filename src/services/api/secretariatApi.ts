@@ -39,14 +39,16 @@ export interface SecretariatStats {
 export interface SecretariatEntryDetail {
     entryId: number;
     catId: number;
+    titleBefore?: string;
     catName: string;
+    titleAfter?: string;
     emsCode: string;
+    catGroup?: string;
     gender: string;
     birthDate: string;
     pedigreeNumber: string;
     chipNumber: string;
     showClass: string;
-    catalogNumber?: string;
 }
 
 export interface SecretariatPayment {
