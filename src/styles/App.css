@@ -529,7 +529,6 @@ body {
     opacity: 1;
 }
 
-/* ====== Responzivita) ====== */
 @media (max-width: 768px) {
     .upcoming-card {
         padding: 1.25rem;
@@ -549,4 +548,24 @@ body {
         font-size: 16px;
         margin-top: 1rem;
     }
+}
+.user-actions div button {
+    background-color: transparent !important;
+    color: inherit;
+    border: none !important;
+    padding: 4px 12px;
+    letter-spacing: normal;
+    min-height: auto;
+    width: auto;
+}
+
+.user-actions div button.bg-white {
+    background-color: #ffffff !important;
+    color: #111827 !important;
+}
+
+.user-actions div button:hover {
+    background-color: transparent !important;
+    border: none !important;
+    color: #4b5563;
 }

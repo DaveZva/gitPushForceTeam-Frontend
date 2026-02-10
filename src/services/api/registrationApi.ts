@@ -65,6 +65,7 @@ export interface SavedCat {
     chipNumber: string;
     birthDate: string;
     gender: string;
+    category: number;
     group: string | null;
 
     fatherName?: string;
@@ -215,7 +216,7 @@ export const registrationApi = {
     getPreviousBreeders: async (): Promise<SavedPerson[]> => {
         const response = await api.get<SavedPerson[]>('/registrations/history/breeders');
         return response.data;
-    }
+    },
 };
 
 export const getRegistrationDetail = async (id: number | string): Promise<RegistrationDetail> => {
