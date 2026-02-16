@@ -21,6 +21,7 @@ import ShowManagementPage from './pages/secretariat/ShowManagementPage'; // Sezn
 import { ShowCreatePage } from './pages/secretariat/ShowCreatePage';
 import ShowControlCenter from './pages/secretariat/ShowControlCenter'; // Detail výstavy (řídící centrum)
 import ShowEditPage from './pages/secretariat/ShowEditPage';
+import PublicCallingBoard from "./pages/PublicCallingBoard";
 
 function App() {
     const { t } = useTranslation();
@@ -55,9 +56,11 @@ function App() {
                             </PrivateRoute>
                         } />
                     </Route>
+                    <Route path="/public/board" element={<PublicCallingBoard />} />
                 </Routes>
             </BrowserRouter>
         </AuthProvider>
+
     );
 }
 export default App;
