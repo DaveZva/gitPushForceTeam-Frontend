@@ -82,7 +82,7 @@ const handleAuthError = (error: unknown) => {
             console.error("API Error Response:", axiosError.response.data);
 
             const serverMessage = axiosError.response.data?.message || axiosError.response.data?.error;
-            throw new Error(serverMessage || 'errors.serverError');
+            throw new Error(serverMessage || 'errors.invalidCredentials');
         } else if (axiosError.request) {
             console.error("API Network Error:", axiosError.request);
             throw new Error('errors.networkError');

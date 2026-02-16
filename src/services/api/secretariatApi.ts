@@ -86,7 +86,7 @@ const handleError = (error: unknown, t?: TFunction) => {
             if (axiosError.response.status === 401 || axiosError.response.status === 403) {
                 throw new Error('errors.unauthorized');
             }
-            throw new Error(axiosError.response.data?.message || (t ? t('errors.serverError') : 'errors.serverError'));
+            throw new Error(axiosError.response.data?.message || (t ? t('errors.') : 'errors.serverError'));
         } else if (axiosError.request) {
             throw new Error(t ? t('errors.networkError') : 'errors.networkError');
         }

@@ -121,7 +121,7 @@ export function AuthModal({ onClose }: AuthModalProps) {
 
                         <div>
                             <label className="text-sm font-semibold text-gray-800 block mb-1">{t('auth.email')}</label>
-                            <input className="w-full bg-gray-100 rounded-full px-4 py-2.5 text-sm focus:ring-2 focus:ring-[#027BFF] outline-none" type="email" value={email} placeholder={t('auth.emailPlaceholder') || 'Zadejte email'} onChange={(e) => setEmail(e.target.value)} />
+                            <input className="w-full bg-gray-100 rounded-full px-4 py-2.5 text-sm focus:ring-2 focus:ring-[#027BFF] outline-none" type="email" value={email} placeholder={t('auth.emailPlaceholder')} onChange={(e) => setEmail(e.target.value)} />
                         </div>
 
                         {view !== 'forgot' && (
