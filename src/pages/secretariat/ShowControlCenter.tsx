@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { secretariatApi, SecretariatShow } from '../../services/api/secretariatApi';
 import { RegistrationsTab } from '../../components/RegistrationsTab';
 import { JudgesSteawardsTab } from '../../components/JudgesStewardsTab';
+import { JudgingSheetsTab } from '../../components/JudgingSheetsTab';
 import { PaymentsTab } from '../../components/PaymentsTab';
 import { Button } from '../../components/ui/Button';
 
@@ -100,6 +101,7 @@ export default function ShowControlCenter() {
         { id: 'overview', label: t('secretariat.tabs.overview') },
         { id: 'registrations', label: t('secretariat.tabs.registrations') },
         { id: 'judges', label: t('secretariat.tabs.judges') },
+        { id: 'judging', label: t('judging.title') },
         { id: 'payments', label: t('secretariat.tabs.payments') },
         { id: 'catalog', label: t('secretariat.tabs.catalog') },
     ];
@@ -298,6 +300,12 @@ export default function ShowControlCenter() {
                     {activeTab === 'judges' && (
                         <div className="overflow-x-auto">
                             <JudgesSteawardsTab showId={id} />
+                        </div>
+                    )}
+
+                    {activeTab === 'judging' && (
+                        <div className="overflow-x-auto">
+                            <JudgingSheetsTab showId={id!} />
                         </div>
                     )}
                 </div>
