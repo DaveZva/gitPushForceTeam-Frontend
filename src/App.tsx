@@ -4,6 +4,7 @@ import { AuthProvider } from './context/AuthContext';
 import './styles/App.css';
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements } from '@stripe/react-stripe-js';
+import { Toaster } from 'react-hot-toast';
 
 import { AppLayout } from './layouts/AppLayout';
 import Dashboard from './pages/Dashboard';
@@ -30,6 +31,7 @@ function App() {
     return (
         <AuthProvider>
             <BrowserRouter>
+                <Toaster position="top-right" />
                 <Routes>
                     <Route path="/" element={<AppLayout />}>
 

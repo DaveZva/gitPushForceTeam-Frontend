@@ -73,6 +73,20 @@ export interface SecretariatJudge {
     validGroups: string[];
 }
 
+export interface BreedDistribution {
+    code: string;
+    name: string;
+    count: number;
+}
+
+export interface JudgeWorkload {
+    judgeId: number;
+    judgeName: string;
+    qualifications: string[];
+    catsCount: number;
+    breedDistribution: BreedDistribution[];
+}
+
 interface ApiErrorData {
     message: string;
 }
@@ -160,6 +174,7 @@ export const secretariatApi = {
         return response.data;
     },
 
+    // === Registrations & Entries ===
     getRegistrationsByShow: async (showId: string | number): Promise<any[]> => {
         const response = await api.get(`/secretariat/shows/${showId}/registrations`);
         return response.data;
@@ -235,6 +250,71 @@ export const secretariatApi = {
     removeJudgeFromShow: async (showId: string | number, judgeId: number): Promise<void> => {
         try {
             await api.delete(`${SECRETARIAT_URL}/${showId}/judges/${judgeId}`);
+        } catch (error) {
+            handleError(error);
+            throw error;
+        }
+    },
+
+    getJudgeSheets: async (showId: string | number, judgeId: number, day: string): Promise<any[]> => {
+        try {
+            const response = await api.get(`${SECRETARIAT_URL}/${showId}/judging/judges/${judgeId}/sheets`, {
+                params: { day }
+            });
+            return response.data;
+        } catch (error) {
+            return [];
+        }
+    },
+
+    generateJudgingSheets: async (showId: string | number): Promise<void> => {
+        try {
+            await api.post(`${SECRETARIAT_URL}/${showId}/judging/generate`);
+        } catch (error) {
+            handleError(error);
+            throw error;
+        }
+    },
+
+    regenerateJudgeSheets: async (showId: string | number, judgeId: number): Promise<void> => {
+        try {
+            await api.post(`${SECRETARIAT_URL}/${showId}/judging/judges/${judgeId}/regenerate`);
+        } catch (error) {
+            handleError(error);
+            throw error;
+        }
+    },
+
+    getJudgingWorkload: async (showId: string | number, day: string): Promise<JudgeWorkload[]> => {
+        try {
+            const response = await api.get<JudgeWorkload[]>(`${SECRETARIAT_URL}/${showId}/judging/workload`, {
+                params: { day }
+            });
+            return response.data;
+        } catch (error) {
+            handleError(error);
+            throw error;
+        }
+    },
+
+    rebalanceWorkload: async (showId: string | number, day: string): Promise<void> => {
+        try {
+            await api.post(`${SECRETARIAT_URL}/${showId}/judging/rebalance`, null, {
+                params: { day }
+            });
+        } catch (error) {
+            handleError(error);
+            throw error;
+        }
+    },
+
+    downloadJudgeSheetsPdf: async (showId: string | number, judgeId: number, day: string): Promise<Blob> => {
+        try {
+            const response = await api.get(`${SECRETARIAT_URL}/${showId}/judging/judges/${judgeId}/sheets/pdf`, {
+                params: { day },
+                responseType: 'blob'
+            });
+            return response.data;
         } catch (error) {
             handleError(error);
             throw error;
