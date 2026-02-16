@@ -21,7 +21,7 @@ export interface SecretariatShow {
     endDate: string;
     registrationDeadline: string;
     organizerName: string;
-    contactEmail?: string;
+    organizerContactEmail?: string;
     websiteUrl?: string;
     totalRegistrations?: number;
     confirmedRegistrations?: number;
