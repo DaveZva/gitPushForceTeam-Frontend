@@ -41,7 +41,7 @@ export const createShowSchema = (t: TFunction) => z.object({
     }),
 
     organizerName: z.string().min(3, t('validation.exhibition.organizerName.min')),
-    contactEmail: z.string().email(t('validation.exhibition.contactEmail.invalid')).optional().or(z.literal('')),
+    organizerContactEmail: z.string().email(t('validation.exhibition.contactEmail.invalid')).optional().or(z.literal('')),
     websiteUrl: z.string().url(t('validation.exhibition.websiteUrl.invalid')).optional().or(z.literal('')),
 
 }).refine(data => new Date(data.endDate) > new Date(data.startDate), {
