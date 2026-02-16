@@ -4,6 +4,7 @@ import { AuthProvider } from './context/AuthContext';
 import './styles/App.css';
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements } from '@stripe/react-stripe-js';
+import { Toaster } from 'react-hot-toast';
 
 import { AppLayout } from './layouts/AppLayout';
 import Dashboard from './pages/Dashboard';
@@ -21,6 +22,7 @@ import ShowManagementPage from './pages/secretariat/ShowManagementPage'; // Sezn
 import { ShowCreatePage } from './pages/secretariat/ShowCreatePage';
 import ShowControlCenter from './pages/secretariat/ShowControlCenter'; // Detail výstavy (řídící centrum)
 import ShowEditPage from './pages/secretariat/ShowEditPage';
+import PublicCallingBoard from "./pages/PublicCallingBoard";
 
 function App() {
     const { t } = useTranslation();
@@ -29,6 +31,7 @@ function App() {
     return (
         <AuthProvider>
             <BrowserRouter>
+                <Toaster position="top-right" />
                 <Routes>
                     <Route path="/" element={<AppLayout />}>
 
@@ -55,9 +58,11 @@ function App() {
                             </PrivateRoute>
                         } />
                     </Route>
+                    <Route path="/public/board" element={<PublicCallingBoard />} />
                 </Routes>
             </BrowserRouter>
         </AuthProvider>
+
     );
 }
 export default App;

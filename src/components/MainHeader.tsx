@@ -41,12 +41,13 @@ export function MainHeader() {
 
 
                     <NavLink
-                        to="/catalog"
+                        to="/public/board"
                         className={getNavLinkClass}
                         onClick={() => setMenuOpen(false)}
                     >
-                        {t('nav.catalog')}
+                        {t('nav.board')}
                     </NavLink>
+
 
                     {isAuthenticated && (
                         <>

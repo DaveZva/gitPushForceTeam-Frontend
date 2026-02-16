@@ -9,7 +9,8 @@
     "logIn": "Přihlášení",
     "signUp": "Registrace",
     "exhibitions": "Výstavy",
-    "catalog": "Katalog"
+    "catalog": "Katalog",
+    "board": "Vyvolávací systém"
   },
   "user": {
     "notifications": "Notifikace"
@@ -741,6 +742,29 @@
     "tryAgain": "Zkusit znovu",
     "verifying": "Ověřuji stav registrace...",
     "verificationFailed": "Nepodařilo se ověřit stav registrace, ale platba pravděpodobně proběhla. Zkontrolujte přihlášky."
+  },
+  "judging": {
+    "title": "Posuzovací listy",
+    "generateAll": "Vygenerovat všechny listy",
+    "regenerate": "Přegenerovat",
+    "workloadBalance": "Rozdělení zátěže",
+    "avgWorkload": "Průměrná zátěž",
+    "maxDeviation": "Max. odchylka",
+    "totalCats": "Celkem koček",
+    "catsCount": "koček",
+    "qualifications": "Kvalifikace",
+    "showDetail": "Zobrazit detail",
+    "breedDistribution": "plemen",
+    "pdfSaturday": "PDF Sobota",
+    "pdfSunday": "PDF Neděle",
+    "confirmGenerate": "Vygenerovat všechny posuzovací listy?",
+    "confirmRegenerate": "Přegenerovat listy pro tohoto porotce?",
+    "generateSuccess": "Posuzovací listy vygenerovány",
+    "regenerateSuccess": "Listy přegenerovány",
+    "generating": "Generuji...",
+    "balancing": "Vyvažuji...",
+    "rebalance": "Přepočítat rozdělení",
+    "confirmRebalance": "Přepočítat rozdělení pro rovnoměrnou zátěž?"
   },
   "location": "Místo"
 }

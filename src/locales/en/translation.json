@@ -742,5 +742,28 @@
     "verifying": "Verifying registration status...",
     "verificationFailed": "Could not verify registration status, but payment was likely successful. Check your applications."
   },
+  "judging": {
+    "title": "Judging Sheets",
+    "generateAll": "Generate All Sheets",
+    "regenerate": "Regenerate",
+    "workloadBalance": "Workload Distribution",
+    "avgWorkload": "Average Workload",
+    "maxDeviation": "Max Deviation",
+    "totalCats": "Total Cats",
+    "catsCount": "cats",
+    "qualifications": "Qualifications",
+    "showDetail": "Show Detail",
+    "breedDistribution": "breeds",
+    "pdfSaturday": "PDF Saturday",
+    "pdfSunday": "PDF Sunday",
+    "confirmGenerate": "Generate all judging sheets?",
+    "confirmRegenerate": "Regenerate sheets for this judge?",
+    "generateSuccess": "Judging sheets generated",
+    "regenerateSuccess": "Sheets regenerated",
+    "generating": "Generating...",
+    "balancing": "Balancing...",
+    "rebalance": "Recalculate Distribution",
+    "confirmRebalance": "Recalculate distribution for balanced workload?"
+  },
   "location": "Location"
 }

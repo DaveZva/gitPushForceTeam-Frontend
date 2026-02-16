@@ -118,7 +118,7 @@ export interface AvailableShow {
     endDate: string;
     registrationDeadline: string;
     organizerName: string;
-    contactEmail?: string;
+    organizerContactEmail?: string;
     websiteUrl?: string;
 }
 
@@ -134,6 +134,7 @@ export interface QuickCatalogEntry {
     catalogNumber: number;
     catName: string;
     gender: 'MALE' | 'FEMALE';
+    birthDate: string;
     emsCode: string;
     showClass: string;
     category: number;
@@ -148,6 +149,7 @@ export interface PublicShowDetail {
     venueCity: string;
     organizerName: string;
     organizerWebsiteUrl: string;
+    organizerContactEmail: string;
     startDate: string;
     endDate: string;
     vetCheckStart: string;
