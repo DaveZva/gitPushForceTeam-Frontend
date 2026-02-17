@@ -1,5 +1,26 @@
 import { TFunction } from 'i18next';
 
+export const FIFE_CATEGORIES: Record<string, { name: string; index: number; ems: string }> = {
+    'EXO': { name: 'Long and Semi-longhaired cats', index: 1, ems: 'I.' },
+    'PER': { name: 'Long and Semi-longhaired cats', index: 1, ems: 'I.' },
+    'RAG': { name: 'Semi-longhaired cats', index: 2, ems: 'II.' },
+    'SBI': { name: 'Semi-longhaired cats', index: 2, ems: 'II.' },
+    'MCO': { name: 'Semi-longhaired cats', index: 2, ems: 'II.' },
+    'ACL': { name: 'Semi-longhaired cats', index: 2, ems: 'II.' },
+    'NFO': { name: 'Semi-longhaired cats', index: 2, ems: 'II.' },
+    'SIB': { name: 'Semi-longhaired cats', index: 2, ems: 'II.' },
+    'TUV': { name: 'Semi-longhaired cats', index: 2, ems: 'II.' },
+    'BEN': { name: 'Shorthaired cats', index: 3, ems: 'III.' },
+    'BSH': { name: 'Shorthaired cats', index: 3, ems: 'III.' },
+    'BUR': { name: 'Shorthaired cats', index: 3, ems: 'III.' },
+    'ABY': { name: 'Siamo-Orientale cats', index: 4, ems: 'IV.' },
+    'SIA': { name: 'Siamo-Orientale cats', index: 4, ems: 'IV.' },
+    'OSH': { name: 'Siamo-Orientale cats', index: 4, ems: 'IV.' },
+    'SPH': { name: 'Siamo-Orientale cats', index: 4, ems: 'IV.' },
+};
+
+// ... zbytek souboru zůstává stejný (BREED_NAMES atd.)
+
 export const BREED_NAMES: Record<string, string> = {
     // Cat 1
     "EXO": "Exotic", "PER": "Persian", "RAG": "Ragdoll", "SBI": "Sacred Birman", "TUV": "Turkish Van",

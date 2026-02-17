@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { secretariatApi, SecretariatPayment } from '../services/api/secretariatApi';
-import { Button } from './ui/Button';
+import { secretariatApi, SecretariatPayment } from '../../services/api/secretariatApi';
+import { Button } from '../ui/Button';
 
 interface PaymentsTabProps {
     showId: string | number;

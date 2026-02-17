@@ -404,7 +404,12 @@
     "days": "days",
     "closed": "Closed",
     "in": "in",
-    "now": "Now"
+    "now": "Now",
+    "error": "An error occurred while saving",
+    "saveChanges": "Save Changes",
+    "cancel": "Cancel",
+    "male": "Male",
+    "female": "Female"
   },
   "errors": {
     "fetchFailed": "Failed to fetch data.",
@@ -576,6 +581,55 @@
       "judges": "Judges",
       "payments": "Payments",
       "catalog": "Catalog"
+    },
+    "payments": {
+      "title": "Payment Management",
+      "col": {
+        "regNumber": "Reg. Number",
+        "owner": "Owner",
+        "cats": "Cats",
+        "amount": "Amount",
+        "status": "Status",
+        "method": "Method",
+        "date": "Payment Date",
+        "actions": "Actions"
+      },
+      "confirmBtn": "Confirm Payment",
+      "filterAll": "All",
+      "filterPaid": "Paid",
+      "filterUnpaid": "Unpaid",
+      "methodStripe": "Card (Stripe)",
+      "methodManual": "Cash / Transfer",
+      "methodPending": "-"
+    },
+    "judges": {
+      "title": "Judge Management",
+      "addBtn": "Add Judge",
+      "noJudges": "No judges assigned to this show yet.",
+      "col": {
+        "name": "Name",
+        "email": "Email",
+        "country": "Country",
+        "groups": "Qualifications (Groups)",
+        "actions": "Actions"
+      },
+      "modal": {
+        "title": "Assign Judge",
+        "tabExisting": "Select from List",
+        "tabNew": "Create New",
+        "selectLabel": "Select Judge",
+        "selectPlaceholder": "-- Select --",
+        "firstName": "First Name",
+        "lastName": "Last Name",
+        "email": "Email",
+        "country": "Country",
+        "groupsLabel": "Group Permissions",
+        "assign": "Assign",
+        "createAndAssign": "Create and Assign"
+      }
+    },
+    "editModal": {
+      "title": "Edit Cat Record"
     },
     "confirmGenerate": "Are you sure you want to close the show and generate the catalog? This action is irreversible.",
     "generateSuccess": "Catalog successfully generated",
