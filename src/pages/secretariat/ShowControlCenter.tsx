@@ -3,9 +3,9 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { secretariatApi, SecretariatShow } from '../../services/api/secretariatApi';
 import { RegistrationsTab } from '../../components/RegistrationsTab';
-import { JudgesSteawardsTab } from '../../components/JudgesStewardsTab';
-import { JudgingSheetsTab } from '../../components/JudgingSheetsTab';
-import { PaymentsTab } from '../../components/PaymentsTab';
+import { JudgesSteawardsTab } from '../../components/judges/JudgesStewardsTab';
+import { JudgingSheetsTab } from '../../components/judges/JudgingSheetsTab';
+import { PaymentsTab } from '../../components/secretariat/PaymentsTab';
 import { Button } from '../../components/ui/Button';
 
 const DonutChart = ({ confirmed, total, max }: { confirmed: number, total: number, max: number }) => {

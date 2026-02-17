@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-hot-toast';
-import { Button } from './ui/Button';
-import { secretariatApi, SecretariatJudge } from '../services/api/secretariatApi';
+import { Button } from '../ui/Button';
+import { secretariatApi, SecretariatJudge } from '../../services/api/secretariatApi';
 
 interface JudgeWithSheets extends SecretariatJudge {
     saturdaySheets?: number;

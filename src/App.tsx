@@ -14,7 +14,7 @@ import ResetPasswordPage from './pages/user/ResetPasswordPage';
 import PaymentPage from './pages/user/PaymentPage';
 import { PaymentResultPage } from './pages/user/PaymentResultPage';
 import { PrivateRoute } from './components/PrivateRoute';
-import Catalog from './pages/./catalog';
+import Catalog from './pages/Catalog';
 
 import { SecretariatLayout } from './layouts/SecretarialLayout'; // Vytvořeno v předchozím kroku
 import SecretariatDashboard from './pages/secretariat/SecretariatDashboard'; // Vytvořeno v předchozím kroku

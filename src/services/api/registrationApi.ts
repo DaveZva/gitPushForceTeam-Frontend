@@ -52,6 +52,7 @@ export interface PublicCatalogEntry {
     category: string;
     color: string;
     className: string;
+    classSortOrder: number;
     group: string | null;
 }
 
@@ -137,6 +138,7 @@ export interface QuickCatalogEntry {
     birthDate: string;
     emsCode: string;
     showClass: string;
+    showClassCode: number;
     category: number;
     group: string | null;
 }

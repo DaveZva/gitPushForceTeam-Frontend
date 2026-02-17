@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { PaymentElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import { useTranslation } from 'react-i18next';
-import { Button } from './ui/Button';
+import { Button } from '../ui/Button';
 
 interface PaymentFormProps {
     clientSecret: string;

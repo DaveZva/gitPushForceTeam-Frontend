@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { secretariatApi, SecretariatJudge } from '../services/api/secretariatApi';
-import { Button } from './ui/Button';
-import { CountrySelect } from './ui/CountrySelect';
-import { getCountryName } from '../data/countries';
+import { secretariatApi, SecretariatJudge } from '../../services/api/secretariatApi';
+import { Button } from '../ui/Button';
+import { CountrySelect } from '../ui/CountrySelect';
+import { getCountryName } from '../../data/countries';
 
 interface JudgesTabProps {
     showId: string | number | undefined;

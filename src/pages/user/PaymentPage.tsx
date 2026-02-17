@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements } from '@stripe/react-stripe-js';
 import { useTranslation } from 'react-i18next';
-import { PaymentForm } from '../../components/PaymentForm';
+import { PaymentForm } from '../../components/secretariat/PaymentForm';
 import { createPaymentIntent } from '../../services/api';
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
