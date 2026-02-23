@@ -1,4 +1,5 @@
 import { useState, useEffect, useMemo } from "react";
+import { LoadingSpinner } from "../ui/LoadingSpinner";
 import { useTranslation } from "react-i18next";
 import { secretariatApi } from "../../services/api/secretariatApi";
 
@@ -7,28 +8,6 @@ interface Props {
     judgeId: number;
     date: string;
 }
-
-const CLASS_MAP: Record<string, string> = {
-    "SUPREME_CHAMPION": "1",
-    "SUPREME_PREMIOR": "2",
-    "GRANT_INTER_CHAMPION": "3", "GRAND_INTERNATIONAL_CHAMPION": "3",
-    "GRANT_INTER_PREMIER": "4", "GRAND_INTERNATIONAL_PREMIER": "4",
-    "INTERNATIONAL_CHAMPION": "5",
-    "INTERNATIONAL_PREMIER": "6",
-    "CHAMPION": "7",
-    "PREMIER": "8",
-    "OPEN": "9",
-    "NEUTER": "10",
-    "JUNIOR": "11",
-    "KITTEN": "12",
-    "NOVICE_CLASS": "13a",
-    "CONTROL_CLASS": "13b",
-    "DETERMINATION_CLASS": "13c",
-    "DOMESTIC_CAT": "14",
-    "OUT_OF_COMPETITION": "15",
-    "LITTER": "16",
-    "VETERAN": "17"
-};
 
 const formatDate = (dateInput: any) => {
     if (!dateInput) return "";
@@ -48,7 +27,7 @@ const formatDate = (dateInput: any) => {
 export const JudgeReportDetail = ({ showId, judgeId, date }: Props) => {
     const { t } = useTranslation();
     const [sheets, setSheets] = useState<any[]>([]);
-    const [loading, setLoading] = useState(true);
+    const [isLoading, setLoading] = useState(true);
 
     useEffect(() => {
         const load = async () => {
@@ -102,7 +81,7 @@ export const JudgeReportDetail = ({ showId, judgeId, date }: Props) => {
         { key: "results", label: "Results" }
     ], []);
 
-    if (loading) return <div className="p-10 text-center">{t("catalog.loading")}</div>;
+    if (isLoading) return <LoadingSpinner className="py-24" />;
 
     return (
         <div className="p-6">
@@ -124,7 +103,6 @@ export const JudgeReportDetail = ({ showId, judgeId, date }: Props) => {
                         const born = formatDate(row.birthDate || row.dob);
 
                         const classCode = row.showClassCode;
-                        const displayClass = classCode;
 
                         const genderStr = String(row.gender || row.sex || "").toUpperCase();
                         const isMale = genderStr === "MALE" || genderStr === "M";
@@ -157,7 +135,7 @@ export const JudgeReportDetail = ({ showId, judgeId, date }: Props) => {
                                 <td className="p-2 border text-center font-bold">{row.catalogNumber}</td>
                                 <td className="p-2 border text-left font-medium">{ems}</td>
                                 <td className="p-2 border text-center">{isMale ? "1,0" : "0,1"}</td>
-                                <td className="p-2 border text-center font-bold">{displayClass}</td>
+                                <td className="p-2 border text-center font-bold">{classCode}</td>
                                 <td className="p-2 border text-center">{born}</td>
 
                                 {["AdM","AdF","NeM","NeF","11M","11F","12M","12F"].map(col => (

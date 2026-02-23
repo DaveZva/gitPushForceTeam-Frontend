@@ -3,4 +3,5 @@ export * from './Checkbox';
 export * from './Input';
 export * from './Radio';
 export * from './Select';
-export * from './PDFIcon'
+export * from './PDFIcon';
+export * from './LoadingSpinner';

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { LoadingSpinner } from "../../components/ui/LoadingSpinner";
 import { secretariatApi, SecretariatShow, SecretariatStats } from "../../services/api/secretariatApi";
 
 const StatCard = ({ title, value, trend, color }: any) => (
@@ -40,7 +41,7 @@ const CapacityBar = ({ show }: { show: SecretariatShow }) => {
 export default function SecretariatDashboard() {
     const { t } = useTranslation();
     const [stats, setStats] = useState<SecretariatStats | null>(null);
-    const [loading, setLoading] = useState(true);
+    const [isLoading, setLoading] = useState(true);
     const [shows, setShows] = useState<SecretariatShow[]>([]);
 
     useEffect(() => {
@@ -61,7 +62,7 @@ export default function SecretariatDashboard() {
         load();
     }, []);
 
-    if (loading) return <div className="p-8 text-center text-gray-500">{t('common.loading')}</div>;
+    if (isLoading) return <LoadingSpinner className="py-24" />;
 
     return (
         <div className="space-y-8 text-left">

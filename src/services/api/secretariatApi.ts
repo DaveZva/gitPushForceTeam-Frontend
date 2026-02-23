@@ -49,6 +49,7 @@ export interface SecretariatEntryDetail {
     pedigreeNumber: string;
     chipNumber: string;
     showClass: string;
+    showClassCode: number;
 }
 
 export interface SecretariatPayment {

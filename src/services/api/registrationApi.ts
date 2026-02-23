@@ -69,6 +69,8 @@ export interface SavedCat {
     category: number;
     group: string | null;
 
+    breederName?: string;
+
     fatherName?: string;
     fatherTitleBefore?: string;
     fatherTitleAfter?: string;
@@ -185,6 +187,20 @@ export const registrationApi = {
     getMyCats: async (): Promise<SavedCat[]> => {
         const response = await api.get<SavedCat[]>('/cats/my');
         return response.data;
+    },
+
+    createCat: async (catData: Partial<SavedCat>): Promise<SavedCat> => {
+        const response = await api.post<SavedCat>('/cats/my', catData);
+        return response.data;
+    },
+
+    updateCat: async (id: number | string, catData: Partial<SavedCat>): Promise<SavedCat> => {
+        const response = await api.put<SavedCat>(`/cats/my/${id}`, catData);
+        return response.data;
+    },
+
+    deleteCat: async (id: number | string): Promise<void> => {
+        await api.delete(`/cats/my/${id}`);
     },
 
     getRegisteredCatIdsForShow: async (showId: string): Promise<number[]> => {

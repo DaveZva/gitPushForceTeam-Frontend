@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, useNavigate } from 'react-router-dom';
+import { LoadingSpinner } from "../../components/ui/LoadingSpinner";
 import { secretariatApi, SecretariatShow } from '../../services/api/secretariatApi';
 import { useAuth } from '../../context/AuthContext';
 
@@ -10,7 +11,7 @@ export default function ShowManagementPage() {
     const navigate = useNavigate();
 
     const [shows, setShows] = useState<SecretariatShow[]>([]);
-    const [loading, setLoading] = useState<boolean>(true);
+    const [isLoading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
 
     const formatDate = (dateString: string | number[] | undefined): string => {
@@ -79,15 +80,7 @@ export default function ShowManagementPage() {
     }, [t, isAuthenticated]);
 
     const renderTableBody = () => {
-        if (loading) {
-            return (
-                <tr>
-                    <td colSpan={5} className="py-8 text-center text-gray-500">
-                        {t('common.loading')}
-                    </td>
-                </tr>
-            );
-        }
+        if (isLoading) return <LoadingSpinner className="py-24" />;
 
         if (error) {
             return (
