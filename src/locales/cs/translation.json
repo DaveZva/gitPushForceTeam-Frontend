@@ -210,7 +210,9 @@
       "sun": "Neděle",
       "both": "Oba dny",
       "agreed": "Souhlasím",
-      "notAgreed": "Nesouhlasím"
+      "notAgreed": "Nesouhlasím",
+      "searchPlaceholder": "Hledat (Jméno, EMS, Reg. č.)...",
+      "noResults": "Nenalezeny žádné záznamy odpovídající zadaným kritériím."
     },
     "recap": {
       "title": "Rekapitulace přihlášky",
@@ -782,7 +784,7 @@
     "pdfSaturday": "PDF Sobota",
     "pdfSunday": "PDF Neděle",
     "confirmGenerate": "Vygenerovat všechny posuzovací listy?",
-    "confirmRegenerate": "Přegenerovat listy pro tohoto porotce?",
+    "confirmRegenerate": "Přegenerovat listy pro tohoto posuzovatele?",
     "generateSuccess": "Posuzovací listy vygenerovány",
     "regenerateSuccess": "Listy přegenerovány",
     "generating": "Generuji...",
@@ -846,5 +848,22 @@
     "breed": "Plemeno / Breed",
     "footer": "Pro aktuální pořadí sledujte své mobilní zařízení nebo tištěný katalog.",
     "powering": "CatShow IS – Powering Cat Exhibitions"
+  },
+  "cat": {
+    "sex": "Pohlaví",
+    "born": "Narozen(a)",
+    "father": "Otec",
+    "mother": "Matka",
+    "owner": "Majitel",
+    "breeder": "Chovatel"
+  },
+  "days": {
+    "saturday": "Sobota",
+    "sunday": "Neděle"
+  },
+  "judges": {
+    "noWorkload": "Pro tento den nejsou přiřazeni žádní porotci.",
+    "catsCountLabel": "KOČEK",
+    "noBreedsAssigned": "Zatím nepřiřazena žádná plemena"
   }
 }
