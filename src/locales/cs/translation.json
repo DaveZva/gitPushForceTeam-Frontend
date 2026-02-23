@@ -433,7 +433,14 @@
     "deletedSuccessfully": "Úspěšně smazáno.",
     "savedSuccessfully": "Úspěšně uloženo.",
     "createdSuccessfully": "Úspěšně vytvořeno.",
-    "pcs": "ks"
+    "pcs": "ks",
+    "sat": "Sobota",
+    "sun": "Neděle",
+    "both": "Oba dny",
+    "agreed": "Souhlasím",
+    "notAgreed": "Nesouhlasím",
+    "searchPlaceholder": "Hledat (Jméno, EMS, Reg. č.)...",
+    "noResults": "Nenalezeny žádné záznamy odpovídající zadaným kritériím."
   },
   "errors": {
     "fetchFailed": "Nepodařilo se načíst data.",

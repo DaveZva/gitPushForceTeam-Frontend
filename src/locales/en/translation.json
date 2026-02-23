@@ -433,7 +433,14 @@
     "deletedSuccessfully": "Successfully deleted.",
     "savedSuccessfully": "Successfully saved.",
     "createdSuccessfully": "Successfully created.",
-    "pcs": "pcs"
+    "pcs": "pcs",
+    "sat": "Saturday",
+    "sun": "Sunday",
+    "both": "Both Days",
+    "agreed": "I Agree",
+    "notAgreed": "I Disagree",
+    "searchPlaceholder": "Search (Name, EMS, Reg. No.)...",
+    "noResults": "No records found matching the criteria."
   },
   "errors": {
     "fetchFailed": "Failed to fetch data.",
