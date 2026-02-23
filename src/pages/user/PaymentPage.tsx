@@ -43,7 +43,6 @@ export default function PaymentPage() {
         <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 py-12 px-4">
             <div className="container max-w-6xl mx-auto">
                 <div className="grid md:grid-cols-2 gap-8 items-center">
-                    {/* Levý sloupec s informacemi - beze změny */}
                     <div className="space-y-8 p-8">
                         <div className="space-y-4">
                             <h1 className="text-4xl font-bold text-gray-900">

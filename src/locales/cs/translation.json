@@ -31,7 +31,8 @@
     "upcoming": {
       "title": "Nadcházející výstavy",
       "subtitle": "Nové výstavy, na které se můžete přihlásit."
-    }
+    },
+    "noShows": "Momentálně nejsou naplánovány žádné výstavy."
   },
   "myApplications": {
     "noApplications": "Zatím nemáte žádné přihlášky.",
@@ -137,7 +138,9 @@
     "unknownError": "Došlo k neznámé chybě.",
     "simulationSent": "Instrukce odeslány (simulace).",
     "hasAccountShort": "Máte účet? ",
-    "forgotPasswordLink": "Zapomněli jste heslo?"
+    "forgotPasswordLink": "Zapomněli jste heslo?",
+    "passwordComplexity": "Heslo musí obsahovat alespoň 8 znaků, velké a malé písmeno, číslo a speciální znak.",
+    "passwordPlaceholder": "********"
   },
   "form": {
     "actions": {
@@ -157,6 +160,8 @@
     "saved_mode": "Načteno z uložených koček",
     "read_only_info": "Identifikační údaje nelze měnit",
     "manual_info": "Vyplňte všechny údaje o nové kočce",
+    "sectionBasic": "Základní informace",
+    "sectionParents": "Rodiče",
     "titleBefore": "Titul před jménem",
     "catName": "Jméno",
     "titleAfter": "Titul za jménem",
@@ -177,18 +182,23 @@
     "female": "Kočka",
     "addAnotherCat": "Přidat další kočku",
     "removeCat": "Odstranit kočku",
-    "motherNamePlaceholder": "Jméno matky",
-    "fatherNamePlaceholder": "Jméno otce",
+    "father": "Otec",
+    "mother": "Matka",
     "tabs": {
       "basic": "Kočka",
       "mother": "Matka",
       "father": "Otec"
     },
     "placeholders": {
-      "catName": "Molly",
+      "catName": "např. Fluffy",
+      "ems": "např. MCO n 03",
+      "titleBefore": "např. IC",
+      "titleAfter": "např. DSM",
       "chipNumber": "15 místné číslo",
-      "pedigreeNumber": "CSZ FO 1234/18",
-      "ems": "n 03 24"
+      "pedigreeNumber": "např. CSZ FO 1234/18",
+      "father": "např. GIC Fluffy",
+      "mother": "např. IC Kitty",
+      "breederName": "např. Jan Novák"
     },
     "common": {
       "loading": "Načítám...",
@@ -260,7 +270,7 @@
   },
   "registration": {
     "step2": {
-      "choose_saved_title": "Vybrat uloženou kočku",
+      "choose_saved_title": "Vybrat uloženou kočka",
       "choose_saved_desc": "Kliknutím na kartu se údaje automaticky vyplní do formuláře.",
       "clear_selection": "Zrušit výběr a vyplnit ručně",
       "no_saved_cats": "Nemáte žádné uložené kočky. Formulář vyplňte ručně.",
@@ -313,6 +323,9 @@
       "city": {
         "label": "Město *"
       },
+      "country": {
+        "label": "Země *"
+      },
       "email": {
         "label": "Email *",
         "placeholder": "email@example.com"
@@ -353,6 +366,9 @@
       },
       "city": {
         "label": "Město *"
+      },
+      "country": {
+        "label": "Země *"
       },
       "email": {
         "label": "Email *",
@@ -409,8 +425,13 @@
     "error": "Nastala chyba při ukládání",
     "saveChanges": "Uložit změny",
     "cancel": "Zrušit",
+    "save": "Uložit",
     "male": "Kocour",
-    "female": "Kočka"
+    "female": "Kočka",
+    "deletedSuccessfully": "Úspěšně smazáno.",
+    "savedSuccessfully": "Úspěšně uloženo.",
+    "createdSuccessfully": "Úspěšně vytvořeno.",
+    "pcs": "ks"
   },
   "errors": {
     "fetchFailed": "Nepodařilo se načíst data.",
@@ -420,7 +441,10 @@
     "unauthorized": "Neoprávněný přístup.",
     "serverError": "Chyba serveru.",
     "networkError": "Chyba sítě.",
-    "unknownError": "Nastala neznámá chyba."
+    "unknownError": "Nastala neznámá chyba.",
+    "loadWorkload": "Chyba při načítání zátěže",
+    "rebalance": "Chyba při přepočtu rozdělení",
+    "saveFailed": "Chyba při ukládání."
   },
   "statuses": {
     "PLANNED": "Nezaplaceno",
@@ -654,7 +678,7 @@
         "required": "Nutno vybrat pohlaví"
       },
       "neutered": {
-        "required": "Katrované?"
+        "required": "Kastrované?"
       },
       "birthDate": {
         "invalid": "Špatně zadáno datum narození"
@@ -766,5 +790,61 @@
     "rebalance": "Přepočítat rozdělení",
     "confirmRebalance": "Přepočítat rozdělení pro rovnoměrnou zátěž?"
   },
-  "location": "Místo"
+  "location": "Lokalita",
+  "myCats": {
+    "title": "Moje kočky",
+    "subtitle": "Správa vašich uložených koček pro rychlou registraci.",
+    "addCat": "Přidat kočku",
+    "noCatsTitle": "Zatím nemáte uložené žádné kočky",
+    "noCatsDescription": "Přidejte svou první kočku a usnadněte si tak vyplňování přihlášek na budoucí výstavy.",
+    "breederLabel": "Chovatel",
+    "deleteConfirm": "Opravdu chcete tuto kočku smazat?",
+    "editCat": "Upravit kočku"
+  },
+  "steward": {
+    "selectJudgeTitle": "Výběr posuzovatele",
+    "selectJudgeSubtitle": "Vyberte posuzovatele, se kterým budete pracovat.",
+    "role": "Steward",
+    "status": {
+      "judging": "Nyní posuzuje",
+      "ready": "Připraveno"
+    },
+    "urgencyActive": "Urgence aktivní",
+    "increaseUrgency": "Zvýšit urgenci",
+    "finishJudging": "Dokončit posuzování",
+    "tableEmpty": "Stůl je prázdný",
+    "callNextCat": "Vyvolejte další kočku",
+    "callToTable": "Zavolat ke stolu",
+    "tabs": {
+      "queue": "Fronta",
+      "biv": "BIV",
+      "bis": "BIS / NOM"
+    },
+    "queueEmpty": "Fronta je prázdná",
+    "setReady": "Nastavit jako připravenou",
+    "setAbsent": "Nastavit jako nepřítomnou",
+    "noBivAvailable": "Žádný BIV není k dispozici",
+    "cats": "koček",
+    "startBiv": "Zahájit BIV",
+    "openNominations": "Otevřít nominace",
+    "goToPanelPanel": "Přejít do panelu BIS",
+    "born": "Narozen(a):",
+    "group": "Skupina:"
+  },
+  "callingBoard": {
+    "title": "Vyvolávání koček / Calling System",
+    "subtitle": "Mezinárodní výstava koček",
+    "liveUpdates": "Live Updates",
+    "status": {
+      "judging": "Nyní posuzujeme",
+      "preparing": "Připravit se",
+      "waiting": "Čeká se"
+    },
+    "ring": "Kruh / Ring",
+    "judge": "Posuzovatel",
+    "catNo": "Číslo kočky / Cat No.",
+    "breed": "Plemeno / Breed",
+    "footer": "Pro aktuální pořadí sledujte své mobilní zařízení nebo tištěný katalog.",
+    "powering": "CatShow IS – Powering Cat Exhibitions"
+  }
 }

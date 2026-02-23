@@ -9,7 +9,8 @@
     "logIn": "Log In",
     "signUp": "Sign Up",
     "exhibitions": "Shows",
-    "catalog": "Catalog"
+    "catalog": "Catalog",
+    "board": "Calling System"
   },
   "user": {
     "notifications": "Notifications"
@@ -30,7 +31,8 @@
     "upcoming": {
       "title": "Upcoming Shows",
       "subtitle": "New shows you can apply for."
-    }
+    },
+    "noShows": "There are currently no shows planned."
   },
   "myApplications": {
     "noApplications": "You have no applications yet.",
@@ -136,7 +138,9 @@
     "unknownError": "An unknown error occurred.",
     "simulationSent": "Instructions sent (simulation).",
     "hasAccountShort": "Have an account? ",
-    "forgotPasswordLink": "Forgot password?"
+    "forgotPasswordLink": "Forgot password?",
+    "passwordComplexity": "Password must contain at least 8 characters, upper and lower case letters, a number and a special character.",
+    "passwordPlaceholder": "********"
   },
   "form": {
     "actions": {
@@ -156,6 +160,8 @@
     "saved_mode": "Loaded from Saved Cats",
     "read_only_info": "Identification details cannot be changed",
     "manual_info": "Fill in all details for the new cat",
+    "sectionBasic": "Basic Information",
+    "sectionParents": "Parents",
     "titleBefore": "Title Before Name",
     "catName": "Name",
     "titleAfter": "Title After Name",
@@ -176,18 +182,23 @@
     "female": "Female",
     "addAnotherCat": "Add Another Cat",
     "removeCat": "Remove Cat",
-    "motherNamePlaceholder": "Mother's Name",
-    "fatherNamePlaceholder": "Father's Name",
+    "father": "Father",
+    "mother": "Mother",
     "tabs": {
       "basic": "Cat",
       "mother": "Mother",
       "father": "Father"
     },
     "placeholders": {
-      "catName": "Molly",
+      "catName": "e.g. Fluffy",
+      "ems": "e.g. MCO n 03",
+      "titleBefore": "e.g. IC",
+      "titleAfter": "e.g. DSM",
       "chipNumber": "15 digit number",
-      "pedigreeNumber": "CSZ FO 1234/18",
-      "ems": "n 03 24"
+      "pedigreeNumber": "e.g. CSZ FO 1234/18",
+      "father": "e.g. GIC Fluffy",
+      "mother": "e.g. IC Kitty",
+      "breederName": "e.g. John Doe"
     },
     "common": {
       "loading": "Loading...",
@@ -312,6 +323,9 @@
       "city": {
         "label": "City *"
       },
+      "country": {
+        "label": "Country *"
+      },
       "email": {
         "label": "Email *",
         "placeholder": "email@example.com"
@@ -352,6 +366,9 @@
       },
       "city": {
         "label": "City *"
+      },
+      "country": {
+        "label": "Country *"
       },
       "email": {
         "label": "Email *",
@@ -408,8 +425,13 @@
     "error": "An error occurred while saving",
     "saveChanges": "Save Changes",
     "cancel": "Cancel",
+    "save": "Save",
     "male": "Male",
-    "female": "Female"
+    "female": "Female",
+    "deletedSuccessfully": "Successfully deleted.",
+    "savedSuccessfully": "Successfully saved.",
+    "createdSuccessfully": "Successfully created.",
+    "pcs": "pcs"
   },
   "errors": {
     "fetchFailed": "Failed to fetch data.",
@@ -419,7 +441,10 @@
     "unauthorized": "Unauthorized access.",
     "serverError": "Server error.",
     "networkError": "Network error.",
-    "unknownError": "An unknown error occurred."
+    "unknownError": "An unknown error occurred.",
+    "loadWorkload": "Error loading workload",
+    "rebalance": "Error rebalancing",
+    "saveFailed": "Error saving data."
   },
   "statuses": {
     "PLANNED": "Planned",
@@ -765,5 +790,61 @@
     "rebalance": "Recalculate Distribution",
     "confirmRebalance": "Recalculate distribution for balanced workload?"
   },
-  "location": "Location"
+  "location": "Location",
+  "myCats": {
+    "title": "My Cats",
+    "subtitle": "Manage your saved cats for quick registration.",
+    "addCat": "Add Cat",
+    "noCatsTitle": "You have no saved cats yet",
+    "noCatsDescription": "Add your first cat to make filling out show applications much faster.",
+    "breederLabel": "Breeder",
+    "deleteConfirm": "Are you sure you want to delete this cat?",
+    "editCat": "Edit Cat"
+  },
+  "steward": {
+    "selectJudgeTitle": "Select Judge",
+    "selectJudgeSubtitle": "Select the judge you will be stewarding for.",
+    "role": "Steward",
+    "status": {
+      "judging": "Judging now",
+      "ready": "Ready"
+    },
+    "urgencyActive": "Urgency Active",
+    "increaseUrgency": "Increase Urgency",
+    "finishJudging": "Finish Judging",
+    "tableEmpty": "Table is empty",
+    "callNextCat": "Call the next cat",
+    "callToTable": "Call to table",
+    "tabs": {
+      "queue": "Queue",
+      "biv": "BIV",
+      "bis": "BIS / NOM"
+    },
+    "queueEmpty": "Queue is empty",
+    "setReady": "Set as ready",
+    "setAbsent": "Set as absent",
+    "noBivAvailable": "No BIV available",
+    "cats": "cats",
+    "startBiv": "Start BIV",
+    "openNominations": "Open Nominations",
+    "goToPanelPanel": "Go to BIS panel",
+    "born": "Born:",
+    "group": "Group:"
+  },
+  "callingBoard": {
+    "title": "Calling System",
+    "subtitle": "International Cat Show",
+    "liveUpdates": "Live Updates",
+    "status": {
+      "judging": "Judging now",
+      "preparing": "Prepare",
+      "waiting": "Waiting"
+    },
+    "ring": "Ring",
+    "judge": "Judge",
+    "catNo": "Cat No.",
+    "breed": "Breed",
+    "footer": "For the current order, please check your mobile device or printed catalog.",
+    "powering": "CatShow IS – Powering Cat Exhibitions"
+  }
 }

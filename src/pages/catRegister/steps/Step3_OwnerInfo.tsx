@@ -129,7 +129,7 @@ export function Step3_OwnerInfo() {
                     defaultValue="CZ"
                     render={({ field: { onChange, value } }) => (
                         <CountrySelect
-                            label={t('registrationSteps.step3_owner.country.label') || "Země"}
+                            label={t('registrationSteps.step3_owner.country.label')}
                             value={value || ''}
                             onChange={onChange}
                             error={errors.ownerCountry?.message}

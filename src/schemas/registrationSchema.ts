@@ -161,7 +161,7 @@ const createCatSchema = (t: TFunction) => z.object({
     }),
     isSaved: z.boolean().optional()
 }).superRefine((data, ctx) => {
-    // Validace skupiny na základě EMS kódu s použitím 't'
+
     if (data.emsCode && data.emsCode.length >= 3) {
         const breedCode = data.emsCode.split(' ')[0].toUpperCase();
 

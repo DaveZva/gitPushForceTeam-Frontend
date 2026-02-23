@@ -40,7 +40,7 @@ export const JudgeWorkloadPanel: React.FC<Props> = ({ showId, day }) => {
             );
             setWorkload(response.data);
         } catch (error) {
-            toast.error('Error loading workload');
+            toast.error(t('errors.loadWorkload'));
         } finally {
             setIsLoading(false);
         }
@@ -57,7 +57,7 @@ export const JudgeWorkloadPanel: React.FC<Props> = ({ showId, day }) => {
             toast.success(t('judging.regenerateSuccess'));
             loadWorkload();
         } catch (error) {
-            toast.error('Error rebalancing');
+            toast.error(t('errors.rebalance'));
         } finally {
             setIsBalancing(false);
         }
@@ -139,7 +139,7 @@ export const JudgeWorkloadPanel: React.FC<Props> = ({ showId, day }) => {
                                     {judge.breedDistribution.map(breed => (
                                         <div key={breed.code} className="flex justify-between py-1">
                                             <span>{breed.name} ({breed.code})</span>
-                                            <span className="font-semibold">{breed.count} ks</span>
+                                            <span className="font-semibold">{breed.count} {t('common.pcs')}</span>
                                         </div>
                                     ))}
                                 </div>

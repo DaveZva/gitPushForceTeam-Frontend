@@ -227,11 +227,11 @@ export const StewardDashboard = () => {
                                     <div className="flex flex-wrap gap-3 text-sm font-medium text-gray-600 bg-gray-50 p-4 rounded-lg inline-flex">
                                         <span>EMS: <strong className="text-gray-900">{currentCat.ems}</strong></span>
                                         <span className="text-gray-300">|</span>
-                                        <span>Born: <strong className="text-gray-900">{currentCat.birthDate}</strong></span>
+                                        <span>{t('steward.born')} <strong className="text-gray-900">{currentCat.birthDate}</strong></span>
                                         {currentCat.group && (
                                             <>
                                                 <span className="text-gray-300">|</span>
-                                                <span>Group: <strong className="text-gray-900">{currentCat.group}</strong></span>
+                                                <span>{t('steward.group')} <strong className="text-gray-900">{currentCat.group}</strong></span>
                                             </>
                                         )}
                                     </div>
@@ -280,7 +280,7 @@ export const StewardDashboard = () => {
                             {[
                                 { id: 'QUEUE', label: t('steward.tabs.queue') },
                                 { id: 'BIV', label: t('steward.tabs.biv'), count: bivGroups.length },
-                                { id: 'BIS', label: 'BIS / NOM' }
+                                { id: 'BIS', label: t('steward.tabs.bis') }
                             ].map(tab => (
                                 <button
                                     key={tab.id}

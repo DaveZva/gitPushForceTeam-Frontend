@@ -27,19 +27,15 @@ export const MyCatModal: React.FC<MyCatModalProps> = ({ isOpen, onClose, onSucce
     const { t } = useTranslation();
     const [isSubmitting, setIsSubmitting] = useState(false);
 
-    // Použijeme useForm pro správu formuláře
     const { register, handleSubmit, reset, setValue } = useForm<Partial<SavedCat>>();
 
-    // Resetování formuláře při otevření/změně kočky
     useEffect(() => {
         if (isOpen) {
             if (catToEdit) {
-                // Naplnění formuláře daty k editaci
                 Object.keys(catToEdit).forEach(key => {
                     setValue(key as keyof SavedCat, catToEdit[key as keyof SavedCat]);
                 });
             } else {
-                // Vyčištění pro novou kočku
                 reset({
                     catName: '',
                     emsCode: '',
@@ -75,16 +71,13 @@ export const MyCatModal: React.FC<MyCatModalProps> = ({ isOpen, onClose, onSucce
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-            {/* Backdrop */}
             <div
                 className="absolute inset-0 bg-black/40 backdrop-blur-sm transition-opacity"
                 onClick={onClose}
             />
 
-            {/* Modal Content */}
             <div className="relative bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-hidden flex flex-col animate-in fade-in zoom-in-95 duration-200">
 
-                {/* Header */}
                 <div className="px-6 py-4 border-b border-gray-100 flex justify-between items-center bg-white sticky top-0 z-10">
                     <h2 className="text-xl font-bold text-gray-900">
                         {catToEdit ? t('myCats.editCat') : t('myCats.addCat')}
@@ -97,33 +90,31 @@ export const MyCatModal: React.FC<MyCatModalProps> = ({ isOpen, onClose, onSucce
                     </button>
                 </div>
 
-                {/* Scrollable Body */}
                 <div className="p-6 overflow-y-auto custom-scrollbar">
                     <form id="cat-form" onSubmit={handleSubmit(onSubmit)} className="space-y-6">
 
-                        {/* Základní informace */}
                         <div className="space-y-4">
                             <h3 className="font-bold text-sm uppercase tracking-wide text-gray-500 border-b pb-2">{t('catForm.sectionBasic')}</h3>
 
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div className="space-y-1">
                                     <label className="text-sm font-medium text-gray-700">{t('catForm.catName')} *</label>
-                                    <Input {...register('catName', { required: true })} placeholder="např. Fluffy" />
+                                    <Input {...register('catName', { required: true })} placeholder={t('catForm.placeholders.catName')} />
                                 </div>
                                 <div className="space-y-1">
                                     <label className="text-sm font-medium text-gray-700">{t('catForm.emsCode')} *</label>
-                                    <Input {...register('emsCode', { required: true })} placeholder="např. MCO n 03" />
+                                    <Input {...register('emsCode', { required: true })} placeholder={t('catForm.placeholders.ems')} />
                                 </div>
                             </div>
 
                             <div className="grid grid-cols-3 gap-4">
                                 <div className="col-span-1 space-y-1">
                                     <label className="text-sm font-medium text-gray-700">{t('catForm.titleBefore')}</label>
-                                    <Input {...register('titleBefore')} placeholder="IC" />
+                                    <Input {...register('titleBefore')} placeholder={t('catForm.placeholders.titleBefore')} />
                                 </div>
                                 <div className="col-span-1 space-y-1">
                                     <label className="text-sm font-medium text-gray-700">{t('catForm.titleAfter')}</label>
-                                    <Input {...register('titleAfter')} placeholder="DSM" />
+                                    <Input {...register('titleAfter')} placeholder={t('catForm.placeholders.titleAfter')} />
                                 </div>
                                 <div className="col-span-1 space-y-1">
                                     <label className="text-sm font-medium text-gray-700">{t('catForm.sex')} *</label>
@@ -141,33 +132,32 @@ export const MyCatModal: React.FC<MyCatModalProps> = ({ isOpen, onClose, onSucce
                                 </div>
                                 <div className="space-y-1">
                                     <label className="text-sm font-medium text-gray-700">{t('catForm.chipNumber')}</label>
-                                    <Input {...register('chipNumber')} />
+                                    <Input {...register('chipNumber')} placeholder={t('catForm.placeholders.chipNumber')} />
                                 </div>
                             </div>
 
                             <div className="space-y-1">
                                 <label className="text-sm font-medium text-gray-700">{t('catForm.pedigreeNumber')}</label>
-                                <Input {...register('pedigreeNumber')} />
+                                <Input {...register('pedigreeNumber')} placeholder={t('catForm.placeholders.pedigreeNumber')} />
                             </div>
 
                             <div className="space-y-1">
                                 <label className="text-sm font-medium text-gray-700">{t('myCats.breederLabel')}</label>
-                                <Input {...register('breederName')} placeholder={t('catForm.breederNamePlaceholder')} />
+                                <Input {...register('breederName')} placeholder={t('catForm.placeholders.breederName')} />
                             </div>
                         </div>
 
-                        {/* Rodiče (volitelné) */}
                         <div className="space-y-4 pt-2">
                             <h3 className="font-bold text-sm uppercase tracking-wide text-gray-500 border-b pb-2">{t('catForm.sectionParents')}</h3>
 
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div className="space-y-1">
                                     <label className="text-sm font-medium text-gray-700">{t('catForm.father')}</label>
-                                    <Input {...register('fatherName')} placeholder={t('catForm.fatherPlaceholder')} />
+                                    <Input {...register('fatherName')} placeholder={t('catForm.placeholders.father')} />
                                 </div>
                                 <div className="space-y-1">
                                     <label className="text-sm font-medium text-gray-700">{t('catForm.mother')}</label>
-                                    <Input {...register('motherName')} placeholder={t('catForm.motherPlaceholder')} />
+                                    <Input {...register('motherName')} placeholder={t('catForm.placeholders.mother')} />
                                 </div>
                             </div>
                         </div>
@@ -175,7 +165,6 @@ export const MyCatModal: React.FC<MyCatModalProps> = ({ isOpen, onClose, onSucce
                     </form>
                 </div>
 
-                {/* Footer */}
                 <div className="px-6 py-4 bg-gray-50 border-t border-gray-200 flex justify-end gap-3 sticky bottom-0">
                     <Button variant="secondary" onClick={onClose} disabled={isSubmitting}>
                         {t('common.cancel')}
