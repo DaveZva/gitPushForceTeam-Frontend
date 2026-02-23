@@ -23,11 +23,9 @@ export default function Dashboard() {
     const { t, i18n } = useTranslation();
     const { user, isAuthenticated } = useAuth();
 
-    // State pro výstavy
     const [upcomingShows, setUpcomingShows] = useState<AvailableShow[]>([]);
     const [isLoadingShows, setIsLoadingShows] = useState(true);
 
-    // Načtení výstav při startu
     useEffect(() => {
         const fetchShows = async () => {
             try {
@@ -102,14 +100,12 @@ export default function Dashboard() {
                     {t('dashboard.upcoming.subtitle')}
                 </p>
 
-                {/* LOADING STATE */}
                 {isLoadingShows && (
                     <div className="flex justify-center py-10">
                         <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-[#027BFF]"></div>
                     </div>
                 )}
 
-                {/* EMPTY STATE - pokud nejsou výstavy */}
                 {!isLoadingShows && upcomingShows.length === 0 && (
                     <div className="p-8 bg-gray-50 rounded-2xl border border-gray-200 text-center">
                         <p className="text-gray-600 font-medium">
@@ -118,7 +114,6 @@ export default function Dashboard() {
                     </div>
                 )}
 
-                {/* GRID VÝSTAV */}
                 {!isLoadingShows && upcomingShows.length > 0 && (
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         {upcomingShows.map((show) => (

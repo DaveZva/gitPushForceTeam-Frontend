@@ -171,7 +171,7 @@ export function ShowCreatePage() {
                         </legend>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <FormField name="organizerName" label={t('fields.organizerName')} error={errors.organizerName?.message} />
-                            <FormField name="contactEmail" label={t('fields.contactEmail')} type="email" error={errors.contactEmail?.message} />
+                            <FormField name="contactEmail" label={t('fields.contactEmail')} type="email" error={errors.organizerContactEmail?.message} />
                             <FormField name="websiteUrl" label={t('fields.websiteUrl')} type="url" error={errors.websiteUrl?.message} />
                         </div>
                     </fieldset>

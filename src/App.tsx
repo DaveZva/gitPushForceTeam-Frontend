@@ -16,12 +16,14 @@ import { PaymentResultPage } from './pages/user/PaymentResultPage';
 import { PrivateRoute } from './components/PrivateRoute';
 import Catalog from './pages/Catalog';
 
-import { SecretariatLayout } from './layouts/SecretarialLayout'; // Vytvořeno v předchozím kroku
-import SecretariatDashboard from './pages/secretariat/SecretariatDashboard'; // Vytvořeno v předchozím kroku
-import ShowManagementPage from './pages/secretariat/ShowManagementPage'; // Seznam výstav
+import { SecretariatLayout } from './layouts/SecretarialLayout';
+import SecretariatDashboard from './pages/secretariat/SecretariatDashboard';
+import ShowManagementPage from './pages/secretariat/ShowManagementPage';
 import { ShowCreatePage } from './pages/secretariat/ShowCreatePage';
-import ShowControlCenter from './pages/secretariat/ShowControlCenter'; // Detail výstavy (řídící centrum)
+import ShowControlCenter from './pages/secretariat/ShowControlCenter';
 import ShowEditPage from './pages/secretariat/ShowEditPage';
+import {StewardDashboard} from "./pages/steward/StewardDashboard";
+import MyCatsPage from "./pages/user/MyCatsPage";
 import PublicCallingBoard from "./pages/PublicCallingBoard";
 
 function App() {
@@ -38,7 +40,7 @@ function App() {
                         <Route index element={<Dashboard />} />
                         <Route path="apply" element={<CatRegisterPage />} />
                         <Route path="my-applications" element={<MyApplicationsPage />} />
-                        <Route path="my-cats" element={<h2>{t('nav.myCats')}</h2>} />
+                        <Route path="my-cats" element={<MyCatsPage />} />
                         <Route path="catalog" element={<Catalog />} />
                         <Route path="catalog/:showId" element={<Catalog />} />
                         <Route path="/reset-password" element={<ResetPasswordPage />} />
@@ -58,7 +60,7 @@ function App() {
                             </PrivateRoute>
                         } />
                     </Route>
-                    <Route path="/public/board" element={<PublicCallingBoard />} />
+                    <Route path="/public/board" element={<StewardDashboard />} />
                 </Routes>
             </BrowserRouter>
         </AuthProvider>

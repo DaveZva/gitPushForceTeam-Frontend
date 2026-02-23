@@ -1,4 +1,5 @@
 import { useState, useEffect, useMemo } from "react";
+import { LoadingSpinner } from "../ui/LoadingSpinner";
 import { useTranslation } from "react-i18next";
 import { secretariatApi } from "../../services/api/secretariatApi";
 
@@ -26,7 +27,7 @@ const formatDate = (dateInput: any) => {
 export const JudgeReportDetail = ({ showId, judgeId, date }: Props) => {
     const { t } = useTranslation();
     const [sheets, setSheets] = useState<any[]>([]);
-    const [loading, setLoading] = useState(true);
+    const [isLoading, setLoading] = useState(true);
 
     useEffect(() => {
         const load = async () => {
@@ -80,7 +81,7 @@ export const JudgeReportDetail = ({ showId, judgeId, date }: Props) => {
         { key: "results", label: "Results" }
     ], []);
 
-    if (loading) return <div className="p-10 text-center">{t("catalog.loading")}</div>;
+    if (isLoading) return <LoadingSpinner className="py-24" />;
 
     return (
         <div className="p-6">

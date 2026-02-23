@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { LoadingSpinner } from "../../components/ui/LoadingSpinner";
 import { useTranslation } from 'react-i18next';
 import { secretariatApi, SecretariatShow } from '../../services/api/secretariatApi';
 import { RegistrationsTab } from '../../components/RegistrationsTab';
@@ -53,7 +54,7 @@ export default function ShowControlCenter() {
     const { t } = useTranslation();
     const [activeTab, setActiveTab] = useState('overview');
     const [show, setShow] = useState<SecretariatShow | null>(null);
-    const [loading, setLoading] = useState(true);
+    const [isLoading, setLoading] = useState(true);
     const [generating, setGenerating] = useState(false);
     const [message, setMessage] = useState<{ type: 'success' | 'error', text: string } | null>(null);
 
@@ -106,7 +107,7 @@ export default function ShowControlCenter() {
         { id: 'catalog', label: t('secretariat.tabs.catalog') },
     ];
 
-    if (loading) return <div className="p-8 text-center text-gray-500">{t('common.loading')}</div>;
+    if (isLoading) return <LoadingSpinner className="py-24" />;
     if (!show) return <div className="p-8 text-center text-red-600">{t('secretariat.showNotFound')}</div>;
 
     const daysToDeadline = getDaysRemaining(show.registrationDeadline);

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useForm, Resolver, Controller } from 'react-hook-form';
 import { useNavigate, useParams, Link } from 'react-router-dom';
+import { LoadingSpinner } from "../../components/ui/LoadingSpinner";
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useTranslation } from 'react-i18next';
 
@@ -102,7 +103,7 @@ export default function ShowEditPage() {
         </div>
     );
 
-    if (isLoading) return <div className="p-8 text-center">Načítám data...</div>;
+    if (isLoading) return <LoadingSpinner className="py-24" />;
 
     return (
         <div className="min-h-screen bg-gray-50 pb-12">
@@ -223,8 +224,8 @@ export default function ShowEditPage() {
                             <FormField label="Název organizace" error={errors.organizerName?.message}>
                                 <Input {...register('organizerName')} />
                             </FormField>
-                            <FormField label="Kontaktní email" error={errors.contactEmail?.message}>
-                                <Input {...register('contactEmail')} />
+                            <FormField label="Kontaktní email" error={errors.organizerContactEmail?.message}>
+                                <Input {...register('organizerContactEmail')} />
                             </FormField>
                             <FormField label="Webová stránka" error={errors.websiteUrl?.message}>
                                 <Input {...register('websiteUrl')} />
