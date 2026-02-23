@@ -210,7 +210,9 @@
       "sun": "Neděle",
       "both": "Oba dny",
       "agreed": "Souhlasím",
-      "notAgreed": "Nesouhlasím"
+      "notAgreed": "Nesouhlasím",
+      "searchPlaceholder": "Hledat (Jméno, EMS, Reg. č.)...",
+      "noResults": "Nenalezeny žádné záznamy odpovídající zadaným kritériím."
     },
     "recap": {
       "title": "Rekapitulace přihlášky",
@@ -431,7 +433,15 @@
     "deletedSuccessfully": "Úspěšně smazáno.",
     "savedSuccessfully": "Úspěšně uloženo.",
     "createdSuccessfully": "Úspěšně vytvořeno.",
-    "pcs": "ks"
+    "pcs": "ks",
+    "sat": "Sobota",
+    "sun": "Neděle",
+    "both": "Oba dny",
+    "agreed": "Souhlasím",
+    "notAgreed": "Nesouhlasím",
+    "searchPlaceholder": "Hledat (Jméno, EMS, Reg. č.)...",
+    "noResults": "Nenalezeny žádné záznamy odpovídající zadaným kritériím.",
+    "actions": "Možnosti"
   },
   "errors": {
     "fetchFailed": "Nepodařilo se načíst data.",
@@ -531,7 +541,7 @@
     "tabPrimary": "Primární katalog",
     "tabSecondary": "Výsledky",
     "infoTitle": "Informace o výstavě",
-    "infoText": "Tato prestižní mezinárodní výstava koček \"MVK Praha Winter\" je vyvrcholením celoročního úsilí chovatelů a milovníků koček z celé Evropy. Akce je ideální příležitostí pro veřejnost, aby se seznámila s různými plemeny, promluvila si s chovateli o péči a genetice a získala cenné rady pro své vlastní mazlíčky. Dva dny plné soutěží nabízejí možnost získat cenné certifikáty, které jsou klíčové pro získání mezinárodního titulu šampiona. Posuzování probíhá pod dohledem mezinárodně uznávaných porotců, kteří pečlivě hodnotí stav srsti, kondici, typ a temperament každého zvířete.",
+    "infoText": "Tato prestižní mezinárodní výstava koček \"MVK Praha Winter\" je vyvrcholením celoročního úsilí chovatelů a milovníků koček z celé Evropy. Akce je ideální příležitostí pro veřejnost, aby se seznámila s různými plemeny, promluvila si s chovateli o péči a genetice a získala cenné rady pro své vlastní mazlíčky. Dva dny plné soutěží nabízejí možnost získat cenné certifikáty, které jsou klíčové pro získání mezinárodního titulu šampiona. Posuzování probíhá pod dohledem mezinárodně uznávaných posuzovatelů, kteří pečlivě hodnotí stav srsti, kondici, typ a temperament každého zvířete.",
     "schedule": "Harmonogram",
     "vetCheck": "Veterinární prohlídka",
     "judgingStart": "Zahájení posuzování",
@@ -782,7 +792,7 @@
     "pdfSaturday": "PDF Sobota",
     "pdfSunday": "PDF Neděle",
     "confirmGenerate": "Vygenerovat všechny posuzovací listy?",
-    "confirmRegenerate": "Přegenerovat listy pro tohoto porotce?",
+    "confirmRegenerate": "Přegenerovat listy pro tohoto posuzovatele?",
     "generateSuccess": "Posuzovací listy vygenerovány",
     "regenerateSuccess": "Listy přegenerovány",
     "generating": "Generuji...",
@@ -846,5 +856,22 @@
     "breed": "Plemeno / Breed",
     "footer": "Pro aktuální pořadí sledujte své mobilní zařízení nebo tištěný katalog.",
     "powering": "CatShow IS – Powering Cat Exhibitions"
+  },
+  "cat": {
+    "sex": "Pohlaví",
+    "born": "Narozen(a)",
+    "father": "Otec",
+    "mother": "Matka",
+    "owner": "Majitel",
+    "breeder": "Chovatel"
+  },
+  "days": {
+    "saturday": "Sobota",
+    "sunday": "Neděle"
+  },
+  "judges": {
+    "noWorkload": "Pro tento den nejsou přiřazeni žádní porotci.",
+    "catsCountLabel": "KOČEK",
+    "noBreedsAssigned": "Zatím nepřiřazena žádná plemena"
   }
 }

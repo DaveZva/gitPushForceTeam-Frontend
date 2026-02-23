@@ -210,7 +210,9 @@
       "sun": "Sunday",
       "both": "Both Days",
       "agreed": "I Agree",
-      "notAgreed": "I Disagree"
+      "notAgreed": "I Disagree",
+      "searchPlaceholder": "Search (Name, EMS, Reg. No.)...",
+      "noResults": "No records found matching the criteria."
     },
     "recap": {
       "title": "Registration Recap",
@@ -431,7 +433,15 @@
     "deletedSuccessfully": "Successfully deleted.",
     "savedSuccessfully": "Successfully saved.",
     "createdSuccessfully": "Successfully created.",
-    "pcs": "pcs"
+    "pcs": "pcs",
+    "sat": "Saturday",
+    "sun": "Sunday",
+    "both": "Both Days",
+    "agreed": "I Agree",
+    "notAgreed": "I Disagree",
+    "searchPlaceholder": "Search (Name, EMS, Reg. No.)...",
+    "noResults": "No records found matching the criteria.",
+    "actions": "Actions"
   },
   "errors": {
     "fetchFailed": "Failed to fetch data.",
@@ -846,5 +856,22 @@
     "breed": "Breed",
     "footer": "For the current order, please check your mobile device or printed catalog.",
     "powering": "CatShow IS – Powering Cat Exhibitions"
+  },
+  "cat": {
+    "sex": "Sex",
+    "born": "Born",
+    "father": "Father",
+    "mother": "Mother",
+    "owner": "Owner",
+    "breeder": "Breeder"
+  },
+  "days": {
+    "saturday": "Saturday",
+    "sunday": "Sunday"
+  },
+  "judges": {
+    "noWorkload": "No judges assigned for this day.",
+    "catsCountLabel": "CATS",
+    "noBreedsAssigned": "No breeds assigned yet"
   }
 }
