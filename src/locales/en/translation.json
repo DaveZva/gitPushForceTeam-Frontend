@@ -440,7 +440,8 @@
     "agreed": "I Agree",
     "notAgreed": "I Disagree",
     "searchPlaceholder": "Search (Name, EMS, Reg. No.)...",
-    "noResults": "No records found matching the criteria."
+    "noResults": "No records found matching the criteria.",
+    "actions": "Actions"
   },
   "errors": {
     "fetchFailed": "Failed to fetch data.",

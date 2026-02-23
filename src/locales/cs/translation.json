@@ -440,7 +440,8 @@
     "agreed": "Souhlasím",
     "notAgreed": "Nesouhlasím",
     "searchPlaceholder": "Hledat (Jméno, EMS, Reg. č.)...",
-    "noResults": "Nenalezeny žádné záznamy odpovídající zadaným kritériím."
+    "noResults": "Nenalezeny žádné záznamy odpovídající zadaným kritériím.",
+    "actions": "Možnosti"
   },
   "errors": {
     "fetchFailed": "Nepodařilo se načíst data.",
