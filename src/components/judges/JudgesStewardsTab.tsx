@@ -230,7 +230,6 @@ export const JudgesSteawardsTab: React.FC<JudgesTabProps> = ({ showId }) => {
                                         />
                                     </div>
 
-                                    {/* POUŽITÍ NOVÉ KOMPONENTY PRO VÝBĚR ZEMĚ */}
                                     <div>
                                         <CountrySelect
                                             label={t('secretariat.judges.modal.country')}

@@ -53,7 +53,7 @@ export function Step6_Recap({ onEditStep }: Step6RecapProps) {
     const [shows, setShows] = useState<AvailableShow[]>([]);
     const [isLoading, setIsLoading] = useState(true);
 
-    // Pomocná funkce pro formátování data (stejná jako v Step 1)
+
     const formatDate = (dateString: string | undefined): string => {
         if (!dateString) return '-';
         return new Date(dateString).toLocaleDateString(i18n.language, {
@@ -76,7 +76,7 @@ export function Step6_Recap({ onEditStep }: Step6RecapProps) {
     }, [t]);
 
     const selectedShow = shows.find(show => String(show.id) === String(data.showId));
-    // Zde aplikujeme formátování data
+
     const showName = isLoading
         ? t('common.loading')
         : (selectedShow ? `${selectedShow.name} (${formatDate(selectedShow.startDate)})` : data.showId);

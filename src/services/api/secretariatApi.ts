@@ -175,7 +175,7 @@ export const secretariatApi = {
         return response.data;
     },
 
-    // === Registrations & Entries ===
+
     getRegistrationsByShow: async (showId: string | number): Promise<any[]> => {
         const response = await api.get(`/secretariat/shows/${showId}/registrations`);
         return response.data;

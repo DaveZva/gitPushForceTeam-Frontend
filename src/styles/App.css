@@ -5,7 +5,6 @@
     text-align: center;
 }
 
-/* --- Základní styly (React-like) --- */
 :root {
     --color-primary: #027BFF;
     --color-background: #f4f7f6;
@@ -24,16 +23,13 @@ body {
     color: var(--color-text);
 }
 
-/* ÚPRAVA: Přidání PADDING-TOP pro odsazení obsahu pod fixním headerem */
 .container {
     max-width: 1400px;
     margin: 0 auto;
     padding: 1.5rem;
     padding-top: 7rem;
 }
-/* --- Komponenta: MainHeader (FIXED/FLOATING) --- */
 .main-header {
-    /* Fixed pozice pro floating efekt */
     position: fixed;
     top: 0;
     left: 50%;
@@ -41,7 +37,6 @@ body {
     width: 100%;
     z-index: 100;
 
-    /* Původní styly (včetně glassmorphismu) */
     max-width: 1355px;
     margin: 2rem auto 0 auto;
     border-radius: 16px;
@@ -127,7 +122,6 @@ body {
 }
 
 @media (max-width: 1200px) {
-    /* Zajištění správného chování v mobilní verzi */
     .main-header {
         max-width: calc(100% - 3rem);
         margin: 0;
@@ -165,7 +159,6 @@ body {
         padding-top: 0.5rem;
         padding-bottom: 0.5rem;
 
-        /* Glassmorphismus pro mobilní menu je zachován */
         background-color: rgba(255, 255, 255, 0.3);
         border-top: 1px solid rgba(255, 255, 255, 0.4);
         border-bottom-left-radius: 16px;
@@ -180,7 +173,6 @@ body {
         border-top-right-radius: 0;
     }
 
-    /* ZRUŠENÍ DESKTOPOVÉHO STYLU AKTIVNÍ POLOŽKY */
     .main-header nav a.active {
         border-bottom: none;
         padding-bottom: 0.75rem;
@@ -219,7 +211,6 @@ body {
 }
 
 
-/*Komponenta: DashboardContent*/
 
 .dashboard-header h1 {
     font-size: 2rem;
@@ -236,7 +227,7 @@ body {
     margin-top: 0;
 }
 
-/*Komponenta: StatRow*/
+
 .stat-row {
     display: flex;
     justify-content: space-between;
@@ -281,7 +272,7 @@ body {
     margin: 0;
     text-align: left;
 }
-/*Responzivita*/
+
 @media (max-width: 1200px) {
     .stat-row {
         flex-wrap: wrap;
@@ -295,14 +286,14 @@ body {
 
 
 
-/*Hlavní Grid (Minulost vs Budoucnost)*/
+
 .dashboard-grid {
     display: grid;
     grid-template-columns: 2fr 1fr;
     gap: 1.5rem;
     margin-top: 2.5rem;
 }
-/* Responzivita */
+
 @media (max-width: 992px) {
     .dashboard-grid {
         grid-template-columns: 1fr;
@@ -311,7 +302,7 @@ body {
 }
 
 
-/* Komponenta: ApplicationHistory (Tabulka) */
+
 .history-panel {
     background-color: #fff;
     border-radius: 20px;
@@ -342,7 +333,7 @@ body {
     margin: 0;
 }
 
-/* Tabulka */
+
 .history-table {
     width: 100%;
     border-collapse: collapse;
@@ -389,7 +380,7 @@ body {
     color: #005FCC;
 }
 
-/* --- Responzivita */
+
 @media (max-width: 600px) {
     .history-table th,
     .history-table td {
@@ -401,7 +392,7 @@ body {
     }
 }
 
-/* Respoznvita --- */
+
 @media (max-width: 768px) {
     .stat-row {
         gap: 1rem;
@@ -428,7 +419,7 @@ body {
         font-size: 26px;
     }
 
-    /* Upcoming Card */
+
     .upcoming-card {
         height: auto;
         padding: 1.25rem 1.5rem;
@@ -457,7 +448,7 @@ body {
     margin: 0 0 -30px 0;
     padding: 0;
 }
-/* --- Komponenta: Upcoming card --- */
+
 .upcoming-card {
     background-color: var(--color-surface);
     border-radius: 20px;

@@ -40,7 +40,7 @@ export default function ResetPasswordPage() {
             }, 3000);
         } catch (err: any) {
             setStatus('error');
-            // Zde předpokládáme, že err.message může být překladový klíč, nebo použijeme obecnou hlášku
+
             setApiError(t(err.message) || t('auth.invalidToken'));
         }
     };
@@ -64,7 +64,6 @@ export default function ResetPasswordPage() {
         <div className="fixed inset-0 flex items-center justify-center p-4 bg-white">
             <div className="w-full max-w-[360px] bg-white rounded-2xl shadow-xl border border-[#027BFF]/30 p-6">
 
-                {/* TITLE */}
                 <h1 className="text-xl font-bold text-gray-900 tracking-[-1px] text-center mb-4">
                     {t('auth.resetPasswordTitle')}
                 </h1>
@@ -89,7 +88,6 @@ export default function ResetPasswordPage() {
 
                     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
 
-                        {/* PASSWORD */}
                         <div className="space-y-1">
                             <label
                                 htmlFor="password"
@@ -119,7 +117,6 @@ export default function ResetPasswordPage() {
                             )}
                         </div>
 
-                        {/* CONFIRM PASSWORD */}
                         <div className="space-y-1">
                             <label
                                 htmlFor="confirmPassword"
@@ -149,14 +146,12 @@ export default function ResetPasswordPage() {
                             )}
                         </div>
 
-                        {/* API ERROR */}
                         {apiError && (
                             <div className="text-red-500 text-xs font-medium text-center bg-red-50 p-2 rounded">
                                 {apiError}
                             </div>
                         )}
 
-                        {/* SUBMIT BUTTON */}
                         <button
                             type="submit"
                             disabled={isSubmitting}

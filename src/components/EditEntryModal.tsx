@@ -39,7 +39,7 @@ export const EditEntryModal = ({ entryId, isOpen, onClose, onSave }: Props) => {
 
     const [breed, setBreed] = useState<string>('');
     const [emsSuffix, setEmsSuffix] = useState<string>('');
-    const [catGroup, setCatGroup] = useState<string>(''); // Nové: Skupina
+    const [catGroup, setCatGroup] = useState<string>('');
     const [emsError, setEmsError] = useState<string | null>(null);
 
     useEffect(() => {
@@ -133,7 +133,6 @@ export const EditEntryModal = ({ entryId, isOpen, onClose, onSave }: Props) => {
                         </div>
                     ) : (
                         <div className="space-y-5">
-                            {/* Row 1: Titles & Name */}
                             <div className="grid grid-cols-12 gap-4">
                                 <div className="col-span-12 sm:col-span-3">
                                     <label className={labelClass}>{t('catForm.titleBefore')}</label>
@@ -177,7 +176,6 @@ export const EditEntryModal = ({ entryId, isOpen, onClose, onSave }: Props) => {
                                 </div>
                             </div>
 
-                            {/* Row 2: EMS Logic + Group */}
                             <div className="grid grid-cols-12 gap-4">
                                 <div className="col-span-12 sm:col-span-5">
                                     <label className={labelClass}>{t('catForm.breed')}</label>
@@ -222,7 +220,6 @@ export const EditEntryModal = ({ entryId, isOpen, onClose, onSave }: Props) => {
                                 </div>
                             </div>
 
-                            {/* Row 3: Gender & Show Class */}
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                                 <div>
                                     <label className={labelClass}>{t('catForm.gender')}</label>
@@ -252,7 +249,6 @@ export const EditEntryModal = ({ entryId, isOpen, onClose, onSave }: Props) => {
                                 </div>
                             </div>
 
-                            {/* Row 4: Identifiers */}
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                                 <div>
                                     <label className={labelClass}>{t('catForm.chip')}</label>

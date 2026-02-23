@@ -286,7 +286,7 @@ export function CatForm({ catIndex, onRemove }: CatFormProps) {
                             <Input
                                 type="text"
                                 {...register(fieldName("motherName"))}
-                                placeholder={t('catForm.motherNamePlaceholder')}
+                                placeholder={t('catForm.placeholders.mother')}
                                 disabled={isSaved}
                             />
                         </FormField>
@@ -374,7 +374,7 @@ export function CatForm({ catIndex, onRemove }: CatFormProps) {
                             <Input
                                 type="text"
                                 {...register(fieldName("fatherName"))}
-                                placeholder={t('catForm.fatherNamePlaceholder')}
+                                placeholder={t('catForm.placeholders.father')}
                                 disabled={isSaved}
                             />
                         </FormField>

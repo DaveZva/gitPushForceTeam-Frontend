@@ -35,7 +35,6 @@ export function Step1_Exhibition() {
         </div>
     );
 
-    // 1. Získání i18n instance pro zjištění aktuálního jazyka
     const { t, i18n } = useTranslation();
     const { register, formState: { errors } } = useFormContext<RegistrationFormData>();
 
@@ -44,7 +43,6 @@ export function Step1_Exhibition() {
 
     const formatDate = (dateString: string | undefined): string => {
         if (!dateString) return '-';
-        // 2. Použití i18n.language místo natvrdo zadaného 'cs-CZ'
         return new Date(dateString).toLocaleDateString(i18n.language, {
             year: 'numeric', month: '2-digit', day: '2-digit',
         });
@@ -70,7 +68,6 @@ export function Step1_Exhibition() {
                 {t('registrationSteps.step1_exhibition.title')}
             </h2>
 
-            {/* Výstava */}
             <FormField label={t('registrationSteps.step1_exhibition.show.label')} name="showId" error={errors.showId}>
                 {loading ? (
                     <div className="w-full p-3 text-gray-500 bg-gray-100 rounded-lg">
@@ -91,7 +88,6 @@ export function Step1_Exhibition() {
                 )}
             </FormField>
 
-            {/* Účast na výstavě */}
             <FormField label={t('registrationSteps.step1_exhibition.attendance.label')} name="days" error={errors.days}>
                 <div className="flex flex-col p-2 space-y-2 bg-gray-100 rounded-lg sm:flex-row sm:space-y-0 sm:space-x-2">
                     <Radio label={t('registrationSteps.step1_exhibition.attendance.saturday')} value="sat" registration={register("days")} />

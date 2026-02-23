@@ -8,16 +8,16 @@
     "skipLibCheck": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
-    "strict": true, // Zapnutí striktního režimu - největší přínos TS!
+    "strict": true,
     "forceConsistentCasingInFileNames": true,
     "module": "ESNext",
     "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "noEmit": true, // Důležité: Vite se stará o kompilaci, TS jen o kontrolu typů
+    "noEmit": true,
     "jsx": "react-jsx",
     "paths": {
-      "@/*": ["./src/*"] // Volitelné: pro hezčí importy
+      "@/*": ["./src/*"]
     }
   },
   "include": ["src"],

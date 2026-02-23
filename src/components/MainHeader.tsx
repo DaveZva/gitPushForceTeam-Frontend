@@ -93,8 +93,8 @@ export function MainHeader() {
                             onClick={() => i18n.changeLanguage('cs')}
                             className={`px-3 py-1 text-[11px] font-bold rounded-md transition-all duration-200 ${
                                 i18n.language.startsWith('cs')
-                                    ? 'bg-white text-gray-900 shadow-sm' // Aktivní: čistě bílá s černým textem
-                                    : 'text-gray-400 hover:text-gray-600' // Neaktivní: tlumená šedá
+                                    ? 'bg-white text-gray-900 shadow-sm' 
+                                    : 'text-gray-400 hover:text-gray-600' 
                             }`}
                         >
                             CZ
@@ -103,8 +103,8 @@ export function MainHeader() {
                             onClick={() => i18n.changeLanguage('en')}
                             className={`px-3 py-1 text-[11px] font-bold rounded-md transition-all duration-200 ${
                                 i18n.language.startsWith('en')
-                                    ? 'bg-white text-gray-900 shadow-sm' // Aktivní
-                                    : 'text-gray-400 hover:text-gray-600' // Neaktivní
+                                    ? 'bg-white text-gray-900 shadow-sm' 
+                                    : 'text-gray-400 hover:text-gray-600' 
                             }`}
                         >
                             EN

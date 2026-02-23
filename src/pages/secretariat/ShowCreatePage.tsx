@@ -31,7 +31,7 @@ export function ShowCreatePage() {
         defaultValues: {
             status: 'PLANNED',
             maxCats: 200,
-            venueState: 'CZ' // Defaultní hodnota pro novou výstavu
+            venueState: 'CZ'
         },
     });
 

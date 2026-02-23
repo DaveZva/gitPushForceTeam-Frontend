@@ -19,7 +19,7 @@ export const FIFE_CATEGORIES: Record<string, { name: string; index: number; ems:
     'SPH': { name: 'Siamo-Orientale cats', index: 4, ems: 'IV.' },
 };
 
-// ... zbytek souboru zůstává stejný (BREED_NAMES atd.)
+
 
 export const BREED_NAMES: Record<string, string> = {
     // Cat 1
@@ -34,11 +34,11 @@ export const BREED_NAMES: Record<string, string> = {
     "BOM": "Bombay", "LYO": "Lykoi",
     // Housecats
     "HCL": "Housecat longhair", "HCS": "Housecat shorthair",
-    // Non-recognised (Můžeme přidat)
+    // Non-recognised
     "XLH": "Neregistrovaná dlouhosrstá", "XSH": "Neregistrovaná krátkosrstá"
 };
 
-// Pomocná funkce pro validaci skupiny
+
 export const BREED_GROUP_RULES: Record<string, number> = {
     "ALC" : 11,
     "ACS" : 11,
@@ -68,11 +68,11 @@ export const BREED_GROUP_RULES: Record<string, number> = {
     "HCS" : 1
 };
 
-// Upravená validace s podporou překladů
+
 export const validateGroupForBreed = (breedCode: string, group: string | undefined | null, t: TFunction): string | true => {
     const maxGroup = BREED_GROUP_RULES[breedCode];
 
-    // Pokud plemeno nemá definované skupiny
+
     if (!maxGroup) {
         if (group && group.trim() !== "") {
             return t('validation.cat.group.notRequired', { breed: breedCode });
@@ -80,7 +80,7 @@ export const validateGroupForBreed = (breedCode: string, group: string | undefin
         return true;
     }
 
-    // Pokud plemeno má skupiny, musí být vyplněna
+
     if (!group || group.trim() === "") {
         return t('validation.cat.group.required', { breed: breedCode, max: maxGroup });
     }
@@ -93,7 +93,7 @@ export const validateGroupForBreed = (breedCode: string, group: string | undefin
     return true;
 };
 
-//Priprava na moznost skupin u nekterych plemen!
+
 export const EMS_GROUPS = [
     { value: '1', label: 'Skupina 1' },
     { value: '2', label: 'Skupina 2' },
@@ -127,21 +127,21 @@ interface EmsRuleSet {
     white: string[];
     patterns: string[];
     pointed: string[];
-    eyeColors?: string[]; // Některá plemena je nemají
-    other?: string[];     // Některá plemena je nemají
+    eyeColors?: string[];
+    other?: string[];
 }
 
 
 function masterValidator(suffix: string, rules: EmsRuleSet): true | string {
-    const parts = suffix.trim().split(' ').filter(p => p); // Rozdělí a odstraní prázdné
+    const parts = suffix.trim().split(' ').filter(p => p);
     const breedCode = rules.breedCode;
 
-    // --- A. Plemeno bez suffixu (např. RUS, CHA, KOR, SIN, SOK, BOM) ---
+
     if (rules.colors.length === 0) {
         return (suffix.trim() === '') ? true : `${breedCode} nesmí mít žádný dodatečný kód.`;
     }
 
-    // --- B. Plemeno s barvou (většina) ---
+
     if (parts.length === 0) {
         return "Chybí kód barvy (např. 'n', 'w'...).";
     }
@@ -149,25 +149,24 @@ function masterValidator(suffix: string, rules: EmsRuleSet): true | string {
     const colorPart = parts[0];
     const otherParts = parts.slice(1);
 
-    // --- C. Příprava a parsování (Logika 4.0) ---
+
     let modifier = '';
     let hasSilver = false;
     let isWhite = (colorPart === 'w');
     let colorIsValid = false;
 
-    // --- D. Kontrola barvy (Logika 4.0) ---
+
     if (isWhite) {
-        // 1. Je to 'w'?
+
         if (rules.colors.includes('w')) {
             colorIsValid = true;
         }
     } else {
-        // 2. Je to speciální/běžná barva? (např. 'n', 'a', 'am', '*m', 'nt')
+
         if (rules.colors.includes(colorPart)) {
             colorIsValid = true;
         }
 
-        // 3. Není to barva s modifikátorem? (např. 'ns', 'ay')
         if (!colorIsValid) {
             let potentialModifier = colorPart.slice(-1);
             if (rules.modifiers.includes(potentialModifier)) {
@@ -181,28 +180,23 @@ function masterValidator(suffix: string, rules: EmsRuleSet): true | string {
         }
     }
 
-    // Finální verdikt o barvě
     if (!colorIsValid) {
         return `Kód barvy "${colorPart}" není pro plemeno ${breedCode} povolen.`;
     }
 
-    // --- E. Kontrola ostatních částí (kresby, bílá, oči, OSTATNÍ) ---
     let hasPattern = false;
     let hasPiebald = false;
     let hasEyeColor = false;
 
-    // --- ZMĚNA: Zajistíme, že 'eyeColors' a 'other' existují (jako prázdná pole) ---
     const allowedEyeColors = rules.eyeColors || [];
     const allowedOther = rules.other || [];
 
-    // První průchod: Najdeme klíčové kódy
     for (const part of otherParts) {
         if (rules.patterns.includes(part)) hasPattern = true;
         if (rules.white.includes(part)) hasPiebald = true;
         if (part.startsWith('6')) hasEyeColor = true;
     }
 
-    // Druhý průchod: Validujeme každou část
     for (const part of otherParts) {
         const isPattern = rules.patterns.includes(part);
         const isWhite = rules.white.includes(part);
@@ -211,11 +205,9 @@ function masterValidator(suffix: string, rules: EmsRuleSet): true | string {
         const isOther = allowedOther.includes(part);
 
         if (isEye) {
-            // 1. Je tato barva očí vůbec povolena?
             if (!allowedEyeColors.includes(part)) {
                 return `Barva očí "${part}" není pro ${breedCode} povolena.`;
             }
-            // PRAVIDLO 1 & 3: TUV musí, HCL/HCS nesmí, ostatní smí jen za podmínek
             const conditionMet =
                 isWhite ||
                 (hasSilver && hasPattern) ||
@@ -226,23 +218,20 @@ function masterValidator(suffix: string, rules: EmsRuleSet): true | string {
                 return `Kód očí (${part}) je povolen jen u 'w', 's + kresba', 's bílou' (01-03) nebo u plemene TUV.`;
             }
         } else if (!isPattern && !isWhite && !isPointed && !isOther) {
-            // Kód není ani kresba, ani bílá, ani pointed, ani kód očí, ani "jiný"
             return `Kód "${part}" není pro plemeno ${breedCode} povolen.`;
         }
     }
 
-    // --- F. Finální kontroly ---
-    // PRAVIDLO 1: TUV musí mít kód očí
     if (breedCode === 'TUV' && !hasEyeColor) {
         return `TUV (Turkish Van) musí mít vždy kód barvy očí (např. 63, 64).`;
     }
 
-    return true; // Vše prošlo
+    return true;
 }
 
 
-// --- 4. HLAVNÍ OBJEKT S PRAVIDLY ---
-// --- ZMĚNA: Otypujeme EMS_RULES ---
+
+
 export const EMS_RULES: Record<string, EmsRuleSet> = {
     // === KATEGORIE 1 ===
     "EXO": {
@@ -353,8 +342,8 @@ export const EMS_RULES: Record<string, EmsRuleSet> = {
         modifiers: ['s', 'y'],
         white:     ['01', '02', '03', '09'],
         patterns:  ['11', '12', '21'],
-        pointed:   [], // Pointed je implicitní
-        eyeColors: [], // Barva očí je implicitní
+        pointed:   [],
+        eyeColors: [],
         other:     []
     },
     "NFO": {
@@ -441,7 +430,7 @@ export const EMS_RULES: Record<string, EmsRuleSet> = {
     },
     "CHA": {
         breedCode: "CHA",
-        colors:    [], // Prázdné pole = žádný suffix povolen
+        colors:    [],
         modifiers: [], white: [], patterns:  [], pointed:   [], eyeColors: [], other:     []
     },
     "CYM": {
@@ -486,7 +475,7 @@ export const EMS_RULES: Record<string, EmsRuleSet> = {
     },
     "KOR": {
         breedCode: "KOR",
-        colors:    [], // Prázdné pole = žádný suffix povolen
+        colors:    [],
         modifiers: [], white: [], patterns:  [], pointed:   [], eyeColors: [], other:     []
     },
     "MAN": {
@@ -521,7 +510,7 @@ export const EMS_RULES: Record<string, EmsRuleSet> = {
     },
     "SIN": {
         breedCode: "SIN",
-        colors:    [], // Prázdné pole = žádný suffix povolen
+        colors:    [],
         modifiers: [], white: [], patterns:  [], pointed:   [], eyeColors: [], other:     []
     },
     "SNO": {
@@ -530,13 +519,13 @@ export const EMS_RULES: Record<string, EmsRuleSet> = {
         modifiers: [],
         white:     ['05'],
         patterns:  ['21'],
-        pointed:   [], // Pointed je implicitní
+        pointed:   [],
         eyeColors: [],
         other:     []
     },
     "SOK": {
         breedCode: "SOK",
-        colors:    [], // Prázdné pole = žádný suffix povolen
+        colors:    [],
         modifiers: [], white: [], patterns:  [], pointed:   [], eyeColors: [], other:     []
     },
     "SRL": {
@@ -566,7 +555,7 @@ export const EMS_RULES: Record<string, EmsRuleSet> = {
         colors:    ['n', 'a', 'o', 'p'],
         modifiers: ['s'],
         white:     [],
-        patterns:  [], // Kresba '25' (ticked) je implicitní
+        patterns:  [],
         pointed:   [],
         eyeColors: [],
         other:     []
@@ -672,7 +661,7 @@ export const EMS_RULES: Record<string, EmsRuleSet> = {
     },
     "RUS": {
         breedCode: "RUS",
-        colors:    [], // Prázdné pole = žádný suffix povolen
+        colors:    [],
         modifiers: [], white: [], patterns:  [], pointed:   [], eyeColors: [], other:     []
     },
     "SIA": {
@@ -693,7 +682,7 @@ export const EMS_RULES: Record<string, EmsRuleSet> = {
         colors:    ['n', 'a', 'o', 'p'],
         modifiers: ['s'],
         white:     [],
-        patterns:  [], // Kresba '25' (ticked) je implicitní
+        patterns:  [],
         pointed:   [],
         eyeColors: [],
         other:     []
@@ -714,15 +703,15 @@ export const EMS_RULES: Record<string, EmsRuleSet> = {
         modifiers: [],
         white:     [],
         patterns:  ['21'],
-        pointed:   [], // Pointed je implicitní
-        eyeColors: [], // Barva očí je implicitní
+        pointed:   [],
+        eyeColors: [],
         other:     []
     },
 
-    // === Předběžně uznaná ===
+
     "BOM": {
         breedCode: "BOM",
-        colors:    [], // Prázdné pole = žádný suffix povolen
+        colors:    [],
         modifiers: [], white: [], patterns:  [], pointed:   [], eyeColors: [], other:     []
     },
     "LYO": {
@@ -736,7 +725,7 @@ export const EMS_RULES: Record<string, EmsRuleSet> = {
         other:     ['84']
     },
 
-    // === Domácí kočky ===
+
     "HCL": {
         breedCode: "HCL",
         colors:    ['w', 'n', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'j', 'o', 'p', 'q', 'r', 'm', 'am', 'cm', 'pm', 'em', '*m', 'nt', 'at', 'ft', 'gt'],
@@ -744,7 +733,7 @@ export const EMS_RULES: Record<string, EmsRuleSet> = {
         white:     ['01', '02', '03', '04', '05', '09'],
         patterns:  ['11', '12', '21', '22', '23', '24', '25'],
         pointed:   ['31', '32', '33'],
-        eyeColors: [], // Barva očí se nezapisuje
+        eyeColors: [],
         other:     ['51', '52', '53', '54']
     },
     "HCS": {
@@ -754,11 +743,11 @@ export const EMS_RULES: Record<string, EmsRuleSet> = {
         white:     ['01', '02', '03', '04', '05', '09'],
         patterns:  ['11', '12', '21', '22', '23', '24', '25'],
         pointed:   ['31', '32', '33'],
-        eyeColors: [], // Barva očí se nezapisuje
+        eyeColors: [],
         other:     ['51', '52', '53', '54']
     },
 
-    // Výchozí pravidla pro plemena, která nemáme definovaná (XLH/XSH)
+
     "__DEFAULT__": {
         breedCode: "Nespecifikované",
         colors:    ['w', 'n', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'j', 'o', 'p', 'q', 'r', 'm', 'am', 'cm', 'pm', 'em', '*m', 'nt', 'at', 'ft', 'gt'],
@@ -772,21 +761,20 @@ export const EMS_RULES: Record<string, EmsRuleSet> = {
 };
 
 
-// --- 5. FINÁLNÍ FUNKCE PRO ZOD / REGISTER ---
-// --- ZMĚNA: Otypujeme parametry a návratovou hodnotu ---
+
+
 export function validateEmsCode(fullEmsCode: string | null | undefined): true | string {
     if (!fullEmsCode || fullEmsCode.length < 3) {
         return 'Musíte vybrat plemeno.';
     }
 
     const parts = fullEmsCode.split(' ');
-    const prefix = parts[0]; // např. "EXO"
-    const suffix = parts.slice(1).join(' '); // např. "ns 03 24"
+    const prefix = parts[0];
+    const suffix = parts.slice(1).join(' ');
 
-    // Najdeme pravidla pro plemeno, nebo použijeme výchozí
+
     const breedRules = EMS_RULES[prefix] || EMS_RULES.__DEFAULT__;
 
-    // Přidáme 'breedCode' do pravidel, aby ho validátor mohl použít v chyb. hláškách
     if (!breedRules.breedCode) {
         breedRules.breedCode = prefix;
     }
@@ -794,8 +782,7 @@ export function validateEmsCode(fullEmsCode: string | null | undefined): true | 
     return masterValidator(suffix, breedRules);
 }
 
-// Priprava pro vyber skupin u plemen..
 export const requiresGroup = (breed: string): boolean => {
-    const breedsWithGroups = ['ACL', 'ACS', 'LPL', 'LPS', 'MCO', 'NEM', 'NFO', 'SIB', 'TUA', 'BML', 'CYM', 'KBL', 'KBS', 'MAN', 'SRL', 'SRS', 'CRX', 'DRX', 'DSP', 'GRX', 'JBS', 'PEB', 'SPH', 'LYO', 'HCL', 'HCS']; // Příklad plemen s grupami (FIFe)
+    const breedsWithGroups = ['ACL', 'ACS', 'LPL', 'LPS', 'MCO', 'NEM', 'NFO', 'SIB', 'TUA', 'BML', 'CYM', 'KBL', 'KBS', 'MAN', 'SRL', 'SRS', 'CRX', 'DRX', 'DSP', 'GRX', 'JBS', 'PEB', 'SPH', 'LYO', 'HCL', 'HCS'];
     return breedsWithGroups.includes(breed.toUpperCase());
 };

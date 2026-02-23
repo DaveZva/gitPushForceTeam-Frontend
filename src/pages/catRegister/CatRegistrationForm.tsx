@@ -96,7 +96,7 @@ const SubmitSuccess: React.FC<SubmitSuccessProps> = ({ registrationNumber, onBac
 
         } catch (error) {
             console.error("Chyba při stahování PDF:", error);
-            // 1. Použití nového klíče
+
             alert(t('alert.pdfDownloadError'));
         } finally {
             setIsDownloading(false);
@@ -126,7 +126,6 @@ const SubmitSuccess: React.FC<SubmitSuccessProps> = ({ registrationNumber, onBac
                     onClick={handleDownloadPdf}
                     disabled={isDownloading}
                 >
-                    {/* 2. Použití nových klíčů pro PDF */}
                     {isDownloading
                         ? t('submitSuccess.downloading')
                         : t('submitSuccess.downloadButton')}

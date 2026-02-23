@@ -91,7 +91,6 @@ export default function MyCatsPage() {
                     <h1 className="text-3xl font-bold text-gray-900 tracking-tight">{t('myCats.title')}</h1>
                     <p className="text-gray-500 mt-1">{t('myCats.subtitle')}</p>
                 </div>
-                {/* Variant PRIMARY (výchozí) */}
                 <Button onClick={handleCreate} className="flex items-center gap-2 shadow-lg hover:shadow-xl transition-all">
                     <Icons.Plus />
                     {t('myCats.addCat')}
@@ -105,7 +104,6 @@ export default function MyCatsPage() {
                     </div>
                     <h3 className="text-lg font-bold text-gray-900 mb-2">{t('myCats.noCatsTitle')}</h3>
                     <p className="text-gray-500 mb-6 max-w-sm">{t('myCats.noCatsDescription')}</p>
-                    {/* Variant SECONDARY (šedé) */}
                     <Button variant="secondary" onClick={handleCreate} className="flex items-center gap-2">
                         <Icons.Plus />
                         {t('myCats.addCat')}

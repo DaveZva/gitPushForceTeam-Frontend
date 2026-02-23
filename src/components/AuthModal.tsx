@@ -128,13 +128,13 @@ export function AuthModal({ onClose }: AuthModalProps) {
                             <>
                                 <div>
                                     <label className="text-sm font-semibold text-gray-800 block mb-1">{t('auth.password')}</label>
-                                    <input className="w-full bg-gray-100 rounded-full px-4 py-2.5 text-sm focus:ring-2 focus:ring-[#027BFF] outline-none" type="password" value={password} placeholder="**********" onChange={(e) => setPassword(e.target.value)} />
+                                    <input className="w-full bg-gray-100 rounded-full px-4 py-2.5 text-sm focus:ring-2 focus:ring-[#027BFF] outline-none" type="password" value={password} placeholder={t('auth.passwordPlaceholder')} onChange={(e) => setPassword(e.target.value)} />
                                 </div>
 
                                 {view === 'register' && (
                                     <div>
                                         <label className="text-sm font-semibold text-gray-800 block mb-1">{t('auth.confirmPassword')}</label>
-                                        <input className="w-full bg-gray-100 rounded-full px-4 py-2.5 text-sm focus:ring-2 focus:ring-[#027BFF] outline-none" type="password" value={confirmPassword} placeholder="**********" onChange={(e) => setConfirmPassword(e.target.value)} />
+                                        <input className="w-full bg-gray-100 rounded-full px-4 py-2.5 text-sm focus:ring-2 focus:ring-[#027BFF] outline-none" type="password" value={confirmPassword} placeholder={t('auth.passwordPlaceholder')} onChange={(e) => setConfirmPassword(e.target.value)} />
                                     </div>
                                 )}
                             </>
