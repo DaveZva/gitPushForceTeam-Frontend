@@ -585,10 +585,12 @@
     "errorLoadingQuick": "Nepodařilo se načíst rychlý katalog.",
     "noQuickResults": "Žádné kočky v této kategorii.",
     "close": "Zavřít",
-    "judgeAssignment": "Přidělení porotců a plemen pro",
-    "judgesReports": "Posudky porotců",
+    "judgeAssignment": "Přidělení posuzovatelů a plemen pro",
+    "judgesReports": "Posudky posuzovatelů",
     "nominations": "Nominace",
-    "judgesAndColours": "Porotci & barvy",
+    "judgesAndColours": "Posuzovatelé & EMS kódy",
+    "judgesPreviewBtn": "Tabulka barev",
+    "resultsReports": "Posuzovatelé & Barvy",
     "dateAndPlace": "Datum a místo",
     "backToList": "Zpět na seznam",
     "status": "Status"
@@ -613,7 +615,7 @@
     "tabs": {
       "overview": "Přehled",
       "registrations": "Přihlášky",
-      "judges": "Porotci",
+      "judges": "Posuzovatelé",
       "payments": "Platby",
       "catalog": "Katalog"
     },
@@ -638,9 +640,9 @@
       "methodPending": "-"
     },
     "judges": {
-      "title": "Správa rozhodčích",
-      "addBtn": "Přidat rozhodčího",
-      "noJudges": "K této výstavě zatím nejsou přiřazeni žádní rozhodčí.",
+      "title": "Správa posuzovatelů",
+      "addBtn": "Přidat posuzovatele",
+      "noJudges": "K této výstavě zatím nejsou přiřazeni žádní posuzovatelé.",
       "col": {
         "name": "Jméno",
         "email": "Email",
@@ -649,10 +651,10 @@
         "actions": "Akce"
       },
       "modal": {
-        "title": "Přiřadit rozhodčího",
+        "title": "Přiřadit posuzovatele",
         "tabExisting": "Vybrat ze seznamu",
         "tabNew": "Vytvořit nového",
-        "selectLabel": "Vyberte rozhodčího",
+        "selectLabel": "Vyberte posuzovatele",
         "selectPlaceholder": "-- Vyberte --",
         "firstName": "Jméno",
         "lastName": "Příjmení",
@@ -870,7 +872,7 @@
     "sunday": "Neděle"
   },
   "judges": {
-    "noWorkload": "Pro tento den nejsou přiřazeni žádní porotci.",
+    "noWorkload": "Pro tento den nejsou přiřazeni žádní posuzovatelé.",
     "catsCountLabel": "KOČEK",
     "noBreedsAssigned": "Zatím nepřiřazena žádná plemena"
   }
