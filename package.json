@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
+    "@stomp/stompjs": "^7.3.0",
     "@stripe/react-stripe-js": "^5.4.0",
     "@stripe/stripe-js": "^8.5.2",
     "axios": "^1.12.2",
@@ -21,6 +22,7 @@
     "react-hot-toast": "^2.6.0",
     "react-i18next": "^16.1.6",
     "react-router-dom": "^7.9.4",
+    "sockjs-client": "^1.6.1",
     "zod": "^3.22.3"
   },
   "devDependencies": {
@@ -28,6 +30,7 @@
     "@types/node": "^24.10.0",
     "@types/react": "^19.2.2",
     "@types/react-dom": "^19.2.2",
+    "@types/sockjs-client": "^1.5.4",
     "@typescript-eslint/eslint-plugin": "^8.46.4",
     "@typescript-eslint/parser": "^8.46.4",
     "@vitejs/plugin-react": "^5.0.4",

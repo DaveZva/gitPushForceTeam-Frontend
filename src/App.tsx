@@ -24,7 +24,7 @@ import ShowControlCenter from './pages/secretariat/ShowControlCenter';
 import ShowEditPage from './pages/secretariat/ShowEditPage';
 import {StewardDashboard} from "./pages/steward/StewardDashboard";
 import MyCatsPage from "./pages/user/MyCatsPage";
-import PublicCallingBoard from "./pages/PublicCallingBoard";
+import {PublicCallingBoard} from "./pages/PublicCallingBoard";
 
 function App() {
     const { t } = useTranslation();
@@ -61,6 +61,7 @@ function App() {
                         } />
                     </Route>
                     <Route path="/public/board" element={<StewardDashboard />} />
+                    <Route path="/public/board2" element={<PublicCallingBoard />} />
                 </Routes>
             </BrowserRouter>
         </AuthProvider>

@@ -8,48 +8,58 @@ export interface StewardQueueEntry {
     sex: string;
     birthDate: string;
     status: 'WAITING' | 'READY' | 'JUDGING' | 'DONE' | 'ABSENT';
-    urgency: boolean;
-    note?: string;
+    urgency: string;
+    callingRecordId?: number;
     judgeId: number;
     group?: string;
     category?: string;
     breed?: string;
 }
 
-export interface JudgeInfo {
+export interface StewardJudgeDto {
     id: number;
     name: string;
+    isLocked: boolean;
+    lockedBySteward: string | null;
+    isLockedByMe: boolean;
+    tableNumber: number | null;
 }
 
 export const stewardApi = {
-    getJudges: async (): Promise<JudgeInfo[]> => {
-        return [
-            { id: 1, name: "Dr. Peter First" },
-            { id: 2, name: "Mrs. Anna Second" }
-        ];
+    getJudges: async (showId: number): Promise<StewardJudgeDto[]> => {
+        const res = await api.get(`/steward/shows/${showId}/judges`);
+        return res.data;
     },
 
-    getQueue: async (judgeId: number): Promise<StewardQueueEntry[]> => {
-        return Array.from({ length: 15 }).map((_, i) => ({
-            id: i + 1,
-            catalogNumber: 100 + i,
-            catName: `Cat Name ${i + 1}`,
-            ems: "MCO n 03",
-            sex: i % 2 === 0 ? "1.0" : "0.1",
-            birthDate: "2023-01-01",
-            status: i === 0 ? 'JUDGING' : i === 1 ? 'READY' : 'WAITING',
-            urgency: false,
-            judgeId: judgeId,
-            breed: "MCO",
-            category: "II"
-        })) as StewardQueueEntry[];
+    lockJudge: async (showId: number, judgeId: number, tableNumber: number): Promise<boolean> => {
+        const res = await api.post(`/steward/shows/${showId}/judges/${judgeId}/lock`, { tableNumber });
+        return res.data.success;
     },
 
-    updateStatus: async (entryId: number, status: string, urgency: boolean = false) => {
-        return Promise.resolve();
+    unlockJudge: async (showId: number, judgeId: number): Promise<void> => {
+        await api.post(`/steward/shows/${showId}/judges/${judgeId}/unlock`);
     },
 
-    callForAction: async (entryId: number, actionType: 'JUDGING' | 'BIV' | 'BIS' | 'NOMINATION') => {
-        return Promise.resolve();
+    getQueue: async (showId: number, judgeId: number): Promise<StewardQueueEntry[]> => {
+        const res = await api.get(`/steward/shows/${showId}/judges/${judgeId}/queue`);
+        return res.data;
+    },
+
+    updateSheetStatus: async (sheetId: number, status: string): Promise<void> => {
+        await api.patch(`/steward/sheets/${sheetId}/status`, { status });
+    },
+
+    callToBoard: async (payload: { showId: number, tableNo: string, judgeName: string, catNumber: number, category: string, urgency: string }) => {
+        const res = await api.post('/calling/call', payload);
+        return res.data;
+    },
+
+    removeFromBoard: async (callingRecordId: number) => {
+        await api.delete(`/calling/${callingRecordId}`);
+    },
+
+    updateUrgency: async (callingRecordId: number, urgency: string) => {
+        const res = await api.patch(`/calling/${callingRecordId}/urgency`, { urgency });
+        return res.data;
     }
 };

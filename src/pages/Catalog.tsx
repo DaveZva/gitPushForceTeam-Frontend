@@ -112,7 +112,7 @@ export default function Catalog() {
                                 <section className="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm flex flex-col md:flex-row justify-between items-center gap-6">
                                     <div className="text-left">
                                         <h2 className="text-xl font-bold text-gray-900 tracking-[-1px]">{showInfo.name}</h2>
-                                        <p className="text-sm text-gray-500 mt-1 uppercase font-semibold tracking-wider">{t('catalog.resultsReports', 'Results & Reports')}</p>
+                                        <p className="text-sm text-gray-500 mt-1 uppercase font-semibold tracking-wider">{t('catalog.resultsReports')}</p>
                                     </div>
                                     <div className="flex gap-4 text-gray-900">
                                         <button
@@ -131,8 +131,8 @@ export default function Catalog() {
                                             <div key={j.id} className="bg-white border border-gray-100 rounded-2xl p-5 shadow-sm hover:shadow-md transition-shadow">
                                                 <div className="font-bold text-gray-900 mb-4">{j.firstName} {j.lastName} ({j.country})</div>
                                                 <div className="flex gap-2">
-                                                    <button onClick={() => setModalState({ type: 'JUDGE_REPORT', date: 'SATURDAY', judge: j })} className="flex-1 text-[10px] font-bold text-[#027BFF] border border-[#027BFF] py-2 rounded-lg hover:bg-[#027BFF] hover:text-white transition-colors uppercase tracking-wider text-gray-900">{t('days.saturday')}</button>
-                                                    <button onClick={() => setModalState({ type: 'JUDGE_REPORT', date: 'SUNDAY', judge: j })} className="flex-1 text-[10px] font-bold text-[#027BFF] border border-[#027BFF] py-2 rounded-lg hover:bg-[#027BFF] hover:text-white transition-colors uppercase tracking-wider text-gray-900">{t('days.sunday')}</button>
+                                                    <button onClick={() => setModalState({ type: 'JUDGE_REPORT', date: 'SATURDAY', judge: j })} className="flex-1 text-[10px] font-bold text-[#FFFFFF] border border-[#027BFF] py-2 rounded-lg hover:bg-[#027BFF] hover:text-white transition-colors uppercase tracking-wider text-gray-900">{t('days.saturday')}</button>
+                                                    <button onClick={() => setModalState({ type: 'JUDGE_REPORT', date: 'SUNDAY', judge: j })} className="flex-1 text-[10px] font-bold text-[#FFFFFF] border border-[#027BFF] py-2 rounded-lg hover:bg-[#027BFF] hover:text-white transition-colors uppercase tracking-wider text-gray-900">{t('days.sunday')}</button>
                                                 </div>
                                             </div>
                                         ))}
