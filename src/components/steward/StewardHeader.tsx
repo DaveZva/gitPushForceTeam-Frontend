@@ -22,18 +22,18 @@ export const StewardHeader = ({ judgeName, tableNumber, onRefresh, onLeave, onRe
                 >
                     <StewardIcons.Home />
                 </button>
-                <div className="flex flex-col">
+                <div className="flex flex-col items-start"> {/* items-start zajistí zarovnání všeho vlevo */}
                     <div className="flex items-center gap-3">
-                        <h2 className="text-lg font-bold text-gray-900 leading-tight">{judgeName}</h2>
+                        <h2 className="text-xl font-bold text-gray-900 leading-none">{judgeName}</h2>
                         {tableNumber && (
-                            <span className="bg-[#027BFF] text-white text-[10px] font-black px-2 py-0.5 rounded uppercase tracking-wider shadow-sm">
-                                {t('steward.tableNum', { number: tableNumber })}
-                            </span>
+                            <span className="bg-[#027BFF] text-white text-[10px] font-black px-2.5 py-1 rounded-full uppercase tracking-widest shadow-sm">
+                {t('steward.tableNum', { num: tableNumber })}
+            </span>
                         )}
                     </div>
-                    <span className="text-xs text-gray-500 font-medium uppercase tracking-wider">
-                        {t('steward.role', 'STEWARD PANEL')}
-                    </span>
+                    <span className="text-[10px] text-gray-400 font-bold uppercase tracking-[0.2em] mt-1">
+        {t('steward.role', 'STEWARD PANEL')}
+    </span>
                 </div>
             </div>
             <div className="flex items-center gap-3">
@@ -47,9 +47,11 @@ export const StewardHeader = ({ judgeName, tableNumber, onRefresh, onLeave, onRe
                 <button
                     onClick={onRelease}
                     title={t('steward.releaseTable', 'Uvolnit stůl (Zrušit přiřazení)')}
-                    className="p-2 text-red-400 hover:text-red-600 bg-red-50/50 hover:bg-red-50 rounded-lg transition-colors"
+                    className="p-2 text-red-500 bg-red-50/50 border-2 border-transparent rounded-lg transition-all duration-200 hover:border-red-500 hover:bg-red-50 outline-none focus:outline-none focus:ring-0 cursor-pointer group flex items-center justify-center"
                 >
-                    <StewardIcons.Unlock />
+                    <div className="text-red-500 group-hover:text-red-700 transition-colors duration-200 flex items-center justify-center">
+                        <StewardIcons.Unlock />
+                    </div>
                 </button>
             </div>
         </header>

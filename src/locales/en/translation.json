@@ -211,6 +211,7 @@
       "both": "Both Days",
       "agreed": "I Agree",
       "notAgreed": "I Disagree",
+      "delete": "Delete",
       "searchPlaceholder": "Search (Name, EMS, Reg. No.)...",
       "noResults": "No records found matching the criteria."
     },
@@ -411,6 +412,7 @@
     "edit": "Edit",
     "yes": "Yes",
     "no": "No",
+    "delete": "Delete",
     "select": "Select",
     "noTitle": "No Title",
     "pdf": "PDF",

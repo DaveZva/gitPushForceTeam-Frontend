@@ -121,8 +121,19 @@ export const EditEntryModal = ({ entryId, isOpen, onClose, onSave }: Props) => {
             <div className="bg-white rounded-2xl shadow-xl w-full max-w-2xl overflow-hidden flex flex-col max-h-[90vh]">
                 <div className="px-6 py-4 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
                     <h3 className="text-lg font-bold text-gray-900">{t('secretariat.editModal.title')}</h3>
-                    <button onClick={onClose} className="text-gray-400 hover:text-gray-600 transition-colors">
-                        <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+                    <button
+                        onClick={onClose}
+                        className="p-2 bg-[#027BFF] text-white border-2 border-[#027BFF] rounded-full transition-all duration-200 hover:bg-transparent hover:text-[#027BFF] flex items-center justify-center cursor-pointer outline-none"
+                    >
+                        <svg
+                            className="w-5 h-5"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                            strokeWidth={2.5}
+                        >
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
                     </button>
                 </div>
 
@@ -276,13 +287,13 @@ export const EditEntryModal = ({ entryId, isOpen, onClose, onSave }: Props) => {
                 <div className="px-6 py-4 bg-gray-50 border-t border-gray-100 flex justify-end gap-3">
                     <button
                         onClick={onClose}
-                        className="px-5 py-2.5 bg-white border border-gray-300 text-gray-700 font-semibold rounded-xl hover:bg-gray-50 transition-colors text-sm"
+                        className="px-6 py-2.5 bg-transparent border-2 border-[#027BFF] text-[#027BFF] font-bold rounded-full hover:bg-[#027BFF] hover:text-white transition-all duration-200 text-sm cursor-pointer"
                     >
                         {t('common.cancel')}
                     </button>
                     <button
                         onClick={handleSave}
-                        className="px-5 py-2.5 bg-[#027BFF] text-white font-semibold rounded-xl hover:bg-[#006ce6] transition-colors shadow-lg shadow-blue-500/30 text-sm"
+                        className="px-6 py-2.5 bg-[#027BFF] border-2 border-[#027BFF] text-white font-bold rounded-full hover:bg-transparent hover:text-[#027BFF] transition-all duration-200 text-sm cursor-pointer"
                     >
                         {t('common.saveChanges')}
                     </button>

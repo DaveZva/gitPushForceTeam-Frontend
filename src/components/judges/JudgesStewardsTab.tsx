@@ -109,7 +109,7 @@ export const JudgesSteawardsTab: React.FC<JudgesTabProps> = ({ showId }) => {
                             <th className="p-4 font-medium text-gray-500">{t('secretariat.judges.col.email')}</th>
                             <th className="p-4 font-medium text-gray-500">{t('secretariat.judges.col.country')}</th>
                             <th className="p-4 font-medium text-gray-500">{t('secretariat.judges.col.groups')}</th>
-                            <th className="p-4 text-right font-medium text-gray-500">{t('secretariat.judges.col.actions')}</th>
+                            <th className="p-4 text-center font-medium text-gray-500 w-40">{t('secretariat.judges.col.actions')}</th>
                         </tr>
                         </thead>
                         <tbody className="divide-y divide-gray-100">
@@ -138,12 +138,12 @@ export const JudgesSteawardsTab: React.FC<JudgesTabProps> = ({ showId }) => {
                                             ))}
                                         </div>
                                     </td>
-                                    <td className="p-4 text-right">
+                                    <td className="p-4 text-center">
                                         <button
                                             onClick={() => handleRemoveJudge(judge.id)}
-                                            className="text-red-500 hover:text-red-700 font-medium text-sm hover:underline"
+                                            className="px-6 py-2 bg-red-500 text-white border-2 border-red-500 rounded-full font-bold text-xs uppercase tracking-wide transition-all duration-200 hover:bg-transparent hover:text-red-500 hover:border-red-500 cursor-pointer"
                                         >
-                                            {t('common.no')}
+                                            {t('common.delete')}
                                         </button>
                                     </td>
                                 </tr>

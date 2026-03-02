@@ -260,20 +260,20 @@ export const JudgingSheetsTab: React.FC<Props> = ({ showId }) => {
                         <div className="flex gap-2">
                             <button
                                 onClick={() => setSelectedDay('SATURDAY')}
-                                className={`px-4 py-2 rounded font-medium ${
+                                className={`px-6 py-2 rounded-full font-bold border-2 transition-all duration-200 cursor-pointer ${
                                     selectedDay === 'SATURDAY'
-                                        ? 'bg-blue-500 text-white'
-                                        : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                                        ? 'bg-[#027BFF] border-[#027BFF] text-white'
+                                        : 'bg-transparent border-gray-200 text-gray-600 hover:border-[#027BFF] hover:text-[#027BFF]'
                                 }`}
                             >
                                 {t('common.sat')}
                             </button>
                             <button
                                 onClick={() => setSelectedDay('SUNDAY')}
-                                className={`px-4 py-2 rounded font-medium ${
+                                className={`px-6 py-2 rounded-full font-bold border-2 transition-all duration-200 cursor-pointer ${
                                     selectedDay === 'SUNDAY'
-                                        ? 'bg-blue-500 text-white'
-                                        : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                                        ? 'bg-[#027BFF] border-[#027BFF] text-white'
+                                        : 'bg-transparent border-gray-200 text-gray-600 hover:border-[#027BFF] hover:text-[#027BFF]'
                                 }`}
                             >
                                 {t('common.sun')}

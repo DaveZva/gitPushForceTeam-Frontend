@@ -26,23 +26,32 @@ export const ActiveTablePanel = ({ currentCat, readyCats, onSetUrgency, onFinish
                     {currentCat && (
                         <div className="flex gap-2">
                             {currentCat.urgency !== 'NORMAL' && (
-                                <button
-                                    onClick={() => onSetUrgency(currentCat, 'NORMAL')}
-                                    className="text-[10px] font-bold px-3 py-1.5 rounded transition-colors bg-gray-600 hover:bg-gray-500 text-white"
-                                >
+                                <button onClick={() => onSetUrgency(currentCat, 'NORMAL')} className="text-[10px] font-bold px-3 py-1.5 rounded flex items-center gap-1 cursor-pointer focus:outline-none focus:ring-0 border-2 transition-all duration-200 bg-[#027BFF] text-white border-transparent hover:bg-white hover:text-[#027BFF] hover:border-[#027BFF] shadow-sm">
                                     {t('steward.cancelUrgency', 'ZRUŠIT URGENCI')}
                                 </button>
                             )}
+
+                            {/* Tlačítko ZVÝRAZNIT / ZVÝRAZNĚNO - Žlutá logika */}
                             <button
                                 onClick={() => onSetUrgency(currentCat, currentCat.urgency === 'URGENT' ? 'NORMAL' : 'URGENT')}
-                                className={`text-[10px] font-bold px-3 py-1.5 rounded transition-colors flex items-center gap-1 ${currentCat.urgency === 'URGENT' ? 'bg-yellow-500 text-black shadow-inner' : 'bg-gray-700 hover:bg-gray-600 text-white'}`}
+                                className={`text-[10px] font-bold px-3 py-1.5 rounded flex items-center gap-1 cursor-pointer focus:outline-none focus:ring-0 border-2 transition-all duration-200 ${
+                                    currentCat.urgency === 'URGENT'
+                                        ? 'bg-yellow-500 text-white border-yellow-500'
+                                        : 'bg-yellow-500 text-white border-transparent hover:bg-white hover:text-yellow-600 hover:border-yellow-500'
+                                }`}
                             >
                                 <StewardIcons.Bell active={currentCat.urgency === 'URGENT'} />
                                 {currentCat.urgency === 'URGENT' ? t('steward.urgentActive', 'ZVÝRAZNĚNO') : t('steward.setUrgent', 'ZVÝRAZNIT')}
                             </button>
+
+                            {/* Tlačítko POSLEDNÍ VÝZVA - Červená logika */}
                             <button
                                 onClick={() => onSetUrgency(currentCat, currentCat.urgency === 'FINAL_CALL' ? 'NORMAL' : 'FINAL_CALL')}
-                                className={`text-[10px] font-bold px-3 py-1.5 rounded transition-colors flex items-center gap-1 ${currentCat.urgency === 'FINAL_CALL' ? 'bg-red-500 text-white shadow-inner animate-pulse' : 'bg-gray-700 hover:bg-gray-600 text-white'}`}
+                                className={`text-[10px] font-bold px-3 py-1.5 rounded flex items-center gap-1 cursor-pointer focus:outline-none focus:ring-0 border-2 transition-all duration-200 ${
+                                    currentCat.urgency === 'FINAL_CALL'
+                                        ? 'bg-red-600 text-white border-red-600 animate-pulse'
+                                        : 'bg-red-500 text-white border-transparent hover:bg-white hover:text-red-500 hover:border-red-500'
+                                }`}
                             >
                                 <StewardIcons.Bell active={currentCat.urgency === 'FINAL_CALL'} />
                                 {currentCat.urgency === 'FINAL_CALL' ? t('steward.finalCallActive', 'POSLEDNÍ VÝZVA') : t('steward.setFinalCall', 'POSLEDNÍ VÝZVA')}
@@ -65,9 +74,10 @@ export const ActiveTablePanel = ({ currentCat, readyCats, onSetUrgency, onFinish
                                 <span>{t('steward.born', 'Narozen')}: <strong className="text-gray-900">{currentCat.birthDate}</strong></span>
                             </div>
                         </div>
+                        {/* Hlavní tlačítko HOTOVO - odstraněna modrá po kliknutí a hover blikání */}
                         <button
                             onClick={() => onFinishJudging(currentCat)}
-                            className="mt-8 w-full bg-[#027BFF] hover:bg-blue-600 text-white py-4 rounded-xl font-bold text-lg shadow-lg shadow-blue-200 transition-all flex items-center justify-center gap-3 active:scale-[0.98]"
+                            className="mt-8 w-full bg-[#027BFF] text-white py-4 rounded-xl font-bold text-lg shadow-lg shadow-blue-100 transition-none flex items-center justify-center gap-3 cursor-pointer focus:outline-none focus:ring-0"
                         >
                             <StewardIcons.Check />
                             {t('steward.finishJudging', 'HOTOVO & SMAZAT Z TABULE')}
@@ -81,6 +91,7 @@ export const ActiveTablePanel = ({ currentCat, readyCats, onSetUrgency, onFinish
                 )}
             </div>
 
+            {/* Sekce PŘIPRAVUJÍ SE */}
             {readyCats.length > 0 && (
                 <div className="space-y-4">
                     <h4 className="font-bold text-gray-500 uppercase tracking-wider text-sm flex items-center gap-2 px-2">
@@ -98,16 +109,13 @@ export const ActiveTablePanel = ({ currentCat, readyCats, onSetUrgency, onFinish
                                     <span className="text-sm font-bold text-gray-400 bg-gray-50 px-2 py-1 rounded-md border border-gray-100">{cat.sex === 'MALE' ? '1.0' : '0.1'}</span>
                                 </div>
                                 <div className="flex gap-2">
-                                    <button
-                                        onClick={() => onCallToTable(cat)}
-                                        className="flex-1 bg-yellow-50 hover:bg-yellow-400 hover:text-white text-yellow-700 py-2.5 rounded-lg font-bold text-xs tracking-wider transition-colors flex items-center justify-center gap-2"
-                                    >
+                                    <button onClick={() => onCallToTable(cat)} className="flex-1 bg-yellow-50 text-yellow-700 border-2 border-transparent hover:bg-yellow-400 hover:text-white hover:border-yellow-400 py-1.5 rounded-lg font-bold text-xs tracking-wider transition-all duration-200 flex items-center justify-center gap-2 cursor-pointer focus:outline-none focus:ring-0">
                                         <StewardIcons.Megaphone />
                                         {t('steward.toTable', 'KE STOLU')}
                                     </button>
                                     <button
                                         onClick={() => onStatusChange(cat, 'WAITING')}
-                                        className="px-3 bg-gray-50 hover:bg-gray-100 text-gray-500 py-2.5 rounded-lg transition-colors border border-gray-100"
+                                        className="px-3 bg-gray-50 hover:bg-gray-100 text-gray-500 py-2.5 rounded-lg transition-colors border border-gray-100 cursor-pointer focus:outline-none focus:ring-0"
                                     >
                                         <StewardIcons.Close />
                                     </button>
