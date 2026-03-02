@@ -60,8 +60,8 @@ function App() {
                             </PrivateRoute>
                         } />
                     </Route>
-                    <Route path="/public/board" element={<StewardDashboard />} />
-                    <Route path="/public/board2" element={<PublicCallingBoard />} />
+                    <Route path="/public/board/:showId" element={<StewardDashboard />} />
+                    <Route path="/public/live-board/:showId" element={<PublicCallingBoard />} />
                 </Routes>
             </BrowserRouter>
         </AuthProvider>
