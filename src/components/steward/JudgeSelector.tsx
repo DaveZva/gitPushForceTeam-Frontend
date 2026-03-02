@@ -77,7 +77,10 @@ export const JudgeSelector = ({ judges, usedTables, onInitiateLock, onConfirmTab
                     <div className="bg-white rounded-2xl shadow-xl w-full max-w-md overflow-hidden">
                         <div className="p-6 border-b border-gray-100 flex justify-between items-center">
                             <h3 className="text-xl font-bold text-gray-900">{t('steward.tableSelectionTitle', 'Vyberte číslo stolu')}</h3>
-                            <button onClick={onCancelLock} className="text-gray-400 hover:text-red-500 transition-colors">
+                            <button
+                                onClick={onCancelLock}
+                                className="p-2 bg-[#027BFF] text-white border-2 border-[#027BFF] rounded-full transition-all duration-200 hover:bg-transparent hover:text-[#027BFF] flex items-center justify-center cursor-pointer outline-none"
+                            >
                                 <StewardIcons.Close />
                             </button>
                         </div>

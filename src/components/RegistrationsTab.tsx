@@ -106,7 +106,7 @@ export const RegistrationsTab = ({ showId }: { showId: string }) => {
                                 <td className="px-6 py-4 text-right">
                                     <button
                                         onClick={() => handleOpenDetail(reg.id)}
-                                        className="text-[#027BFF] font-semibold hover:text-[#0056b3] transition-colors text-sm hover:underline"
+                                        className="px-5 py-2 rounded-full border-2 border-[#027BFF] bg-[#027BFF] text-white font-bold text-xs uppercase tracking-wide transition-all duration-200 hover:bg-transparent hover:text-[#027BFF]"
                                     >
                                         {t('common.edit')}
                                     </button>
