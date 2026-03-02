@@ -211,6 +211,7 @@
       "both": "Oba dny",
       "agreed": "Souhlasím",
       "notAgreed": "Nesouhlasím",
+      "delete": "Smazat",
       "searchPlaceholder": "Hledat (Jméno, EMS, Reg. č.)...",
       "noResults": "Nenalezeny žádné záznamy odpovídající zadaným kritériím."
     },
@@ -411,6 +412,7 @@
     "edit": "Upravit",
     "yes": "Ano",
     "no": "Ne",
+    "delete": "Smazat",
     "select": "Vyberte",
     "noTitle": "Bez titulu",
     "pdf": "PDF",
