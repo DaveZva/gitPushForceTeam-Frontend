@@ -13,7 +13,7 @@ const STORAGE_KEY_JUDGE = "steward_selected_judge";
 export const StewardDashboard = () => {
     const { t } = useTranslation();
     const { showId } = useParams<{ showId: string }>();
-    const currentShowId = Number(showId) || 1;
+    const currentShowId = Number(showId) || 3;
 
     const [selectedJudge, setSelectedJudge] = useState<StewardJudgeDto | null>(null);
     const [judges, setJudges] = useState<StewardJudgeDto[]>([]);

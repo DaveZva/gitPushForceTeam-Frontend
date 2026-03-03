@@ -52,7 +52,7 @@ const playGong = () => {
 
 export const PublicCallingBoard = () => {
     const { showId } = useParams<{ showId: string }>();
-    const currentShowId = Number(showId) || 1;
+    const currentShowId = Number(showId) || 3;
     const [tables, setTables] = useState<TableState[]>([]);
     const [isStarted, setIsStarted] = useState(false);
     const [currentTime, setCurrentTime] = useState(new Date());
