@@ -8,12 +8,11 @@ import { JudgeSelector } from "../../components/steward/JudgeSelector";
 import { ActiveTablePanel } from "../../components/steward/ActiveTablePanel";
 import { QueuePanel } from "../../components/steward/QueuePanel";
 
-const STORAGE_KEY_JUDGE = "steward_selected_judge";
-
 export const StewardDashboard = () => {
     const { t } = useTranslation();
     const { showId } = useParams<{ showId: string }>();
-    const currentShowId = Number(showId) || 3;
+    const currentShowId = Number(showId) || 1;
+    const storageKey = `steward_selected_judge_${currentShowId}`;
 
     const [selectedJudge, setSelectedJudge] = useState<StewardJudgeDto | null>(null);
     const [judges, setJudges] = useState<StewardJudgeDto[]>([]);
@@ -21,6 +20,7 @@ export const StewardDashboard = () => {
     const [loading, setLoading] = useState(true);
     const [activeTab, setActiveTab] = useState<'QUEUE' | 'BIV' | 'BIS'>('QUEUE');
     const [judgeToLock, setJudgeToLock] = useState<StewardJudgeDto | null>(null);
+    const [isPaused, setIsPaused] = useState(false);
 
     const loadJudges = useCallback(async () => {
         try {
@@ -38,18 +38,18 @@ export const StewardDashboard = () => {
     useEffect(() => {
         const init = async () => {
             const data = await loadJudges();
-            const savedJudgeId = localStorage.getItem(STORAGE_KEY_JUDGE);
+            const savedJudgeId = localStorage.getItem(storageKey);
             if (savedJudgeId) {
                 const found = data.find(j => j.id.toString() === savedJudgeId);
                 if (found && found.isLockedByMe) {
                     setSelectedJudge(found);
                 } else {
-                    localStorage.removeItem(STORAGE_KEY_JUDGE);
+                    localStorage.removeItem(storageKey);
                 }
             }
         };
         init();
-    }, [loadJudges]);
+    }, [loadJudges, storageKey]);
 
     const fetchQueue = useCallback(async () => {
         if (!selectedJudge) return;
@@ -72,7 +72,7 @@ export const StewardDashboard = () => {
     const initiateLock = (judge: StewardJudgeDto) => {
         if (judge.isLockedByMe) {
             setSelectedJudge(judge);
-            localStorage.setItem(STORAGE_KEY_JUDGE, judge.id.toString());
+            localStorage.setItem(storageKey, judge.id.toString());
             return;
         }
         setJudgeToLock(judge);
@@ -85,7 +85,7 @@ export const StewardDashboard = () => {
             if (success) {
                 const updatedJudge = { ...judgeToLock, tableNumber, isLockedByMe: true };
                 setSelectedJudge(updatedJudge);
-                localStorage.setItem(STORAGE_KEY_JUDGE, updatedJudge.id.toString());
+                localStorage.setItem(storageKey, updatedJudge.id.toString());
                 await loadJudges();
             } else {
                 alert(t('steward.tableTakenError', 'Tento stůl je již obsazen jiným stevardem.'));
@@ -93,23 +93,29 @@ export const StewardDashboard = () => {
             }
         } catch (error) {
             console.error(error);
+            alert(t('steward.lockError', 'Došlo k chybě při zamykání stolu. Zkuste to prosím znovu.'));
         }
         setJudgeToLock(null);
     };
 
-    const handleLeaveTable = () => {
+    const handleLeaveTable = async () => {
         setSelectedJudge(null);
-        localStorage.removeItem(STORAGE_KEY_JUDGE);
+        localStorage.removeItem(storageKey);
         setQueue([]);
+        await loadJudges();
     };
 
     const handleReleaseTable = async () => {
         if (window.confirm(t('steward.confirmRelease', 'Opravdu chcete uvolnit tento stůl?'))) {
             if (selectedJudge) {
-                await stewardApi.unlockJudge(currentShowId, selectedJudge.id);
+                try {
+                    await stewardApi.unlockJudge(currentShowId, selectedJudge.id);
+                } catch (error) {
+                    console.error(error);
+                }
             }
             setSelectedJudge(null);
-            localStorage.removeItem(STORAGE_KEY_JUDGE);
+            localStorage.removeItem(storageKey);
             setQueue([]);
             await loadJudges();
         }
@@ -153,6 +159,23 @@ export const StewardDashboard = () => {
         }
     };
 
+    const handleCallBivGroup = async (cats: StewardQueueEntry[]) => {
+        try {
+            await Promise.all(cats.map(cat => stewardApi.callToBoard({
+                showId: currentShowId,
+                tableNo: `T${selectedJudge?.tableNumber}`,
+                judgeName: selectedJudge?.name || "Judge",
+                catNumber: cat.catalogNumber,
+                category: 'BIV',
+                urgency: 'NORMAL'
+            })));
+            await Promise.all(cats.map(cat => stewardApi.updateSheetStatus(cat.id, 'JUDGING')));
+            fetchQueue();
+        } catch (err) {
+            console.error(err);
+        }
+    };
+
     const handleSetUrgency = async (cat: StewardQueueEntry, newUrgency: string) => {
         if (!cat.callingRecordId) return;
         try {
@@ -175,7 +198,28 @@ export const StewardDashboard = () => {
         }
     };
 
-    const currentCat = useMemo(() => queue.find(q => q.status === 'JUDGING'), [queue]);
+    const handleFinishAll = async (cats: StewardQueueEntry[]) => {
+        try {
+            await Promise.all(cats.map(cat => handleFinishJudging(cat)));
+        } catch (err) {
+            console.error(err);
+        }
+    };
+
+    const handleTogglePause = async () => {
+        if (!selectedJudge) return;
+        const newPauseState = !isPaused;
+        setIsPaused(newPauseState);
+        try {
+            await stewardApi.togglePause(currentShowId, selectedJudge.id, newPauseState);
+            fetchQueue();
+        } catch (err) {
+            console.error(err);
+            setIsPaused(!newPauseState);
+        }
+    };
+
+    const currentCats = useMemo(() => queue.filter(q => q.status === 'JUDGING'), [queue]);
     const readyCats = useMemo(() => queue.filter(q => q.status === 'READY'), [queue]);
     const waitingCats = useMemo(() => queue.filter(q => q.status === 'WAITING'), [queue]);
     const allActiveCats = useMemo(() => queue.filter(q => q.status !== 'ABSENT'), [queue]);
@@ -220,10 +264,13 @@ export const StewardDashboard = () => {
 
             <div className="max-w-[1600px] mx-auto p-4 lg:p-6 grid grid-cols-1 lg:grid-cols-12 gap-6">
                 <ActiveTablePanel
-                    currentCat={currentCat}
+                    currentCats={currentCats}
                     readyCats={readyCats}
+                    isPaused={isPaused}
+                    onTogglePause={handleTogglePause}
                     onSetUrgency={handleSetUrgency}
                     onFinishJudging={handleFinishJudging}
+                    onFinishAll={handleFinishAll}
                     onCallToTable={handleCallToTable}
                     onStatusChange={handleStatusChange}
                 />
@@ -236,6 +283,7 @@ export const StewardDashboard = () => {
                     allActiveCats={allActiveCats}
                     onStatusChange={handleStatusChange}
                     onCallToTable={handleCallToTable}
+                    onCallBivGroup={handleCallBivGroup}
                     onPrepareGroup={handlePrepareGroup}
                 />
             </div>
