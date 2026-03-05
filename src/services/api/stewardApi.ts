@@ -23,6 +23,7 @@ export interface StewardJudgeDto {
     lockedBySteward: string | null;
     isLockedByMe: boolean;
     tableNumber: number | null;
+    isPaused: boolean;
 }
 
 export const stewardApi = {
