@@ -10,14 +10,15 @@ interface QueuePanelProps {
     allActiveCats: StewardQueueEntry[];
     onStatusChange: (cat: StewardQueueEntry, status: string) => void;
     onCallToTable: (cat: StewardQueueEntry, type?: string) => void;
+    onCallBivGroup: (cats: StewardQueueEntry[]) => void;
     onPrepareGroup: (cats: StewardQueueEntry[]) => void;
 }
 
-export const QueuePanel = ({ activeTab, setActiveTab, waitingCats, bivGroups, allActiveCats, onStatusChange, onCallToTable, onPrepareGroup }: QueuePanelProps) => {
+export const QueuePanel = ({ activeTab, setActiveTab, waitingCats, bivGroups, allActiveCats, onStatusChange, onCallToTable, onCallBivGroup, onPrepareGroup }: QueuePanelProps) => {
     const { t } = useTranslation();
 
     const tabs = [
-        { id: 'QUEUE', label: t('steward.tabs.queue') },
+        { id: 'QUEUE', label: t('steward.tabs.queue', 'FRONTA') },
         { id: 'BIV', label: 'BIV', count: bivGroups.length },
         { id: 'BIS', label: 'BIS / NOM' }
     ] as const;
@@ -30,17 +31,15 @@ export const QueuePanel = ({ activeTab, setActiveTab, waitingCats, bivGroups, al
                         <button
                             key={tab.id}
                             onClick={() => setActiveTab(tab.id as any)}
-                            className={`flex-1 py-4 font-bold text-xs sm:text-sm uppercase tracking-wide transition-none relative border-2 border-[#027BFF] cursor-pointer focus:outline-none focus:ring-0 ${
+                            className={`flex-1 py-4 font-bold text-xs sm:text-sm uppercase tracking-wide transition-colors relative ${
                                 activeTab === tab.id
-                                    ? 'text-[#027BFF] bg-white'
-                                    : 'text-white bg-[#027BFF]'
+                                    ? 'text-[#027BFF] border-b-2 border-[#027BFF] bg-blue-50/10'
+                                    : 'text-gray-400 hover:text-gray-600 hover:bg-gray-50'
                             }`}
                         >
                             {tab.label}
                             {'count' in tab && tab.count ? (
-                                <span className="ml-2 bg-red-500 text-white text-[10px] px-1.5 py-0.5 rounded-full shadow-sm">
-            {tab.count}
-        </span>
+                                <span className="ml-2 bg-red-500 text-white text-[10px] px-1.5 py-0.5 rounded-full">{tab.count}</span>
                             ) : null}
                         </button>
                     ))}
@@ -50,7 +49,7 @@ export const QueuePanel = ({ activeTab, setActiveTab, waitingCats, bivGroups, al
                     {activeTab === 'QUEUE' && (
                         <>
                             {waitingCats.length === 0 ? (
-                                <div className="text-center py-12 text-gray-400 text-sm">{t('steward.queueEmpty')}</div>
+                                <div className="text-center py-12 text-gray-400 text-sm">{t('steward.queueEmpty', 'Fronta je prázdná')}</div>
                             ) : (
                                 waitingCats.map(cat => (
                                     <div key={cat.id} className="bg-white p-3 rounded-lg border border-gray-200 flex items-center justify-between group shadow-sm hover:border-[#027BFF]/30 transition-colors">
@@ -67,14 +66,14 @@ export const QueuePanel = ({ activeTab, setActiveTab, waitingCats, bivGroups, al
                                                 className="px-3 py-2 bg-gray-50 text-gray-600 hover:bg-yellow-50 hover:text-yellow-700 hover:border-yellow-200 border border-gray-100 rounded-lg font-bold text-[10px] tracking-wider transition-colors flex items-center gap-1"
                                             >
                                                 <StewardIcons.List />
-                                                {t('steward.prepare')}
+                                                {t('steward.prepare', 'PŘIPRAVIT')}
                                             </button>
                                             <button
                                                 onClick={() => onCallToTable(cat)}
                                                 className="px-3 py-2 bg-blue-50 text-[#027BFF] hover:bg-[#027BFF] hover:text-white rounded-lg font-bold text-[10px] tracking-wider transition-colors flex items-center gap-1"
                                             >
                                                 <StewardIcons.Megaphone />
-                                                {t('steward.toTableBtn')}
+                                                {t('steward.toTableBtn', 'VOLAT')}
                                             </button>
                                         </div>
                                     </div>
@@ -86,7 +85,7 @@ export const QueuePanel = ({ activeTab, setActiveTab, waitingCats, bivGroups, al
                     {activeTab === 'BIV' && (
                         <div className="space-y-3">
                             {bivGroups.length === 0 ? (
-                                <div className="text-center py-12 text-gray-400 text-sm">{t('steward.noBivAvailable')}</div>
+                                <div className="text-center py-12 text-gray-400 text-sm">{t('steward.noBivAvailable', 'Žádné BIV skupiny')}</div>
                             ) : (
                                 bivGroups.map(([groupName, cats]) => {
                                     const canPrepare = cats.some(c => c.status !== 'READY' && c.status !== 'JUDGING');
@@ -95,11 +94,11 @@ export const QueuePanel = ({ activeTab, setActiveTab, waitingCats, bivGroups, al
                                         <div key={groupName} className="bg-white rounded-lg border border-gray-200 overflow-hidden shadow-sm">
                                             <div className="bg-blue-50 px-4 py-3 border-b border-blue-100 flex justify-between items-center">
                                                 <span className="font-bold text-[#027BFF] text-sm">{groupName}</span>
-                                                <span className="text-xs font-bold text-blue-500 bg-blue-100 px-2 py-1 rounded-full">{cats.length} {t('steward.cats')}</span>
+                                                <span className="text-xs font-bold text-blue-500 bg-blue-100 px-2 py-1 rounded-full">{cats.length} {t('steward.cats', 'koček')}</span>
                                             </div>
                                             <div className="p-2 space-y-2 bg-gray-50/50">
                                                 {cats.map(cat => (
-                                                    <div key={cat.id} className={`bg-white p-2.5 rounded-lg border flex items-center justify-between shadow-sm transition-all duration-200 ${cat.status === 'DONE' ? 'border-green-200 bg-green-50/30' : 'border-gray-200 hover:border-[#027BFF]/30 hover:shadow-md'}`}>
+                                                    <div key={cat.id} className={`bg-white p-2.5 rounded-lg border flex items-center justify-between shadow-sm transition-colors ${cat.status === 'DONE' ? 'border-green-200 bg-green-50/30' : 'border-gray-200'}`}>
                                                         <div className="flex items-center gap-3">
                                                             <span className={`font-bold w-8 text-right text-lg ${cat.status === 'DONE' ? 'text-gray-400' : 'text-gray-900'}`}>
                                                                 #{cat.catalogNumber}
@@ -111,7 +110,7 @@ export const QueuePanel = ({ activeTab, setActiveTab, waitingCats, bivGroups, al
                                                         <div className="flex gap-2 items-center">
                                                             {cat.status === 'DONE' && (
                                                                 <span className="text-[10px] font-bold text-green-600 uppercase bg-green-100 px-2 py-1.5 rounded border border-green-200 flex items-center gap-1">
-                                                                    <StewardIcons.Check /> {t('steward.judged')}
+                                                                    <StewardIcons.Check /> {t('steward.judged', 'Posouzeno')}
                                                                 </span>
                                                             )}
                                                             <button
@@ -119,25 +118,29 @@ export const QueuePanel = ({ activeTab, setActiveTab, waitingCats, bivGroups, al
                                                                 className="px-2 py-1.5 bg-gray-50 text-gray-600 hover:bg-yellow-50 hover:text-yellow-700 hover:border-yellow-200 border border-gray-100 rounded-md font-bold text-[10px] tracking-wider transition-colors flex items-center gap-1"
                                                             >
                                                                 <StewardIcons.List />
-                                                                {t('steward.prepare')}
-                                                            </button>
-                                                            <button
-                                                                onClick={() => onCallToTable(cat, 'BIV')}
-                                                                className="px-2 py-1.5 bg-red-50 text-red-600 hover:bg-red-600 hover:text-white border border-red-100 hover:border-red-600 rounded-md font-bold text-[10px] tracking-wider transition-all duration-200 flex items-center gap-1 cursor-pointer"
-                                                            >
-                                                                <StewardIcons.Megaphone />
-                                                                BIV
+                                                                {t('steward.prepare', 'PŘIPRAVIT')}
                                                             </button>
                                                         </div>
                                                     </div>
                                                 ))}
 
                                                 {canPrepare && (
-                                                    <button onClick={() => onPrepareGroup(cats)} className="w-full mt-2 bg-yellow-50/80 border border-yellow-200 text-yellow-700 hover:bg-yellow-400 hover:text-white hover:border-yellow-400 font-bold py-2.5 rounded-lg text-xs transition-all duration-200 flex items-center justify-center gap-2 cursor-pointer focus:outline-none focus:ring-0">
+                                                    <button
+                                                        onClick={() => onPrepareGroup(cats)}
+                                                        className="w-full mt-2 bg-yellow-50/80 border border-yellow-200 text-yellow-700 hover:bg-yellow-400 hover:text-white font-bold py-2.5 rounded-lg text-xs transition-colors flex items-center justify-center gap-2"
+                                                    >
                                                         <StewardIcons.List />
-                                                        {t('steward.prepareGroup')}
+                                                        {t('steward.prepareGroup', 'PŘIPRAVIT CELOU SKUPINU')}
                                                     </button>
                                                 )}
+
+                                                <button
+                                                    onClick={() => onCallBivGroup(cats)}
+                                                    className="w-full mt-2 bg-purple-50 text-purple-700 hover:bg-purple-600 hover:text-white border border-purple-200 font-bold py-3 rounded-lg text-xs tracking-wide transition-colors flex items-center justify-center gap-2 shadow-sm"
+                                                >
+                                                    <StewardIcons.Megaphone />
+                                                    {t('steward.callGroupBiv', 'VYVOLAT CELOU SKUPINU K BIV')}
+                                                </button>
                                             </div>
                                         </div>
                                     );
@@ -149,22 +152,18 @@ export const QueuePanel = ({ activeTab, setActiveTab, waitingCats, bivGroups, al
                     {activeTab === 'BIS' && (
                         <div className="p-2 grid grid-cols-1 gap-3">
                             {allActiveCats.map(cat => (
-                                <div key={cat.id} className="bg-white p-3 rounded-lg border border-[#027BFF]/30 flex items-center justify-between shadow-sm hover:border-[#027BFF]/70 transition-colors">
-                                    <span className="font-bold text-black-900 w-8 text-lg">#{cat.catalogNumber}</span>
-                                    <div className="flex gap-2">
-                                        <button
-                                            onClick={() => onCallToTable(cat, 'BIS')}
-                                            className="px-4 py-2 bg-red-100 text-red-600 rounded-lg font-bold text-xs tracking-wider transition-all duration-200 border-2 border-transparent hover:border-red-600 hover:text-red-800 hover:bg-red-200 focus:outline-none focus:ring-0 cursor-pointer"
-                                        >
-                                            {t('steward.callBis')}
-                                        </button>
-                                        <button
-                                            onClick={() => onCallToTable(cat, 'BOB')}
-                                            className="px-4 py-2 bg-green-100 text-green-600 rounded-lg font-bold text-xs tracking-wider transition-all duration-200 border-2 border-transparent hover:border-green-600 hover:text-green-800 hover:bg-green-200 focus:outline-none focus:ring-0 cursor-pointer"
-                                        >
-                                            {t('steward.callBob')}
-                                        </button>
+                                <div key={cat.id} className="bg-white p-3 rounded-lg border border-purple-200 flex items-center justify-between shadow-sm hover:border-purple-400 transition-colors">
+                                    <div className="flex items-center gap-4">
+                                        <span className="font-bold text-purple-900 w-8 text-lg text-right">#{cat.catalogNumber}</span>
+                                        <span className="text-xs font-bold text-gray-500">{cat.ems}</span>
                                     </div>
+                                    <button
+                                        onClick={() => onCallToTable(cat, 'BIS')}
+                                        className="px-6 py-2.5 bg-purple-100 text-purple-700 hover:bg-purple-600 hover:text-white rounded-lg font-bold text-xs tracking-wider transition-colors flex items-center gap-2 shadow-sm"
+                                    >
+                                        <StewardIcons.Megaphone />
+                                        {t('steward.callBis', 'VOLAT BIS')}
+                                    </button>
                                 </div>
                             ))}
                         </div>

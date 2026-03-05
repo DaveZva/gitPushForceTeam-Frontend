@@ -23,6 +23,7 @@ export interface StewardJudgeDto {
     lockedBySteward: string | null;
     isLockedByMe: boolean;
     tableNumber: number | null;
+    isPaused: boolean;
 }
 
 export const stewardApi = {
@@ -61,5 +62,9 @@ export const stewardApi = {
     updateUrgency: async (callingRecordId: number, urgency: string) => {
         const res = await api.patch(`/calling/${callingRecordId}/urgency`, { urgency });
         return res.data;
+    },
+
+    togglePause: async (showId: number, judgeId: number, isPaused: boolean) => {
+        await api.patch(`/steward/show/${showId}/judge/${judgeId}/pause`, { isPaused });
     }
 };

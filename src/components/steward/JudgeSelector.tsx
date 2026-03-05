@@ -14,8 +14,6 @@ interface JudgeSelectorProps {
 export const JudgeSelector = ({ judges, usedTables, onInitiateLock, onConfirmTable, judgeToLock, onCancelLock }: JudgeSelectorProps) => {
     const { t } = useTranslation();
 
-    // Dynamický výpočet viditelných stolů:
-    // Ukazuje 4. Pokud jsou 1-4 všechny obsazené, ukáže 8. Pokud 1-8, ukáže 12 atd.
     const getVisibleTableCount = () => {
         let count = 4;
         while (
