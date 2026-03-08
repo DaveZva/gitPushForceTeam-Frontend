@@ -107,7 +107,7 @@ export default function PaymentPage() {
                                     <span className="text-3xl">⚠️</span>
                                 </div>
                                 <h3 className="text-xl font-bold text-gray-900 mb-2">
-                                    {t('payment.errorTitle', 'Nelze provést platbu')}
+                                    {t('payment.errorTitle')}
                                 </h3>
                                 <p className="text-gray-600 mb-6">
                                     {error}
@@ -116,7 +116,7 @@ export default function PaymentPage() {
                                     onClick={() => navigate('/my-applications')}
                                     className="px-6 py-3 bg-blue-600 text-white rounded-xl font-semibold hover:bg-blue-700 transition-colors shadow-lg"
                                 >
-                                    {t('navigation.backToRegistrations', 'Zpět na přihlášky')}
+                                    {t('navigation.backToRegistrations')}
                                 </button>
                             </div>
                         ) : clientSecret ? (

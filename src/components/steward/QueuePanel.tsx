@@ -18,7 +18,7 @@ export const QueuePanel = ({ activeTab, setActiveTab, waitingCats, bivGroups, al
     const { t } = useTranslation();
 
     const tabs = [
-        { id: 'QUEUE', label: t('steward.tabs.queue', 'FRONTA') },
+        { id: 'QUEUE', label: t('steward.tabs.queue') },
         { id: 'BIV', label: 'BIV', count: bivGroups.length },
         { id: 'BIS', label: 'BIS / NOM' }
     ] as const;
@@ -49,7 +49,7 @@ export const QueuePanel = ({ activeTab, setActiveTab, waitingCats, bivGroups, al
                     {activeTab === 'QUEUE' && (
                         <>
                             {waitingCats.length === 0 ? (
-                                <div className="text-center py-12 text-gray-400 text-sm">{t('steward.queueEmpty', 'Fronta je prázdná')}</div>
+                                <div className="text-center py-12 text-gray-400 text-sm">{t('steward.queueEmpty')}</div>
                             ) : (
                                 waitingCats.map(cat => (
                                     <div key={cat.id} className="bg-white p-3 rounded-lg border border-gray-200 flex items-center justify-between group shadow-sm hover:border-[#027BFF]/30 transition-colors">
@@ -66,14 +66,14 @@ export const QueuePanel = ({ activeTab, setActiveTab, waitingCats, bivGroups, al
                                                 className="px-3 py-2 bg-gray-50 text-gray-600 hover:bg-yellow-50 hover:text-yellow-700 hover:border-yellow-200 border border-gray-100 rounded-lg font-bold text-[10px] tracking-wider transition-colors flex items-center gap-1"
                                             >
                                                 <StewardIcons.List />
-                                                {t('steward.prepare', 'PŘIPRAVIT')}
+                                                {t('steward.prepare')}
                                             </button>
                                             <button
                                                 onClick={() => onCallToTable(cat)}
                                                 className="px-3 py-2 bg-blue-50 text-[#027BFF] hover:bg-[#027BFF] hover:text-white rounded-lg font-bold text-[10px] tracking-wider transition-colors flex items-center gap-1"
                                             >
                                                 <StewardIcons.Megaphone />
-                                                {t('steward.toTableBtn', 'VOLAT')}
+                                                {t('steward.toTableBtn')}
                                             </button>
                                         </div>
                                     </div>
@@ -85,7 +85,7 @@ export const QueuePanel = ({ activeTab, setActiveTab, waitingCats, bivGroups, al
                     {activeTab === 'BIV' && (
                         <div className="space-y-3">
                             {bivGroups.length === 0 ? (
-                                <div className="text-center py-12 text-gray-400 text-sm">{t('steward.noBivAvailable', 'Žádné BIV skupiny')}</div>
+                                <div className="text-center py-12 text-gray-400 text-sm">{t('steward.noBivAvailable')}</div>
                             ) : (
                                 bivGroups.map(([groupName, cats]) => {
                                     const canPrepare = cats.some(c => c.status !== 'READY' && c.status !== 'JUDGING');
@@ -94,7 +94,7 @@ export const QueuePanel = ({ activeTab, setActiveTab, waitingCats, bivGroups, al
                                         <div key={groupName} className="bg-white rounded-lg border border-gray-200 overflow-hidden shadow-sm">
                                             <div className="bg-blue-50 px-4 py-3 border-b border-blue-100 flex justify-between items-center">
                                                 <span className="font-bold text-[#027BFF] text-sm">{groupName}</span>
-                                                <span className="text-xs font-bold text-blue-500 bg-blue-100 px-2 py-1 rounded-full">{cats.length} {t('steward.cats', 'koček')}</span>
+                                                <span className="text-xs font-bold text-blue-500 bg-blue-100 px-2 py-1 rounded-full">{cats.length} {t('steward.cats')}</span>
                                             </div>
                                             <div className="p-2 space-y-2 bg-gray-50/50">
                                                 {cats.map(cat => (
@@ -110,7 +110,7 @@ export const QueuePanel = ({ activeTab, setActiveTab, waitingCats, bivGroups, al
                                                         <div className="flex gap-2 items-center">
                                                             {cat.status === 'DONE' && (
                                                                 <span className="text-[10px] font-bold text-green-600 uppercase bg-green-100 px-2 py-1.5 rounded border border-green-200 flex items-center gap-1">
-                                                                    <StewardIcons.Check /> {t('steward.judged', 'Posouzeno')}
+                                                                    <StewardIcons.Check /> {t('steward.judged')}
                                                                 </span>
                                                             )}
                                                             <button
@@ -118,7 +118,7 @@ export const QueuePanel = ({ activeTab, setActiveTab, waitingCats, bivGroups, al
                                                                 className="px-2 py-1.5 bg-gray-50 text-gray-600 hover:bg-yellow-50 hover:text-yellow-700 hover:border-yellow-200 border border-gray-100 rounded-md font-bold text-[10px] tracking-wider transition-colors flex items-center gap-1"
                                                             >
                                                                 <StewardIcons.List />
-                                                                {t('steward.prepare', 'PŘIPRAVIT')}
+                                                                {t('steward.prepare')}
                                                             </button>
                                                         </div>
                                                     </div>
@@ -130,7 +130,7 @@ export const QueuePanel = ({ activeTab, setActiveTab, waitingCats, bivGroups, al
                                                         className="w-full mt-2 bg-yellow-50/80 border border-yellow-200 text-yellow-700 hover:bg-yellow-400 hover:text-white font-bold py-2.5 rounded-lg text-xs transition-colors flex items-center justify-center gap-2"
                                                     >
                                                         <StewardIcons.List />
-                                                        {t('steward.prepareGroup', 'PŘIPRAVIT CELOU SKUPINU')}
+                                                        {t('steward.prepareGroup')}
                                                     </button>
                                                 )}
 
@@ -139,7 +139,7 @@ export const QueuePanel = ({ activeTab, setActiveTab, waitingCats, bivGroups, al
                                                     className="w-full mt-2 bg-purple-50 text-purple-700 hover:bg-purple-600 hover:text-white border border-purple-200 font-bold py-3 rounded-lg text-xs tracking-wide transition-colors flex items-center justify-center gap-2 shadow-sm"
                                                 >
                                                     <StewardIcons.Megaphone />
-                                                    {t('steward.callGroupBiv', 'VYVOLAT CELOU SKUPINU K BIV')}
+                                                    {t('steward.callGroupBiv')}
                                                 </button>
                                             </div>
                                         </div>
@@ -162,7 +162,7 @@ export const QueuePanel = ({ activeTab, setActiveTab, waitingCats, bivGroups, al
                                         className="px-6 py-2.5 bg-purple-100 text-purple-700 hover:bg-purple-600 hover:text-white rounded-lg font-bold text-xs tracking-wider transition-colors flex items-center gap-2 shadow-sm"
                                     >
                                         <StewardIcons.Megaphone />
-                                        {t('steward.callBis', 'VOLAT BIS')}
+                                        {t('steward.callBis')}
                                     </button>
                                 </div>
                             ))}

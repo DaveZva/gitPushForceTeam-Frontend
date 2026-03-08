@@ -226,7 +226,7 @@ export default function ShowControlCenter() {
                                             <span className="text-xs md:text-sm text-gray-500">{t('secretariat.stats.totalCats')}</span>
                                         </div>
                                         <p className="text-xl md:text-2xl font-bold text-gray-900">{show.totalCats || 0}</p>
-                                        <p className="text-xs text-gray-400">{((show.totalCats || 0) / show.maxCats * 100).toFixed(1)}% {t('secretariat.stats.capacity', 'kapacity')}</p>
+                                        <p className="text-xs text-gray-400">{((show.totalCats || 0) / show.maxCats * 100).toFixed(1)}% {t('secretariat.stats.capacity')}</p>
                                     </div>
 
                                     <div className="bg-green-50 p-3 md:p-4 rounded-xl border border-green-100">
@@ -269,7 +269,7 @@ export default function ShowControlCenter() {
                                     <div className="flex justify-between items-center mb-1">
                                         <span className="text-sm font-medium text-gray-600">{t('secretariat.showStart')}</span>
                                         <span className="text-xs font-bold bg-blue-50 text-blue-700 px-2 py-0.5 rounded">
-                                            {daysToShow > 0 ? `${t('common.in', 'za')} ${daysToShow} ${t('common.days')}` : t('common.now')}
+                                            {daysToShow > 0 ? `${t('common.in')} ${daysToShow} ${t('common.days')}` : t('common.now')}
                                         </span>
                                     </div>
                                     <p className="text-sm text-gray-900">{new Date(show.startDate).toLocaleDateString()}</p>
@@ -281,7 +281,7 @@ export default function ShowControlCenter() {
                                     <div className="flex justify-between items-center mb-1">
                                         <span className="text-sm font-medium text-gray-600">{t('secretariat.showEnd')}</span>
                                         <span className="text-xs font-bold bg-blue-50 text-blue-700 px-2 py-0.5 rounded">
-                                            {daysToEndShow > 0 ? `${t('common.in', 'za')} ${daysToEndShow} ${t('common.days')}` : t('common.now')}
+                                            {daysToEndShow > 0 ? `${t('common.in')} ${daysToEndShow} ${t('common.days')}` : t('common.now')}
                                         </span>
                                     </div>
                                     <p className="text-sm text-gray-900">{new Date(show.endDate).toLocaleDateString()}</p>

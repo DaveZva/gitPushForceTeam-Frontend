@@ -80,7 +80,8 @@
     "processing": "Processing...",
     "pay": "Pay",
     "sslSecure": "SSL Secure",
-    "poweredByStripe": "Powered by Stripe"
+    "poweredByStripe": "Powered by Stripe",
+    "errorTitle": "An error occurred"
   },
   "table": {
     "show": "Show",
@@ -99,7 +100,8 @@
     "showAllShows": "Show All Shows →",
     "applyToShow": "Apply for Show",
     "showDetails": "Show Details",
-    "pay": "Pay"
+    "pay": "Pay",
+    "actions": "Actions"
   },
   "auth": {
     "login": "Login",
@@ -261,7 +263,10 @@
       "own": "Own Cage - 1700 CZK",
       "rentSmall": "Rented Cage 70x70 - 2200 CZK",
       "rentLarge": "Rented Cage 120x70 - 2800 CZK"
-    }
+    },
+    "chip": "Chip",
+    "pedigree": "Pedigree",
+    "sex": "Sex"
   },
   "stepper": {
     "exhibition": "Show",
@@ -464,7 +469,12 @@
     "CLOSED": "Registration Closed",
     "COMPLETED": "Completed",
     "CANCELLED": "Cancelled",
-    "CONFIRMED": "Paid"
+    "CONFIRMED": "Paid",
+    "PLANNED_desc": "PLANNED",
+    "OPEN_desc": "OPEN",
+    "CLOSED_desc": "CLOSED",
+    "COMPLETED_desc": "COMPLETED",
+    "CANCELLED_desc": "CANCELLED"
   },
   "regStatuses": {
     "PLANNED": "Pending Payment",
@@ -502,7 +512,10 @@
         "date": "Date",
         "status": "Status",
         "actions": "Actions"
-      }
+      },
+      "editShow": "Edit Show",
+      "detail": "Detail",
+      "editAction": "Edit"
     },
     "create": {
       "title": "Create New Show",
@@ -595,7 +608,15 @@
     "resultsReports": "Judges & Colours",
     "dateAndPlace": "Date and Place",
     "backToList": "Back to List",
-    "status": "Status"
+    "status": "Status",
+    "totalCats": "Total Cats",
+    "filterAll": "All",
+    "filterCat": "Cat",
+    "tableNo": "Cage",
+    "tableEms": "EMS",
+    "tableSex": "Sex",
+    "tableClass": "Class",
+    "inProgress": "In Progress"
   },
   "secretariat": {
     "dashboard": {
@@ -678,7 +699,9 @@
     "viewPublicCatalog": "View Catalog",
     "registrationDeadline": "Registration Deadline",
     "showStart": "Show Start",
-    "showEnd": "Show End"
+    "showEnd": "Show End",
+    "title": "Secretariat",
+    "adminRole": "Admin Role"
   },
   "validation": {
     "cat": {
@@ -747,7 +770,10 @@
       "localOrganization.min": "Invalid local club name",
       "localOrganization.max": "Local club name too long",
       "membershipNumber.min": "Invalid member number",
-      "membershipNumber.max": "Member number too long"
+      "membershipNumber.max": "Member number too long",
+      "country": {
+        "min": "Select country"
+      }
     },
     "exhibition": {
       "name.min": "Name must be at least 5 characters.",
@@ -764,6 +790,11 @@
       "vetCheckStart.invalid": "Invalid veterinary check time.",
       "judgingStart.invalid": "Invalid judging start time.",
       "judgingEnd.invalid": "Invalid judging end time."
+    },
+    "auth": {
+      "password": {
+        "min": "Password must be at least 8 characters"
+      }
     }
   },
   "paymentResult": {
@@ -779,7 +810,8 @@
     "backToApplications": "Back to My Applications",
     "tryAgain": "Try Again",
     "verifying": "Verifying registration status...",
-    "verificationFailed": "Could not verify registration status, but payment was likely successful. Check your applications."
+    "verificationFailed": "Could not verify registration status, but payment was likely successful. Check your applications.",
+    "error": "Error"
   },
   "judging": {
     "title": "Judging Sheets",
@@ -802,7 +834,9 @@
     "generating": "Generating...",
     "balancing": "Balancing...",
     "rebalance": "Recalculate Distribution",
-    "confirmRebalance": "Recalculate distribution for balanced workload?"
+    "confirmRebalance": "Recalculate distribution for balanced workload?",
+    "rebalanceSuccess": "Distribution saved successfully",
+    "noWorkload": "No workload"
   },
   "location": "Location",
   "myCats": {
@@ -882,5 +916,25 @@
     "noWorkload": "No judges assigned for this day.",
     "catsCountLabel": "CATS",
     "noBreedsAssigned": "No breeds assigned yet"
+  },
+  "loading": "Loading...",
+  "saturday": "Saturday",
+  "sunday": "Sunday",
+  "error": {
+    "loadFailed": "Load failed",
+    "saveFailed": "Save failed"
+  },
+  "navigation": {
+    "backToRegistrations": "Back to applications"
+  },
+  "board": {
+    "title": "Calling Board",
+    "activeJudging": "ACTIVE JUDGING",
+    "broadcast": "CAT SHOW BROADCAST",
+    "waitingSteward": "WAITING FOR STEWARD",
+    "unoccupied": "UNOCCUPIED",
+    "finalCall": "Final Call!",
+    "preparing": "Preparing",
+    "nextInLine": "Next In Line"
   }
 }

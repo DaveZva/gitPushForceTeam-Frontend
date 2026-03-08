@@ -143,7 +143,7 @@ export const JudgeReportDetail = ({ showId, judgeId, date }: Props) => {
                                         {getMark(col)}
                                     </td>
                                 ))}
-                                <td className="p-2 border text-left italic text-gray-400">In Progress</td>
+                                <td className="p-2 border text-left italic text-gray-400">{t('catalog.inProgress')}</td>
                             </tr>
                         );
                     })}

@@ -60,7 +60,7 @@ export default function ShowEditPage() {
                 reset(formattedData);
             } catch (err) {
                 console.error(err);
-                setLoadError(t('error.loadFailed', 'Nepodařilo se načíst data výstavy.'));
+                setLoadError(t('error.loadFailed'));
             } finally {
                 setIsLoading(false);
             }
@@ -91,7 +91,7 @@ export default function ShowEditPage() {
             navigate(`/secretariat/shows/${id}`);
         } catch (err) {
             console.error(err);
-            alert(t('error.saveFailed', 'Chyba při ukládání změn.'));
+            alert(t('error.saveFailed'));
         }
     };
 
@@ -112,13 +112,13 @@ export default function ShowEditPage() {
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
                 <div className="mb-6">
                     <nav className="text-sm text-gray-500 mb-2">
-                        <Link to="/secretariat" className="hover:text-blue-600">Sekretariát</Link>
+                        <Link to="/secretariat" className="hover:text-blue-600">{t('secretariat.title')}</Link>
                         <span className="mx-2">/</span>
-                        <Link to={`/secretariat/shows/${id}`} className="hover:text-blue-600">Detail</Link>
+                        <Link to={`/secretariat/shows/${id}`} className="hover:text-blue-600">{t('admin.shows.detail')}</Link>
                         <span className="mx-2">/</span>
-                        <span className="text-gray-900 font-medium">Editace</span>
+                        <span className="text-gray-900 font-medium">{t('admin.shows.editAction')}</span>
                     </nav>
-                    <h1 className="text-3xl font-bold text-gray-900">Upravit výstavu</h1>
+                    <h1 className="text-3xl font-bold text-gray-900">{t('admin.shows.editShow')}</h1>
                 </div>
 
                 <div className="max-w-3xl mx-auto bg-white p-8 rounded-xl shadow-sm border border-gray-200">
@@ -140,11 +140,11 @@ export default function ShowEditPage() {
                                     {...register('status')}
                                     className="w-full p-3 bg-gray-100 rounded-lg border-[1px] border-transparent focus:outline-none focus:ring-1 focus:ring-[#027BFF] focus:border-[#027BFF]"
                                 >
-                                    <option value="PLANNED">PLANNED (Připravuje se)</option>
-                                    <option value="OPEN">OPEN (Otevřeno)</option>
-                                    <option value="CLOSED">CLOSED (Uzavřeno)</option>
-                                    <option value="COMPLETED">COMPLETED (Proběhlo)</option>
-                                    <option value="CANCELLED">CANCELLED (Zrušeno)</option>
+                                    <option value="PLANNED">{t('statuses.PLANNED_desc')}</option>
+                                    <option value="OPEN">{t('statuses.OPEN_desc')}</option>
+                                    <option value="CLOSED">{t('statuses.CLOSED_desc')}</option>
+                                    <option value="COMPLETED">{t('statuses.COMPLETED_desc')}</option>
+                                    <option value="CANCELLED">{t('statuses.CANCELLED_desc')}</option>
                                 </select>
                             </FormField>
                         </div>
@@ -161,7 +161,7 @@ export default function ShowEditPage() {
                             <Input type="number" {...register('maxCats')} />
                         </FormField>
 
-                        <h3 className="text-lg font-semibold text-gray-900 pt-4 border-t">Místo konání</h3>
+                        <h3 className="text-lg font-semibold text-gray-900 pt-4 border-t">{t('fields.venueName')}</h3>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <FormField label="Název haly / místa" error={errors.venueName?.message}>
                                 <Input {...register('venueName')} />
@@ -193,7 +193,7 @@ export default function ShowEditPage() {
                             </div>
                         </div>
 
-                        <h3 className="text-lg font-semibold text-gray-900 pt-4 border-t">Termíny</h3>
+                        <h3 className="text-lg font-semibold text-gray-900 pt-4 border-t">{t('admin.create.section.dates')}</h3>
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                             <FormField label="Začátek akce" error={errors.startDate?.message}>
                                 <Input type="datetime-local" {...register('startDate')} />
@@ -206,7 +206,7 @@ export default function ShowEditPage() {
                             </FormField>
                         </div>
 
-                        <h3 className="text-lg font-semibold text-gray-900 pt-4 border-t">Harmonogram</h3>
+                        <h3 className="text-lg font-semibold text-gray-900 pt-4 border-t">{t('catalog.schedule')}</h3>
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                             <FormField label={t('fields.vetCheckStart')} error={errors.vetCheckStart?.message}>
                                 <Input type="datetime-local" {...register('vetCheckStart')} />
@@ -219,7 +219,7 @@ export default function ShowEditPage() {
                             </FormField>
                         </div>
 
-                        <h3 className="text-lg font-semibold text-gray-900 pt-4 border-t">Organizátor</h3>
+                        <h3 className="text-lg font-semibold text-gray-900 pt-4 border-t">{t('fields.organizerName')}</h3>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <FormField label="Název organizace" error={errors.organizerName?.message}>
                                 <Input {...register('organizerName')} />
