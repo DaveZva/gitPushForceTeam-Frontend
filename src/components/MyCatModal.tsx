@@ -119,8 +119,8 @@ export const MyCatModal: React.FC<MyCatModalProps> = ({ isOpen, onClose, onSucce
                                 <div className="col-span-1 space-y-1">
                                     <label className="text-sm font-medium text-gray-700">{t('catForm.sex')} *</label>
                                     <Select {...register('gender', { required: true })}>
-                                        <option value="MALE">1.0 (Male)</option>
-                                        <option value="FEMALE">0.1 (Female)</option>
+                                        <option value="MALE">{t('common.male')}</option>
+                                        <option value="FEMALE">{t('common.female')}</option>
                                     </Select>
                                 </div>
                             </div>

@@ -80,7 +80,8 @@
     "processing": "Zpracovávám...",
     "pay": "Zaplatit",
     "sslSecure": "Zabezpečeno SSL",
-    "poweredByStripe": "Powered by Stripe"
+    "poweredByStripe": "Powered by Stripe",
+    "errorTitle": "Nastala chyba"
   },
   "table": {
     "show": "Výstava",
@@ -99,7 +100,8 @@
     "showAllShows": "Zobrazit všechny výstavy →",
     "applyToShow": "Přihlásit se na výstavu",
     "showDetails": "Zobrazit detaily",
-    "pay": "Zaplatit"
+    "pay": "Zaplatit",
+    "actions": "Akce"
   },
   "auth": {
     "login": "Přihlášení",
@@ -261,7 +263,10 @@
       "own": "Vlastní klec - 1700 CZK",
       "rentSmall": "Klec k zapůjčení 70x70 - 2200 CZK",
       "rentLarge": "Klec k zapůjčení 120x70 - 2800 CZK"
-    }
+    },
+    "chip": "Čip",
+    "pedigree": "Průkaz původu",
+    "sex": "Pohlaví"
   },
   "stepper": {
     "exhibition": "Výstava",
@@ -464,7 +469,12 @@
     "CLOSED": "Registrace uzavřena",
     "COMPLETED": "Proběhlo",
     "CANCELLED": "Zrušeno",
-    "CONFIRMED": "Zaplaceno"
+    "CONFIRMED": "Zaplaceno",
+    "PLANNED_desc": "PLANNED (Připravuje se)",
+    "OPEN_desc": "OPEN (Otevřeno)",
+    "CLOSED_desc": "CLOSED (Uzavřeno)",
+    "COMPLETED_desc": "COMPLETED (Proběhlo)",
+    "CANCELLED_desc": "CANCELLED (Zrušeno)"
   },
   "regStatuses": {
     "PLANNED": "Čeká na platbu",
@@ -502,7 +512,10 @@
         "date": "Datum konání",
         "status": "Status",
         "actions": "Akce"
-      }
+      },
+      "editShow": "Upravit výstavu",
+      "detail": "Detail",
+      "editAction": "Editace"
     },
     "create": {
       "title": "Vytvořit novou výstavu",
@@ -595,7 +608,15 @@
     "resultsReports": "Posuzovatelé & Barvy",
     "dateAndPlace": "Datum a místo",
     "backToList": "Zpět na seznam",
-    "status": "Status"
+    "status": "Status",
+    "totalCats": "Celkem koček",
+    "filterAll": "Vše",
+    "filterCat": "Kočka",
+    "tableNo": "Klec",
+    "tableEms": "EMS",
+    "tableSex": "Pohlaví",
+    "tableClass": "Třída",
+    "inProgress": "Probíhá"
   },
   "secretariat": {
     "dashboard": {
@@ -678,7 +699,9 @@
     "viewPublicCatalog": "Zobrazit katalog",
     "registrationDeadline": "Uzávěrka přihlášek",
     "showStart": "Začátek výstavy",
-    "showEnd": "Konec výstavy"
+    "showEnd": "Konec výstavy",
+    "title": "Sekretariát",
+    "adminRole": "Admin Role"
   },
   "validation": {
     "cat": {
@@ -747,7 +770,39 @@
       "localOrganization.min": "Špatně zadaná základní organizace",
       "localOrganization.max": "Příliš dlouhý název organizace",
       "membershipNumber.min": "Špatné členské číslo",
-      "membershipNumber.max": "Příliš dlouhé členské číslo"
+      "membershipNumber.max": "Příliš dlouhé členské číslo",
+      "country": {
+        "min": "Vyberte zemi"
+      },
+      "address": {
+        "min": "Zadejte platnou adresu"
+      },
+      "city": {
+        "min": "Zadejte město"
+      },
+      "email": {
+        "invalid": "Neplatný email"
+      },
+      "firstName": {
+        "min": "Zadejte jméno"
+      },
+      "lastName": {
+        "min": "Zadejte příjmení"
+      },
+      "localOrganization": {
+        "max": "Název ZO je příliš dlouhý",
+        "min": "Zadejte základní organizaci"
+      },
+      "membershipNumber": {
+        "max": "Číslo člena je příliš dlouhé",
+        "min": "Zadejte číslo člena"
+      },
+      "phone": {
+        "invalid": "Neplatné telefonní číslo"
+      },
+      "zip": {
+        "invalid": "Neplatné PSČ"
+      }
     },
     "exhibition": {
       "name.min": "Název musí mít alespoň 5 znaků.",
@@ -763,7 +818,52 @@
       "maxCats.max": "Kapacita nesmí přesáhnout 2000 koček.",
       "vetCheckStart.invalid": "Neplatný čas veterinární přejímky.",
       "judgingStart.invalid": "Neplatný čas začátku posuzování.",
-      "judgingEnd.invalid": "Neplatný čas konce posuzování."
+      "judgingEnd.invalid": "Neplatný čas konce posuzování.",
+      "contactEmail": {
+        "invalid": "Neplatný formát emailu"
+      },
+      "date": {
+        "order": "Konec výstavy musí být po jejím začátku"
+      },
+      "endDate": {
+        "invalid": "Neplatné datum ukončení"
+      },
+      "judgingEnd": {
+        "invalid": "Neplatný konec posuzování"
+      },
+      "judgingStart": {
+        "invalid": "Neplatný začátek posuzování"
+      },
+      "maxCats": {
+        "max": "Překročen maximální počet koček",
+        "min": "Nelze mít méně než 1 kočku"
+      },
+      "name": {
+        "min": "Název musí mít alespoň 3 znaky"
+      },
+      "organizerName": {
+        "min": "Jméno organizátora musí mít alespoň 3 znaky"
+      },
+      "registrationDeadline": {
+        "invalid": "Neplatný termín registrace"
+      },
+      "startDate": {
+        "invalid": "Neplatné datum zahájení"
+      },
+      "venueName": {
+        "min": "Název místa musí mít alespoň 3 znaky"
+      },
+      "vetCheckStart": {
+        "invalid": "Neplatný začátek veterinární přejímky"
+      },
+      "websiteUrl": {
+        "invalid": "Neplatná URL adresa webu"
+      }
+    },
+    "auth": {
+      "password": {
+        "min": "Heslo musí mít alespoň 8 znaků"
+      }
     }
   },
   "paymentResult": {
@@ -779,7 +879,8 @@
     "backToApplications": "Zpět na mé přihlášky",
     "tryAgain": "Zkusit znovu",
     "verifying": "Ověřuji stav registrace...",
-    "verificationFailed": "Nepodařilo se ověřit stav registrace, ale platba pravděpodobně proběhla. Zkontrolujte přihlášky."
+    "verificationFailed": "Nepodařilo se ověřit stav registrace, ale platba pravděpodobně proběhla. Zkontrolujte přihlášky.",
+    "error": "Chyba"
   },
   "judging": {
     "title": "Posuzovací listy",
@@ -802,7 +903,9 @@
     "generating": "Generuji...",
     "balancing": "Vyvažuji...",
     "rebalance": "Přepočítat rozdělení",
-    "confirmRebalance": "Přepočítat rozdělení pro rovnoměrnou zátěž?"
+    "confirmRebalance": "Přepočítat rozdělení pro rovnoměrnou zátěž?",
+    "rebalanceSuccess": "Rozdělení úspěšně uloženo",
+    "noWorkload": "Žádná zátěž"
   },
   "location": "Lokalita",
   "myCats": {
@@ -848,7 +951,16 @@
     "releaseTable": "Uvolnit stůl",
     "tableTakenError": "Tento stůl je již obsazen jiným stevardem.",
     "lockError": "Nepodařilo se zamknout stůl.",
-    "confirmRelease": "Opravdu chcete uvolnit tento stůl?"
+    "confirmRelease": "Opravdu chcete uvolnit tento stůl?",
+    "selectJudgeTitle": "Výběr posuzovatele",
+    "selectJudgeSubtitle": "Vyberte posuzovatele, kterému chcete dělat stevarda.",
+    "cats": "Kočky",
+    "noBivAvailable": "Žádné BIV k dispozici",
+    "queueEmpty": "Fronta je prázdná",
+    "role": "Stevard",
+    "tabs": {
+      "queue": "Fronta"
+    }
   },
   "callingBoard": {
     "title": "Vyvolávání koček / Calling System",
@@ -882,5 +994,25 @@
     "noWorkload": "Pro tento den nejsou přiřazeni žádní posuzovatelé.",
     "catsCountLabel": "KOČEK",
     "noBreedsAssigned": "Zatím nepřiřazena žádná plemena"
+  },
+  "loading": "Načítám...",
+  "saturday": "Sobota",
+  "sunday": "Neděle",
+  "error": {
+    "loadFailed": "Načítání selhalo",
+    "saveFailed": "Uložení selhalo"
+  },
+  "navigation": {
+    "backToRegistrations": "Zpět na přihlášky"
+  },
+  "board": {
+    "title": "Vyvolávací tabule",
+    "activeJudging": "AKTIVNÍ POSUZOVÁNÍ",
+    "broadcast": "VYSÍLÁNÍ Z VÝSTAVY",
+    "waitingSteward": "ČEKÁ NA STEVARDA",
+    "unoccupied": "NEOBSAZENO",
+    "finalCall": "Poslední výzva!",
+    "preparing": "Připravuje se",
+    "nextInLine": "Další na řadě"
   }
 }

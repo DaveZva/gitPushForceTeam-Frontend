@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import { Client } from '@stomp/stompjs';
 import SockJS from 'sockjs-client';
 import api from '../services/api';
+import { useTranslation } from 'react-i18next';
 
 interface BoardCat {
     catalogNumber: number;
@@ -48,6 +49,7 @@ const playGong = () => {
 };
 
 export const PublicCallingBoard = () => {
+    const { t } = useTranslation();
     const { showId } = useParams<{ showId: string }>();
     const currentShowId = Number(showId) || 1;
     const [tables, setTables] = useState<TableState[]>([]);
@@ -111,7 +113,7 @@ export const PublicCallingBoard = () => {
         return (
             <div className="h-screen bg-slate-900 flex items-center justify-center p-4">
                 <div className="bg-slate-800 p-10 rounded-2xl text-center border border-slate-700 max-w-md w-full">
-                    <h1 className="text-3xl font-bold text-white mb-4">Calling Board</h1>
+                    <h1 className="text-3xl font-bold text-white mb-4">{t('board.title')}</h1>
                     <button onClick={() => setIsStarted(true)} className="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-4 rounded-xl text-lg transition-colors shadow-lg shadow-blue-500/30">
                         START BOARD
                     </button>
@@ -124,8 +126,8 @@ export const PublicCallingBoard = () => {
         <div className="h-screen w-screen bg-slate-950 p-2 sm:p-4 flex flex-col font-sans overflow-hidden">
             <header className="flex justify-between items-end mb-3 border-b border-slate-800 pb-2 shrink-0">
                 <div>
-                    <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight uppercase leading-none">ACTIVE JUDGING</h1>
-                    <div className="text-slate-500 text-xs font-bold tracking-widest mt-1">CAT SHOW BROADCAST</div>
+                    <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight uppercase leading-none">{t('board.activeJudging')}</h1>
+                    <div className="text-slate-500 text-xs font-bold tracking-widest mt-1">{t('board.broadcast')}</div>
                 </div>
                 <div className="text-slate-400 font-mono text-xl font-bold">{currentTime.toLocaleTimeString()}</div>
             </header>
@@ -138,11 +140,11 @@ export const PublicCallingBoard = () => {
                             <div key={`empty-${tableNum}`} className="bg-slate-900/40 rounded-2xl border border-slate-800/40 flex flex-col overflow-hidden shadow-lg relative min-h-0">
                                 <div className="bg-slate-800/20 px-4 py-2 text-center border-b border-slate-800/40 flex justify-between items-center shrink-0">
                                     <span className="bg-slate-800/50 text-slate-500 px-3 py-1 rounded-full text-xs font-bold tracking-wider border border-slate-700/50 uppercase">STŮL {tableNum}</span>
-                                    <h2 className="text-lg font-black text-slate-700 tracking-tight truncate">ČEKÁ NA STEVARDA</h2>
+                                    <h2 className="text-lg font-black text-slate-700 tracking-tight truncate">{t('board.waitingSteward')}</h2>
                                     <span className="w-[70px]"></span>
                                 </div>
                                 <div className="p-3 flex-1 flex flex-col gap-3 min-h-0">
-                                    <div className="flex-1 bg-slate-800/10 rounded-xl border border-slate-800/50 border-dashed flex items-center justify-center text-slate-700 font-bold tracking-widest min-h-0">NEOBSAZENO</div>
+                                    <div className="flex-1 bg-slate-800/10 rounded-xl border border-slate-800/50 border-dashed flex items-center justify-center text-slate-700 font-bold tracking-widest min-h-0">{t('board.unoccupied')}</div>
                                     <div className="grid grid-cols-2 gap-3 shrink-0 opacity-20">
                                         <div className="h-[60px] bg-slate-800 rounded border border-slate-700 border-dashed"></div>
                                         <div className="h-[60px] bg-slate-800 rounded border border-slate-700 border-dashed"></div>
@@ -180,7 +182,7 @@ export const PublicCallingBoard = () => {
                                                 ))}
                                             </div>
 
-                                            {displayCats[0].urgency === 'FINAL_CALL' && <span className="absolute bottom-3 bg-white text-red-600 px-6 py-1.5 rounded-full text-sm sm:text-base font-black uppercase tracking-widest animate-bounce shadow-xl">Final Call!</span>}
+                                            {displayCats[0].urgency === 'FINAL_CALL' && <span className="absolute bottom-3 bg-white text-red-600 px-6 py-1.5 rounded-full text-sm sm:text-base font-black uppercase tracking-widest animate-bounce shadow-xl">{t('board.finalCall')}</span>}
                                         </div>
                                     ) : table.isPaused ? (
                                         <div className="w-full h-full bg-yellow-500/10 rounded-xl border border-yellow-500/30 border-dashed flex items-center justify-center text-yellow-500 text-2xl sm:text-3xl font-black tracking-widest animate-pulse text-center p-4 min-h-0">
@@ -195,7 +197,7 @@ export const PublicCallingBoard = () => {
 
                                 <div className="grid grid-cols-2 gap-3 shrink-0">
                                     <div className="flex flex-col min-h-0">
-                                        <div className="text-slate-500 text-[10px] font-black uppercase tracking-widest mb-1 text-center text-yellow-500">Preparing</div>
+                                        <div className="text-slate-500 text-[10px] font-black uppercase tracking-widest mb-1 text-center text-yellow-500">{t('board.preparing')}</div>
                                         <div className="grid grid-cols-3 gap-1.5 flex-1">
                                             {table.preparingCats.length > 0 ? table.preparingCats.slice(0, 6).map(cat => (
                                                 <div key={cat.catalogNumber} className="bg-slate-800 border-l-2 border-yellow-500 rounded p-1 sm:p-1.5 text-center flex flex-col justify-center shadow-sm h-full">
@@ -209,7 +211,7 @@ export const PublicCallingBoard = () => {
                                     </div>
 
                                     <div className="flex flex-col min-h-0">
-                                        <div className="text-slate-500 text-[10px] font-black uppercase tracking-widest mb-1 text-center">Next In Line</div>
+                                        <div className="text-slate-500 text-[10px] font-black uppercase tracking-widest mb-1 text-center">{t('board.nextInLine')}</div>
                                         <div className="grid grid-cols-3 gap-1.5 flex-1">
                                             {table.waitingCats.length > 0 ? table.waitingCats.slice(0, 6).map(cat => (
                                                 <div key={cat.catalogNumber} className="bg-slate-800 border-l-2 border-slate-600 rounded p-1 sm:p-1.5 flex items-center justify-center h-full">

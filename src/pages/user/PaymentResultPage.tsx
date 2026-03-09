@@ -128,7 +128,7 @@ export const PaymentResultPage = () => {
                         <div className="bg-gray-50 rounded-xl p-4 text-left space-y-3 mb-8">
                             <div className="flex justify-between border-b border-gray-200 pb-2">
                                 <span className="text-gray-500">
-                                    {t('paymentResult.registrationNumber', 'Registrační číslo')}:
+                                    {t('paymentResult.registrationNumber')}:
                                 </span>
                                 <span className="font-bold text-xl text-blue-600">
                                     {recapData?.regNumber || recapData?.regId || "Nenačteno"}
@@ -160,7 +160,7 @@ export const PaymentResultPage = () => {
 
     return (
         <div className="min-h-screen bg-gray-50 py-12 px-4 flex items-center justify-center">
-            <div className="text-center">Chyba</div>
+            <div className="text-center">{t('paymentResult.error')}</div>
         </div>
     );
 };

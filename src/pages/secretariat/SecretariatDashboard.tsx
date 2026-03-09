@@ -96,7 +96,7 @@ export default function SecretariatDashboard() {
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 <div className="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm min-h-[300px] flex flex-col">
-                    <h3 className="font-bold text-gray-900 mb-6">{t('secretariat.dashboard.capacityTitle', 'Stav naplnění výstav')}</h3>
+                    <h3 className="font-bold text-gray-900 mb-6">{t('secretariat.dashboard.capacityTitle')}</h3>
 
                     {shows.length > 0 ? (
                         <div className="overflow-y-auto pr-2 max-h-[300px] scrollbar-thin scrollbar-thumb-gray-200">
@@ -112,7 +112,7 @@ export default function SecretariatDashboard() {
                 </div>
 
                 <div className="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm min-h-[300px]">
-                    <h3 className="font-bold text-gray-900 mb-6">{t('secretariat.dashboard.recentRegistrations', 'Poslední registrace')}</h3>
+                    <h3 className="font-bold text-gray-900 mb-6">{t('secretariat.dashboard.recentRegistrations')}</h3>
                     <div className="flex items-center justify-center h-full text-gray-400 pb-10">
                         {t('common.preparingContent')}
                     </div>

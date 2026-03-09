@@ -108,7 +108,7 @@ export default function Dashboard() {
                 {!isLoadingShows && upcomingShows.length === 0 && (
                     <div className="p-8 bg-gray-50 rounded-2xl border border-gray-200 text-center">
                         <p className="text-gray-600 font-medium">
-                            {t('dashboard.noShows', 'Momentálně nejsou naplánovány žádné výstavy.')}
+                            {t('dashboard.noShows')}
                         </p>
                     </div>
                 )}
