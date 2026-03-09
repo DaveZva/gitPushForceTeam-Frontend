@@ -73,7 +73,7 @@ export const JudgesColoursTable = ({ showId }: Props) => {
                                 : 'text-gray-500 hover:text-gray-700'
                         }`}
                     >
-                        {t('days.saturday', 'SATURDAY')}
+                        {t('days.saturday')}
                     </button>
                     <button
                         onClick={() => setSelectedDay('SUNDAY')}
@@ -83,7 +83,7 @@ export const JudgesColoursTable = ({ showId }: Props) => {
                                 : 'text-gray-500 hover:text-gray-700'
                         }`}
                     >
-                        {t('days.sunday', 'SUNDAY')}
+                        {t('days.sunday')}
                     </button>
                 </div>
             </div>
@@ -94,7 +94,7 @@ export const JudgesColoursTable = ({ showId }: Props) => {
                 </div>
             ) : data.length === 0 ? (
                 <div className="text-center py-24 bg-white rounded-2xl border border-dashed border-gray-300 shadow-sm">
-                    <p className="text-gray-500 font-medium">{t('judges.noWorkload', 'No judges assigned for this day.')}</p>
+                    <p className="text-gray-500 font-medium">{t('judges.noWorkload')}</p>
                 </div>
             ) : (
                 <div className="flex flex-wrap justify-center gap-6 items-start">
@@ -108,7 +108,7 @@ export const JudgesColoursTable = ({ showId }: Props) => {
                                     {judge.judgeName}
                                 </h3>
                                 <span className="bg-white border border-gray-200 text-[#027BFF] px-2.5 py-1 rounded-lg text-xs font-black shadow-sm whitespace-nowrap">
-                                    {judge.totalCats} {t('judges.catsCountLabel', 'CATS')}
+                                    {judge.totalCats} {t('judges.catsCountLabel')}
                                 </span>
                             </div>
 
@@ -130,7 +130,7 @@ export const JudgesColoursTable = ({ showId }: Props) => {
                                 ) : (
                                     <div className="p-6 text-center">
                                         <p className="text-sm text-gray-400 italic">
-                                            {t('judges.noBreedsAssigned', 'No breeds assigned yet')}
+                                            {t('judges.noBreedsAssigned')}
                                         </p>
                                     </div>
                                 )}

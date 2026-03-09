@@ -88,12 +88,12 @@ export const StewardDashboard = () => {
                 localStorage.setItem(storageKey, updatedJudge.id.toString());
                 await loadJudges();
             } else {
-                alert(t('steward.tableTakenError', 'Tento stůl je již obsazen jiným stevardem.'));
+                alert(t('steward.tableTakenError'));
                 await loadJudges();
             }
         } catch (error) {
             console.error(error);
-            alert(t('steward.lockError', 'Došlo k chybě při zamykání stolu. Zkuste to prosím znovu.'));
+            alert(t('steward.lockError'));
         }
         setJudgeToLock(null);
     };
@@ -106,7 +106,7 @@ export const StewardDashboard = () => {
     };
 
     const handleReleaseTable = async () => {
-        if (window.confirm(t('steward.confirmRelease', 'Opravdu chcete uvolnit tento stůl?'))) {
+        if (window.confirm(t('steward.confirmRelease'))) {
             if (selectedJudge) {
                 try {
                     await stewardApi.unlockJudge(currentShowId, selectedJudge.id);

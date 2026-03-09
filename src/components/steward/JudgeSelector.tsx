@@ -34,8 +34,8 @@ export const JudgeSelector = ({ judges, usedTables, onInitiateLock, onConfirmTab
                     <div className="w-16 h-16 bg-blue-50 rounded-full flex items-center justify-center mx-auto mb-4 text-[#027BFF]">
                         <StewardIcons.User />
                     </div>
-                    <h1 className="text-2xl font-bold text-gray-900">{t('steward.selectJudgeTitle', 'Výběr posuzovatele')}</h1>
-                    <p className="text-gray-500 mt-2 text-sm">{t('steward.selectJudgeSubtitle', 'Vyberte svého posuzovatele ze seznamu')}</p>
+                    <h1 className="text-2xl font-bold text-gray-900">{t('steward.selectJudgeTitle')}</h1>
+                    <p className="text-gray-500 mt-2 text-sm">{t('steward.selectJudgeSubtitle')}</p>
                 </div>
                 <div className="space-y-3">
                     {judges.map(judge => {
@@ -58,12 +58,12 @@ export const JudgeSelector = ({ judges, usedTables, onInitiateLock, onConfirmTab
                                     </span>
                                     {isLockedBySomeoneElse && (
                                         <span className="text-xs font-bold text-gray-500 flex items-center gap-1 mt-1">
-                                            <StewardIcons.Lock /> {judge.lockedBySteward} ({t('steward.table', 'Stůl')} {judge.tableNumber})
+                                            <StewardIcons.Lock /> {judge.lockedBySteward} ({t('steward.table')} {judge.tableNumber})
                                         </span>
                                     )}
                                 </div>
                                 {!judge.isLocked && <span className="text-gray-300 group-hover:text-[#027BFF]"><StewardIcons.ChevronRight /></span>}
-                                {judge.isLockedByMe && <span className="text-[#027BFF] text-xs font-bold bg-blue-50 px-2 py-1 rounded">{t('steward.myTable', 'Můj stůl')} {judge.tableNumber}</span>}
+                                {judge.isLockedByMe && <span className="text-[#027BFF] text-xs font-bold bg-blue-50 px-2 py-1 rounded">{t('steward.myTable')} {judge.tableNumber}</span>}
                             </button>
                         );
                     })}
@@ -74,7 +74,7 @@ export const JudgeSelector = ({ judges, usedTables, onInitiateLock, onConfirmTab
                 <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-gray-900/70 backdrop-blur-sm">
                     <div className="bg-white rounded-2xl shadow-xl w-full max-w-md overflow-hidden">
                         <div className="p-6 border-b border-gray-100 flex justify-between items-center">
-                            <h3 className="text-xl font-bold text-gray-900">{t('steward.tableSelectionTitle', 'Vyberte číslo stolu')}</h3>
+                            <h3 className="text-xl font-bold text-gray-900">{t('steward.tableSelectionTitle')}</h3>
                             <button
                                 onClick={onCancelLock}
                                 className="p-2 bg-[#027BFF] text-white border-2 border-[#027BFF] rounded-full transition-all duration-200 hover:bg-transparent hover:text-[#027BFF] flex items-center justify-center cursor-pointer outline-none"
@@ -84,8 +84,8 @@ export const JudgeSelector = ({ judges, usedTables, onInitiateLock, onConfirmTab
                         </div>
                         <div className="p-6">
                             <p className="text-sm text-gray-500 mb-6 leading-relaxed">
-                                {t('steward.assigningTo', 'Přiřazujete se k:')} <strong className="text-[#027BFF] text-base">{judgeToLock.name}</strong>.<br/>
-                                {t('steward.tableSelectionDesc', 'Vyberte volný stůl. Další se uvolní až po zaplnění aktuálních.')}
+                                {t('steward.assigningTo')} <strong className="text-[#027BFF] text-base">{judgeToLock.name}</strong>.<br/>
+                                {t('steward.tableSelectionDesc')}
                             </p>
                             <div className="grid grid-cols-4 gap-3">
                                 {Array.from({length: visibleTableCount}, (_, i) => i + 1).map(num => {

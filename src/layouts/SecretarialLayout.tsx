@@ -19,7 +19,7 @@ export const SecretariatLayout = () => {
             <aside className="w-64 bg-white border-r border-gray-200 flex flex-col">
                 <div className="p-6 border-b border-gray-100">
                     <h1 className="text-xl font-bold text-gray-800 flex items-center gap-2">
-                        <span className="text-[#027BFF]">Pawdium</span> Admin
+                        <span className="text-[#027BFF]">{t('nav.appName')}</span> Admin
                     </h1>
                 </div>
                 <nav className="flex-1 p-4 space-y-1 overflow-y-auto">
@@ -47,8 +47,8 @@ export const SecretariatLayout = () => {
                             SE
                         </div>
                         <div className="text-sm">
-                            <p className="font-medium text-gray-900">Sekretariát</p>
-                            <p className="text-xs text-gray-500">Admin Role</p>
+                            <p className="font-medium text-gray-900">{t('secretariat.title')}</p>
+                            <p className="text-xs text-gray-500">{t('secretariat.adminRole')}</p>
                         </div>
                     </div>
                 </div>

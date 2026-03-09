@@ -132,7 +132,7 @@ export const JudgingSheetsTab: React.FC<Props> = ({ showId }) => {
         setIsBalancing(true);
         try {
             await secretariatApi.rebalanceWorkload(showId, selectedDay);
-            toast.success(t('judging.rebalanceSuccess', 'Workload rebalanced'));
+            toast.success(t('judging.rebalanceSuccess'));
             loadWorkload();
             loadJudges();
         } catch (error) {
@@ -293,7 +293,7 @@ export const JudgingSheetsTab: React.FC<Props> = ({ showId }) => {
                     <div className="text-center py-8">{t('common.loading')}</div>
                 ) : workload.length === 0 ? (
                     <div className="text-center py-8 text-gray-500">
-                        {t('judging.noWorkload', 'Žádná data pro rozdělení zátěže')}
+                        {t('judging.noWorkload')}
                     </div>
                 ) : (
                     <>

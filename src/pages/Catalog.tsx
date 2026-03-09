@@ -49,7 +49,7 @@ export default function Catalog() {
 
     return (
         <div className="bg-white rounded-2xl shadow-xl p-6 font-sans tracking-tight text-gray-900">
-            {!showInfo ? <div className="py-24 text-center">{t('catalog.loading', 'Loading...')}</div> : (
+            {!showInfo ? <div className="py-24 text-center">{t('catalog.loading')}</div> : (
                 <>
                     <div className="max-w-6xl mx-auto px-4 pt-4 pb-6 border-b border-gray-200">
                         <h1 className="text-3xl sm:text-4xl font-bold tracking-[-2px] text-gray-900 mb-4 text-left">{showInfo.name}</h1>
@@ -142,12 +142,12 @@ export default function Catalog() {
                                 <section className="pt-10 border-t border-gray-100">
                                     <h3 className="text-lg font-bold text-gray-900 mb-4 tracking-[-1px]">{t('catalog.quickCatalogTitle')}</h3>
                                     <div className="flex gap-2 mb-4 overflow-x-auto pb-2 no-scrollbar">
-                                        <button onClick={() => setActiveQuickFilter('ALL')} className={`px-4 py-1.5 rounded-lg text-xs font-bold uppercase transition ${activeQuickFilter === 'ALL' ? 'bg-[#027BFF] text-white shadow-sm' : 'bg-gray-100 text-gray-400'}`}>{t('catalog.filterAll', '[ALL]')}</button>
-                                        {[1, 2, 3, 4, 5].map(n => <button key={n} onClick={() => setActiveQuickFilter(n as any)} className={`px-4 py-1.5 rounded-lg text-xs font-bold uppercase transition ${activeQuickFilter === n ? 'bg-[#027BFF] text-white shadow-sm' : 'bg-gray-100 text-gray-400'}`}>[{t('catalog.filterCat', 'cat')} {n === 5 ? 'DOM' : n}]</button>)}
+                                        <button onClick={() => setActiveQuickFilter('ALL')} className={`px-4 py-1.5 rounded-lg text-xs font-bold uppercase transition ${activeQuickFilter === 'ALL' ? 'bg-[#027BFF] text-white shadow-sm' : 'bg-gray-100 text-gray-400'}`}>{t('catalog.filterAll')}</button>
+                                        {[1, 2, 3, 4, 5].map(n => <button key={n} onClick={() => setActiveQuickFilter(n as any)} className={`px-4 py-1.5 rounded-lg text-xs font-bold uppercase transition ${activeQuickFilter === n ? 'bg-[#027BFF] text-white shadow-sm' : 'bg-gray-100 text-gray-400'}`}>[{t('catalog.filterCat')} {n === 5 ? 'DOM' : n}]</button>)}
                                     </div>
                                     <div className="overflow-x-auto rounded-xl border border-gray-100 shadow-sm">
                                         <table className="w-full border-collapse text-sm">
-                                            <thead><tr className="bg-[#027BFF] text-white font-semibold"><th className="p-3 text-left">{t('catalog.tableNo', 'No.')}</th><th className="p-3 text-left">{t('catalog.tableEms', 'EMS')}</th><th className="p-3 text-left">{t('catForm.catName')}</th><th className="p-3 text-center">{t('catalog.tableSex', 'Sex')}</th><th className="p-3 text-left">{t('catalog.tableClass', 'Class')}</th></tr></thead>
+                                            <thead><tr className="bg-[#027BFF] text-white font-semibold"><th className="p-3 text-left">{t('catalog.tableNo')}</th><th className="p-3 text-left">{t('catalog.tableEms')}</th><th className="p-3 text-left">{t('catForm.catName')}</th><th className="p-3 text-center">{t('catalog.tableSex')}</th><th className="p-3 text-left">{t('catalog.tableClass')}</th></tr></thead>
                                             <tbody>
                                             {filteredQuick.map((row) => (
                                                 <tr key={row.catalogNumber} className="border-b hover:bg-blue-50/30 transition-colors">
