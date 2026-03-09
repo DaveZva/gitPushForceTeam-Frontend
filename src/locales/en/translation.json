@@ -773,6 +773,35 @@
       "membershipNumber.max": "Member number too long",
       "country": {
         "min": "Select country"
+      },
+      "address": {
+        "min": "Enter a valid address"
+      },
+      "city": {
+        "min": "Enter city"
+      },
+      "email": {
+        "invalid": "Invalid email"
+      },
+      "firstName": {
+        "min": "Enter first name"
+      },
+      "lastName": {
+        "min": "Enter last name"
+      },
+      "localOrganization": {
+        "max": "Local organization name is too long",
+        "min": "Enter local organization"
+      },
+      "membershipNumber": {
+        "max": "Membership number is too long",
+        "min": "Enter membership number"
+      },
+      "phone": {
+        "invalid": "Invalid phone number"
+      },
+      "zip": {
+        "invalid": "Invalid zip code"
       }
     },
     "exhibition": {
@@ -789,7 +818,47 @@
       "maxCats.max": "Capacity must not exceed 2000 cats.",
       "vetCheckStart.invalid": "Invalid veterinary check time.",
       "judgingStart.invalid": "Invalid judging start time.",
-      "judgingEnd.invalid": "Invalid judging end time."
+      "judgingEnd.invalid": "Invalid judging end time.",
+      "contactEmail": {
+        "invalid": "Invalid email format"
+      },
+      "date": {
+        "order": "End date must be after start date"
+      },
+      "endDate": {
+        "invalid": "Invalid end date"
+      },
+      "judgingEnd": {
+        "invalid": "Invalid judging end"
+      },
+      "judgingStart": {
+        "invalid": "Invalid judging start"
+      },
+      "maxCats": {
+        "max": "Maximum number of cats exceeded",
+        "min": "Cannot have less than 1 cat"
+      },
+      "name": {
+        "min": "Name must be at least 3 characters"
+      },
+      "organizerName": {
+        "min": "Organizer name must be at least 3 characters"
+      },
+      "registrationDeadline": {
+        "invalid": "Invalid registration deadline"
+      },
+      "startDate": {
+        "invalid": "Invalid start date"
+      },
+      "venueName": {
+        "min": "Venue name must be at least 3 characters"
+      },
+      "vetCheckStart": {
+        "invalid": "Invalid vet check start"
+      },
+      "websiteUrl": {
+        "invalid": "Invalid website URL"
+      }
     },
     "auth": {
       "password": {
@@ -882,7 +951,16 @@
     "releaseTable": "Release Table",
     "tableTakenError": "This table is already taken by another steward.",
     "lockError": "Could not lock the table.",
-    "confirmRelease": "Are you sure you want to release this table?"
+    "confirmRelease": "Are you sure you want to release this table?",
+    "selectJudgeTitle": "Select Judge",
+    "selectJudgeSubtitle": "Select a judge to start stewarding for.",
+    "cats": "Cats",
+    "noBivAvailable": "No BIV available",
+    "queueEmpty": "Queue is empty",
+    "role": "Steward",
+    "tabs": {
+      "queue": "Queue"
+    }
   },
   "callingBoard": {
     "title": "Calling System",

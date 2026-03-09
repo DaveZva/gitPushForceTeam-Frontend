@@ -773,6 +773,35 @@
       "membershipNumber.max": "Příliš dlouhé členské číslo",
       "country": {
         "min": "Vyberte zemi"
+      },
+      "address": {
+        "min": "Zadejte platnou adresu"
+      },
+      "city": {
+        "min": "Zadejte město"
+      },
+      "email": {
+        "invalid": "Neplatný email"
+      },
+      "firstName": {
+        "min": "Zadejte jméno"
+      },
+      "lastName": {
+        "min": "Zadejte příjmení"
+      },
+      "localOrganization": {
+        "max": "Název ZO je příliš dlouhý",
+        "min": "Zadejte základní organizaci"
+      },
+      "membershipNumber": {
+        "max": "Číslo člena je příliš dlouhé",
+        "min": "Zadejte číslo člena"
+      },
+      "phone": {
+        "invalid": "Neplatné telefonní číslo"
+      },
+      "zip": {
+        "invalid": "Neplatné PSČ"
       }
     },
     "exhibition": {
@@ -789,7 +818,47 @@
       "maxCats.max": "Kapacita nesmí přesáhnout 2000 koček.",
       "vetCheckStart.invalid": "Neplatný čas veterinární přejímky.",
       "judgingStart.invalid": "Neplatný čas začátku posuzování.",
-      "judgingEnd.invalid": "Neplatný čas konce posuzování."
+      "judgingEnd.invalid": "Neplatný čas konce posuzování.",
+      "contactEmail": {
+        "invalid": "Neplatný formát emailu"
+      },
+      "date": {
+        "order": "Konec výstavy musí být po jejím začátku"
+      },
+      "endDate": {
+        "invalid": "Neplatné datum ukončení"
+      },
+      "judgingEnd": {
+        "invalid": "Neplatný konec posuzování"
+      },
+      "judgingStart": {
+        "invalid": "Neplatný začátek posuzování"
+      },
+      "maxCats": {
+        "max": "Překročen maximální počet koček",
+        "min": "Nelze mít méně než 1 kočku"
+      },
+      "name": {
+        "min": "Název musí mít alespoň 3 znaky"
+      },
+      "organizerName": {
+        "min": "Jméno organizátora musí mít alespoň 3 znaky"
+      },
+      "registrationDeadline": {
+        "invalid": "Neplatný termín registrace"
+      },
+      "startDate": {
+        "invalid": "Neplatné datum zahájení"
+      },
+      "venueName": {
+        "min": "Název místa musí mít alespoň 3 znaky"
+      },
+      "vetCheckStart": {
+        "invalid": "Neplatný začátek veterinární přejímky"
+      },
+      "websiteUrl": {
+        "invalid": "Neplatná URL adresa webu"
+      }
     },
     "auth": {
       "password": {
@@ -882,7 +951,16 @@
     "releaseTable": "Uvolnit stůl",
     "tableTakenError": "Tento stůl je již obsazen jiným stevardem.",
     "lockError": "Nepodařilo se zamknout stůl.",
-    "confirmRelease": "Opravdu chcete uvolnit tento stůl?"
+    "confirmRelease": "Opravdu chcete uvolnit tento stůl?",
+    "selectJudgeTitle": "Výběr posuzovatele",
+    "selectJudgeSubtitle": "Vyberte posuzovatele, kterému chcete dělat stevarda.",
+    "cats": "Kočky",
+    "noBivAvailable": "Žádné BIV k dispozici",
+    "queueEmpty": "Fronta je prázdná",
+    "role": "Stevard",
+    "tabs": {
+      "queue": "Fronta"
+    }
   },
   "callingBoard": {
     "title": "Vyvolávání koček / Calling System",
