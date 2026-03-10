@@ -53,7 +53,7 @@ export function MainHeader() {
                         className={getNavLinkClass}
                         onClick={() => setMenuOpen(false)}
                     >
-                        {t('nav.board') + ' (Live)'}
+                        {t('nav.board') + ' Live'}
                     </NavLink>
 
 
