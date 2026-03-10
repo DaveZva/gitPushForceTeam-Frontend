@@ -74,8 +74,13 @@ export const PublicCallingBoard = () => {
     useEffect(() => {
         if (!isStarted) return;
         fetchBoardState();
+
+        const backendUrl = import.meta.env.VITE_API_URL
+            ? import.meta.env.VITE_API_URL.replace('/api/v1', '')
+            : 'http://localhost:8080';
+
         const client = new Client({
-            webSocketFactory: () => new SockJS('http://localhost:8080/ws-calling'),
+            webSocketFactory: () => new SockJS(`${backendUrl}/ws-calling`),
             debug: () => {},
             reconnectDelay: 5000,
             onConnect: () => {
