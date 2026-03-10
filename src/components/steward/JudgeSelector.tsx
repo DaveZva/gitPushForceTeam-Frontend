@@ -18,7 +18,7 @@ export const JudgeSelector = ({ judges, usedTables, onInitiateLock, onConfirmTab
         let count = 4;
         while (
             Array.from({ length: count }, (_, i) => i + 1).every(num => usedTables.includes(num)) &&
-            count < 24 // Bezpečnostní limit
+            count < 24 
             ) {
             count += 4;
         }

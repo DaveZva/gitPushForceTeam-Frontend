@@ -171,7 +171,7 @@ export default function ShowControlCenter() {
                         ) : (
                             <Button
                                 variant="primary"
-                                onClick={() => window.open(`/catalog/${show.id}`, '_blank')}
+                                onClick={() => navigate(`/catalog/${show.id}`)}
                                 className="w-full justify-center !bg-[#F59E0B] !text-white !border-2 !border-[#F59E0B] !rounded-full !font-bold transition-all duration-200 hover:!bg-transparent hover:!text-[#F59E0B] hover:!border-[#F59E0B]"
                             >
                                 {t('secretariat.viewPublicCatalog')}
