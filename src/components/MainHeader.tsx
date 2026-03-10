@@ -41,11 +41,19 @@ export function MainHeader() {
 
 
                     <NavLink
-                        to="/public/board"
+                        to="/public/board/4"
                         className={getNavLinkClass}
                         onClick={() => setMenuOpen(false)}
                     >
                         {t('nav.board')}
+                    </NavLink>
+
+                    <NavLink
+                        to="/public/live-board/4"
+                        className={getNavLinkClass}
+                        onClick={() => setMenuOpen(false)}
+                    >
+                        {t('nav.board') + ' (Live)'}
                     </NavLink>
 
 
