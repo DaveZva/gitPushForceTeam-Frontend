@@ -23,6 +23,7 @@ const CATEGORY_COLORS: Record<number, { bg: string; text: string; dot: string }>
 };
 
 function isJudgeQualified(qualifications: string[], category: number): boolean {
+    if (category === 5) return true;
     const cat = String(category);
     return (
         qualifications.includes(cat) ||
