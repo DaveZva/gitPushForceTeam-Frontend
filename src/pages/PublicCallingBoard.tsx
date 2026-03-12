@@ -134,7 +134,14 @@ export const PublicCallingBoard = () => {
                     <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight uppercase leading-none">{t('board.activeJudging')}</h1>
                     <div className="text-slate-500 text-xs font-bold tracking-widest mt-1">{t('board.broadcast')}</div>
                 </div>
-                <div className="text-slate-400 font-mono text-xl font-bold">{currentTime.toLocaleTimeString()}</div>
+
+                <div className="flex flex-col items-end gap-0.5 select-none">
+                    <div className="text-slate-400 font-mono text-xl font-bold">{currentTime.toLocaleTimeString()}</div>
+                    <div className="flex items-center gap-1.5">
+                        <span className="text-slate-300 font-bold text-sm tracking-tight">Pawdium</span>
+                        <span className="bg-blue-500/20 text-blue-400 border border-blue-500/40 text-[9px] font-black tracking-widest uppercase px-1.5 py-0.5 rounded-full">Beta</span>
+                    </div>
+                </div>
             </header>
 
             <div className="flex-1 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 lg:grid-rows-2 gap-3 sm:gap-4 min-h-0">
