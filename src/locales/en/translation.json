@@ -448,7 +448,8 @@
     "notAgreed": "I Disagree",
     "searchPlaceholder": "Search (Name, EMS, Reg. No.)...",
     "noResults": "No records found matching the criteria.",
-    "actions": "Actions"
+    "actions": "Actions",
+    "close": "Close"
   },
   "errors": {
     "fetchFailed": "Failed to fetch data.",
@@ -905,7 +906,12 @@
     "rebalance": "Recalculate Distribution",
     "confirmRebalance": "Recalculate distribution for balanced workload?",
     "rebalanceSuccess": "Distribution saved successfully",
-    "noWorkload": "No workload"
+    "noWorkload": "No workload",
+    "manualReassign": "Manual Reassignment",
+    "dragHint": "Drag a cat to reassign to another judge",
+    "dropHere": "Drop here",
+    "canDrop": "Can drop",
+    "notQualified": "Not qualified"
   },
   "location": "Location",
   "myCats": {

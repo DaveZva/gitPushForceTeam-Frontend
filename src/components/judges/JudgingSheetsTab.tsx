@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { toast } from 'react-hot-toast';
 import { Button } from '../ui/Button';
 import { secretariatApi, SecretariatJudge } from '../../services/api/secretariatApi';
+import { ManualReassignPanel } from './ManualReassignPanel';
 
 interface JudgeWithSheets extends SecretariatJudge {
     saturdaySheets?: number;
@@ -35,6 +36,7 @@ export const JudgingSheetsTab: React.FC<Props> = ({ showId }) => {
     const [workload, setWorkload] = useState<JudgeWorkload[]>([]);
     const [isBalancing, setIsBalancing] = useState(false);
     const [loadingWorkload, setLoadingWorkload] = useState(false);
+    const [showReassign, setShowReassign] = useState(false);
 
     useEffect(() => {
         if (showId) {
@@ -171,16 +173,32 @@ export const JudgingSheetsTab: React.FC<Props> = ({ showId }) => {
 
     return (
         <div className="p-6 space-y-8">
+            {showReassign && (
+                <ManualReassignPanel
+                    showId={showId}
+                    onClose={() => { setShowReassign(false); loadJudges(); loadWorkload(); }}
+                />
+            )}
             <div>
                 <div className="flex justify-between items-center mb-6">
                     <h2 className="text-2xl font-bold">{t('judging.title')}</h2>
-                    <Button
-                        onClick={handleGenerateSheets}
-                        disabled={isGenerating}
-                        variant="primary"
-                    >
-                        {isGenerating ? t('judging.generating') : t('judging.generateAll')}
-                    </Button>
+                    <div className="flex gap-2">
+                        {workload.length > 0 && (
+                            <Button
+                                onClick={() => setShowReassign(true)}
+                                variant="secondary"
+                            >
+                                {t('judging.manualReassign')}
+                            </Button>
+                        )}
+                        <Button
+                            onClick={handleGenerateSheets}
+                            disabled={isGenerating}
+                            variant="primary"
+                        >
+                            {isGenerating ? t('judging.generating') : t('judging.generateAll')}
+                        </Button>
+                    </div>
                 </div>
 
                 {judges.length === 0 ? (

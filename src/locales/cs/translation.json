@@ -448,7 +448,8 @@
     "notAgreed": "Nesouhlasím",
     "searchPlaceholder": "Hledat (Jméno, EMS, Reg. č.)...",
     "noResults": "Nenalezeny žádné záznamy odpovídající zadaným kritériím.",
-    "actions": "Možnosti"
+    "actions": "Možnosti",
+    "close": "Zavřít"
   },
   "errors": {
     "fetchFailed": "Nepodařilo se načíst data.",
@@ -905,7 +906,12 @@
     "rebalance": "Přepočítat rozdělení",
     "confirmRebalance": "Přepočítat rozdělení pro rovnoměrnou zátěž?",
     "rebalanceSuccess": "Rozdělení úspěšně uloženo",
-    "noWorkload": "Žádná zátěž"
+    "noWorkload": "Žádná zátěž",
+    "manualReassign": "Manuální přeřazení",
+    "dragHint": "Přetáhněte kočku k jinému posuzovateli",
+    "dropHere": "Pustit zde",
+    "canDrop": "Lze přetáhnout",
+    "notQualified": "Není kvalifikován"
   },
   "location": "Lokalita",
   "myCats": {
