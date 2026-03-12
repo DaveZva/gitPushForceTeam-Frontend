@@ -88,6 +88,20 @@ export interface JudgeWorkload {
     breedDistribution: BreedDistribution[];
 }
 
+export interface JudgingSheet {
+    id: number;
+    judgeId: number;
+    catEntryId: number;
+    catName: string;
+    emsCode: string;
+    catGroup: string | null;
+    catalogNumber: number | null;
+    status: string;
+    day: string;
+    category: number;
+    showClass: string | null;
+}
+
 interface ApiErrorData {
     message: string;
 }
@@ -315,6 +329,31 @@ export const secretariatApi = {
                 params: { day },
                 responseType: 'blob'
             });
+            return response.data;
+        } catch (error) {
+            handleError(error);
+            throw error;
+        }
+    },
+
+    getAllSheets: async (showId: string | number, day: string): Promise<JudgingSheet[]> => {
+        try {
+            const response = await api.get<JudgingSheet[]>(`${SECRETARIAT_URL}/${showId}/judging/sheets`, {
+                params: { day }
+            });
+            return response.data;
+        } catch (error) {
+            handleError(error);
+            throw error;
+        }
+    },
+
+    reassignSheet: async (showId: string | number, sheetId: number, targetJudgeId: number): Promise<JudgingSheet> => {
+        try {
+            const response = await api.patch<JudgingSheet>(
+                `${SECRETARIAT_URL}/${showId}/judging/sheets/${sheetId}/reassign`,
+                { targetJudgeId }
+            );
             return response.data;
         } catch (error) {
             handleError(error);
