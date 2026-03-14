@@ -1,6 +1,12 @@
 target/
 build/
 
+# Zabezpečení / Env soubory
+.env
+.env.*
+!.env.example
+!.env.template
+
 # Soubory IDE
 .idea/
 *.iml
