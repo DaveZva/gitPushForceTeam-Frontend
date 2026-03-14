@@ -47,7 +47,6 @@ export function MainHeader() {
                         {t('nav.board') + ' Live'}
                     </NavLink>
 
-
                     {isAuthenticated && (
                         <>
                             <NavLink
