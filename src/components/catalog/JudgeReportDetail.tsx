@@ -53,6 +53,12 @@ export const JudgeReportDetail = ({ showId, judgeId, date }: Props) => {
                     }
                 }));
 
+                enrichedData.sort((a, b) => {
+                    const numA = Number(a.catalogNumber) || 0;
+                    const numB = Number(b.catalogNumber) || 0;
+                    return numA - numB;
+                });
+
                 setSheets(enrichedData);
             } catch (err) {
                 console.error(err);
