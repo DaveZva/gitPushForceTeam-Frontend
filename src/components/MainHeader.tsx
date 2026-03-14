@@ -39,15 +39,6 @@ export function MainHeader() {
                         {t('nav.dashboard')}
                     </NavLink>
 
-
-                    <NavLink
-                        to="/public/board/4"
-                        className={getNavLinkClass}
-                        onClick={() => setMenuOpen(false)}
-                    >
-                        {t('nav.board')}
-                    </NavLink>
-
                     <NavLink
                         to="/public/live-board/4"
                         className={getNavLinkClass}
@@ -56,9 +47,16 @@ export function MainHeader() {
                         {t('nav.board') + ' Live'}
                     </NavLink>
 
-
                     {isAuthenticated && (
                         <>
+                            <NavLink
+                                to="/public/board/4"
+                                className={getNavLinkClass}
+                                onClick={() => setMenuOpen(false)}
+                            >
+                                {t('nav.board')}
+                            </NavLink>
+
                             <NavLink
                                 to="/apply"
                                 className={getNavLinkClass}
