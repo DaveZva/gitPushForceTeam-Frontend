@@ -1022,11 +1022,17 @@
     "title": "Calling Board",
     "activeJudging": "ACTIVE JUDGING",
     "broadcast": "CAT SHOW BROADCAST",
+    "table": "TABLE",
     "waitingSteward": "WAITING FOR STEWARD",
     "unoccupied": "UNOCCUPIED",
     "finalCall": "Final Call!",
+    "catCount": "Cats count: {{count}}",
+    "pausedJudging": "JUDGING PAUSED",
+    "tableEmpty": "TABLE EMPTY",
     "preparing": "Preparing",
     "nextInLine": "Next In Line",
-    "start": "Start board"
+    "start": "Start board",
+    "soundOn": "Turn sound on",
+    "soundOff": "Mute sound"
   }
 }

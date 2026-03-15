@@ -10,7 +10,7 @@ interface StewardHeaderProps {
 }
 
 export const StewardHeader = ({ judgeName, tableNumber, onRefresh, onLeave, onRelease }: StewardHeaderProps) => {
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
 
     return (
         <header className="bg-white border-b border-gray-200 sticky top-0 z-40 px-6 py-4 shadow-sm flex justify-between items-center">
@@ -37,6 +37,26 @@ export const StewardHeader = ({ judgeName, tableNumber, onRefresh, onLeave, onRe
                 </div>
             </div>
             <div className="flex items-center gap-3">
+                <div className="flex items-center bg-gray-100 p-1 rounded-lg border border-gray-200">
+                    <button
+                        onClick={() => i18n.changeLanguage('cs')}
+                        className={`px-3 py-1 text-[11px] font-bold rounded-md transition-all duration-200 ${i18n.language.startsWith('cs')
+                                ? 'bg-white text-gray-900 shadow-sm'
+                                : 'bg-transparent text-gray-400 hover:text-gray-600'
+                            }`}
+                    >
+                        CZ
+                    </button>
+                    <button
+                        onClick={() => i18n.changeLanguage('en')}
+                        className={`px-3 py-1 text-[11px] font-bold rounded-md transition-all duration-200 ${i18n.language.startsWith('en')
+                                ? 'bg-white text-gray-900 shadow-sm'
+                                : 'bg-transparent text-gray-400 hover:text-gray-600'
+                            }`}
+                    >
+                        EN
+                    </button>
+                </div>
                 <button
                     onClick={onRefresh}
                     title={t('steward.refresh')}

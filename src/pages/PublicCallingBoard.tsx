@@ -56,8 +56,14 @@ export const PublicCallingBoard = () => {
     const [isStarted, setIsStarted] = useState(false);
     const [currentTime, setCurrentTime] = useState(new Date());
     const [isMuted, setIsMuted] = useState(false);
+    const [boardLng, setBoardLng] = useState<'cs' | 'en'>('cs');
+    const [isTextVisible, setIsTextVisible] = useState(true);
     const isMutedRef = useRef(false);
+    const languageSwitchTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
     const stompClient = useRef<Client | null>(null);
+
+    const boardTextClass = `board-text-transition ${isTextVisible ? 'board-text-visible' : 'board-text-hidden'}`;
+    const translateBoard = (key: string, options?: Record<string, unknown>) => t(key, { lng: boardLng, ...options });
 
     useEffect(() => {
         isMutedRef.current = isMuted;
@@ -66,6 +72,26 @@ export const PublicCallingBoard = () => {
     useEffect(() => {
         const timer = setInterval(() => setCurrentTime(new Date()), 1000);
         return () => clearInterval(timer);
+    }, []);
+
+    useEffect(() => {
+        const languageTimer = setInterval(() => {
+            setIsTextVisible(false);
+            if (languageSwitchTimeoutRef.current) {
+                clearTimeout(languageSwitchTimeoutRef.current);
+            }
+            languageSwitchTimeoutRef.current = setTimeout(() => {
+                setBoardLng(prev => (prev === 'cs' ? 'en' : 'cs'));
+                setIsTextVisible(true);
+            }, 220);
+        }, 5000);
+
+        return () => {
+            clearInterval(languageTimer);
+            if (languageSwitchTimeoutRef.current) {
+                clearTimeout(languageSwitchTimeoutRef.current);
+            }
+        };
     }, []);
 
     const fetchBoardState = useCallback(async () => {
@@ -87,7 +113,7 @@ export const PublicCallingBoard = () => {
 
         const client = new Client({
             webSocketFactory: () => new SockJS(`${backendUrl}/ws-calling`),
-            debug: () => {},
+            debug: () => { },
             reconnectDelay: 5000,
             onConnect: () => {
                 client.subscribe(`/topic/show/${currentShowId}/board`, () => {
@@ -125,13 +151,13 @@ export const PublicCallingBoard = () => {
             <div className="h-screen bg-slate-900 flex items-center justify-center p-4">
                 <div className="bg-slate-800 p-10 rounded-2xl text-center border border-slate-700 max-w-md w-full">
                     <h1 className="text-3xl font-bold text-white mb-4 tracking-[-2px]">
-                        {t('board.title')}
+                        <span className={boardTextClass}>{translateBoard('board.title')}</span>
                     </h1>
                     <button
                         onClick={() => setIsStarted(true)}
                         className="w-full bg-blue-600 hover:bg-blue-500 text-white hover:text-white font-bold py-4 rounded-xl text-lg transition-colors shadow-lg shadow-blue-500/30 cursor-pointer"
                     >
-                        {t('board.start')}
+                        <span className={boardTextClass}>{translateBoard('board.start')}</span>
                     </button>
                 </div>
             </div>
@@ -142,20 +168,23 @@ export const PublicCallingBoard = () => {
         <div className="h-screen w-screen bg-slate-950 p-2 sm:p-4 flex flex-col font-sans overflow-hidden">
             <header className="flex justify-between items-end mb-3 border-b border-slate-800 pb-2 shrink-0">
                 <div>
-                    <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight uppercase leading-none">{t('board.activeJudging')}</h1>
-                    <div className="text-slate-500 text-xs font-bold tracking-widest mt-1">{t('board.broadcast')}</div>
+                    <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight uppercase leading-none">
+                        <span className={boardTextClass}>{translateBoard('board.activeJudging')}</span>
+                    </h1>
+                    <div className="text-slate-500 text-xs font-bold tracking-widest mt-1">
+                        <span className={boardTextClass}>{translateBoard('board.broadcast')}</span>
+                    </div>
                 </div>
 
                 <div className="flex flex-col items-end gap-0.5 select-none">
                     <div className="flex items-center gap-2">
                         <button
                             onClick={() => setIsMuted(m => !m)}
-                            title={isMuted ? 'Zapnout zvuk' : 'Ztlumit zvuk'}
-                            className={`flex items-center justify-center w-7 h-7 rounded-lg transition-all text-base ${
-                                isMuted
+                            title={isMuted ? translateBoard('board.soundOn') : translateBoard('board.soundOff')}
+                            className={`flex items-center justify-center w-7 h-7 rounded-lg transition-all text-base ${isMuted
                                     ? 'bg-red-500/20 border border-red-500/40 hover:bg-red-500/30'
                                     : 'bg-slate-800 border border-slate-700 hover:bg-slate-700'
-                            }`}
+                                }`}
                         >
                             {isMuted ? '🔇' : '🔊'}
                         </button>
@@ -175,12 +204,18 @@ export const PublicCallingBoard = () => {
                         return (
                             <div key={`empty-${tableNum}`} className="bg-slate-900/40 rounded-2xl border border-slate-800/40 flex flex-col overflow-hidden shadow-lg relative min-h-0">
                                 <div className="bg-slate-800/20 px-4 py-2 text-center border-b border-slate-800/40 flex justify-between items-center shrink-0">
-                                    <span className="bg-slate-800/50 text-slate-500 px-3 py-1 rounded-full text-xs font-bold tracking-wider border border-slate-700/50 uppercase">STŮL {tableNum}</span>
-                                    <h2 className="text-lg font-black text-slate-700 tracking-tight truncate">{t('board.waitingSteward')}</h2>
+                                    <span className="bg-slate-800/50 text-slate-500 px-3 py-1 rounded-full text-xs font-bold tracking-wider border border-slate-700/50 uppercase">
+                                        <span className={boardTextClass}>{translateBoard('board.table')} {tableNum}</span>
+                                    </span>
+                                    <h2 className="text-lg font-black text-slate-700 tracking-tight truncate">
+                                        <span className={boardTextClass}>{translateBoard('board.waitingSteward')}</span>
+                                    </h2>
                                     <span className="w-[70px]"></span>
                                 </div>
                                 <div className="p-3 flex-1 flex flex-col gap-3 min-h-0">
-                                    <div className="flex-1 bg-slate-800/10 rounded-xl border border-slate-800/50 border-dashed flex items-center justify-center text-slate-700 font-bold tracking-widest min-h-0">{t('board.unoccupied')}</div>
+                                    <div className="flex-1 bg-slate-800/10 rounded-xl border border-slate-800/50 border-dashed flex items-center justify-center text-slate-700 font-bold tracking-widest min-h-0">
+                                        <span className={boardTextClass}>{translateBoard('board.unoccupied')}</span>
+                                    </div>
                                     <div className="grid grid-cols-2 gap-3 shrink-0 opacity-20">
                                         <div className="h-[60px] bg-slate-800 rounded border border-slate-700 border-dashed"></div>
                                         <div className="h-[60px] bg-slate-800 rounded border border-slate-700 border-dashed"></div>
@@ -195,7 +230,9 @@ export const PublicCallingBoard = () => {
                     return (
                         <div key={table.judgeId} className="bg-slate-900 rounded-2xl border border-slate-800 flex flex-col overflow-hidden shadow-2xl relative min-h-0">
                             <div className="bg-slate-800 px-4 py-2 text-center border-b border-slate-700 flex justify-between items-center shrink-0">
-                                <span className="bg-blue-600/20 text-blue-400 px-3 py-1 rounded-full text-xs font-bold tracking-wider border border-blue-500/30 uppercase">STŮL {tableNum}</span>
+                                <span className="bg-blue-600/20 text-blue-400 px-3 py-1 rounded-full text-xs font-bold tracking-wider border border-blue-500/30 uppercase">
+                                    <span className={boardTextClass}>{translateBoard('board.table')} {tableNum}</span>
+                                </span>
                                 <h2 className="text-xl sm:text-2xl font-black text-white tracking-tight truncate">{table.judgeName}</h2>
                                 <span className="w-[70px]"></span>
                             </div>
@@ -214,7 +251,7 @@ export const PublicCallingBoard = () => {
 
                                             {(displayCats[0].type === 'BIV' || displayCats[0].type === 'BIS') && (
                                                 <span className="text-base sm:text-lg font-bold opacity-60 tracking-widest mb-2">
-                                                    Počet koček: {displayCats.length}
+                                                    <span className={boardTextClass}>{translateBoard('board.catCount', { count: displayCats.length })}</span>
                                                 </span>
                                             )}
 
@@ -226,22 +263,28 @@ export const PublicCallingBoard = () => {
                                                 ))}
                                             </div>
 
-                                            {displayCats[0].urgency === 'FINAL_CALL' && <span className="absolute bottom-3 bg-white text-red-600 px-6 py-1.5 rounded-full text-sm sm:text-base font-black uppercase tracking-widest animate-bounce shadow-xl">{t('board.finalCall')}</span>}
+                                            {displayCats[0].urgency === 'FINAL_CALL' && (
+                                                <span className="absolute bottom-3 bg-white text-red-600 px-6 py-1.5 rounded-full text-sm sm:text-base font-black uppercase tracking-widest animate-bounce shadow-xl">
+                                                    <span className={boardTextClass}>{translateBoard('board.finalCall')}</span>
+                                                </span>
+                                            )}
                                         </div>
                                     ) : table.isPaused ? (
                                         <div className="w-full h-full bg-yellow-500/10 rounded-xl border border-yellow-500/30 border-dashed flex items-center justify-center text-yellow-500 text-2xl sm:text-3xl font-black tracking-widest animate-pulse text-center p-4 min-h-0">
-                                            PAUZA POSUZOVÁNÍ
+                                            <span className={boardTextClass}>{translateBoard('board.pausedJudging')}</span>
                                         </div>
                                     ) : (
                                         <div className="w-full h-full bg-slate-800/50 rounded-xl border border-slate-700/50 border-dashed flex items-center justify-center text-slate-600 font-bold min-h-0">
-                                            TABLE EMPTY
+                                            <span className={boardTextClass}>{translateBoard('board.tableEmpty')}</span>
                                         </div>
                                     )}
                                 </div>
 
                                 <div className="grid grid-cols-2 gap-3 shrink-0">
                                     <div className="flex flex-col min-h-0">
-                                        <div className="text-slate-500 text-[10px] font-black uppercase tracking-widest mb-1 text-center text-yellow-500">{t('board.preparing')}</div>
+                                        <div className="text-slate-500 text-[10px] font-black uppercase tracking-widest mb-1 text-center text-yellow-500">
+                                            <span className={boardTextClass}>{translateBoard('board.preparing')}</span>
+                                        </div>
                                         <div className="grid grid-cols-3 gap-1.5 flex-1">
                                             {table.preparingCats.length > 0 ? table.preparingCats.slice(0, 6).map(cat => (
                                                 <div key={cat.catalogNumber} className="bg-slate-800 border-l-2 border-yellow-500 rounded p-1 sm:p-1.5 text-center flex flex-col justify-center shadow-sm h-full">
@@ -255,7 +298,9 @@ export const PublicCallingBoard = () => {
                                     </div>
 
                                     <div className="flex flex-col min-h-0">
-                                        <div className="text-slate-500 text-[10px] font-black uppercase tracking-widest mb-1 text-center">{t('board.nextInLine')}</div>
+                                        <div className="text-slate-500 text-[10px] font-black uppercase tracking-widest mb-1 text-center">
+                                            <span className={boardTextClass}>{translateBoard('board.nextInLine')}</span>
+                                        </div>
                                         <div className="grid grid-cols-3 gap-1.5 flex-1">
                                             {table.waitingCats.length > 0 ? table.waitingCats.slice(0, 6).map(cat => (
                                                 <div key={cat.catalogNumber} className="bg-slate-800 border-l-2 border-slate-600 rounded p-1 sm:p-1.5 flex items-center justify-center h-full">

@@ -1022,11 +1022,17 @@
     "title": "Vyvolávací tabule",
     "activeJudging": "AKTIVNÍ POSUZOVÁNÍ",
     "broadcast": "VYSÍLÁNÍ Z VÝSTAVY",
+    "table": "STŮL",
     "waitingSteward": "ČEKÁ NA STEVARDA",
     "unoccupied": "NEOBSAZENO",
     "finalCall": "Poslední výzva!",
+    "catCount": "Počet koček: {{count}}",
+    "pausedJudging": "PAUZA POSUZOVÁNÍ",
+    "tableEmpty": "STŮL JE PRÁZDNÝ",
     "preparing": "Připravuje se",
     "nextInLine": "Další na řadě",
-    "start": "Zapnout tabuli"
+    "start": "Zapnout tabuli",
+    "soundOn": "Zapnout zvuk",
+    "soundOff": "Ztlumit zvuk"
   }
 }

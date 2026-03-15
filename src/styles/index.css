@@ -20,6 +20,7 @@ a {
   color: #027BFF;
   text-decoration: inherit;
 }
+
 a:hover {
   color: #000000;
 }
@@ -54,9 +55,26 @@ button {
   transition: all 0.25s ease;
   align-items: center;
 }
+
 button:hover {
   background-color: #fff;
   color: #027BFF;
   border: 2px solid #027BFF;
   opacity: 1;
+}
+
+.board-text-transition {
+  display: inline-block;
+  transition: opacity 220ms ease-in-out, filter 220ms ease-in-out;
+  will-change: opacity, filter;
+}
+
+.board-text-visible {
+  opacity: 1;
+  filter: blur(0);
+}
+
+.board-text-hidden {
+  opacity: 0;
+  filter: blur(1.5px);
 }
