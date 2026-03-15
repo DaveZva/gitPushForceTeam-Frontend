@@ -66,7 +66,17 @@ export default function Catalog() {
                     <div className="max-w-6xl mx-auto px-4 mt-8">
                         <div className="flex gap-4 justify-start">
                             {["info", "primary", "secondary"].map(id => (
-                                <button key={id} onClick={() => setTab(id as any)} className={`px-4 py-2 text-sm rounded-xl font-semibold transition ${tab === id ? "bg-[#027BFF] text-white shadow-lg" : "bg-gray-100 text-gray-500 hover:bg-gray-200"}`}>{t(`catalog.tab${id.charAt(0).toUpperCase() + id.slice(1)}`)}</button>
+                                <button
+                                    key={id}
+                                    onClick={() => setTab(id as any)}
+                                    className={`px-4 py-2 text-sm rounded-xl font-semibold transition ${
+                                        tab === id
+                                            ? "bg-[#027BFF] text-white shadow-lg"
+                                            : "bg-gray-100 text-gray-500 hover:bg-white border-2 border-transparent hover:border-[#027BFF] hover:text-[#027BFF]"
+                                    }`}
+                                >
+                                    {t(`catalog.tab${id.charAt(0).toUpperCase() + id.slice(1)}`)}
+                                </button>
                             ))}
                         </div>
                     </div>
@@ -131,8 +141,8 @@ export default function Catalog() {
                                             <div key={j.id} className="bg-white border border-gray-100 rounded-2xl p-5 shadow-sm hover:shadow-md transition-shadow">
                                                 <div className="font-bold text-gray-900 mb-4">{j.firstName} {j.lastName} ({j.country})</div>
                                                 <div className="flex gap-2">
-                                                    <button onClick={() => setModalState({ type: 'JUDGE_REPORT', date: 'SATURDAY', judge: j })} className="flex-1 text-[10px] font-bold text-[#FFFFFF] border border-[#027BFF] py-2 rounded-lg hover:bg-[#027BFF] hover:text-white transition-colors uppercase tracking-wider text-gray-900">{t('days.saturday')}</button>
-                                                    <button onClick={() => setModalState({ type: 'JUDGE_REPORT', date: 'SUNDAY', judge: j })} className="flex-1 text-[10px] font-bold text-[#FFFFFF] border border-[#027BFF] py-2 rounded-lg hover:bg-[#027BFF] hover:text-white transition-colors uppercase tracking-wider text-gray-900">{t('days.sunday')}</button>
+                                                    <button onClick={() => setModalState({ type: 'JUDGE_REPORT', date: 'SATURDAY', judge: j })} className="flex-1 text-[10px] font-bold py-2 rounded-lg uppercase tracking-wider transition-all duration-200 border-2 bg-[#027BFF] text-white border-[#027BFF] hover:bg-white hover:text-[#027BFF]">{t('days.saturday')}</button>
+                                                    <button onClick={() => setModalState({ type: 'JUDGE_REPORT', date: 'SUNDAY', judge: j })} className="flex-1 text-[10px] font-bold py-2 rounded-lg uppercase tracking-wider transition-all duration-200 border-2 bg-[#027BFF] text-white border-[#027BFF] hover:bg-white hover:text-[#027BFF]">{t('days.sunday')}</button>
                                                 </div>
                                             </div>
                                         ))}
@@ -169,8 +179,8 @@ export default function Catalog() {
             )}
 
             {modalState.type !== 'NONE' && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-gray-900/70 backdrop-blur-sm">
-                    <div className="bg-white rounded-2xl shadow-2xl w-full max-w-[95vw] max-h-[90vh] lg:max-w-7xl overflow-hidden flex flex-col tracking-tight text-gray-900 relative">
+                <div className="fixed inset-0 z-[9999] flex items-start pt-[100px] pb-6 justify-center px-4 bg-gray-900/70 backdrop-blur-sm">
+                    <div className="bg-white rounded-2xl shadow-2xl w-full max-w-[95vw] max-h-full lg:max-w-7xl overflow-hidden flex flex-col tracking-tight text-gray-900 relative">
                         <div className="p-6 border-b flex justify-between items-center sticky top-0 bg-white z-10">
                             <div className="text-left">
                                 {modalState.type === 'JUDGE_REPORT' && modalState.judge && (
@@ -185,7 +195,7 @@ export default function Catalog() {
                             </div>
                             <button
                                 onClick={closeModal}
-                                className="w-10 h-10 flex items-center justify-center rounded-full bg-gray-100 text-gray-600 hover:bg-red-50 hover:text-red-600 transition-colors text-xl font-bold"
+                                className="w-10 h-10 flex items-center justify-center rounded-full bg-gray-100 text-gray-600 border-2 border-transparent hover:border-black hover:text-black hover:bg-white transition-all text-xl font-bold focus:outline-none"
                             >
                                 ×
                             </button>

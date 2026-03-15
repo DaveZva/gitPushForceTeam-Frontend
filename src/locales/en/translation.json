@@ -966,7 +966,14 @@
     "role": "Steward",
     "tabs": {
       "queue": "Queue"
-    }
+    },
+    "selectForBiv": "Select cats for BIV (min. 3)",
+    "selectForBis": "Select cats for BIS",
+    "selectedCats": "Selected cats",
+    "callGroupBivSelected": "Call selected (BIV)",
+    "callGroupBisSelected": "Call selected (BIS)",
+    "noBisAvailable": "No cats available",
+    "minBivCats": "Select at least 3 cats for BIV"
   },
   "callingBoard": {
     "title": "Calling System",
@@ -1019,6 +1026,7 @@
     "unoccupied": "UNOCCUPIED",
     "finalCall": "Final Call!",
     "preparing": "Preparing",
-    "nextInLine": "Next In Line"
+    "nextInLine": "Next In Line",
+    "start": "Start board"
   }
 }

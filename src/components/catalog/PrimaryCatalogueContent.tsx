@@ -111,7 +111,8 @@ export const PrimaryCatalogueContent = ({ showId }: Props) => {
                 <input
                     type="text"
                     placeholder={t('common.searchPlaceholder')}
-                    className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-[#027BFF] focus:ring-2 focus:ring-blue-100 transition-all outline-none"
+                    /* PŘIDÁNY TŘÍDY: bg-white text-black */
+                    className="w-full px-4 py-3 rounded-lg border border-gray-200 bg-white text-black focus:border-[#027BFF] focus:ring-2 focus:ring-blue-100 transition-all outline-none"
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                 />
