@@ -12,14 +12,14 @@ interface JudgeSelectorProps {
 }
 
 export const JudgeSelector = ({ judges, usedTables, onInitiateLock, onConfirmTable, judgeToLock, onCancelLock }: JudgeSelectorProps) => {
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
 
     const getVisibleTableCount = () => {
         let count = 4;
         while (
             Array.from({ length: count }, (_, i) => i + 1).every(num => usedTables.includes(num)) &&
             count < 24
-            ) {
+        ) {
             count += 4;
         }
         return count;
@@ -29,6 +29,27 @@ export const JudgeSelector = ({ judges, usedTables, onInitiateLock, onConfirmTab
 
     return (
         <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4 relative font-sans">
+            <div className="absolute top-4 right-4 flex items-center bg-gray-100 p-1 rounded-lg border border-gray-200 shadow-sm z-10">
+                <button
+                    onClick={() => i18n.changeLanguage('cs')}
+                    className={`px-3 py-1 text-[11px] font-bold rounded-md transition-all duration-200 ${i18n.language.startsWith('cs')
+                            ? 'bg-white text-gray-900 shadow-sm'
+                            : 'bg-transparent text-gray-400 hover:text-gray-600'
+                        }`}
+                >
+                    CZ
+                </button>
+                <button
+                    onClick={() => i18n.changeLanguage('en')}
+                    className={`px-3 py-1 text-[11px] font-bold rounded-md transition-all duration-200 ${i18n.language.startsWith('en')
+                            ? 'bg-white text-gray-900 shadow-sm'
+                            : 'bg-transparent text-gray-400 hover:text-gray-600'
+                        }`}
+                >
+                    EN
+                </button>
+            </div>
+
             <div className="max-w-md w-full bg-white rounded-xl shadow-lg p-8 border border-gray-100">
                 <div className="text-center mb-8">
                     <div className="w-16 h-16 bg-blue-50 rounded-full flex items-center justify-center mx-auto mb-4 text-[#027BFF]">
@@ -46,11 +67,10 @@ export const JudgeSelector = ({ judges, usedTables, onInitiateLock, onConfirmTab
                                 key={judge.id}
                                 disabled={isLockedBySomeoneElse}
                                 onClick={() => onInitiateLock(judge)}
-                                className={`w-full p-4 text-left border-2 rounded-lg flex justify-between items-center transition-all duration-200 cursor-pointer ${
-                                    isLockedBySomeoneElse
+                                className={`w-full p-4 text-left border-2 rounded-lg flex justify-between items-center transition-all duration-200 cursor-pointer ${isLockedBySomeoneElse
                                         ? 'bg-gray-100 border-gray-200 opacity-50 cursor-not-allowed grayscale'
                                         : 'border-transparent bg-gray-50 text-gray-700 hover:border-[#027BFF] hover:bg-white hover:text-[#027BFF] group'
-                                }`}
+                                    }`}
                             >
                                 <div>
                                     <span className={`font-bold block transition-colors ${isLockedBySomeoneElse ? 'text-gray-500' : 'text-gray-700 group-hover:text-[#027BFF]'}`}>
@@ -84,22 +104,21 @@ export const JudgeSelector = ({ judges, usedTables, onInitiateLock, onConfirmTab
                         </div>
                         <div className="p-6">
                             <p className="text-sm text-gray-500 mb-6 leading-relaxed">
-                                {t('steward.assigningTo')} <strong className="text-[#027BFF] text-base font-bold">{judgeToLock.name}</strong>.<br/>
+                                {t('steward.assigningTo')} <strong className="text-[#027BFF] text-base font-bold">{judgeToLock.name}</strong>.<br />
                                 {t('steward.tableSelectionDesc')}
                             </p>
                             <div className="grid grid-cols-4 gap-3">
-                                {Array.from({length: visibleTableCount}, (_, i) => i + 1).map(num => {
+                                {Array.from({ length: visibleTableCount }, (_, i) => i + 1).map(num => {
                                     const isUsed = usedTables.includes(num);
                                     return (
                                         <button
                                             key={num}
                                             disabled={isUsed}
                                             onClick={() => onConfirmTable(num)}
-                                            className={`py-4 rounded-xl font-bold text-lg border-2 transition-all duration-200 cursor-pointer ${
-                                                isUsed
+                                            className={`py-4 rounded-xl font-bold text-lg border-2 transition-all duration-200 cursor-pointer ${isUsed
                                                     ? 'bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed line-through decoration-gray-300'
                                                     : 'bg-blue-50/50 text-[#027BFF] border-transparent hover:border-[#027BFF] hover:bg-white shadow-sm hover:shadow-md'
-                                            }`}
+                                                }`}
                                         >
                                             {num}
                                         </button>
