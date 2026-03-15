@@ -206,13 +206,21 @@ export const PublicCallingBoard = () => {
                                         <div className={`relative rounded-xl pt-8 pb-4 px-4 flex flex-col items-center justify-center transition-all duration-300 w-full h-full min-h-0 ${getColorClass(displayCats[0].type, displayCats[0].urgency)}`}>
                                             {getTypeLabel(displayCats[0].type)}
 
-                                            <span className="text-2xl sm:text-4xl font-bold opacity-90 drop-shadow-md shrink-0 mb-2">
-                                                {displayCats[0].ems}
-                                            </span>
+                                            {displayCats[0].type !== 'BIV' && displayCats[0].type !== 'BIS' && (
+                                                <span className="text-2xl sm:text-4xl font-bold opacity-90 drop-shadow-md shrink-0 mb-2">
+                                                    {displayCats[0].ems}
+                                                </span>
+                                            )}
+
+                                            {(displayCats[0].type === 'BIV' || displayCats[0].type === 'BIS') && (
+                                                <span className="text-base sm:text-lg font-bold opacity-60 tracking-widest mb-2">
+                                                    Počet koček: {displayCats.length}
+                                                </span>
+                                            )}
 
                                             <div className="flex flex-wrap justify-center items-center gap-x-8 gap-y-4 w-full overflow-hidden content-center flex-1">
                                                 {displayCats.map(cat => (
-                                                    <span key={cat.catalogNumber} className={`font-black tracking-tighter leading-none drop-shadow-lg ${displayCats.length > 2 ? 'text-5xl md:text-6xl lg:text-[75px]' : 'text-7xl md:text-8xl lg:text-[110px]'}`}>
+                                                    <span key={cat.catalogNumber} className={`font-black tracking-tighter leading-none drop-shadow-lg font-mono [font-variant-ligatures:none] [font-variant-numeric:normal] ${displayCats.length > 2 ? 'text-5xl md:text-6xl lg:text-[75px]' : 'text-7xl md:text-8xl lg:text-[110px]'}`}>
                                                         #{cat.catalogNumber}
                                                     </span>
                                                 ))}
@@ -237,7 +245,7 @@ export const PublicCallingBoard = () => {
                                         <div className="grid grid-cols-3 gap-1.5 flex-1">
                                             {table.preparingCats.length > 0 ? table.preparingCats.slice(0, 6).map(cat => (
                                                 <div key={cat.catalogNumber} className="bg-slate-800 border-l-2 border-yellow-500 rounded p-1 sm:p-1.5 text-center flex flex-col justify-center shadow-sm h-full">
-                                                    <div className="text-base sm:text-lg font-black text-white leading-none">#{cat.catalogNumber}</div>
+                                                    <div className="text-base sm:text-lg font-black text-white leading-none font-mono [font-variant-ligatures:none]">#{cat.catalogNumber}</div>
                                                     <div className="text-[9px] sm:text-[10px] text-slate-400 font-bold mt-0.5 truncate leading-none">{cat.ems}</div>
                                                 </div>
                                             )) : (
@@ -251,7 +259,7 @@ export const PublicCallingBoard = () => {
                                         <div className="grid grid-cols-3 gap-1.5 flex-1">
                                             {table.waitingCats.length > 0 ? table.waitingCats.slice(0, 6).map(cat => (
                                                 <div key={cat.catalogNumber} className="bg-slate-800 border-l-2 border-slate-600 rounded p-1 sm:p-1.5 flex items-center justify-center h-full">
-                                                    <div className="text-base sm:text-lg font-bold text-slate-300 leading-none">#{cat.catalogNumber}</div>
+                                                    <div className="text-base sm:text-lg font-bold text-slate-300 leading-none font-mono [font-variant-ligatures:none]">#{cat.catalogNumber}</div>
                                                 </div>
                                             )) : (
                                                 <div className="col-span-3 bg-slate-800/30 rounded p-2 text-center text-slate-600 text-xs border border-slate-700/50 border-dashed flex items-center justify-center h-full">-</div>
