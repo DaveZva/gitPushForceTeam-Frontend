@@ -118,8 +118,13 @@ export const PublicCallingBoard = () => {
         return (
             <div className="h-screen bg-slate-900 flex items-center justify-center p-4">
                 <div className="bg-slate-800 p-10 rounded-2xl text-center border border-slate-700 max-w-md w-full">
-                    <h1 className="text-3xl font-bold text-white mb-4">{t('board.title')}</h1>
-                    <button onClick={() => setIsStarted(true)} className="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-4 rounded-xl text-lg transition-colors shadow-lg shadow-blue-500/30">
+                    <h1 className="text-3xl font-bold text-white mb-4 tracking-[-2px]">
+                        {t('board.title')}
+                    </h1>
+                    <button
+                        onClick={() => setIsStarted(true)}
+                        className="w-full bg-blue-600 hover:bg-blue-500 text-white hover:text-white font-bold py-4 rounded-xl text-lg transition-colors shadow-lg shadow-blue-500/30 cursor-pointer"
+                    >
                         START BOARD
                     </button>
                 </div>

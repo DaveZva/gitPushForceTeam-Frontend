@@ -105,9 +105,7 @@ export const JudgeReportDetail = ({ showId, judgeId, date }: Props) => {
                     <tbody>
                     {sheets.map((row, index) => {
                         const ems = row.emsCode || row.ems || "";
-
                         const born = formatDate(row.birthDate || row.dob);
-
                         const classCode = row.showClassCode;
 
                         const genderStr = String(row.gender || row.sex || "").toUpperCase();
