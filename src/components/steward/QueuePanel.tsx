@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { StewardQueueEntry } from "../../services/api/stewardApi";
 import { StewardIcons } from "./StewardIcons";
@@ -14,12 +15,44 @@ interface QueuePanelProps {
     onPrepareGroup: (cats: StewardQueueEntry[]) => void;
 }
 
-export const QueuePanel = ({ activeTab, setActiveTab, waitingCats, bivGroups, allActiveCats, onStatusChange, onCallToTable, onCallBivGroup, onPrepareGroup }: QueuePanelProps) => {
+export const QueuePanel = ({ activeTab, setActiveTab, waitingCats, allActiveCats, onCallToTable, onCallBivGroup, onStatusChange, onPrepareGroup }: QueuePanelProps) => {
     const { t } = useTranslation();
+    const [selectedBiv, setSelectedBiv] = useState<Set<number>>(new Set());
+    const [selectedBis, setSelectedBis] = useState<Set<number>>(new Set());
+
+    const toggleBiv = (id: number) => {
+        setSelectedBiv(prev => {
+            const next = new Set(prev);
+            next.has(id) ? next.delete(id) : next.add(id);
+            return next;
+        });
+    };
+
+    const toggleBis = (id: number) => {
+        setSelectedBis(prev => {
+            const next = new Set(prev);
+            next.has(id) ? next.delete(id) : next.add(id);
+            return next;
+        });
+    };
+
+    const handleCallBiv = () => {
+        const cats = allActiveCats.filter(c => selectedBiv.has(c.id));
+        if (cats.length < 3) return;
+        onCallBivGroup(cats);
+        setSelectedBiv(new Set());
+    };
+
+    const handleCallBis = () => {
+        const cats = allActiveCats.filter(c => selectedBis.has(c.id));
+        if (cats.length === 0) return;
+        cats.forEach(cat => onCallToTable(cat, 'BIS'));
+        setSelectedBis(new Set());
+    };
 
     const tabs = [
         { id: 'QUEUE', label: t('steward.tabs.queue') },
-        { id: 'BIV', label: 'BIV', count: bivGroups.length },
+        { id: 'BIV', label: 'BIV' },
         { id: 'BIS', label: 'BIS / NOM' }
     ] as const;
 
@@ -38,13 +71,6 @@ export const QueuePanel = ({ activeTab, setActiveTab, waitingCats, bivGroups, al
                             }`}
                         >
                             {tab.label}
-                            {'count' in tab && tab.count ? (
-                                <span className={`ml-2 text-[10px] px-1.5 py-0.5 rounded-full font-black ${
-                                    activeTab === tab.id ? 'bg-white text-[#027BFF]' : 'bg-red-500 text-white'
-                                }`}>
-                    {tab.count}
-                </span>
-                            ) : null}
                         </button>
                     ))}
                 </div>
@@ -87,64 +113,68 @@ export const QueuePanel = ({ activeTab, setActiveTab, waitingCats, bivGroups, al
                     )}
 
                     {activeTab === 'BIV' && (
-                        <div className="space-y-3">
-                            {bivGroups.length === 0 ? (
+                        <div className="space-y-2">
+                            {/* Call button */}
+                            <div className="bg-white rounded-lg border border-purple-200 p-3 shadow-sm">
+                                <p className="text-xs text-gray-500 mb-2">{t('steward.selectForBiv')}</p>
+                                <button
+                                    onClick={handleCallBiv}
+                                    disabled={selectedBiv.size < 3}
+                                    className={`w-full py-3 rounded-lg font-bold text-xs tracking-widest uppercase transition-all duration-200 flex items-center justify-center gap-2 border-2 cursor-pointer ${
+                                        selectedBiv.size >= 3
+                                            ? 'bg-purple-600 text-white border-purple-600 hover:bg-white hover:text-purple-600 shadow-sm'
+                                            : 'bg-gray-100 text-gray-400 border-gray-100 cursor-not-allowed'
+                                    }`}
+                                >
+                                    <StewardIcons.Megaphone />
+                                    {t('steward.callGroupBivSelected')}
+                                    {selectedBiv.size > 0 && (
+                                        <span className={`ml-1 px-2 py-0.5 rounded-full text-[10px] font-black ${
+                                            selectedBiv.size >= 3 ? 'bg-white/30 text-white' : 'bg-gray-200 text-gray-500'
+                                        }`}>
+                                            {selectedBiv.size}
+                                        </span>
+                                    )}
+                                </button>
+                                {selectedBiv.size > 0 && selectedBiv.size < 3 && (
+                                    <p className="text-[10px] text-red-400 text-center mt-1.5">{t('steward.minBivCats')}</p>
+                                )}
+                            </div>
+
+                            {allActiveCats.length === 0 ? (
                                 <div className="text-center py-12 text-gray-400 text-sm">{t('steward.noBivAvailable')}</div>
                             ) : (
-                                bivGroups.map(([groupName, cats]) => {
-                                    const canPrepare = cats.some(c => c.status !== 'READY' && c.status !== 'JUDGING');
-
+                                allActiveCats.map(cat => {
+                                    const selected = selectedBiv.has(cat.id);
                                     return (
-                                        <div key={groupName} className="bg-white rounded-lg border border-gray-200 overflow-hidden shadow-sm">
-                                            <div className="bg-blue-50 px-4 py-3 border-b border-blue-100 flex justify-between items-center">
-                                                <span className="font-bold text-[#027BFF] text-sm tracking-tight">{groupName}</span>
-                                                <span className="text-xs font-bold text-blue-500 bg-blue-100 px-2 py-1 rounded-full">{cats.length} {t('steward.cats')}</span>
-                                            </div>
-                                            <div className="p-2 space-y-2 bg-gray-50/50">
-                                                {cats.map(cat => (
-                                                    <div key={cat.id} className={`bg-white p-2.5 rounded-lg border flex items-center justify-between shadow-sm transition-all ${cat.status === 'DONE' ? 'border-green-200 bg-green-50/30' : 'border-gray-200'}`}>
-                                                        <div className="flex items-center gap-3">
-                                                            <span className={`font-bold w-8 text-right text-lg tracking-tighter ${cat.status === 'DONE' ? 'text-gray-400' : 'text-gray-900'}`}>
-                                                                #{cat.catalogNumber}
-                                                            </span>
-                                                            <span className="text-xs font-bold text-gray-500 bg-gray-100 px-2 py-1 rounded border border-gray-200">
-                                                                {cat.sex === 'MALE' ? '1.0' : '0.1'}
-                                                            </span>
-                                                        </div>
-                                                        <div className="flex gap-2 items-center">
-                                                            {cat.status === 'DONE' && (
-                                                                <span className="text-[10px] font-bold text-green-600 uppercase bg-green-100 px-2 py-1.5 rounded border border-green-200 flex items-center gap-1">
-                                                                    <StewardIcons.Check /> {t('steward.judged')}
-                                                                </span>
-                                                            )}
-                                                            <button
-                                                                onClick={() => onStatusChange(cat, 'READY')}
-                                                                className="px-2 py-1.5 bg-gray-50 text-gray-600 border-2 border-transparent hover:border-yellow-500 hover:bg-white hover:text-yellow-600 rounded-md font-bold text-[10px] tracking-wider transition-all duration-200 flex items-center gap-1 cursor-pointer"
-                                                            >
-                                                                <StewardIcons.List />
-                                                                {t('steward.prepare')}
-                                                            </button>
-                                                        </div>
+                                        <div
+                                            key={cat.id}
+                                            onClick={() => toggleBiv(cat.id)}
+                                            className={`bg-white p-3 rounded-lg border flex items-center justify-between shadow-sm transition-all cursor-pointer ${
+                                                selected
+                                                    ? 'border-purple-400 bg-purple-50/50 ring-1 ring-purple-300'
+                                                    : 'border-gray-200 hover:border-purple-300'
+                                            }`}
+                                        >
+                                            <div className="flex items-center gap-3">
+                                                <div className={`w-5 h-5 rounded border-2 flex items-center justify-center shrink-0 transition-all ${
+                                                    selected ? 'bg-purple-600 border-purple-600' : 'border-gray-300'
+                                                }`}>
+                                                    {selected && (
+                                                        <svg className="w-3 h-3 text-white" viewBox="0 0 12 12" fill="none">
+                                                            <path d="M2 6l3 3 5-5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                                                        </svg>
+                                                    )}
+                                                </div>
+                                                <span className={`font-bold w-8 text-right text-lg tracking-tighter ${selected ? 'text-purple-900' : 'text-gray-900'}`}>
+                                                    #{cat.catalogNumber}
+                                                </span>
+                                                <div className="h-8 w-px bg-gray-100"></div>
+                                                <div>
+                                                    <div className={`font-bold text-sm ${selected ? 'text-purple-800' : 'text-gray-900'}`}>
+                                                        {cat.ems} <span className="font-normal text-gray-400 text-xs ml-1">({cat.sex === 'MALE' ? '1.0' : '0.1'})</span>
                                                     </div>
-                                                ))}
-
-                                                {canPrepare && (
-                                                    <button
-                                                        onClick={() => onPrepareGroup(cats)}
-                                                        className="w-full mt-2 bg-yellow-50/80 border-2 border-transparent hover:border-yellow-500 text-yellow-700 hover:bg-white hover:text-yellow-600 font-bold py-2.5 rounded-lg text-xs transition-all duration-200 flex items-center justify-center gap-2 cursor-pointer"
-                                                    >
-                                                        <StewardIcons.List />
-                                                        {t('steward.prepareGroup')}
-                                                    </button>
-                                                )}
-
-                                                <button
-                                                    onClick={() => onCallBivGroup(cats)}
-                                                    className="w-full mt-2 bg-purple-50 text-purple-700 border-2 border-transparent hover:border-purple-600 hover:bg-white hover:text-purple-600 font-bold py-3 rounded-lg text-xs tracking-wide transition-all duration-200 flex items-center justify-center gap-2 shadow-sm cursor-pointer"
-                                                >
-                                                    <StewardIcons.Megaphone />
-                                                    {t('steward.callGroupBiv')}
-                                                </button>
+                                                </div>
                                             </div>
                                         </div>
                                     );
@@ -154,22 +184,63 @@ export const QueuePanel = ({ activeTab, setActiveTab, waitingCats, bivGroups, al
                     )}
 
                     {activeTab === 'BIS' && (
-                        <div className="p-2 grid grid-cols-1 gap-3">
-                            {allActiveCats.map(cat => (
-                                <div key={cat.id} className="bg-white p-3 rounded-lg border border-purple-200 flex items-center justify-between shadow-sm hover:border-purple-400 transition-all">
-                                    <div className="flex items-center gap-4">
-                                        <span className="font-bold text-purple-900 w-8 text-lg text-right tracking-tighter">#{cat.catalogNumber}</span>
-                                        <span className="text-xs font-bold text-gray-500">{cat.ems}</span>
-                                    </div>
-                                    <button
-                                        onClick={() => onCallToTable(cat, 'BIS')}
-                                        className="px-6 py-2.5 bg-purple-100 text-purple-700 border-2 border-transparent hover:border-purple-600 hover:bg-white hover:text-purple-600 rounded-lg font-bold text-xs tracking-wider transition-all duration-200 flex items-center gap-2 shadow-sm cursor-pointer"
-                                    >
-                                        <StewardIcons.Megaphone />
-                                        {t('steward.callBis')}
-                                    </button>
-                                </div>
-                            ))}
+                        <div className="space-y-2">
+                            {/* Call button */}
+                            <div className="bg-white rounded-lg border border-purple-200 p-3 shadow-sm">
+                                <p className="text-xs text-gray-500 mb-2">{t('steward.selectForBis')}</p>
+                                <button
+                                    onClick={handleCallBis}
+                                    disabled={selectedBis.size === 0}
+                                    className={`w-full py-3 rounded-lg font-bold text-xs tracking-widest uppercase transition-all duration-200 flex items-center justify-center gap-2 border-2 cursor-pointer ${
+                                        selectedBis.size > 0
+                                            ? 'bg-purple-600 text-white border-purple-600 hover:bg-white hover:text-purple-600 shadow-sm'
+                                            : 'bg-gray-100 text-gray-400 border-gray-100 cursor-not-allowed'
+                                    }`}
+                                >
+                                    <StewardIcons.Megaphone />
+                                    {t('steward.callGroupBisSelected')}
+                                    {selectedBis.size > 0 && (
+                                        <span className="ml-1 px-2 py-0.5 rounded-full text-[10px] font-black bg-white/30 text-white">
+                                            {selectedBis.size}
+                                        </span>
+                                    )}
+                                </button>
+                            </div>
+
+                            {allActiveCats.length === 0 ? (
+                                <div className="text-center py-12 text-gray-400 text-sm">{t('steward.noBisAvailable')}</div>
+                            ) : (
+                                allActiveCats.map(cat => {
+                                    const selected = selectedBis.has(cat.id);
+                                    return (
+                                        <div
+                                            key={cat.id}
+                                            onClick={() => toggleBis(cat.id)}
+                                            className={`bg-white p-3 rounded-lg border flex items-center justify-between shadow-sm transition-all cursor-pointer ${
+                                                selected
+                                                    ? 'border-purple-400 bg-purple-50/50 ring-1 ring-purple-300'
+                                                    : 'border-purple-200 hover:border-purple-400'
+                                            }`}
+                                        >
+                                            <div className="flex items-center gap-4">
+                                                <div className={`w-5 h-5 rounded border-2 flex items-center justify-center shrink-0 transition-all ${
+                                                    selected ? 'bg-purple-600 border-purple-600' : 'border-gray-300'
+                                                }`}>
+                                                    {selected && (
+                                                        <svg className="w-3 h-3 text-white" viewBox="0 0 12 12" fill="none">
+                                                            <path d="M2 6l3 3 5-5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                                                        </svg>
+                                                    )}
+                                                </div>
+                                                <span className={`font-bold w-8 text-lg text-right tracking-tighter ${selected ? 'text-purple-900' : 'text-purple-900'}`}>
+                                                    #{cat.catalogNumber}
+                                                </span>
+                                                <span className="text-xs font-bold text-gray-500">{cat.ems}</span>
+                                            </div>
+                                        </div>
+                                    );
+                                })
+                            )}
                         </div>
                     )}
                 </div>

@@ -55,7 +55,13 @@ export const PublicCallingBoard = () => {
     const [tables, setTables] = useState<TableState[]>([]);
     const [isStarted, setIsStarted] = useState(false);
     const [currentTime, setCurrentTime] = useState(new Date());
+    const [isMuted, setIsMuted] = useState(false);
+    const isMutedRef = useRef(false);
     const stompClient = useRef<Client | null>(null);
+
+    useEffect(() => {
+        isMutedRef.current = isMuted;
+    }, [isMuted]);
 
     useEffect(() => {
         const timer = setInterval(() => setCurrentTime(new Date()), 1000);
@@ -86,7 +92,7 @@ export const PublicCallingBoard = () => {
             onConnect: () => {
                 client.subscribe(`/topic/show/${currentShowId}/board`, () => {
                     fetchBoardState();
-                    playGong();
+                    if (!isMutedRef.current) playGong();
                 });
             },
         });
@@ -125,7 +131,7 @@ export const PublicCallingBoard = () => {
                         onClick={() => setIsStarted(true)}
                         className="w-full bg-blue-600 hover:bg-blue-500 text-white hover:text-white font-bold py-4 rounded-xl text-lg transition-colors shadow-lg shadow-blue-500/30 cursor-pointer"
                     >
-                        START BOARD
+                        {t('board.start')}
                     </button>
                 </div>
             </div>
@@ -141,7 +147,20 @@ export const PublicCallingBoard = () => {
                 </div>
 
                 <div className="flex flex-col items-end gap-0.5 select-none">
-                    <div className="text-slate-400 font-mono text-xl font-bold">{currentTime.toLocaleTimeString()}</div>
+                    <div className="flex items-center gap-2">
+                        <button
+                            onClick={() => setIsMuted(m => !m)}
+                            title={isMuted ? 'Zapnout zvuk' : 'Ztlumit zvuk'}
+                            className={`flex items-center justify-center w-7 h-7 rounded-lg transition-all text-base ${
+                                isMuted
+                                    ? 'bg-red-500/20 border border-red-500/40 hover:bg-red-500/30'
+                                    : 'bg-slate-800 border border-slate-700 hover:bg-slate-700'
+                            }`}
+                        >
+                            {isMuted ? '🔇' : '🔊'}
+                        </button>
+                        <div className="text-slate-400 font-mono text-xl font-bold">{currentTime.toLocaleTimeString()}</div>
+                    </div>
                     <div className="flex items-center gap-1.5">
                         <span className="text-slate-300 font-bold text-sm tracking-tight">Pawdium</span>
                         <span className="bg-blue-500/20 text-blue-400 border border-blue-500/40 text-[9px] font-black tracking-widest uppercase px-1.5 py-0.5 rounded-full">Beta</span>

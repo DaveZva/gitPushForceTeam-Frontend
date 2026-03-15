@@ -966,7 +966,14 @@
     "role": "Stevard",
     "tabs": {
       "queue": "Fronta"
-    }
+    },
+    "selectForBiv": "Vyberte kočky pro BIV (min. 3)",
+    "selectForBis": "Vyberte kočky pro BIS",
+    "selectedCats": "Vybraných koček",
+    "callGroupBivSelected": "Zavolat vybrané (BIV)",
+    "callGroupBisSelected": "Zavolat vybrané (BIS)",
+    "noBisAvailable": "Žádné kočky k dispozici",
+    "minBivCats": "Vyberte alespoň 3 kočky pro BIV"
   },
   "callingBoard": {
     "title": "Vyvolávání koček / Calling System",
@@ -1019,6 +1026,7 @@
     "unoccupied": "NEOBSAZENO",
     "finalCall": "Poslední výzva!",
     "preparing": "Připravuje se",
-    "nextInLine": "Další na řadě"
+    "nextInLine": "Další na řadě",
+    "start": "Zapnout tabuli"
   }
 }
