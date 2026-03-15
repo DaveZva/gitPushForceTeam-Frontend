@@ -123,7 +123,7 @@ export const EditEntryModal = ({ entryId, isOpen, onClose, onSave }: Props) => {
                     <h3 className="text-lg font-bold text-gray-900">{t('secretariat.editModal.title')}</h3>
                     <button
                         onClick={onClose}
-                        className="p-2 bg-[#027BFF] text-white border-2 border-[#027BFF] rounded-full transition-all duration-200 hover:bg-transparent hover:text-[#027BFF] flex items-center justify-center cursor-pointer outline-none"
+                        className="p-2 bg-gray-100 text-gray-500 border-2 border-gray-200 rounded-full transition-all duration-200 hover:bg-white hover:text-black hover:border-black flex items-center justify-center cursor-pointer outline-none"
                     >
                         <svg
                             className="w-5 h-5"
@@ -287,7 +287,7 @@ export const EditEntryModal = ({ entryId, isOpen, onClose, onSave }: Props) => {
                 <div className="px-6 py-4 bg-gray-50 border-t border-gray-100 flex justify-end gap-3">
                     <button
                         onClick={onClose}
-                        className="px-6 py-2.5 bg-transparent border-2 border-[#027BFF] text-[#027BFF] font-bold rounded-full hover:bg-[#027BFF] hover:text-white transition-all duration-200 text-sm cursor-pointer"
+                        className="px-6 py-2.5 bg-transparent border-2 border-red-500 text-red-500 font-bold rounded-full hover:bg-red-500 hover:text-white hover:border-red-500 transition-all duration-200 text-sm cursor-pointer"
                     >
                         {t('common.cancel')}
                     </button>

@@ -26,20 +26,24 @@ export const QueuePanel = ({ activeTab, setActiveTab, waitingCats, bivGroups, al
     return (
         <div className="lg:col-span-5 flex flex-col h-[calc(100vh-140px)] sticky top-24">
             <div className="bg-white rounded-xl shadow-sm border border-gray-200 flex-1 flex flex-col overflow-hidden">
-                <div className="flex border-b border-gray-100">
+                <div className="flex p-2 gap-2 bg-white border-b border-gray-100">
                     {tabs.map(tab => (
                         <button
                             key={tab.id}
                             onClick={() => setActiveTab(tab.id as any)}
-                            className={`flex-1 py-4 font-bold text-xs sm:text-sm uppercase tracking-wide transition-colors relative ${
+                            className={`flex-1 py-3 px-4 font-black text-[11px] uppercase tracking-widest transition-all duration-200 rounded-xl border-2 cursor-pointer flex items-center justify-center relative ${
                                 activeTab === tab.id
-                                    ? 'text-[#027BFF] border-b-2 border-[#027BFF] bg-blue-50/10'
-                                    : 'text-gray-400 hover:text-gray-600 hover:bg-gray-50'
+                                    ? 'bg-[#027BFF] text-white border-[#027BFF] shadow-md shadow-[#027BFF]/20'
+                                    : 'bg-white text-[#027BFF] border-[#027BFF] hover:bg-[#027BFF]/10'
                             }`}
                         >
                             {tab.label}
                             {'count' in tab && tab.count ? (
-                                <span className="ml-2 bg-red-500 text-white text-[10px] px-1.5 py-0.5 rounded-full">{tab.count}</span>
+                                <span className={`ml-2 text-[10px] px-1.5 py-0.5 rounded-full font-black ${
+                                    activeTab === tab.id ? 'bg-white text-[#027BFF]' : 'bg-red-500 text-white'
+                                }`}>
+                    {tab.count}
+                </span>
                             ) : null}
                         </button>
                     ))}
@@ -52,9 +56,9 @@ export const QueuePanel = ({ activeTab, setActiveTab, waitingCats, bivGroups, al
                                 <div className="text-center py-12 text-gray-400 text-sm">{t('steward.queueEmpty')}</div>
                             ) : (
                                 waitingCats.map(cat => (
-                                    <div key={cat.id} className="bg-white p-3 rounded-lg border border-gray-200 flex items-center justify-between group shadow-sm hover:border-[#027BFF]/30 transition-colors">
+                                    <div key={cat.id} className="bg-white p-3 rounded-lg border border-gray-200 flex items-center justify-between group shadow-sm hover:border-[#027BFF]/30 transition-all">
                                         <div className="flex items-center gap-4">
-                                            <span className="text-gray-900 font-bold w-8 text-right text-lg">{cat.catalogNumber}</span>
+                                            <span className="text-gray-900 font-bold w-8 text-right text-lg tracking-tighter">{cat.catalogNumber}</span>
                                             <div className="h-8 w-px bg-gray-100"></div>
                                             <div>
                                                 <div className="font-bold text-gray-900 text-sm">{cat.ems} <span className="font-normal text-gray-400 text-xs ml-1">({cat.sex === 'MALE' ? '1.0' : '0.1'})</span></div>
@@ -63,14 +67,14 @@ export const QueuePanel = ({ activeTab, setActiveTab, waitingCats, bivGroups, al
                                         <div className="flex gap-2">
                                             <button
                                                 onClick={() => onStatusChange(cat, 'READY')}
-                                                className="px-3 py-2 bg-gray-50 text-gray-600 hover:bg-yellow-50 hover:text-yellow-700 hover:border-yellow-200 border border-gray-100 rounded-lg font-bold text-[10px] tracking-wider transition-colors flex items-center gap-1"
+                                                className="px-3 py-2 bg-gray-50 text-gray-600 border-2 border-transparent hover:border-yellow-500 hover:bg-white hover:text-yellow-600 rounded-lg font-bold text-[10px] tracking-wider transition-all duration-200 flex items-center gap-1 cursor-pointer"
                                             >
                                                 <StewardIcons.List />
                                                 {t('steward.prepare')}
                                             </button>
                                             <button
                                                 onClick={() => onCallToTable(cat)}
-                                                className="px-3 py-2 bg-blue-50 text-[#027BFF] hover:bg-[#027BFF] hover:text-white rounded-lg font-bold text-[10px] tracking-wider transition-colors flex items-center gap-1"
+                                                className="px-3 py-2 bg-blue-50 text-[#027BFF] border-2 border-transparent hover:border-[#027BFF] hover:bg-white hover:text-[#027BFF] rounded-lg font-bold text-[10px] tracking-wider transition-all duration-200 flex items-center gap-1 cursor-pointer"
                                             >
                                                 <StewardIcons.Megaphone />
                                                 {t('steward.toTableBtn')}
@@ -93,14 +97,14 @@ export const QueuePanel = ({ activeTab, setActiveTab, waitingCats, bivGroups, al
                                     return (
                                         <div key={groupName} className="bg-white rounded-lg border border-gray-200 overflow-hidden shadow-sm">
                                             <div className="bg-blue-50 px-4 py-3 border-b border-blue-100 flex justify-between items-center">
-                                                <span className="font-bold text-[#027BFF] text-sm">{groupName}</span>
+                                                <span className="font-bold text-[#027BFF] text-sm tracking-tight">{groupName}</span>
                                                 <span className="text-xs font-bold text-blue-500 bg-blue-100 px-2 py-1 rounded-full">{cats.length} {t('steward.cats')}</span>
                                             </div>
                                             <div className="p-2 space-y-2 bg-gray-50/50">
                                                 {cats.map(cat => (
-                                                    <div key={cat.id} className={`bg-white p-2.5 rounded-lg border flex items-center justify-between shadow-sm transition-colors ${cat.status === 'DONE' ? 'border-green-200 bg-green-50/30' : 'border-gray-200'}`}>
+                                                    <div key={cat.id} className={`bg-white p-2.5 rounded-lg border flex items-center justify-between shadow-sm transition-all ${cat.status === 'DONE' ? 'border-green-200 bg-green-50/30' : 'border-gray-200'}`}>
                                                         <div className="flex items-center gap-3">
-                                                            <span className={`font-bold w-8 text-right text-lg ${cat.status === 'DONE' ? 'text-gray-400' : 'text-gray-900'}`}>
+                                                            <span className={`font-bold w-8 text-right text-lg tracking-tighter ${cat.status === 'DONE' ? 'text-gray-400' : 'text-gray-900'}`}>
                                                                 #{cat.catalogNumber}
                                                             </span>
                                                             <span className="text-xs font-bold text-gray-500 bg-gray-100 px-2 py-1 rounded border border-gray-200">
@@ -115,7 +119,7 @@ export const QueuePanel = ({ activeTab, setActiveTab, waitingCats, bivGroups, al
                                                             )}
                                                             <button
                                                                 onClick={() => onStatusChange(cat, 'READY')}
-                                                                className="px-2 py-1.5 bg-gray-50 text-gray-600 hover:bg-yellow-50 hover:text-yellow-700 hover:border-yellow-200 border border-gray-100 rounded-md font-bold text-[10px] tracking-wider transition-colors flex items-center gap-1"
+                                                                className="px-2 py-1.5 bg-gray-50 text-gray-600 border-2 border-transparent hover:border-yellow-500 hover:bg-white hover:text-yellow-600 rounded-md font-bold text-[10px] tracking-wider transition-all duration-200 flex items-center gap-1 cursor-pointer"
                                                             >
                                                                 <StewardIcons.List />
                                                                 {t('steward.prepare')}
@@ -127,7 +131,7 @@ export const QueuePanel = ({ activeTab, setActiveTab, waitingCats, bivGroups, al
                                                 {canPrepare && (
                                                     <button
                                                         onClick={() => onPrepareGroup(cats)}
-                                                        className="w-full mt-2 bg-yellow-50/80 border border-yellow-200 text-yellow-700 hover:bg-yellow-400 hover:text-white font-bold py-2.5 rounded-lg text-xs transition-colors flex items-center justify-center gap-2"
+                                                        className="w-full mt-2 bg-yellow-50/80 border-2 border-transparent hover:border-yellow-500 text-yellow-700 hover:bg-white hover:text-yellow-600 font-bold py-2.5 rounded-lg text-xs transition-all duration-200 flex items-center justify-center gap-2 cursor-pointer"
                                                     >
                                                         <StewardIcons.List />
                                                         {t('steward.prepareGroup')}
@@ -136,7 +140,7 @@ export const QueuePanel = ({ activeTab, setActiveTab, waitingCats, bivGroups, al
 
                                                 <button
                                                     onClick={() => onCallBivGroup(cats)}
-                                                    className="w-full mt-2 bg-purple-50 text-purple-700 hover:bg-purple-600 hover:text-white border border-purple-200 font-bold py-3 rounded-lg text-xs tracking-wide transition-colors flex items-center justify-center gap-2 shadow-sm"
+                                                    className="w-full mt-2 bg-purple-50 text-purple-700 border-2 border-transparent hover:border-purple-600 hover:bg-white hover:text-purple-600 font-bold py-3 rounded-lg text-xs tracking-wide transition-all duration-200 flex items-center justify-center gap-2 shadow-sm cursor-pointer"
                                                 >
                                                     <StewardIcons.Megaphone />
                                                     {t('steward.callGroupBiv')}
@@ -152,14 +156,14 @@ export const QueuePanel = ({ activeTab, setActiveTab, waitingCats, bivGroups, al
                     {activeTab === 'BIS' && (
                         <div className="p-2 grid grid-cols-1 gap-3">
                             {allActiveCats.map(cat => (
-                                <div key={cat.id} className="bg-white p-3 rounded-lg border border-purple-200 flex items-center justify-between shadow-sm hover:border-purple-400 transition-colors">
+                                <div key={cat.id} className="bg-white p-3 rounded-lg border border-purple-200 flex items-center justify-between shadow-sm hover:border-purple-400 transition-all">
                                     <div className="flex items-center gap-4">
-                                        <span className="font-bold text-purple-900 w-8 text-lg text-right">#{cat.catalogNumber}</span>
+                                        <span className="font-bold text-purple-900 w-8 text-lg text-right tracking-tighter">#{cat.catalogNumber}</span>
                                         <span className="text-xs font-bold text-gray-500">{cat.ems}</span>
                                     </div>
                                     <button
                                         onClick={() => onCallToTable(cat, 'BIS')}
-                                        className="px-6 py-2.5 bg-purple-100 text-purple-700 hover:bg-purple-600 hover:text-white rounded-lg font-bold text-xs tracking-wider transition-colors flex items-center gap-2 shadow-sm"
+                                        className="px-6 py-2.5 bg-purple-100 text-purple-700 border-2 border-transparent hover:border-purple-600 hover:bg-white hover:text-purple-600 rounded-lg font-bold text-xs tracking-wider transition-all duration-200 flex items-center gap-2 shadow-sm cursor-pointer"
                                     >
                                         <StewardIcons.Megaphone />
                                         {t('steward.callBis')}

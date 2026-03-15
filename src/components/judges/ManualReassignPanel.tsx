@@ -138,15 +138,15 @@ export const ManualReassignPanel: React.FC<Props> = ({ showId, onClose }) => {
                         {t('judging.manualReassign')}
                     </h2>
 
-                    <div className="flex items-center gap-1 p-1 bg-gray-100 rounded-lg">
+                    <div className="flex items-center gap-2 p-1">
                         {(['SATURDAY', 'SUNDAY'] as const).map(day => (
                             <button
                                 key={day}
                                 onClick={() => setSelectedDay(day)}
-                                className={`px-4 py-1.5 rounded-md text-sm font-semibold transition-all ${
+                                className={`px-4 py-1.5 rounded-lg text-sm font-semibold transition-all border-2 ${
                                     selectedDay === day
-                                        ? 'bg-white text-[#027BFF] shadow-sm'
-                                        : 'text-gray-500 hover:text-gray-700'
+                                        ? 'bg-[#027BFF] text-white border-[#027BFF] shadow-md'
+                                        : 'bg-white text-[#027BFF] border-[#027BFF] hover:bg-blue-50'
                                 }`}
                             >
                                 {t(`common.${day === 'SATURDAY' ? 'sat' : 'sun'}`)}
@@ -176,7 +176,7 @@ export const ManualReassignPanel: React.FC<Props> = ({ showId, onClose }) => {
                     </span>
                     <button
                         onClick={onClose}
-                        className="flex items-center gap-1.5 px-4 py-2 rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium text-sm transition-colors"
+                        className="flex items-center gap-1.5 px-4 py-2 rounded-lg bg-gray-100 text-gray-700 font-medium text-sm transition-all border-2 border-transparent hover:border-black hover:text-black hover:bg-white focus:outline-none focus:border-black active:border-black"
                     >
                         <svg className="w-4 h-4" viewBox="0 0 20 20" fill="currentColor">
                             <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />

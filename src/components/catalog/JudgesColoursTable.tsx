@@ -62,25 +62,25 @@ export const JudgesColoursTable = ({ showId }: Props) => {
     }, [showId, selectedDay]);
 
     return (
-        <div className="space-y-6 sm:p-2">
-            <div className="flex justify-center mb-8">
-                <div className="bg-gray-100/80 p-1.5 rounded-xl inline-flex shadow-inner border border-gray-200/60">
+        <div className="space-y-4 sm:p-2 pt-2">
+            <div className="flex justify-center">
+                <div className="flex flex-row justify-center items-center my-4 gap-5 w-full">
                     <button
                         onClick={() => setSelectedDay('SATURDAY')}
-                        className={`px-8 py-2.5 rounded-lg font-bold text-sm tracking-wide transition-all duration-200 ${
+                        className={`px-8 py-2.5 rounded-2xl font-bold text-sm tracking-wide transition-all duration-200 border-2 ${
                             selectedDay === 'SATURDAY'
-                                ? 'bg-white text-[#027BFF] shadow-sm ring-1 ring-gray-200/50'
-                                : 'text-gray-500 hover:text-gray-700'
+                                ? 'bg-[#027BFF] text-white border-[#027BFF] shadow-md shadow-blue-100'
+                                : 'bg-white text-[#027BFF] border-[#027BFF] hover:bg-white hover:shadow-lg'
                         }`}
                     >
                         {t('days.saturday')}
                     </button>
                     <button
                         onClick={() => setSelectedDay('SUNDAY')}
-                        className={`px-8 py-2.5 rounded-lg font-bold text-sm tracking-wide transition-all duration-200 ${
+                        className={`px-8 py-2.5 rounded-2xl font-bold text-sm tracking-wide transition-all duration-200 border-2 ${
                             selectedDay === 'SUNDAY'
-                                ? 'bg-white text-[#027BFF] shadow-sm ring-1 ring-gray-200/50'
-                                : 'text-gray-500 hover:text-gray-700'
+                                ? 'bg-[#027BFF] text-white border-[#027BFF] shadow-md shadow-blue-100'
+                                : 'bg-white text-[#027BFF] border-[#027BFF] hover:bg-white hover:shadow-lg'
                         }`}
                     >
                         {t('days.sunday')}
@@ -97,7 +97,7 @@ export const JudgesColoursTable = ({ showId }: Props) => {
                     <p className="text-gray-500 font-medium">{t('judges.noWorkload')}</p>
                 </div>
             ) : (
-                <div className="flex flex-wrap justify-center gap-6 items-start">
+                <div className="flex flex-wrap justify-center gap-6 items-start px-4">
                     {data.map((judge) => (
                         <div
                             key={judge.judgeId}
