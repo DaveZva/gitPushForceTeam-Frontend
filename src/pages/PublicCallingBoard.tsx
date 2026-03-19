@@ -143,12 +143,12 @@ export const PublicCallingBoard = () => {
 
     const getTypeLabel = (type: string) => {
         if (type === 'NORMAL' || !type) return '';
-        return <span className="absolute -top-5 left-1/2 -translate-x-1/2 bg-black text-white px-6 py-1.5 rounded-full text-lg sm:text-xl font-black tracking-widest uppercase border-2 border-white/20 shadow-2xl z-10">{type}</span>;
+        return <span className="absolute -top-5 left-1/2 -translate-x-1/2 bg-black text-white px-6 py-1.5 2xl:px-10 2xl:py-3 min-[2560px]:px-14 min-[2560px]:py-5 rounded-full text-lg sm:text-xl 2xl:text-3xl min-[2560px]:text-5xl font-black tracking-widest uppercase border-2 border-white/20 shadow-2xl z-10">{type}</span>;
     };
 
     if (!isStarted) {
         return (
-            <div className="h-screen bg-slate-900 flex items-center justify-center p-4">
+            <div className="min-h-screen bg-slate-900 flex items-center justify-center p-4">
                 <div className="bg-slate-800 p-10 rounded-2xl text-center border border-slate-700 max-w-md w-full">
                     <h1 className="text-3xl font-bold text-white mb-4 tracking-[-2px]">
                         <span className={boardTextClass}>{translateBoard('board.title')}</span>
@@ -165,60 +165,60 @@ export const PublicCallingBoard = () => {
     }
 
     return (
-        <div className="h-screen w-screen bg-slate-950 p-2 sm:p-4 flex flex-col font-sans overflow-hidden">
-            <header className="flex justify-between items-end mb-3 border-b border-slate-800 pb-2 shrink-0">
+        <div className="min-h-screen w-full bg-slate-950 p-3 sm:p-5 2xl:p-8 min-[2560px]:p-12 flex flex-col font-sans">
+            <header className="flex flex-wrap justify-between items-end mb-4 2xl:mb-8 min-[2560px]:mb-12 border-b border-slate-800 pb-3 2xl:pb-6 min-[2560px]:pb-8 shrink-0 gap-3">
                 <div>
-                    <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight uppercase leading-none">
+                    <h1 className="text-2xl sm:text-3xl md:text-4xl 2xl:text-6xl min-[2560px]:text-[5rem] font-black text-white tracking-tight uppercase leading-none">
                         <span className={boardTextClass}>{translateBoard('board.activeJudging')}</span>
                     </h1>
-                    <div className="text-slate-500 text-xs font-bold tracking-widest mt-1">
+                    <div className="text-slate-500 text-xs sm:text-sm 2xl:text-xl min-[2560px]:text-3xl font-bold tracking-widest mt-1 2xl:mt-3">
                         <span className={boardTextClass}>{translateBoard('board.broadcast')}</span>
                     </div>
                 </div>
 
-                <div className="flex flex-col items-end gap-0.5 select-none">
-                    <div className="flex items-center gap-2">
+                <div className="flex flex-col items-end gap-1 2xl:gap-3 select-none">
+                    <div className="flex items-center gap-3 2xl:gap-6 min-[2560px]:gap-8">
                         <button
                             onClick={() => setIsMuted(m => !m)}
                             title={isMuted ? translateBoard('board.soundOn') : translateBoard('board.soundOff')}
-                            className={`flex items-center justify-center w-7 h-7 rounded-lg transition-all text-base ${isMuted
-                                    ? 'bg-red-500/20 border border-red-500/40 hover:bg-red-500/30'
-                                    : 'bg-slate-800 border border-slate-700 hover:bg-slate-700'
-                                }`}
+                            className={`flex items-center justify-center w-8 h-8 sm:w-10 sm:h-10 2xl:w-16 2xl:h-16 min-[2560px]:w-24 min-[2560px]:h-24 rounded-lg 2xl:rounded-2xl transition-all text-lg sm:text-xl 2xl:text-3xl min-[2560px]:text-5xl ${isMuted
+                                ? 'bg-red-500/20 border border-red-500/40 hover:bg-red-500/30'
+                                : 'bg-slate-800 border border-slate-700 hover:bg-slate-700'
+                            }`}
                         >
                             {isMuted ? '🔇' : '🔊'}
                         </button>
-                        <div className="text-slate-400 font-mono text-xl font-bold">{currentTime.toLocaleTimeString()}</div>
+                        <div className="text-slate-400 font-mono text-xl sm:text-2xl 2xl:text-4xl min-[2560px]:text-6xl font-bold">{currentTime.toLocaleTimeString()}</div>
                     </div>
-                    <div className="flex items-center gap-1.5">
-                        <span className="text-slate-300 font-bold text-sm tracking-tight">Pawdium</span>
-                        <span className="bg-blue-500/20 text-blue-400 border border-blue-500/40 text-[9px] font-black tracking-widest uppercase px-1.5 py-0.5 rounded-full">Beta</span>
+                    <div className="flex items-center gap-2 2xl:gap-4 min-[2560px]:gap-6 mt-1">
+                        <span className="text-slate-300 font-bold text-sm sm:text-base 2xl:text-2xl min-[2560px]:text-4xl tracking-tight">Pawdium</span>
+                        <span className="bg-blue-500/20 text-blue-400 border border-blue-500/40 text-[10px] 2xl:text-base min-[2560px]:text-xl font-black tracking-widest uppercase px-2 py-0.5 2xl:px-4 2xl:py-1 rounded-full">Beta</span>
                     </div>
                 </div>
             </header>
 
-            <div className="flex-1 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 lg:grid-rows-2 gap-3 sm:gap-4 min-h-0">
+            <div className="flex-1 grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 2xl:gap-8 min-[2560px]:gap-12 mt-2 2xl:mt-4">
                 {[1, 2, 3, 4].map(tableNum => {
                     const table = tables.find(t => t.tableNo === `T${tableNum}`);
                     if (!table) {
                         return (
-                            <div key={`empty-${tableNum}`} className="bg-slate-900/40 rounded-2xl border border-slate-800/40 flex flex-col overflow-hidden shadow-lg relative min-h-0">
-                                <div className="bg-slate-800/20 px-4 py-2 text-center border-b border-slate-800/40 flex justify-between items-center shrink-0">
-                                    <span className="bg-slate-800/50 text-slate-500 px-3 py-1 rounded-full text-xs font-bold tracking-wider border border-slate-700/50 uppercase">
+                            <div key={`empty-${tableNum}`} className="bg-slate-900 rounded-2xl 2xl:rounded-[2rem] border border-slate-800 flex flex-col shadow-xl relative min-h-[250px] 2xl:min-h-[400px] min-[2560px]:min-h-[600px]">
+                                <div className="bg-slate-800/40 px-5 py-3 2xl:px-8 2xl:py-6 min-[2560px]:px-12 min-[2560px]:py-8 text-center border-b border-slate-800 flex justify-between items-center rounded-t-2xl 2xl:rounded-t-[2rem]">
+                                    <span className="bg-slate-800/80 text-slate-500 px-3 py-1.5 2xl:px-6 2xl:py-3 rounded-full text-sm sm:text-base 2xl:text-2xl min-[2560px]:text-4xl font-bold tracking-wider border border-slate-700 uppercase">
                                         <span className={boardTextClass}>{translateBoard('board.table')} {tableNum}</span>
                                     </span>
-                                    <h2 className="text-lg font-black text-slate-700 tracking-tight truncate">
+                                    <h2 className="text-xl sm:text-2xl md:text-3xl 2xl:text-4xl min-[2560px]:text-6xl font-black text-slate-700 tracking-tight truncate">
                                         <span className={boardTextClass}>{translateBoard('board.waitingSteward')}</span>
                                     </h2>
-                                    <span className="w-[70px]"></span>
+                                    <span className="w-[70px] 2xl:w-[120px] min-[2560px]:w-[180px]"></span>
                                 </div>
-                                <div className="p-3 flex-1 flex flex-col gap-3 min-h-0">
-                                    <div className="flex-1 bg-slate-800/10 rounded-xl border border-slate-800/50 border-dashed flex items-center justify-center text-slate-700 font-bold tracking-widest min-h-0">
+                                <div className="p-4 2xl:p-8 min-[2560px]:p-12 flex-1 flex flex-col gap-4 2xl:gap-8 min-[2560px]:gap-12">
+                                    <div className="flex-1 bg-slate-800/20 rounded-xl 2xl:rounded-3xl border border-slate-800/50 border-dashed flex items-center justify-center text-slate-700 text-xl sm:text-2xl lg:text-3xl 2xl:text-5xl min-[2560px]:text-7xl font-bold tracking-widest min-h-[150px] 2xl:min-h-[250px] min-[2560px]:min-h-[350px]">
                                         <span className={boardTextClass}>{translateBoard('board.unoccupied')}</span>
                                     </div>
-                                    <div className="grid grid-cols-2 gap-3 shrink-0 opacity-20">
-                                        <div className="h-[60px] bg-slate-800 rounded border border-slate-700 border-dashed"></div>
-                                        <div className="h-[60px] bg-slate-800 rounded border border-slate-700 border-dashed"></div>
+                                    <div className="grid grid-cols-2 gap-4 2xl:gap-8 min-[2560px]:gap-12 opacity-20">
+                                        <div className="h-[80px] 2xl:h-[140px] min-[2560px]:h-[200px] bg-slate-800 rounded-lg 2xl:rounded-2xl border border-slate-700 border-dashed"></div>
+                                        <div className="h-[80px] 2xl:h-[140px] min-[2560px]:h-[200px] bg-slate-800 rounded-lg 2xl:rounded-2xl border border-slate-700 border-dashed"></div>
                                     </div>
                                 </div>
                             </div>
@@ -228,86 +228,89 @@ export const PublicCallingBoard = () => {
                     const displayCats = table.currentCats?.length ? table.currentCats : (table.currentCat ? [table.currentCat] : []);
 
                     return (
-                        <div key={table.judgeId} className="bg-slate-900 rounded-2xl border border-slate-800 flex flex-col overflow-hidden shadow-2xl relative min-h-0">
-                            <div className="bg-slate-800 px-4 py-2 text-center border-b border-slate-700 flex justify-between items-center shrink-0">
-                                <span className="bg-blue-600/20 text-blue-400 px-3 py-1 rounded-full text-xs font-bold tracking-wider border border-blue-500/30 uppercase">
+                        <div key={table.judgeId} className="bg-slate-900 rounded-2xl 2xl:rounded-[2rem] border border-slate-800 flex flex-col shadow-2xl relative h-full">
+                            <div className="bg-slate-800 px-5 py-3 2xl:px-8 2xl:py-6 min-[2560px]:px-12 min-[2560px]:py-8 text-center border-b border-slate-700 flex justify-between items-center rounded-t-2xl 2xl:rounded-t-[2rem]">
+                                <span className="bg-blue-600/20 text-blue-400 px-3 py-1.5 2xl:px-6 2xl:py-3 rounded-full text-sm sm:text-base 2xl:text-2xl min-[2560px]:text-4xl font-bold tracking-wider border border-blue-500/30 uppercase">
                                     <span className={boardTextClass}>{translateBoard('board.table')} {tableNum}</span>
                                 </span>
-                                <h2 className="text-xl sm:text-2xl font-black text-white tracking-tight truncate">{table.judgeName}</h2>
-                                <span className="w-[70px]"></span>
+                                <h2 className="text-2xl sm:text-3xl 2xl:text-5xl min-[2560px]:text-7xl font-black text-white tracking-tight truncate px-2">{table.judgeName}</h2>
+                                <span className="w-[70px] 2xl:w-[120px] min-[2560px]:w-[180px]"></span>
                             </div>
 
-                            <div className="p-3 flex-1 flex flex-col gap-3 min-h-0">
-                                <div className="flex-1 flex flex-col min-h-0 relative">
+                            <div className="p-4 sm:p-5 2xl:p-8 min-[2560px]:p-12 flex-1 flex flex-col gap-4 sm:gap-5 2xl:gap-8 min-[2560px]:gap-12">
+                                <div className="flex-1 flex flex-col">
                                     {displayCats.length > 0 ? (
-                                        <div className={`relative rounded-xl pt-8 pb-4 px-4 flex flex-col items-center justify-center transition-all duration-300 w-full h-full min-h-0 ${getColorClass(displayCats[0].type, displayCats[0].urgency)}`}>
+                                        <div className={`relative rounded-xl 2xl:rounded-3xl pt-12 pb-8 2xl:pt-24 2xl:pb-16 min-[2560px]:pt-32 min-[2560px]:pb-24 px-4 sm:px-6 2xl:px-12 flex flex-col items-center justify-center transition-all duration-300 w-full flex-grow min-h-[200px] 2xl:min-h-[400px] min-[2560px]:min-h-[600px] ${getColorClass(displayCats[0].type, displayCats[0].urgency)}`}>
                                             {getTypeLabel(displayCats[0].type)}
 
                                             {displayCats[0].type !== 'BIV' && displayCats[0].type !== 'BIS' && (
-                                                <span className="text-2xl sm:text-4xl font-bold opacity-90 drop-shadow-md shrink-0 mb-2">
+                                                <span className="text-4xl sm:text-5xl 2xl:text-6xl min-[2560px]:text-[6rem] font-bold opacity-90 drop-shadow-md shrink-0 mb-4 2xl:mb-8 min-[2560px]:mb-12 text-center">
                                                     {displayCats[0].ems}
                                                 </span>
                                             )}
 
                                             {(displayCats[0].type === 'BIV' || displayCats[0].type === 'BIS') && (
-                                                <span className="text-base sm:text-lg font-bold opacity-60 tracking-widest mb-2">
+                                                <span className="text-xl sm:text-2xl 2xl:text-3xl min-[2560px]:text-5xl font-bold opacity-70 tracking-widest mb-4 2xl:mb-8 min-[2560px]:mb-12 shrink-0 text-center">
                                                     <span className={boardTextClass}>{translateBoard('board.catCount', { count: displayCats.length })}</span>
                                                 </span>
                                             )}
 
-                                            <div className="flex flex-wrap justify-center items-center gap-x-8 gap-y-4 w-full overflow-hidden content-center flex-1">
-                                                {displayCats.map(cat => (
-                                                    <span key={cat.catalogNumber} className={`font-black tracking-tighter leading-none drop-shadow-lg font-mono [font-variant-ligatures:none] [font-variant-numeric:normal] ${displayCats.length > 2 ? 'text-5xl md:text-6xl lg:text-[75px]' : 'text-7xl md:text-8xl lg:text-[110px]'}`}>
+                                            <div className="flex flex-wrap justify-center items-center gap-x-6 sm:gap-x-10 2xl:gap-x-16 min-[2560px]:gap-x-24 gap-y-4 sm:gap-y-6 2xl:gap-y-12 min-[2560px]:gap-y-20 w-full align-middle">
+                                                {displayCats.map((cat, index) => (
+                                                    <span
+                                                        key={`${cat.catalogNumber}-${index}`}
+                                                        className="font-black tracking-tighter drop-shadow-lg font-mono break-words [font-variant-ligatures:none] [font-variant-numeric:normal] text-6xl sm:text-7xl md:text-[80px] lg:text-[95px] xl:text-[110px] 2xl:text-[180px] min-[2560px]:text-[280px] leading-normal pb-1 shrink-0"
+                                                    >
                                                         #{cat.catalogNumber}
                                                     </span>
                                                 ))}
                                             </div>
 
                                             {displayCats[0].urgency === 'FINAL_CALL' && (
-                                                <span className="absolute bottom-3 bg-white text-red-600 px-6 py-1.5 rounded-full text-sm sm:text-base font-black uppercase tracking-widest animate-bounce shadow-xl">
+                                                <span className="absolute bottom-3 2xl:bottom-8 min-[2560px]:bottom-12 left-1/2 -translate-x-1/2 bg-white text-red-600 px-6 py-1.5 2xl:px-10 2xl:py-3 min-[2560px]:px-14 min-[2560px]:py-5 rounded-full text-base sm:text-lg 2xl:text-3xl min-[2560px]:text-5xl font-black uppercase tracking-widest animate-bounce shadow-xl text-center whitespace-nowrap">
                                                     <span className={boardTextClass}>{translateBoard('board.finalCall')}</span>
                                                 </span>
                                             )}
                                         </div>
                                     ) : table.isPaused ? (
-                                        <div className="w-full h-full bg-yellow-500/10 rounded-xl border border-yellow-500/30 border-dashed flex items-center justify-center text-yellow-500 text-2xl sm:text-3xl font-black tracking-widest animate-pulse text-center p-4 min-h-0">
+                                        <div className="w-full h-full min-h-[200px] 2xl:min-h-[400px] min-[2560px]:min-h-[600px] bg-yellow-500/10 rounded-xl 2xl:rounded-3xl border border-yellow-500/30 border-dashed flex items-center justify-center text-yellow-500 text-3xl sm:text-4xl lg:text-5xl 2xl:text-[4rem] min-[2560px]:text-[6rem] font-black tracking-widest animate-pulse text-center p-6 2xl:p-12 flex-grow">
                                             <span className={boardTextClass}>{translateBoard('board.pausedJudging')}</span>
                                         </div>
                                     ) : (
-                                        <div className="w-full h-full bg-slate-800/50 rounded-xl border border-slate-700/50 border-dashed flex items-center justify-center text-slate-600 font-bold min-h-0">
+                                        <div className="w-full h-full min-h-[200px] 2xl:min-h-[400px] min-[2560px]:min-h-[600px] bg-slate-800/50 rounded-xl 2xl:rounded-3xl border border-slate-700/50 border-dashed flex items-center justify-center text-slate-600 text-2xl sm:text-3xl lg:text-4xl 2xl:text-[3rem] min-[2560px]:text-[5rem] font-bold p-6 2xl:p-12 flex-grow">
                                             <span className={boardTextClass}>{translateBoard('board.tableEmpty')}</span>
                                         </div>
                                     )}
                                 </div>
 
-                                <div className="grid grid-cols-2 gap-3 shrink-0">
-                                    <div className="flex flex-col min-h-0">
-                                        <div className="text-slate-500 text-[10px] font-black uppercase tracking-widest mb-1 text-center text-yellow-500">
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5 2xl:gap-8 min-[2560px]:gap-12 shrink-0">
+                                    <div className="flex flex-col">
+                                        <div className="text-slate-500 text-sm sm:text-base md:text-lg lg:text-xl 2xl:text-3xl min-[2560px]:text-[3rem] font-black uppercase tracking-widest mb-2 sm:mb-3 2xl:mb-4 min-[2560px]:mb-8 text-center text-yellow-500">
                                             <span className={boardTextClass}>{translateBoard('board.preparing')}</span>
                                         </div>
-                                        <div className="grid grid-cols-3 gap-1.5 flex-1">
-                                            {table.preparingCats.length > 0 ? table.preparingCats.slice(0, 6).map(cat => (
-                                                <div key={cat.catalogNumber} className="bg-slate-800 border-l-2 border-yellow-500 rounded p-1 sm:p-1.5 text-center flex flex-col justify-center shadow-sm h-full">
-                                                    <div className="text-base sm:text-lg font-black text-white leading-none font-mono [font-variant-ligatures:none]">#{cat.catalogNumber}</div>
-                                                    <div className="text-[9px] sm:text-[10px] text-slate-400 font-bold mt-0.5 truncate leading-none">{cat.ems}</div>
+                                        <div className="grid grid-cols-2 min-[480px]:grid-cols-3 gap-2 2xl:gap-4 min-[2560px]:gap-6">
+                                            {table.preparingCats.length > 0 ? table.preparingCats.slice(0, 6).map((cat, index) => (
+                                                <div key={`prep-${cat.catalogNumber}-${index}`} className="bg-slate-800 border-l-[3px] 2xl:border-l-[6px] border-yellow-500 rounded-lg 2xl:rounded-2xl p-3 sm:p-4 2xl:p-6 min-[2560px]:p-8 text-center flex flex-col justify-center shadow-sm min-h-[70px] sm:min-h-[80px] 2xl:min-h-[120px] min-[2560px]:min-h-[180px]">
+                                                    <div className="text-2xl sm:text-3xl lg:text-4xl 2xl:text-5xl min-[2560px]:text-[4.5rem] font-black text-white leading-none font-mono [font-variant-ligatures:none]">#{cat.catalogNumber}</div>
+                                                    <div className="text-xs sm:text-sm 2xl:text-2xl min-[2560px]:text-4xl text-slate-400 font-bold mt-2 2xl:mt-4 truncate leading-none">{cat.ems}</div>
                                                 </div>
                                             )) : (
-                                                <div className="col-span-3 bg-slate-800/30 rounded p-2 text-center text-slate-600 text-xs border border-slate-700/50 border-dashed flex items-center justify-center h-full">-</div>
+                                                <div className="col-span-full bg-slate-800/30 rounded-lg 2xl:rounded-2xl p-4 2xl:p-6 text-center text-slate-600 text-3xl sm:text-4xl lg:text-5xl 2xl:text-6xl min-[2560px]:text-[6rem] border border-slate-700/50 border-dashed flex items-center justify-center min-h-[70px] sm:min-h-[80px] 2xl:min-h-[120px] min-[2560px]:min-h-[180px]">-</div>
                                             )}
                                         </div>
                                     </div>
 
-                                    <div className="flex flex-col min-h-0">
-                                        <div className="text-slate-500 text-[10px] font-black uppercase tracking-widest mb-1 text-center">
+                                    <div className="flex flex-col">
+                                        <div className="text-slate-500 text-sm sm:text-base md:text-lg lg:text-xl 2xl:text-3xl min-[2560px]:text-[3rem] font-black uppercase tracking-widest mb-2 sm:mb-3 2xl:mb-4 min-[2560px]:mb-8 text-center">
                                             <span className={boardTextClass}>{translateBoard('board.nextInLine')}</span>
                                         </div>
-                                        <div className="grid grid-cols-3 gap-1.5 flex-1">
-                                            {table.waitingCats.length > 0 ? table.waitingCats.slice(0, 6).map(cat => (
-                                                <div key={cat.catalogNumber} className="bg-slate-800 border-l-2 border-slate-600 rounded p-1 sm:p-1.5 flex items-center justify-center h-full">
-                                                    <div className="text-base sm:text-lg font-bold text-slate-300 leading-none font-mono [font-variant-ligatures:none]">#{cat.catalogNumber}</div>
+                                        <div className="grid grid-cols-2 min-[480px]:grid-cols-3 gap-2 2xl:gap-4 min-[2560px]:gap-6">
+                                            {table.waitingCats.length > 0 ? table.waitingCats.slice(0, 6).map((cat, index) => (
+                                                <div key={`wait-${cat.catalogNumber}-${index}`} className="bg-slate-800 border-l-[3px] 2xl:border-l-[6px] border-slate-600 rounded-lg 2xl:rounded-2xl p-3 sm:p-4 2xl:p-6 min-[2560px]:p-8 flex items-center justify-center min-h-[70px] sm:min-h-[80px] 2xl:min-h-[120px] min-[2560px]:min-h-[180px]">
+                                                    <div className="text-2xl sm:text-3xl lg:text-4xl 2xl:text-5xl min-[2560px]:text-[4.5rem] font-bold text-slate-300 leading-none font-mono [font-variant-ligatures:none]">#{cat.catalogNumber}</div>
                                                 </div>
                                             )) : (
-                                                <div className="col-span-3 bg-slate-800/30 rounded p-2 text-center text-slate-600 text-xs border border-slate-700/50 border-dashed flex items-center justify-center h-full">-</div>
+                                                <div className="col-span-full bg-slate-800/30 rounded-lg 2xl:rounded-2xl p-4 2xl:p-6 text-center text-slate-600 text-3xl sm:text-4xl lg:text-5xl 2xl:text-6xl min-[2560px]:text-[6rem] border border-slate-700/50 border-dashed flex items-center justify-center min-h-[70px] sm:min-h-[80px] 2xl:min-h-[120px] min-[2560px]:min-h-[180px]">-</div>
                                             )}
                                         </div>
                                     </div>
