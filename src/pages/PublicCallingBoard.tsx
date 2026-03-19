@@ -48,6 +48,209 @@ const playGong = () => {
     }
 };
 
+const useContainerSize = (ref: React.RefObject<HTMLDivElement>) => {
+    const [size, setSize] = useState({ width: 0, height: 0 });
+    useEffect(() => {
+        if (!ref.current) return;
+        const ro = new ResizeObserver(entries => {
+            const { width, height } = entries[0].contentRect;
+            setSize({ width, height });
+        });
+        ro.observe(ref.current);
+        return () => ro.disconnect();
+    }, [ref]);
+    return size;
+};
+
+const TableCard = ({
+                       tableNum,
+                       table,
+                       boardTextClass,
+                       translateBoard,
+                   }: {
+    tableNum: number;
+    table: TableState | undefined;
+    boardTextClass: string;
+    translateBoard: (key: string, options?: Record<string, unknown>) => string;
+}) => {
+    const cardRef = useRef<HTMLDivElement>(null);
+    const { width: cardW, height: cardH } = useContainerSize(cardRef as React.RefObject<HTMLDivElement>);
+
+    const scale = cardW > 0 ? Math.min(cardW / 320, cardH > 0 ? cardH / 280 : 999) : 1;
+    const fs = (base: number) => `${Math.round(base * scale)}px`;
+
+    const getColorClass = (type: string, urgency: string) => {
+        if (urgency === 'FINAL_CALL') return 'bg-red-600 text-white animate-pulse border-4 border-red-400';
+        let c = '';
+        switch (type) {
+            case 'BIS': c = 'bg-gradient-to-br from-yellow-400 to-yellow-600 text-black'; break;
+            case 'BIV': c = 'bg-gradient-to-br from-purple-600 to-purple-800 text-white'; break;
+            default: c = 'bg-slate-800 text-white'; break;
+        }
+        if (urgency === 'URGENT') return `${c} border-4 border-yellow-400`;
+        return `${c} border-2 ${type === 'NORMAL' || !type ? 'border-slate-600' : 'border-white/40'}`;
+    };
+
+    if (!table) {
+        return (
+            <div ref={cardRef} className="bg-slate-900/40 rounded-2xl border border-slate-800/40 flex flex-col overflow-hidden min-h-0">
+                <div className="bg-slate-800/20 px-3 py-2 border-b border-slate-800/40 flex justify-between items-center shrink-0">
+                    <span
+                        className="bg-slate-800/50 text-slate-500 px-2 py-0.5 rounded-full font-black tracking-wider border border-slate-700/50 uppercase"
+                        style={{ fontSize: fs(10) }}
+                    >
+                        <span className={boardTextClass}>{translateBoard('board.table')} {tableNum}</span>
+                    </span>
+                    <span
+                        className="font-black text-slate-700 tracking-tight truncate"
+                        style={{ fontSize: fs(13) }}
+                    >
+                        <span className={boardTextClass}>{translateBoard('board.waitingSteward')}</span>
+                    </span>
+                    <span style={{ width: fs(50) }} />
+                </div>
+                <div className="flex-1 flex items-center justify-center p-4 min-h-0">
+                    <span
+                        className="text-slate-700 font-black tracking-widest uppercase"
+                        style={{ fontSize: fs(14) }}
+                    >
+                        <span className={boardTextClass}>{translateBoard('board.unoccupied')}</span>
+                    </span>
+                </div>
+            </div>
+        );
+    }
+
+    const displayCats = (table.currentCats?.length ? table.currentCats : (table.currentCat ? [table.currentCat] : []))
+        .slice()
+        .sort((a, b) => a.catalogNumber - b.catalogNumber);
+
+    const numSize = displayCats.length > 2 ? fs(44) : fs(64);
+
+    return (
+        <div ref={cardRef} className="bg-slate-900 rounded-2xl border border-slate-800 flex flex-col overflow-hidden shadow-2xl min-h-0">
+            <div className="bg-slate-800 px-3 py-2 border-b border-slate-700 flex justify-between items-center shrink-0">
+                <span
+                    className="bg-blue-600/20 text-blue-400 px-2 py-0.5 rounded-full font-black tracking-wider border border-blue-500/30 uppercase"
+                    style={{ fontSize: fs(10) }}
+                >
+                    <span className={boardTextClass}>{translateBoard('board.table')} {tableNum}</span>
+                </span>
+                <span
+                    className="font-black text-white tracking-tight truncate px-2"
+                    style={{ fontSize: fs(15) }}
+                >
+                    {table.judgeName}
+                </span>
+                <span style={{ width: fs(50) }} />
+            </div>
+
+            <div className="flex-1 flex flex-col gap-2 p-2 min-h-0">
+                <div className="flex-1 min-h-0 relative">
+                    {displayCats.length > 0 ? (
+                        <div className={`relative rounded-xl w-full h-full flex flex-col items-center justify-center shadow-xl ${getColorClass(displayCats[0].type, displayCats[0].urgency)}`}>
+                            {(displayCats[0].type !== 'NORMAL' && displayCats[0].type) && (
+                                <span
+                                    className="absolute top-2 left-1/2 -translate-x-1/2 bg-black/70 text-white px-3 py-0.5 rounded-full font-black tracking-widest uppercase border border-white/20 z-10"
+                                    style={{ fontSize: fs(10) }}
+                                >
+                                    {displayCats[0].type}
+                                </span>
+                            )}
+
+                            {displayCats[0].type !== 'BIV' && displayCats[0].type !== 'BIS' && (
+                                <span
+                                    className="font-bold opacity-80 drop-shadow-md shrink-0 mb-1"
+                                    style={{ fontSize: fs(18) }}
+                                >
+                                    {displayCats[0].ems}
+                                </span>
+                            )}
+
+                            {(displayCats[0].type === 'BIV' || displayCats[0].type === 'BIS') && (
+                                <span
+                                    className="font-bold opacity-60 tracking-widest mb-1"
+                                    style={{ fontSize: fs(11) }}
+                                >
+                                    <span className={boardTextClass}>{translateBoard('board.catCount', { count: displayCats.length })}</span>
+                                </span>
+                            )}
+
+                            <div className="flex flex-wrap justify-center items-center gap-x-3 gap-y-1 w-full px-2 overflow-hidden">
+                                {displayCats.map(cat => (
+                                    <span
+                                        key={cat.catalogNumber}
+                                        className="font-black tracking-tighter leading-none drop-shadow-lg font-mono"
+                                        style={{ fontSize: numSize }}
+                                    >
+                                        #{cat.catalogNumber}
+                                    </span>
+                                ))}
+                            </div>
+
+                            {displayCats[0].urgency === 'FINAL_CALL' && (
+                                <span
+                                    className="absolute bottom-2 bg-white text-red-600 px-4 py-0.5 rounded-full font-black uppercase tracking-widest animate-bounce shadow-xl"
+                                    style={{ fontSize: fs(10) }}
+                                >
+                                    <span className={boardTextClass}>{translateBoard('board.finalCall')}</span>
+                                </span>
+                            )}
+                        </div>
+                    ) : table.isPaused ? (
+                        <div className="w-full h-full bg-yellow-500/10 rounded-xl border border-yellow-500/30 border-dashed flex items-center justify-center text-yellow-500 font-black tracking-widest animate-pulse text-center p-2">
+                            <span className={boardTextClass} style={{ fontSize: fs(14) }}>{translateBoard('board.pausedJudging')}</span>
+                        </div>
+                    ) : (
+                        <div className="w-full h-full bg-slate-800/50 rounded-xl border border-slate-700/50 border-dashed flex items-center justify-center text-slate-600 font-bold">
+                            <span className={boardTextClass} style={{ fontSize: fs(13) }}>{translateBoard('board.tableEmpty')}</span>
+                        </div>
+                    )}
+                </div>
+
+                <div className="grid grid-cols-2 gap-2 shrink-0">
+                    <div>
+                        <div
+                            className="text-yellow-500 font-black uppercase tracking-widest mb-1 text-center"
+                            style={{ fontSize: fs(8) }}
+                        >
+                            <span className={boardTextClass}>{translateBoard('board.preparing')}</span>
+                        </div>
+                        <div className="grid grid-cols-3 gap-1">
+                            {table.preparingCats.length > 0 ? table.preparingCats.slice(0, 6).map(cat => (
+                                <div key={cat.catalogNumber} className="bg-slate-800 border-l-2 border-yellow-500 rounded p-1 text-center flex flex-col justify-center">
+                                    <div className="font-black text-white leading-none font-mono" style={{ fontSize: fs(12) }}>#{cat.catalogNumber}</div>
+                                    <div className="text-slate-400 font-bold mt-0.5 truncate leading-none" style={{ fontSize: fs(8) }}>{cat.ems}</div>
+                                </div>
+                            )) : (
+                                <div className="col-span-3 bg-slate-800/30 rounded p-1 text-center text-slate-600 border border-slate-700/50 border-dashed flex items-center justify-center" style={{ fontSize: fs(10) }}>-</div>
+                            )}
+                        </div>
+                    </div>
+
+                    <div>
+                        <div
+                            className="text-slate-500 font-black uppercase tracking-widest mb-1 text-center"
+                            style={{ fontSize: fs(8) }}
+                        >
+                            <span className={boardTextClass}>{translateBoard('board.nextInLine')}</span>
+                        </div>
+                        <div className="grid grid-cols-3 gap-1">
+                            {table.waitingCats.length > 0 ? table.waitingCats.slice(0, 6).map(cat => (
+                                <div key={cat.catalogNumber} className="bg-slate-800 border-l-2 border-slate-600 rounded p-1 flex items-center justify-center">
+                                    <div className="font-bold text-slate-300 leading-none font-mono" style={{ fontSize: fs(12) }}>#{cat.catalogNumber}</div>
+                                </div>
+                            )) : (
+                                <div className="col-span-3 bg-slate-800/30 rounded p-1 text-center text-slate-600 border border-slate-700/50 border-dashed flex items-center justify-center" style={{ fontSize: fs(10) }}>-</div>
+                            )}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+};
+
 export const PublicCallingBoard = () => {
     const { t } = useTranslation();
     const { showId } = useParams<{ showId: string }>();
@@ -56,16 +259,35 @@ export const PublicCallingBoard = () => {
     const [isStarted, setIsStarted] = useState(false);
     const [currentTime, setCurrentTime] = useState(new Date());
     const [isMuted, setIsMuted] = useState(false);
+    const [boardLng, setBoardLng] = useState<'cs' | 'en'>('cs');
+    const [isTextVisible, setIsTextVisible] = useState(true);
     const isMutedRef = useRef(false);
+    const languageSwitchTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
     const stompClient = useRef<Client | null>(null);
 
-    useEffect(() => {
-        isMutedRef.current = isMuted;
-    }, [isMuted]);
+    const boardTextClass = `board-text-transition ${isTextVisible ? 'board-text-visible' : 'board-text-hidden'}`;
+    const translateBoard = (key: string, options?: Record<string, unknown>) => t(key, { lng: boardLng, ...options });
+
+    useEffect(() => { isMutedRef.current = isMuted; }, [isMuted]);
 
     useEffect(() => {
         const timer = setInterval(() => setCurrentTime(new Date()), 1000);
         return () => clearInterval(timer);
+    }, []);
+
+    useEffect(() => {
+        const languageTimer = setInterval(() => {
+            setIsTextVisible(false);
+            if (languageSwitchTimeoutRef.current) clearTimeout(languageSwitchTimeoutRef.current);
+            languageSwitchTimeoutRef.current = setTimeout(() => {
+                setBoardLng(prev => (prev === 'cs' ? 'en' : 'cs'));
+                setIsTextVisible(true);
+            }, 220);
+        }, 5000);
+        return () => {
+            clearInterval(languageTimer);
+            if (languageSwitchTimeoutRef.current) clearTimeout(languageSwitchTimeoutRef.current);
+        };
     }, []);
 
     const fetchBoardState = useCallback(async () => {
@@ -80,11 +302,9 @@ export const PublicCallingBoard = () => {
     useEffect(() => {
         if (!isStarted) return;
         fetchBoardState();
-
         const backendUrl = import.meta.env.VITE_API_URL
             ? import.meta.env.VITE_API_URL.replace('/api/v1', '')
             : 'http://localhost:8080';
-
         const client = new Client({
             webSocketFactory: () => new SockJS(`${backendUrl}/ws-calling`),
             debug: () => {},
@@ -98,40 +318,21 @@ export const PublicCallingBoard = () => {
         });
         client.activate();
         stompClient.current = client;
-        return () => {
-            if (stompClient.current) stompClient.current.deactivate();
-        };
+        return () => { if (stompClient.current) stompClient.current.deactivate(); };
     }, [currentShowId, fetchBoardState, isStarted]);
-
-    const getColorClass = (type: string, urgency: string) => {
-        if (urgency === 'FINAL_CALL') return 'bg-red-600 text-white animate-pulse border-4 border-red-400 shadow-[0_0_30px_rgba(220,38,38,0.6)]';
-        let colorClass = '';
-        switch (type) {
-            case 'BIS': colorClass = 'bg-gradient-to-br from-yellow-400 to-yellow-600 text-black'; break;
-            case 'BIV': colorClass = 'bg-gradient-to-br from-purple-600 to-purple-800 text-white'; break;
-            default: colorClass = 'bg-slate-800 text-white'; break;
-        }
-        if (urgency === 'URGENT') return `${colorClass} border-4 border-yellow-400 shadow-[0_0_25px_rgba(250,204,21,0.7)]`;
-        return `${colorClass} border-2 ${type === 'NORMAL' || !type ? 'border-slate-600' : 'border-white/40'} shadow-xl`;
-    };
-
-    const getTypeLabel = (type: string) => {
-        if (type === 'NORMAL' || !type) return '';
-        return <span className="absolute -top-5 left-1/2 -translate-x-1/2 bg-black text-white px-6 py-1.5 rounded-full text-lg sm:text-xl font-black tracking-widest uppercase border-2 border-white/20 shadow-2xl z-10">{type}</span>;
-    };
 
     if (!isStarted) {
         return (
-            <div className="h-screen bg-slate-900 flex items-center justify-center p-4">
-                <div className="bg-slate-800 p-10 rounded-2xl text-center border border-slate-700 max-w-md w-full">
-                    <h1 className="text-3xl font-bold text-white mb-4 tracking-[-2px]">
-                        {t('board.title')}
+            <div className="min-h-screen bg-slate-900 flex items-center justify-center p-4">
+                <div className="bg-slate-800 p-10 rounded-2xl text-center border border-slate-700 w-full max-w-md">
+                    <h1 className="text-3xl font-bold text-white mb-6 tracking-[-2px]">
+                        <span className={boardTextClass}>{translateBoard('board.title')}</span>
                     </h1>
                     <button
                         onClick={() => setIsStarted(true)}
-                        className="w-full bg-blue-600 hover:bg-blue-500 text-white hover:text-white font-bold py-4 rounded-xl text-lg transition-colors shadow-lg shadow-blue-500/30 cursor-pointer"
+                        className="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-4 rounded-xl text-lg transition-colors shadow-lg cursor-pointer"
                     >
-                        {t('board.start')}
+                        <span className={boardTextClass}>{translateBoard('board.start')}</span>
                     </button>
                 </div>
             </div>
@@ -139,138 +340,44 @@ export const PublicCallingBoard = () => {
     }
 
     return (
-        <div className="h-screen w-screen bg-slate-950 p-2 sm:p-4 flex flex-col font-sans overflow-hidden">
-            <header className="flex justify-between items-end mb-3 border-b border-slate-800 pb-2 shrink-0">
+        <div className="h-[100dvh] w-full bg-slate-950 flex flex-col font-sans overflow-hidden p-2 sm:p-3 gap-2 sm:gap-3">
+            <header className="flex justify-between items-center border-b border-slate-800 pb-2 shrink-0">
                 <div>
-                    <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight uppercase leading-none">{t('board.activeJudging')}</h1>
-                    <div className="text-slate-500 text-xs font-bold tracking-widest mt-1">{t('board.broadcast')}</div>
-                </div>
-
-                <div className="flex flex-col items-end gap-0.5 select-none">
-                    <div className="flex items-center gap-2">
-                        <button
-                            onClick={() => setIsMuted(m => !m)}
-                            title={isMuted ? 'Zapnout zvuk' : 'Ztlumit zvuk'}
-                            className={`flex items-center justify-center w-7 h-7 rounded-lg transition-all text-base ${
-                                isMuted
-                                    ? 'bg-red-500/20 border border-red-500/40 hover:bg-red-500/30'
-                                    : 'bg-slate-800 border border-slate-700 hover:bg-slate-700'
-                            }`}
-                        >
-                            {isMuted ? '🔇' : '🔊'}
-                        </button>
-                        <div className="text-slate-400 font-mono text-xl font-bold">{currentTime.toLocaleTimeString()}</div>
+                    <h1 className="text-lg sm:text-2xl font-black text-white tracking-tight uppercase leading-none">
+                        <span className={boardTextClass}>{translateBoard('board.activeJudging')}</span>
+                    </h1>
+                    <div className="text-slate-500 text-[10px] sm:text-xs font-bold tracking-widest mt-0.5">
+                        <span className={boardTextClass}>{translateBoard('board.broadcast')}</span>
                     </div>
-                    <div className="flex items-center gap-1.5">
-                        <span className="text-slate-300 font-bold text-sm tracking-tight">Pawdium</span>
-                        <span className="bg-blue-500/20 text-blue-400 border border-blue-500/40 text-[9px] font-black tracking-widest uppercase px-1.5 py-0.5 rounded-full">Beta</span>
+                </div>
+                <div className="flex items-center gap-2 select-none">
+                    <button
+                        onClick={() => setIsMuted(m => !m)}
+                        title={isMuted ? translateBoard('board.soundOn') : translateBoard('board.soundOff')}
+                        className={`flex items-center justify-center w-7 h-7 rounded-lg transition-all text-sm ${isMuted ? 'bg-red-500/20 border border-red-500/40' : 'bg-slate-800 border border-slate-700 hover:bg-slate-700'}`}
+                    >
+                        {isMuted ? '🔇' : '🔊'}
+                    </button>
+                    <div className="text-slate-400 font-mono text-sm sm:text-lg font-bold tabular-nums">
+                        {currentTime.toLocaleTimeString()}
+                    </div>
+                    <div className="hidden sm:flex items-center gap-1">
+                        <span className="text-slate-300 font-bold text-xs">Pawdium</span>
+                        <span className="bg-blue-500/20 text-blue-400 border border-blue-500/40 text-[8px] font-black tracking-widest uppercase px-1.5 py-0.5 rounded-full">Beta</span>
                     </div>
                 </div>
             </header>
 
-            <div className="flex-1 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 lg:grid-rows-2 gap-3 sm:gap-4 min-h-0">
-                {[1, 2, 3, 4].map(tableNum => {
-                    const table = tables.find(t => t.tableNo === `T${tableNum}`);
-                    if (!table) {
-                        return (
-                            <div key={`empty-${tableNum}`} className="bg-slate-900/40 rounded-2xl border border-slate-800/40 flex flex-col overflow-hidden shadow-lg relative min-h-0">
-                                <div className="bg-slate-800/20 px-4 py-2 text-center border-b border-slate-800/40 flex justify-between items-center shrink-0">
-                                    <span className="bg-slate-800/50 text-slate-500 px-3 py-1 rounded-full text-xs font-bold tracking-wider border border-slate-700/50 uppercase">STŮL {tableNum}</span>
-                                    <h2 className="text-lg font-black text-slate-700 tracking-tight truncate">{t('board.waitingSteward')}</h2>
-                                    <span className="w-[70px]"></span>
-                                </div>
-                                <div className="p-3 flex-1 flex flex-col gap-3 min-h-0">
-                                    <div className="flex-1 bg-slate-800/10 rounded-xl border border-slate-800/50 border-dashed flex items-center justify-center text-slate-700 font-bold tracking-widest min-h-0">{t('board.unoccupied')}</div>
-                                    <div className="grid grid-cols-2 gap-3 shrink-0 opacity-20">
-                                        <div className="h-[60px] bg-slate-800 rounded border border-slate-700 border-dashed"></div>
-                                        <div className="h-[60px] bg-slate-800 rounded border border-slate-700 border-dashed"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        );
-                    }
-
-                    const displayCats = table.currentCats?.length ? table.currentCats : (table.currentCat ? [table.currentCat] : []);
-
-                    return (
-                        <div key={table.judgeId} className="bg-slate-900 rounded-2xl border border-slate-800 flex flex-col overflow-hidden shadow-2xl relative min-h-0">
-                            <div className="bg-slate-800 px-4 py-2 text-center border-b border-slate-700 flex justify-between items-center shrink-0">
-                                <span className="bg-blue-600/20 text-blue-400 px-3 py-1 rounded-full text-xs font-bold tracking-wider border border-blue-500/30 uppercase">STŮL {tableNum}</span>
-                                <h2 className="text-xl sm:text-2xl font-black text-white tracking-tight truncate">{table.judgeName}</h2>
-                                <span className="w-[70px]"></span>
-                            </div>
-
-                            <div className="p-3 flex-1 flex flex-col gap-3 min-h-0">
-                                <div className="flex-1 flex flex-col min-h-0 relative">
-                                    {displayCats.length > 0 ? (
-                                        <div className={`relative rounded-xl pt-8 pb-4 px-4 flex flex-col items-center justify-center transition-all duration-300 w-full h-full min-h-0 ${getColorClass(displayCats[0].type, displayCats[0].urgency)}`}>
-                                            {getTypeLabel(displayCats[0].type)}
-
-                                            {displayCats[0].type !== 'BIV' && displayCats[0].type !== 'BIS' && (
-                                                <span className="text-2xl sm:text-4xl font-bold opacity-90 drop-shadow-md shrink-0 mb-2">
-                                                    {displayCats[0].ems}
-                                                </span>
-                                            )}
-
-                                            {(displayCats[0].type === 'BIV' || displayCats[0].type === 'BIS') && (
-                                                <span className="text-base sm:text-lg font-bold opacity-60 tracking-widest mb-2">
-                                                    Počet koček: {displayCats.length}
-                                                </span>
-                                            )}
-
-                                            <div className="flex flex-wrap justify-center items-center gap-x-8 gap-y-4 w-full overflow-hidden content-center flex-1">
-                                                {displayCats.map(cat => (
-                                                    <span key={cat.catalogNumber} className={`font-black tracking-tighter leading-none drop-shadow-lg font-mono [font-variant-ligatures:none] [font-variant-numeric:normal] ${displayCats.length > 2 ? 'text-5xl md:text-6xl lg:text-[75px]' : 'text-7xl md:text-8xl lg:text-[110px]'}`}>
-                                                        #{cat.catalogNumber}
-                                                    </span>
-                                                ))}
-                                            </div>
-
-                                            {displayCats[0].urgency === 'FINAL_CALL' && <span className="absolute bottom-3 bg-white text-red-600 px-6 py-1.5 rounded-full text-sm sm:text-base font-black uppercase tracking-widest animate-bounce shadow-xl">{t('board.finalCall')}</span>}
-                                        </div>
-                                    ) : table.isPaused ? (
-                                        <div className="w-full h-full bg-yellow-500/10 rounded-xl border border-yellow-500/30 border-dashed flex items-center justify-center text-yellow-500 text-2xl sm:text-3xl font-black tracking-widest animate-pulse text-center p-4 min-h-0">
-                                            PAUZA POSUZOVÁNÍ
-                                        </div>
-                                    ) : (
-                                        <div className="w-full h-full bg-slate-800/50 rounded-xl border border-slate-700/50 border-dashed flex items-center justify-center text-slate-600 font-bold min-h-0">
-                                            TABLE EMPTY
-                                        </div>
-                                    )}
-                                </div>
-
-                                <div className="grid grid-cols-2 gap-3 shrink-0">
-                                    <div className="flex flex-col min-h-0">
-                                        <div className="text-slate-500 text-[10px] font-black uppercase tracking-widest mb-1 text-center text-yellow-500">{t('board.preparing')}</div>
-                                        <div className="grid grid-cols-3 gap-1.5 flex-1">
-                                            {table.preparingCats.length > 0 ? table.preparingCats.slice(0, 6).map(cat => (
-                                                <div key={cat.catalogNumber} className="bg-slate-800 border-l-2 border-yellow-500 rounded p-1 sm:p-1.5 text-center flex flex-col justify-center shadow-sm h-full">
-                                                    <div className="text-base sm:text-lg font-black text-white leading-none font-mono [font-variant-ligatures:none]">#{cat.catalogNumber}</div>
-                                                    <div className="text-[9px] sm:text-[10px] text-slate-400 font-bold mt-0.5 truncate leading-none">{cat.ems}</div>
-                                                </div>
-                                            )) : (
-                                                <div className="col-span-3 bg-slate-800/30 rounded p-2 text-center text-slate-600 text-xs border border-slate-700/50 border-dashed flex items-center justify-center h-full">-</div>
-                                            )}
-                                        </div>
-                                    </div>
-
-                                    <div className="flex flex-col min-h-0">
-                                        <div className="text-slate-500 text-[10px] font-black uppercase tracking-widest mb-1 text-center">{t('board.nextInLine')}</div>
-                                        <div className="grid grid-cols-3 gap-1.5 flex-1">
-                                            {table.waitingCats.length > 0 ? table.waitingCats.slice(0, 6).map(cat => (
-                                                <div key={cat.catalogNumber} className="bg-slate-800 border-l-2 border-slate-600 rounded p-1 sm:p-1.5 flex items-center justify-center h-full">
-                                                    <div className="text-base sm:text-lg font-bold text-slate-300 leading-none font-mono [font-variant-ligatures:none]">#{cat.catalogNumber}</div>
-                                                </div>
-                                            )) : (
-                                                <div className="col-span-3 bg-slate-800/30 rounded p-2 text-center text-slate-600 text-xs border border-slate-700/50 border-dashed flex items-center justify-center h-full">-</div>
-                                            )}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    );
-                })}
+            <div className="flex-1 grid grid-cols-2 grid-rows-2 gap-2 sm:gap-3 min-h-0">
+                {[1, 2, 3, 4].map(tableNum => (
+                    <TableCard
+                        key={tableNum}
+                        tableNum={tableNum}
+                        table={tables.find(t => t.tableNo === `T${tableNum}`)}
+                        boardTextClass={boardTextClass}
+                        translateBoard={translateBoard}
+                    />
+                ))}
             </div>
         </div>
     );
