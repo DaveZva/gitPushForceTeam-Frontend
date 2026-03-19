@@ -26,6 +26,9 @@ export interface StewardJudgeDto {
     isPaused: boolean;
 }
 
+export type ShowDay = 'SATURDAY' | 'SUNDAY';
+
+
 export const stewardApi = {
     getJudges: async (showId: number): Promise<StewardJudgeDto[]> => {
         const res = await api.get(`/steward/shows/${showId}/judges`);
@@ -41,8 +44,10 @@ export const stewardApi = {
         await api.post(`/steward/shows/${showId}/judges/${judgeId}/unlock`);
     },
 
-    getQueue: async (showId: number, judgeId: number): Promise<StewardQueueEntry[]> => {
-        const res = await api.get(`/steward/shows/${showId}/judges/${judgeId}/queue`);
+    getQueue: async (showId: number, judgeId: number, day: ShowDay): Promise<StewardQueueEntry[]> => {
+        const res = await api.get(`/steward/shows/${showId}/judges/${judgeId}/queue`, {
+            params: { day }
+        });
         return res.data;
     },
 
@@ -50,7 +55,7 @@ export const stewardApi = {
         await api.patch(`/steward/sheets/${sheetId}/status`, { status });
     },
 
-    callToBoard: async (payload: { showId: number, tableNo: string, judgeName: string, catNumber: number, category: string, urgency: string }) => {
+    callToBoard: async (payload: { showId: number, tableNo: string, judgeName: string, catNumber: number, category: string, urgency: string, day: string }) => {
         const res = await api.post('/calling/call', payload);
         return res.data;
     },

@@ -449,7 +449,9 @@
     "searchPlaceholder": "Hledat (Jméno, EMS, Reg. č.)...",
     "noResults": "Nenalezeny žádné záznamy odpovídající zadaným kritériím.",
     "actions": "Možnosti",
-    "close": "Zavřít"
+    "close": "Zavřít",
+    "change": "Změnit"
+
   },
   "errors": {
     "fetchFailed": "Nepodařilo se načíst data.",
@@ -973,7 +975,11 @@
     "callGroupBivSelected": "Zavolat vybrané (BIV)",
     "callGroupBisSelected": "Zavolat vybrané (BIS)",
     "noBisAvailable": "Žádné kočky k dispozici",
-    "minBivCats": "Vyberte alespoň 3 kočky pro BIV"
+    "minBivCats": "Vyberte alespoň 3 kočky pro BIV",
+    "selectDayTitle": "Vyberte den",
+    "selectDaySubtitle": "Vyberte den, pro který chcete vidět frontu a pracovat jako stevard.",
+    "dayOne": "Den 1",
+    "dayTwo": "Den 2"
   },
   "callingBoard": {
     "title": "Vyvolávání koček / Calling System",
