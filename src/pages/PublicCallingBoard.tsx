@@ -307,7 +307,7 @@ export const PublicCallingBoard = () => {
             : 'http://localhost:8080';
         const client = new Client({
             webSocketFactory: () => new SockJS(`${backendUrl}/ws-calling`),
-            debug: () => {},
+            debug: () => { },
             reconnectDelay: 5000,
             onConnect: () => {
                 client.subscribe(`/topic/show/${currentShowId}/board`, () => {

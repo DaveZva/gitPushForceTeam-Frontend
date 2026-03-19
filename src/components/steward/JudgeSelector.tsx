@@ -31,7 +31,7 @@ export const JudgeSelector = ({
         while (
             Array.from({ length: count }, (_, i) => i + 1).every(num => usedTables.includes(num)) &&
             count < 24
-            ) {
+        ) {
             count += 4;
         }
         return count;
@@ -179,11 +179,10 @@ export const JudgeSelector = ({
                                 key={judge.id}
                                 disabled={isLockedBySomeoneElse}
                                 onClick={() => onInitiateLock(judge)}
-                                className={`w-full p-4 text-left border-2 rounded-lg flex justify-between items-center transition-all duration-200 cursor-pointer ${
-                                    isLockedBySomeoneElse
+                                className={`w-full p-4 text-left border-2 rounded-lg flex justify-between items-center transition-all duration-200 cursor-pointer ${isLockedBySomeoneElse
                                         ? 'bg-gray-100 border-gray-200 opacity-50 cursor-not-allowed grayscale'
                                         : 'border-transparent bg-gray-50 text-gray-700 hover:border-[#027BFF] hover:bg-white hover:text-[#027BFF] group'
-                                }`}
+                                    }`}
                             >
                                 <div>
                                     <span className={`font-bold block transition-colors ${
@@ -242,11 +241,10 @@ export const JudgeSelector = ({
                                             key={num}
                                             disabled={isUsed}
                                             onClick={() => onConfirmTable(num)}
-                                            className={`py-4 rounded-xl font-bold text-lg border-2 transition-all duration-200 cursor-pointer ${
-                                                isUsed
+                                            className={`py-4 rounded-xl font-bold text-lg border-2 transition-all duration-200 cursor-pointer ${isUsed
                                                     ? 'bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed line-through decoration-gray-300'
                                                     : 'bg-blue-50/50 text-[#027BFF] border-transparent hover:border-[#027BFF] hover:bg-white shadow-sm hover:shadow-md'
-                                            }`}
+                                                }`}
                                         >
                                             {num}
                                         </button>
