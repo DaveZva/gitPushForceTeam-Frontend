@@ -449,7 +449,8 @@
     "searchPlaceholder": "Search (Name, EMS, Reg. No.)...",
     "noResults": "No records found matching the criteria.",
     "actions": "Actions",
-    "close": "Close"
+    "close": "Close",
+    "change": "Change"
   },
   "errors": {
     "fetchFailed": "Failed to fetch data.",
@@ -973,7 +974,11 @@
     "callGroupBivSelected": "Call selected (BIV)",
     "callGroupBisSelected": "Call selected (BIS)",
     "noBisAvailable": "No cats available",
-    "minBivCats": "Select at least 3 cats for BIV"
+    "minBivCats": "Select at least 3 cats for BIV",
+    "selectDayTitle": "Select Day",
+    "selectDaySubtitle": "Please select the day for stewarding.",
+    "dayOne": "Day 1",
+    "dayTwo": "Day 2"
   },
   "callingBoard": {
     "title": "Calling System",

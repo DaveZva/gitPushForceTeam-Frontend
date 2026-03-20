@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
-import { stewardApi, StewardQueueEntry, StewardJudgeDto } from "../../services/api/stewardApi";
+import { stewardApi, StewardQueueEntry, StewardJudgeDto, ShowDay } from "../../services/api/stewardApi";
 import { LoadingSpinner } from "../../components/ui/LoadingSpinner";
 import { StewardHeader } from "../../components/steward/StewardHeader";
 import { JudgeSelector } from "../../components/steward/JudgeSelector";
@@ -12,7 +12,14 @@ export const StewardDashboard = () => {
     const { t } = useTranslation();
     const { showId } = useParams<{ showId: string }>();
     const currentShowId = Number(showId) || 1;
-    const storageKey = `steward_selected_judge_${currentShowId}`;
+
+    const dayStorageKey = `steward_day_${currentShowId}`;
+    const judgeStorageKey = `steward_selected_judge_${currentShowId}`;
+
+    const [selectedDay, setSelectedDay] = useState<ShowDay | null>(() => {
+        const saved = localStorage.getItem(dayStorageKey);
+        return (saved === 'SATURDAY' || saved === 'SUNDAY') ? saved : null;
+    });
 
     const [selectedJudge, setSelectedJudge] = useState<StewardJudgeDto | null>(null);
     const [judges, setJudges] = useState<StewardJudgeDto[]>([]);
@@ -21,6 +28,18 @@ export const StewardDashboard = () => {
     const [activeTab, setActiveTab] = useState<'QUEUE' | 'BIV' | 'BIS'>('QUEUE');
     const [judgeToLock, setJudgeToLock] = useState<StewardJudgeDto | null>(null);
     const [isPaused, setIsPaused] = useState(false);
+
+    const handleSelectDay = (day: ShowDay | null) => {
+        setSelectedDay(day);
+        if (day) {
+            localStorage.setItem(dayStorageKey, day);
+        } else {
+            localStorage.removeItem(dayStorageKey);
+            setSelectedJudge(null);
+            localStorage.removeItem(judgeStorageKey);
+            setQueue([]);
+        }
+    };
 
     const loadJudges = useCallback(async () => {
         try {
@@ -36,43 +55,47 @@ export const StewardDashboard = () => {
     }, [currentShowId]);
 
     useEffect(() => {
+        if (!selectedDay) {
+            setLoading(false);
+            return;
+        }
         const init = async () => {
             const data = await loadJudges();
-            const savedJudgeId = localStorage.getItem(storageKey);
+            const savedJudgeId = localStorage.getItem(judgeStorageKey);
             if (savedJudgeId) {
                 const found = data.find(j => j.id.toString() === savedJudgeId);
                 if (found && found.isLockedByMe) {
                     setSelectedJudge(found);
                 } else {
-                    localStorage.removeItem(storageKey);
+                    localStorage.removeItem(judgeStorageKey);
                 }
             }
         };
         init();
-    }, [loadJudges, storageKey]);
+    }, [loadJudges, judgeStorageKey, selectedDay]);
 
     const fetchQueue = useCallback(async () => {
-        if (!selectedJudge) return;
+        if (!selectedJudge || !selectedDay) return;
         try {
-            const data = await stewardApi.getQueue(currentShowId, selectedJudge.id);
+            const data = await stewardApi.getQueue(currentShowId, selectedJudge.id, selectedDay);
             setQueue(data.sort((a, b) => a.catalogNumber - b.catalogNumber));
         } catch (error) {
             console.error(error);
         }
-    }, [selectedJudge, currentShowId]);
+    }, [selectedJudge, currentShowId, selectedDay]);
 
     useEffect(() => {
-        if (selectedJudge) {
+        if (selectedJudge && selectedDay) {
             fetchQueue();
             const interval = setInterval(fetchQueue, 5000);
             return () => clearInterval(interval);
         }
-    }, [selectedJudge, fetchQueue]);
+    }, [selectedJudge, selectedDay, fetchQueue]);
 
     const initiateLock = (judge: StewardJudgeDto) => {
         if (judge.isLockedByMe) {
             setSelectedJudge(judge);
-            localStorage.setItem(storageKey, judge.id.toString());
+            localStorage.setItem(judgeStorageKey, judge.id.toString());
             return;
         }
         setJudgeToLock(judge);
@@ -85,7 +108,7 @@ export const StewardDashboard = () => {
             if (success) {
                 const updatedJudge = { ...judgeToLock, tableNumber, isLockedByMe: true };
                 setSelectedJudge(updatedJudge);
-                localStorage.setItem(storageKey, updatedJudge.id.toString());
+                localStorage.setItem(judgeStorageKey, updatedJudge.id.toString());
                 await loadJudges();
             } else {
                 alert(t('steward.tableTakenError'));
@@ -100,7 +123,7 @@ export const StewardDashboard = () => {
 
     const handleLeaveTable = async () => {
         setSelectedJudge(null);
-        localStorage.removeItem(storageKey);
+        localStorage.removeItem(judgeStorageKey);
         setQueue([]);
         await loadJudges();
     };
@@ -115,7 +138,7 @@ export const StewardDashboard = () => {
                 }
             }
             setSelectedJudge(null);
-            localStorage.removeItem(storageKey);
+            localStorage.removeItem(judgeStorageKey);
             setQueue([]);
             await loadJudges();
         }
@@ -150,7 +173,8 @@ export const StewardDashboard = () => {
                 judgeName: selectedJudge?.name || "Judge",
                 catNumber: cat.catalogNumber,
                 category: callType,
-                urgency: 'NORMAL'
+                urgency: 'NORMAL',
+                day: selectedDay ?? 'SATURDAY',
             });
             await stewardApi.updateSheetStatus(cat.id, 'JUDGING');
             fetchQueue();
@@ -167,7 +191,8 @@ export const StewardDashboard = () => {
                 judgeName: selectedJudge?.name || "Judge",
                 catNumber: cat.catalogNumber,
                 category: 'BIV',
-                urgency: 'NORMAL'
+                urgency: 'NORMAL',
+                day: selectedDay ?? 'SATURDAY',
             })));
             await Promise.all(cats.map(cat => stewardApi.updateSheetStatus(cat.id, 'JUDGING')));
             fetchQueue();
@@ -186,12 +211,16 @@ export const StewardDashboard = () => {
         }
     };
 
+    const finishSingleCat = async (cat: StewardQueueEntry) => {
+        if (cat.callingRecordId) {
+            await stewardApi.removeFromBoard(cat.callingRecordId);
+        }
+        await stewardApi.updateSheetStatus(cat.id, 'DONE');
+    };
+
     const handleFinishJudging = async (cat: StewardQueueEntry) => {
         try {
-            if (cat.callingRecordId) {
-                await stewardApi.removeFromBoard(cat.callingRecordId);
-            }
-            await stewardApi.updateSheetStatus(cat.id, 'DONE');
+            await finishSingleCat(cat);
             fetchQueue();
         } catch (err) {
             console.error(err);
@@ -200,7 +229,20 @@ export const StewardDashboard = () => {
 
     const handleFinishAll = async (cats: StewardQueueEntry[]) => {
         try {
-            await Promise.all(cats.map(cat => handleFinishJudging(cat)));
+            await Promise.all(cats.map(cat => finishSingleCat(cat)));
+            fetchQueue();
+        } catch (err) {
+            console.error(err);
+        }
+    };
+
+    const handleReturnToQueue = async (cat: StewardQueueEntry) => {
+        try {
+            if (cat.callingRecordId) {
+                await stewardApi.removeFromBoard(cat.callingRecordId);
+            }
+            await stewardApi.updateSheetStatus(cat.id, 'WAITING');
+            fetchQueue();
         } catch (err) {
             console.error(err);
         }
@@ -235,15 +277,20 @@ export const StewardDashboard = () => {
         return Array.from(groups.entries()).filter(([_, cats]) => cats.length >= 3);
     }, [queue]);
 
-    const usedTables = useMemo(() => judges.map(j => j.tableNumber).filter((t): t is number => t !== null), [judges]);
+    const usedTables = useMemo(
+        () => judges.map(j => j.tableNumber).filter((t): t is number => t !== null),
+        [judges]
+    );
 
-    if (loading) return <LoadingSpinner fullScreen />;
+    if (loading && selectedDay) return <LoadingSpinner fullScreen />;
 
-    if (!selectedJudge) {
+    if (!selectedDay || !selectedJudge) {
         return (
             <JudgeSelector
                 judges={judges}
                 usedTables={usedTables}
+                selectedDay={selectedDay}
+                onSelectDay={handleSelectDay}
                 onInitiateLock={initiateLock}
                 onConfirmTable={confirmTableSelection}
                 judgeToLock={judgeToLock}
@@ -257,6 +304,7 @@ export const StewardDashboard = () => {
             <StewardHeader
                 judgeName={selectedJudge.name}
                 tableNumber={selectedJudge.tableNumber}
+                selectedDay={selectedDay}
                 onRefresh={fetchQueue}
                 onLeave={handleLeaveTable}
                 onRelease={handleReleaseTable}
@@ -273,6 +321,7 @@ export const StewardDashboard = () => {
                     onFinishAll={handleFinishAll}
                     onCallToTable={handleCallToTable}
                     onStatusChange={handleStatusChange}
+                    onReturnToQueue={handleReturnToQueue}
                 />
 
                 <QueuePanel
